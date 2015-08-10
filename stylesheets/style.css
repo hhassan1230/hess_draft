@@ -492,6 +492,7 @@ footer {
             border-bottom: none;
             padding-bottom: 1px; }
         .nav-bar nav .nav-list a {
+          text-decoration: none;
           color: white; }
         .nav-bar nav .nav-list a:hover {
           color: #3b5998; }
