@@ -1,9 +1,10 @@
 $green: #16DDA4;
+$blue: #3b5998;
 $font: Roboto, sans-serif;
 
 .long-button {
   display:inline-block;
-  background-color: $green;
+  background-color: $blue;
   cursor:pointer;
   color:white;
   font-family: 100% $font;
@@ -20,7 +21,7 @@ a {
   text-decoration: none;
 }
 li a {
-  color: $green;
+  color: $blue;
   text-decoration: underline;
 }
 h1 {
@@ -44,7 +45,7 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
-    background-color: $green;
+    background-color: $blue;
   }
 }
 
@@ -106,7 +107,7 @@ ul {
     width: 35px;
     text-align: center;
     border-radius: 1in;
-    border: 1.5px solid $green;
+    border: 1.5px solid $blue;
     font-weight: 900;
     background-color: white;
   }

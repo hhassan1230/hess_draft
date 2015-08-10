@@ -6,7 +6,7 @@ html {
 
 .long-button {
   display: inline-block;
-  background-color: #16DDA4;
+  background-color: #3b5998;
   cursor: pointer;
   color: white;
   font-family: 100% Roboto, sans-serif;
@@ -23,7 +23,7 @@ a {
   text-decoration: none; }
 
 li a {
-  color: #16DDA4;
+  color: #3b5998;
   text-decoration: underline; }
 
 h1 {
@@ -47,7 +47,7 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
-    background-color: #16DDA4; }
+    background-color: #3b5998; }
 
 h3 {
   font-family: Roboto, sans-serif;
@@ -104,7 +104,7 @@ ul {
     width: 35px;
     text-align: center;
     border-radius: 1in;
-    border: 1.5px solid #16DDA4;
+    border: 1.5px solid #3b5998;
     font-weight: 900;
     background-color: white; }
 
@@ -335,21 +335,21 @@ h1, h2 {
   left: 49.5%;
   height: 565px;
   width: 3.5px;
-  background-color: #16DDA4; }
+  background-color: #3b5998; }
   .line .line-start {
     position: absolute;
     height: 5px;
     width: 16px;
     top: -5px;
     left: -6px;
-    background-color: #16DDA4; }
+    background-color: #3b5998; }
   .line .line-end {
     position: absolute;
     height: 5px;
     width: 16px;
     top: 562px;
     left: -6px;
-    background-color: #16DDA4; }
+    background-color: #3b5998; }
 
 footer {
   float: left;
@@ -425,7 +425,7 @@ footer {
   margin-right: auto;
   margin-left: -10px;
   display: inline;
-  background-color: #16DDA4;
+  background-color: #3b5998;
   cursor: pointer;
   color: #ffffff;
   font-family: 1.733em;
@@ -453,7 +453,7 @@ footer {
       left: 0px;
       position: fixed; }
       .nav-bar .logo p {
-        color: #16DDA4;
+        color: #3b5998;
         font-size: 0.56278em;
         font-weight: 900;
         float: left; }
@@ -487,14 +487,14 @@ footer {
           color: #000000;
           text-align: center;
           padding-bottom: 5px;
-          border-bottom: 1px solid #16DDA4; }
+          border-bottom: 1px solid #3b5998; }
           .nav-bar nav .nav-list li:last-child {
             border-bottom: none;
             padding-bottom: 1px; }
         .nav-bar nav .nav-list a {
           color: white; }
         .nav-bar nav .nav-list a:hover {
-          color: #16DDA4; }
+          color: #3b5998; }
       .nav-bar nav .c-hamburger {
         top: 0px;
         right: 0px;
@@ -544,7 +544,7 @@ footer {
       .nav-bar nav .c-hamburger span::after {
         bottom: -20px; }
       .nav-bar nav .c-hamburger--rot {
-        background-color: #16DDA4; }
+        background-color: #3b5998; }
       .nav-bar nav .c-hamburger--rot span {
         transition: transform 0.3s; }
       .nav-bar nav .c-hamburger--rot.is-active {
@@ -1073,21 +1073,21 @@ footer {
     left: -90px;
     height: 3.5px;
     width: 1025px;
-    background-color: #16DDA4; }
+    background-color: #3b5998; }
     .line .line-start {
       position: absolute;
       height: 16px;
       width: 3px;
       top: -6px;
       left: 1025px;
-      background-color: #16DDA4; }
+      background-color: #3b5998; }
     .line .line-end {
       position: absolute;
       height: 16px;
       width: 3px;
       top: -6px;
       left: 0px;
-      background-color: #16DDA4; }
+      background-color: #3b5998; }
 
   footer {
     margin-top: 150px; }
@@ -1133,7 +1133,7 @@ footer {
       width: 100%;
       text-align: center; }
       .nav-bar .logo p {
-        color: #16DDA4;
+        color: #3b5998;
         font-size: 0.56278em;
         margin-right: 0px;
         font-weight: 900; }
@@ -1162,7 +1162,7 @@ footer {
     nav li {
       padding: 0px 3px;
       font-size: 0.56278em;
-      border-right: 2px solid #16DDA4;
+      border-right: 2px solid #3b5998;
       display: inline; }
       nav li:last-child {
         border-right: none; }
@@ -1172,14 +1172,14 @@ footer {
         padding-right: 5px;
         text-decoration: none; }
       nav li a:hover {
-        color: #16DDA4; }
+        color: #3b5998; }
 
   .nav-bar .logo {
     width: auto;
     padding-left: 30px;
     float: left; }
     .nav-bar .logo p {
-      color: #16DDA4;
+      color: #3b5998;
       font-size: 14px;
       margin-right: 0px; }
 

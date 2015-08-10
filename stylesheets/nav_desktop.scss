@@ -5,7 +5,7 @@
     width: 100%;
     text-align: center;
     p {
-      color: $green;
+      color: $blue;
       font-size: modular-scale(-2);
       margin-right: 0px;
       font-weight: 900;
@@ -33,7 +33,7 @@ nav {
   li {
     padding: 0px 3px;
     font-size: modular-scale(-2);
-    border-right: 2px solid $green;
+    border-right: 2px solid $blue;
     &:last-child { border-right: none; }
     display: inline;
     a {
@@ -42,7 +42,7 @@ nav {
       padding-right: 5px;
       text-decoration: none;
     }
-    a:hover { color:$green; }
+    a:hover { color:$blue; }
   }
 }
 .nav-bar {
@@ -51,7 +51,7 @@ nav {
     padding-left: 30px;
     float: left;
     p {
-      color: $green;
+      color: $blue;
       font-size: 14px;
       margin-right: 0px;
     }
