@@ -351,25 +351,29 @@ h1, h2 {
     left: -6px;
     background-color: #16DDA4; }
 
-footer {
+.partners {
   float: left;
   display: block;
   margin-right: 2.35765%;
   width: 100%;
-  text-align: center; }
-  footer:last-child {
+  text-align: center;
+  left: 250px;
+  position: absolute; }
+  .partners:last-child {
     margin-right: 0; }
-  footer .partner-logos {
+  .partners .partner-logos {
     padding: 20px 0px 40px; }
-  footer h2 {
+  .partners h2 {
     margin-top: 760px; }
-  footer a {
+  .partners a {
     display: block;
     padding-bottom: 20px; }
-    footer a img {
+    .partners a img {
       width: 120px; }
 
-.footer {
+footer {
+  position: absolute;
+  bottom: -2900;
   background-color: black;
   color: white;
   clear: both;
@@ -380,17 +384,19 @@ footer {
   text-align: center;
   padding: 15px;
   max-width: none; }
-  .footer:last-child {
+  footer:last-child {
     margin-right: 0; }
-  .footer nav, .footer ul {
+  footer nav, footer ul {
     float: none;
     width: auto; }
-  .footer li {
+  footer li {
     text-transform: uppercase; }
-  .footer ul {
+    footer li:first-child {
+      margin-left: 560px; }
+  footer ul {
     display: inline-block;
     padding: 0px; }
-  .footer nav {
+  footer nav {
     padding: 10px 0px; }
 
 .mail-signup #mc_embed_signup #mc_embed_signup_scroll label[for=mce-EMAIL] {
@@ -993,28 +999,28 @@ footer {
       left: 0px;
       background-color: #16DDA4; }
 
-  footer {
+  .partners {
     margin-top: 150px; }
-    footer .partner-logos {
+    .partners .partner-logos {
       float: left;
       display: block;
       margin-right: 2.35765%;
       width: 100%; }
-      footer .partner-logos:last-child {
+      .partners .partner-logos:last-child {
         margin-right: 0; }
-      footer .partner-logos a {
+      .partners .partner-logos a {
         display: inline-block;
         margin-right: 80px; }
-        footer .partner-logos a:first-child {
+        .partners .partner-logos a:first-child {
           margin-left: 90px; }
-        footer .partner-logos a img {
+        .partners .partner-logos a img {
           height: 60px;
           width: auto;
           text-align: center; }
-          footer .partner-logos a img:last-child {
+          .partners .partner-logos a img:last-child {
             margin-right: 0px; }
 
-  footer h2 {
+  .partners h2 {
     margin-top: 310px; }
 
   .nav-bar {
