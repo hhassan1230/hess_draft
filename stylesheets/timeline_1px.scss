@@ -84,14 +84,14 @@
   left: 49.5%;
   height: 565px;
   width: 3.5px;
-  background-color: $blue;
+  background-color: $accent-color;
   .line-start {
     position: absolute;
     height: 5px;
     width: 16px;
     top: -5px;
     left: -6px;
-    background-color: $blue;
+    background-color: $accent-color;
   }
   .line-end {
     position: absolute;
@@ -99,6 +99,6 @@
     width: 16px;
     top: 562px;
     left: -6px;
-    background-color: $blue;
+    background-color: $accent-color;
   }
 }

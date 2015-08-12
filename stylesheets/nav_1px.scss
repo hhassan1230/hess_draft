@@ -5,7 +5,7 @@
     width: 100%;
     // text-align: center;
     p {
-      color: $blue;
+      color: $accent-color;
       font-size: modular-scale(-2);
       font-weight: 900;
       float: left;
@@ -43,7 +43,7 @@ nav {
       color:#000000;
       text-align: center;
       padding-bottom: 5px;
-      border-bottom: 1px solid $blue;
+      border-bottom: 1px solid $accent-color;
       &:last-child {
           border-bottom: none;
           padding-bottom: 1px;
@@ -55,7 +55,7 @@ nav {
       color: white; 
     }
     a:hover {
-      color: $blue;
+      color: $accent-color;
     }
   }
   .c-hamburger {
@@ -117,7 +117,7 @@ nav {
     bottom: -20px;
   }
   .c-hamburger--rot {
-    background-color: $blue;
+    background-color: $accent-color;
   }
 
   .c-hamburger--rot span {

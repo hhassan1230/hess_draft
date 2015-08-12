@@ -451,14 +451,14 @@
   left: -90px;
   height: 3.5px;
   width: 1025px;
-  background-color: $blue;
+  background-color: $accent-color;
   .line-start {
     position: absolute;
     height: 16px;
     width: 3px;
     top: -6px;
     left: 1025px;
-    background-color: $blue;
+    background-color: $accent-color;
   }
   .line-end {
     position: absolute;
@@ -466,7 +466,7 @@
     width: 3px;
     top: -6px;
     left: 0px;
-    background-color: $blue;
+    background-color: $accent-color;
   }
 }
 

@@ -1,10 +1,9 @@
-$green: #16DDA4;
-$blue: #3b5998;
+$accent-color: #16DDA4;
 $font: Roboto, sans-serif;
 
 .long-button {
   display:inline-block;
-  background-color: $blue;
+  background-color: $accent-color;
   cursor:pointer;
   color:white;
   font-family: 100% $font;
@@ -21,7 +20,7 @@ a {
   text-decoration: none;
 }
 li a {
-  color: $blue;
+  color: $accent-color;
   text-decoration: underline;
 }
 h1 {
@@ -45,7 +44,7 @@ h2 {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
-    background-color: $blue;
+    background-color: $accent-color;
   }
 }
 
@@ -107,7 +106,7 @@ ul {
     width: 35px;
     text-align: center;
     border-radius: 1in;
-    border: 1.5px solid $blue;
+    border: 1.5px solid $accent-color;
     font-weight: 900;
     background-color: white;
   }
