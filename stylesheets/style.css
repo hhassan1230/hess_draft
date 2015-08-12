@@ -662,103 +662,6 @@ footer {
   .timeline {
     width: 100%;
     position: relative;
-    /*  #dot4 {
-        left: 295px;
-        top: 177px;
-        h3 {
-          position: absolute;
-          left: -12px;
-          width: 230px;
-          top: 15px;
-        }
-        h4 {
-          position: absolute;
-          left: 31px;
-          width: 180px;
-          font-size: 1em;
-          top: 130px;
-        }
-        .callout {
-          position: relative;
-          top: 59px;
-          left: -25px;
-          height: 50px;
-          width: 205px;
-          margin: 18px 20px 3px;
-          padding: 44px 20px;
-          background-color: #eef4f9;
-          -moz-border-radius: 6px;
-          -webkit-border-radius: 6px;
-          border-radius: 6px;
-        }
-        .callout .notch {
-          position: absolute;
-          top: -18px;
-          left: 73px;
-          margin: 0;
-          border-top: 0;
-          border-left: 10px solid transparent;
-          border-right: 10px solid transparent;
-          border-bottom: 18px solid #eef4f9;
-          padding: 0;
-          width: 0;
-          height: 0;
-          font-size: 0;
-          line-height: 0;
-          _border-right-color: pink;
-          _border-left-color: pink;
-          _filter: chroma(color=pink);
-        }
-      }
-      #dot5 {
-        position: absolute;
-        left: 408px;
-        top: 177px;
-        h3 {
-          position: absolute;
-          left: -90px;
-          width: 250px;
-          top: 15px;
-        }
-        h4 {
-          position: absolute;
-          left: 5px;
-          width: 180px;
-          font-size: 1em;
-          top: -16px;
-        }
-        .callout {
-          position: relative;
-          top: -85px;
-          left: -19px;
-          height: 50px;
-          width: 155px;
-          margin: 18px 20px 3px;
-          padding: 44px 20px;
-          background-color: #eef4f9;
-          -moz-border-radius: 6px;
-          -webkit-border-radius: 6px;
-          border-radius: 6px;
-        }
-        .callout .notch {
-          position: absolute;
-          top: 86px;
-          left: 67px;
-          margin: 0;
-          border-top: 0;
-          border-left: 10px solid transparent;
-          border-right: 10px solid transparent;
-          border-top: 18px solid #eef4f9;
-          padding: 0;
-          width: 0;
-          height: 0;
-          font-size: 0;
-          line-height: 0;
-          _border-right-color: pink;
-          _border-left-color: pink;
-          _filter: chroma(color=pink);
-        }
-      }*/
     display: inline-block; }
     .timeline::after {
       clear: both;
@@ -782,12 +685,12 @@ footer {
       top: 177px; }
       .timeline #dot1 h3 {
         position: absolute;
-        left: 10px;
+        left: -37px;
         width: 205px;
         top: 15px; }
       .timeline #dot1 h4 {
         position: absolute;
-        left: 83px;
+        left: 96px;
         width: 180px;
         font-size: 1em;
         top: -22px; }
@@ -825,12 +728,12 @@ footer {
       top: 177px; }
       .timeline #dot2 h3 {
         position: absolute;
-        left: -7px;
+        left: -25.5px;
         width: 170px;
         top: 15px; }
       .timeline #dot2 h4 {
         position: absolute;
-        left: 45.5px;
+        left: 61px;
         width: 180px;
         font-size: 1em;
         top: 120px; }
@@ -868,12 +771,12 @@ footer {
       top: 177px; }
       .timeline #dot3 h3 {
         position: absolute;
-        left: -86px;
+        left: -104px;
         width: 250px;
         top: 15px; }
       .timeline #dot3 h4 {
         position: absolute;
-        left: 4px;
+        left: 18px;
         width: 180px;
         font-size: 1em;
         top: -23px; }
@@ -906,22 +809,22 @@ footer {
         _border-right-color: pink;
         _border-left-color: pink;
         _filter: chroma(color=pink); }
-    .timeline #dot6 {
+    .timeline #dot4 {
       position: absolute;
       left: 327px;
       top: 177px; }
-      .timeline #dot6 h3 {
+      .timeline #dot4 h3 {
         position: absolute;
-        left: -34px;
+        left: -82px;
         width: 250px;
         top: 15px; }
-      .timeline #dot6 h4 {
+      .timeline #dot4 h4 {
         position: absolute;
-        left: 38px;
+        left: 53px;
         width: 180px;
         font-size: 1em;
         top: 122px; }
-      .timeline #dot6 .callout {
+      .timeline #dot4 .callout {
         position: relative;
         top: 59px;
         left: -15px;
@@ -933,7 +836,7 @@ footer {
         -moz-border-radius: 6px;
         -webkit-border-radius: 6px;
         border-radius: 6px; }
-      .timeline #dot6 .callout .notch {
+      .timeline #dot4 .callout .notch {
         position: absolute;
         top: -18px;
         left: 64px;
@@ -950,22 +853,22 @@ footer {
         _border-right-color: pink;
         _border-left-color: pink;
         _filter: chroma(color=pink); }
-    .timeline #dot7 {
+    .timeline #dot5 {
       position: absolute;
       left: 645px;
       top: 177px; }
-      .timeline #dot7 h3 {
+      .timeline #dot5 h3 {
         position: absolute;
-        left: -89px;
+        left: -104.5px;
         width: 250px;
         top: 15px; }
-      .timeline #dot7 h4 {
+      .timeline #dot5 h4 {
         position: absolute;
-        left: 17px;
+        left: 37px;
         width: 180px;
         font-size: 1em;
         top: -21px; }
-      .timeline #dot7 .callout {
+      .timeline #dot5 .callout {
         position: relative;
         top: -85px;
         left: -9px;
@@ -977,7 +880,7 @@ footer {
         -moz-border-radius: 6px;
         -webkit-border-radius: 6px;
         border-radius: 6px; }
-      .timeline #dot7 .callout .notch {
+      .timeline #dot5 .callout .notch {
         position: absolute;
         top: 86px;
         left: 58px;
@@ -994,22 +897,22 @@ footer {
         _border-right-color: pink;
         _border-left-color: pink;
         _filter: chroma(color=pink); }
-    .timeline #dot8 {
+    .timeline #dot6 {
       position: absolute;
       left: 800px;
       top: 177px; }
-      .timeline #dot8 h3 {
+      .timeline #dot6 h3 {
         position: absolute;
-        left: -84px;
+        left: -104px;
         width: 250px;
         top: 15px; }
-      .timeline #dot8 h4 {
+      .timeline #dot6 h4 {
         position: absolute;
-        left: -38px;
+        left: -21px;
         width: 180px;
         font-size: 1em;
         top: 122px; }
-      .timeline #dot8 .callout {
+      .timeline #dot6 .callout {
         position: relative;
         top: 59px;
         left: -65px;
@@ -1021,7 +924,7 @@ footer {
         -moz-border-radius: 6px;
         -webkit-border-radius: 6px;
         border-radius: 6px; }
-      .timeline #dot8 .callout .notch {
+      .timeline #dot6 .callout .notch {
         position: absolute;
         top: -18px;
         left: 113px;
