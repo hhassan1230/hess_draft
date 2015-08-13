@@ -292,15 +292,15 @@ h1, h2 {
     top: 340px;
     /*    left: 11%;
     */ }
-  .timeline #dot6 {
+  .timeline #dot4 {
     position: absolute;
     top: 427px;
     /*    left: 22.5%;
     */ }
-  .timeline #dot7 {
+  .timeline #dot5 {
     position: absolute;
     top: 580px; }
-  .timeline #dot8 {
+  .timeline #dot6 {
     position: absolute;
     top: 675px; }
   .timeline h3 {
@@ -352,15 +352,7 @@ h1, h2 {
     background-color: #16DDA4; }
 
 .partners {
-  float: left;
-  display: block;
-  margin-right: 2.35765%;
-  width: 100%;
-  text-align: center;
-  left: 250px;
-  position: absolute; }
-  .partners:last-child {
-    margin-right: 0; }
+  text-align: center; }
   .partners .partner-logos {
     padding: 20px 0px 40px; }
   .partners h2 {
@@ -372,15 +364,13 @@ h1, h2 {
       width: 120px; }
 
 footer {
-  position: absolute;
-  bottom: -2900;
-  background-color: black;
-  color: white;
-  clear: both;
   float: left;
   display: block;
   margin-right: 2.35765%;
   width: 100%;
+  background-color: black;
+  color: white;
+  clear: both;
   text-align: center;
   padding: 15px;
   max-width: none; }
@@ -391,9 +381,10 @@ footer {
     width: auto; }
   footer li {
     text-transform: uppercase; }
-    footer li:first-child {
-      margin-left: 560px; }
+    footer li a {
+      text-decoration: none; }
   footer ul {
+    list-style-type: none;
     display: inline-block;
     padding: 0px; }
   footer nav {
@@ -1022,6 +1013,32 @@ footer {
 
   .partners h2 {
     margin-top: 310px; }
+
+  footer {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 100%;
+    background-color: black;
+    color: white;
+    clear: both;
+    text-align: center;
+    padding: 15px;
+    max-width: none; }
+    footer:last-child {
+      margin-right: 0; }
+    footer nav, footer ul {
+      float: none;
+      width: auto; }
+    footer li {
+      text-transform: uppercase; }
+      footer li:first-child {
+        margin-left: 560px; }
+    footer ul {
+      display: inline-block;
+      padding: 0px; }
+    footer nav {
+      padding: 10px 0px; }
 
   .nav-bar {
     float: left;

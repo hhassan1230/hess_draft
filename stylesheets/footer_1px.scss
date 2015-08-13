@@ -1,8 +1,5 @@
 .partners {
-  @include span-columns(12);
   text-align: center;
-  left: 250px;
-  position: absolute;
   .partner-logos {
     padding: 20px 0px 40px;
   }
@@ -19,12 +16,10 @@
 }
 
 footer {
-  position: absolute;
-  bottom: -2900;
+  @include span-columns(12);
   background-color:black;
   color: white;
   clear: both;
-  @include span-columns(12);
   text-align:center;
   padding: 15px;  
   max-width: none;
@@ -34,11 +29,12 @@ footer {
   }
   li { 
     text-transform: uppercase;
-    &:first-child {
-      margin-left: 560px;
+    a {
+      text-decoration: none;
     }
   }
   ul {
+    list-style-type: none;
     display: inline-block;
     padding: 0px;
   }
