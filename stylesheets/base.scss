@@ -1,6 +1,5 @@
-$accent-color: #16DDA4;
+$accent-color: #FF6633;
 $font: Roboto, sans-serif;
-
 .long-button {
   display:inline-block;
   background-color: $accent-color;
@@ -47,7 +46,6 @@ h2 {
     background-color: $accent-color;
   }
 }
-
 h3 {
   font-family: $font;
   font-size: modular-scale(0);
@@ -66,7 +64,6 @@ p {
   font-weight: 100;
   color: black;
 }
-
 li {
   font-family: $font;
   font-size: modular-scale(0);
@@ -78,7 +75,6 @@ ul {
   font-weight: 400;
   color: black;
 }
-
 .application-steps ol {
   list-style: none;
   counter-reset: my-awesome-counter;
