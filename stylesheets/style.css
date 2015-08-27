@@ -3,6 +3,7 @@ html {
 
 *, *::after, *::before {
   box-sizing: inherit; }
+
 .long-button {
   display: inline-block;
   background-color: #FF6633;
@@ -13,20 +14,25 @@ html {
   padding: 8px 0px;
   text-decoration: none;
   border: none; }
+
 body {
   margin: 0; }
+
 a {
   color: white;
   text-decoration: none; }
+
 li a {
   color: #FF6633;
   text-decoration: underline; }
+
 h1 {
   font-family: Roboto, sans-serif;
   font-size: 2.36859em;
   font-weight: 500;
   color: white;
   z-index: 10; }
+
 h2 {
   font-family: Roboto, sans-serif;
   font-size: 1.333em;
@@ -613,7 +619,11 @@ footer {
       margin-top: 25px; }
 
   .hero {
-    background-size: 1500px; }
+    width: 100%;
+    /*background-size: cover;*/
+    padding: 15%;
+    background-repeat: no-repeat;
+    background-size: 2800px; }
     .hero .hero-blurb {
       max-width: 80em; }
     .hero p {

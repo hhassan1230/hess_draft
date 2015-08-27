@@ -48,7 +48,11 @@ section.curriculum .image-blurb {
   ol { margin-top: 25px; }
 }
 .hero {
-  background-size: 1500px;
+  width: 100%;
+  /*background-size: cover;*/
+  padding: 15%;
+  background-repeat: no-repeat;
+  background-size: 2800px;
   .hero-blurb { 
     max-width: 80em;
   }
