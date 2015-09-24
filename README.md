@@ -1,3 +1,5 @@
+#Microsoft's landing page template
+
 Easy-to-use one page template. 
 
 It was originally created as a simple and user friendly landing site for a program, allowing for users to find more information including an overview, application requirements, and a timeline of key dates regarding the program. The page is separated into four sections to allow for a clear separation of information. 
