@@ -1,0 +1,219 @@
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: black;
+  overflow-x: hidden;
+  margin-left: -8px;
+}
+
+.no-scroll {
+	overflow-y: hidden;
+}
+
+.picture-container {
+	display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.pictures-inner {
+		width: 90%;
+		height: 80%;
+}
+
+.picture {
+	width:30.333%;
+	height: auto;
+	margin: 1%;
+}
+
+.scroll {
+	overflow-y: auto;
+}
+
+a {
+  transition: all 500ms;
+}
+
+a:link, a:visited {
+  color: white;
+}
+
+a:hover, a:active {
+  color: purple;
+  text-decoration: none;
+}
+
+section {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+section.pictures {
+	padding: 5%;
+}
+
+.down-arrow{
+  position: absolute;
+  bottom: 2%;
+  z-index: 1;
+}
+
+.vr-view {
+  position: fixed;
+  left: 0;
+  z-index: 0;
+  transform: scale(0.15);
+  width: 100%;
+}
+
+.vr-goggles {
+  position: absolute;
+  z-index: 1;
+  margin-top: -20px;
+}
+
+.expand {
+  transform: scale(1);
+  transition: all 2s ease-in-out;
+}
+
+.expand-goggles {
+  transform: scale(5);
+  transition: all 1.9s ease-in-out;
+}
+
+.transparent {
+  opacity: 0;
+}
+
+.fadeout {
+  opacity: 0;
+  transition: all 2s ease-in-out;
+}
+
+.transparent.fadein {
+  opacity: 1;
+  transition: all 4.4s ease-in-out;
+}
+
+.text-panel {
+  padding: 1.5%;
+  position: absolute;
+  z-index: 2;
+  border: 1px solid white;
+  width: 25%;
+  left: 70%;
+  border-radius: 25px;
+  background: grey;
+  text-align: center;
+  font-family: Avenir;
+}
+
+.vr-view-shift-up {
+	transition: top 1s;
+}
+
+.video-wrapper iframe {
+ position: absolute;
+ top: 10%;
+ left: 0;
+ width: 100%;
+ height: 80%;
+}
+	.video-wrapper{
+		position: relative;
+	 padding-bottom: 56.25%; /* 16:9 */
+	 padding-top: 25px;
+	 height: 0; 
+	 width: 90%;
+	}
+
+.title-section {
+	position: absolute;
+	top: 0%;
+  z-index: 2;
+  text-align: center;
+  color: white;
+}
+
+.oculus {
+  display: inline-block;
+  z-index: 2;
+  text-align: center;
+  height: 32px;
+  width: 64px;
+  background: url("//static.xx.fbcdn.net/rsrc.php/v3/yA/r/OVUuqScHe6J.png") no-repeat;
+  background-position: 0 -32px;
+}
+
+.gear-tag {
+	  background: url("../img/Logo_Samsung_Gear_VR.png") no-repeat;
+    height: 145px;
+    width: 184px;
+		background-size: 184px 184px;
+}
+
+@media only screen and (max-width: 1500px) {
+	.title-section {
+		top: 5%;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	.text-panel {
+		width: 40%;
+		left: 55%;
+	}
+	.title-section {
+		top: 10%;
+	}
+}
+
+@media only screen and (max-width: 560px) {
+	.picture {
+			width:47%;
+	}
+}
+
+@media only screen and (max-width: 420px) {
+	.vr-view {
+		  transform: scale(0.45);
+	}
+	.expand {
+	  transform: scale(1);
+	}
+	.title-section {
+		top: 20%;
+	}
+}
+
+@media only screen and (max-width: 680px) {
+	.vr-view {
+		  transform: scale(0.55);
+	}
+	.expand {
+	  transform: scale(1);
+	}
+	.text-panel {
+		width: 94%;
+		left: 2%;
+		right: 2%;
+		bottom: 15%;
+
+	}
+	.vr-view-shift-up {
+		top: 0;
+	}
+}
