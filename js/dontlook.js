@@ -6,13 +6,25 @@ var delayTime = 4400;
 // fullanimtime / 3;
 
 $(window).on("load", function() {
+  $('section').eq(0).scrollTop(0);
+  // Put Back These Slides
   $('.vr-view').addClass('expand');
   $('.vr-goggles').addClass('fadeout expand-goggles');
-  $('.text-panel, .down-arrow').addClass('fadein');
-  $('body').delay(delayTime).removeClass('no-scroll').addClass('scroll');
+
   // $('.vr-view').delay(delayTime+5000).addClass('vr-view-shift-up');
+
+    // Put Back These Slides
+    // FF I need to give padd div padding top like 20%
+
+  setTimeout(function () {
+    $('.vr-goggles').remove();
+    $('.text-panel').wrap('<div class="padd"><div class="table"><div class="cell">').fadeIn(600);
+    $('.text-panel, .down-arrow').addClass('fadein');
+    $('a.down-arrow i').delay(1500).shake();
+    $('body').removeClass('no-scroll').addClass('scroll');
+  }, delayTime/2);
   setTimeout(function(){
-	  $('.vr-view').addClass('vr-view-shift-up');
+    $('.vr-view').addClass('vr-view-shift-up');
   }, delayTime+2000);
 });
 
@@ -27,10 +39,10 @@ jQuery.fn.shake = function() {
 }
 
 $(function () {
-  $(document).scrollTop(0);
-	$('body').addClass('no-scroll');
+  window.location = '#intro';
+  $('.ver-view').addClass('vr-view-shift-up');
+  $('body').addClass('no-scroll');
   $('section').smoothScroll({
     delegateSelector: 'a.down-arrow'
   });
-  $('a.down-arrow i').delay(2500).shake();
 });
