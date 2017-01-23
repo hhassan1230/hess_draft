@@ -1,0 +1,220 @@
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: black;
+  overflow-x: hidden;
+  margin-left: -8px;
+}
+
+.no-scroll {
+  overflow-y: hidden;
+}
+
+.picture {
+  width:30.333%;
+  height: auto;
+  margin: 1%;
+  border: 1px solid white;
+}
+
+.scroll {
+  overflow-y: auto;
+}
+
+.padd {
+  position: relative;
+  z-index: 2;
+  margin: 0 10%;
+  min-height: 80%;
+  height: 80%;
+  /* if FF padding top 20%*/
+}
+
+a {
+  transition: all 500ms;
+}
+
+a:link, a:visited {
+  color: white;
+}
+
+a:hover, a:active {
+  color: purple;
+  text-decoration: none;
+}
+
+section {
+  display: table;
+  width: 100%;
+  height: 100vh;
+  min-height: 200px;
+  color: white;
+}
+
+.table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  height: 100%;
+  min-height: 100%;
+}
+
+.cell {
+  display: table-cell;
+  vertical-align: middle;
+  min-height: 100%;
+  height: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+.center-content {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+  z-index: 0;
+}
+
+.down-arrow{
+  position: absolute;
+  bottom: 1.5%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 3;
+}
+
+.vr-view {
+  position: fixed;
+  top: -10%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  transform: scale(0.15);
+  width: 100%;
+}
+
+.vr-goggles {
+  width: 100%;
+  position: relative;*/
+  z-index: 0;
+  margin-top: -20px;
+}
+
+.expand {
+  transform: scale(1);
+  transition: all 2s ease-in-out;
+}
+
+.expand-goggles {
+  transform: scale(5);
+  transition: all 1.9s ease-in-out;
+}
+
+.transparent {
+  opacity: 0;
+}
+
+.fadeout {
+  opacity: 0;
+  transition: all 2s ease-in-out;
+}
+
+.transparent.fadein {
+  opacity: 1;
+  transition: all 4.4s ease-in-out;
+}
+
+.text-panel {
+  padding: 2%;
+  position: absolute;
+  z-index: 1;
+  border: 1px solid white;
+  width: 33.333%;
+  right: 0;
+  bottom: 0;
+  border-radius: 25px;
+  background: grey;
+  text-align: center;
+  font-family: Avenir;
+}
+
+.text-panel p {
+  margin-bottom: 0;
+}
+
+.vr-view.vr-view-shift-up {
+  top: 0;
+  transition: top 400ms;
+}
+
+iframe {
+  width: 100%;
+  min-width: 350px;
+  max-width: 606px;
+  min-height: 263px;
+  max-height: 455px;
+}
+
+@media only screen and (min-width: 1600px) {
+  .vr-view {
+    top: -30%;
+  }
+}
+
+@media only screen and (max-width: 1050px) {
+  .vr-view {
+    top: 5%;
+  }
+}
+
+@media only screen and (max-width: 1020px) {
+  .text-panel {
+    width: 40%;
+  }
+}
+
+@media only screen and (max-width: 980px) {
+  .vr-view {
+    top: 10%;
+  }
+}
+
+@media only screen and (max-width: 890px) {
+  .text-panel {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 860px) {
+  .picture {
+      width:47%;
+  }
+  .vr-view {
+    top: 15%;
+  }
+}
+
+@media only screen and (max-width: 780px) {
+  .vr-view {
+    top: 20%;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .vr-view {
+    top: 25%;
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .vr-view {
+    top: 27%;
+  }
+}
