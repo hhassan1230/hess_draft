@@ -2,6 +2,9 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, 
     margin: 0;
     padding: 0;
 }
+.maintance-header {
+    text-align: center;
+}
 
 table {
     border-collapse: collapse;
@@ -3094,4 +3097,32 @@ body.students a{color:#60BDDB} /*Causing the social icons to be blue*/
 
 .smooth-scroller {
     padding-top: 20px;
+}
+
+body {
+  font-family: "Andale Mono", AndaleMono, monospace;
+  background-color: #DDDDDD;
+}
+
+#container {
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  text-align: center;
+}
+
+#container p {
+  display: none;
+  font-size: 3.3vw;
+}
+
+#container p:first-child {
+  display: block;
+}
+.bottom-maintance {
+    position: absolute;
+    left: 35%;
+    bottom: 20%;
 }
