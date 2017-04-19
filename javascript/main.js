@@ -45,4 +45,20 @@ $("document").ready(function(){
       };
     };
   }
+  $('.button-big').on('click', function(){
+    var openings = {
+      facebook: '//www.linkedin.com/in/hessvacio/',
+      twitter: '//twitter.com/hessvacio',
+      dribbble: '//github.com/hhassan1230'
+    };
+    var socalMedia = $(this).attr('class').split(" ")[0];
+    socalMedia ? window.open(openings[socalMedia]) : null;
+  });
+  // Change Logo on Hover
+  $( "#h-logo" ).mouseleave(function() {
+    $( "#h-logo" ).attr( "src", "./images/Hessvacio_logo_blacknwhite.png" );
+  });
+  $( "#h-logo" ).mouseover(function() {
+    $( "#h-logo" ).attr( "src", "./images/Hessvacio_logo_hover.png" );
+  });
 })

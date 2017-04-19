@@ -5,15 +5,22 @@
     display: table;
   }
 }
+.modal{
+  margin-top: 61px;
+  max-width: 700px;
+}    
 header {
   @include clearfix;
 }
 .hero {
   @include span-columns(12);
-  background-image: url("../images/tech_jobs_academy_demo.jpg");
+  background-image: url("../images/Hess_draft_cover.png");
   background-repeat: no-repeat;
   background-size: 750px;
-  background-position: -60px 0px;
+  background-color: rgba(237, 241,242, 0.7);
+  /* background: linear-gradient(to right, rgba(237, 241,242, 0.2) 0%, rgba(237, 241,242, .7) 5%, rgba(237, 241,242, .7) 95%, rgba(237, 241,242, .2) 100%);*/
+  /* background-position: -60px 0px; */
+  /* background-position: -558px -847px; */
   padding-top: 15%;
 
   p h1 { @include span-columns(12); }

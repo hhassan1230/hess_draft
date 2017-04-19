@@ -1,4 +1,4 @@
-$accent-color: #FF6633;
+$accent-color: #20ACF0;
 $font: Roboto, sans-serif;
 .long-button {
   display:inline-block;
@@ -127,4 +127,9 @@ section {
   height: 78px;
   width: 82px;
   padding-top: -90px;
+}
+
+.more-btn {
+    text-align: center;
+    margin-top: 5%;
 }

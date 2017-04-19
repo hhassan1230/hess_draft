@@ -1,0 +1,40 @@
+$transition : .2s;
+
+.curriculum-blurbs:hover {
+	.image-blurb {
+		.curriculum-blurbs {
+			transform: translateX(-25%);
+		}
+	}
+	.curriculum-blurbs:hover {
+		transform: scale(1.5);
+		transition-duration: $transition/1.1;
+	}
+	.curriculum-blurbs:hover {
+		transform: scale(1.5);
+		transition-duration: $transition/1.1;
+	}
+
+	.curriculum-blurbs:hover ~ li {
+		transform: translateX(25%);
+	}
+}
+
+.curriculum-blurbs {
+		transition: transform $transition linear;
+}
+
+// ul:hover {
+// 	// li {
+// 	// 	transform: translateX(-25%);
+// 	// }
+
+// 	li:hover {
+// 		transform: scale(1.5);
+// 		transition-duration: $transition/1.1;
+// 	}
+
+// 	li:hover ~ li {
+// 		transform: translateX(25%);
+// 	}
+// }

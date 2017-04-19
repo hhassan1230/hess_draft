@@ -46,6 +46,7 @@ nav {
   }
 }
 .nav-bar {
+  height: 55px;
   .logo {
     width: auto;
     padding-left: 30px;
@@ -54,6 +55,11 @@ nav {
       color: $accent-color;
       font-size: 14px;
       margin-right: 0px;
+    }
+    img {
+      position: absolute;
+      height: 50px;
+      top: 3px;
     }
   }
 }

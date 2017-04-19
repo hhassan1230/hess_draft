@@ -3,6 +3,11 @@
   @include clearfix;
   .logo {
     width: 100%;
+    .moveTo {
+      img {
+        height: 29px;
+      }
+    }
     // text-align: center;
     p {
       color: $accent-color;

@@ -1,10 +1,23 @@
 <html>
   <head>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-93090487-1', 'auto');
+    ga('send', 'pageview');
+  </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./images/hessvacio_favicon.png" type="image/x-icon">
+    <link rel="icon" href="./images/hessvacio_favicon.png" type="image/x-icon">
     <title>The Hessvacio</title>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
     <script src="./javascript/main.js" type="text/javascript" charset="utf-8"></script>
+    <script src="//jquerymodal.com/jquery.modal.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="//jquerymodal.com/jquery.modal.css" type="text/css" media="screen" />
     <link href="./stylesheets/style.css" rel="stylesheet">
     <link
     href='http://fonts.googleapis.com/css?family=Roboto:900,500,400,300,100' rel='stylesheet' type='text/css'>
@@ -13,7 +26,9 @@
     <header>
       <div class="nav-bar">
         <div class="logo">
-          <a href="#home" class="moveTo" title="MAIN-NAME"><p>Hessvacio</p></a>
+          <a href="#home" class="moveTo" title="MAIN-NAME">
+            <img id='h-logo' src="./images/Hessvacio_logo_blacknwhite.png" />
+          </a>
         </div>
         <nav>
           <button class="c-hamburger c-hamburger--rot" id="hamburger">
@@ -21,10 +36,10 @@
           </button>
           <div class="nav-list">
             <ul>
-              <li><a href="#section-1" class="moveTo" title="SECTION 1"> SECTION 1</a></li>
-              <li><a href="#section-2" class="moveTo" title="SECTION 2">SECTION 2</a></li>
-              <li><a href="#section-3" class="moveTo" title="SECTION 3"> SECTION 3</a></li>
-              <li><a href="#section-4" class="moveTo" title="SECTION 4"> SECTION 4</a></li>
+              <li><a href="#section-1" class="moveTo" title="SECTION 1">About</a></li>
+              <li><a href="#section-2" class="moveTo" title="SECTION 2">Projects</a></li>
+              <li><a href="#section-3" class="moveTo" title="SECTION 3">Resume</a></li>
+              <li><a href="#section-4" class="moveTo" title="SECTION 4">My Tech Timeline</a></li>
             </ul>          
           </div>
         </nav>
@@ -33,111 +48,206 @@
         <div class="hero-blurb">
           <h1>Hi I'm Hessvacio</h1>
           <p>I am a Fullstack Developer who makes Amazing Apps.</p>
-          <button class="long-button"><a href="#" title="Link">Link</a></button>
+          <button class="long-button"><a href="#section-2" class="moveTo" title="Link">See My Projects</a></button>
         </div>
       </div>
     </header>
     <section class="overview" id="section-1">
-      <h2>Section 1 - Overview</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis. Fusce faucibus tellus quis rutrum facilisis. Quisque commodo, sapien vel posuere consectetur, libero tortor elementum ex, a pellentesque odio felis vel quam. Nam efficitur ante enim, id elementum velit posuere ut. Etiam tincidunt scelerisque erat, at vehicula lacus fringilla ut. Integer nec leo nisl. Vivamus odio odio, mattis at nisl et, malesuada dignissim nisi. </p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis. Fusce faucibus tellus quis rutrum facilisis.</p>
+      <h2>About</h2>
+      <p>How will the user feel about what I’m building? This something that always goes through my head during my development process. With my experience in Rails, Unity3D, JavaScript, and React, I strive to make the best Apps in the web. I build products with a sense of discovery, a clear message to get across and products that are just overall fun to interact with. My empathy for the user comes from introducing technology to my Amish family as a kid.<br>I studied at The State University of New York at Oswego, where I focused on communications and social interaction. I have integrated my coding knowledge with my communications degree to become an innovative developer with a tenacious appetite for learning, who experiments with new technologies, always strives to understand and implement solutions for a variety of problems.</p>
+      <p>I am familiar with a multitude languages and frameworks. Here are a few technologies and frameworks I often use.</p>
       <div class="curriculum-blurbs">
         <div class="image-blurb">
           <img src="http://vincent.billey.me/talks/react-putting-js-in-your-face/assets/react-logo.png">
           <h3>React.js</h3>
-          <p>Paragraph 1 blurb</p>
+          <p></p>
         </div>
         <div class="image-blurb">
           <img src="http://www.javatpoint.com/images/javascript/javascript_logo.png">
           <h3>JavaScript</h3>
-          <p>Paragraph 2 blurb</p>
+          <p></p>
         </div>
         <div class="image-blurb">
           <img src="https://unity3d.com/files/images/ogimg.jpg">
           <h3>Unity 3D</h3>
-          <p>Paragraph 3 blurb</p>
+          <p></p>
         </div>
         <div class="image-blurb">
-          <img src="https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/Ruby_on_Rails.svg/791px-Ruby_on_Rails.svg.png">
+          <img src="https://www.simplify.com/blog/wp-content/uploads/2015/03/Ruby_on_Rails.svg_.png">
           <h3>Ruby on Rails</h3>
-          <p>Paragraph 4 blurb</p>
+          <p></p>
         </div>
       </div>
     </section>
 
     <section class="curriculum" id="section-2">
-      <h2>Projects - Featured</h2>
+      <h2>Projects</h2>
       <div class="curriculum-blurbs">
         <div class="image-blurb">
-          <a href="#"><img src="https://scontent.oculuscdn.com/t64.5771-25/s360x360/12680421_283166598750045_6030574463760728064_n.png"><h3>Don't Look Away VR</h3></a>
+          <a href="pages/dontlookaway.html"><img src="images/HessDLA_VR.png">
+            <h3>Don't Look Away VR</h3>
+          </a>
         </div>
         <div class="image-blurb">
-          <a href="http://kanyenest.com/" target="_blank"><img src="http://kanyenest.com/images/opening_0.png"><h3>Kanye Nest</h3></a>
+            <a href="http://kanyenest.com/" rel="noopener noreferrer" target="_blank"><img src="images/kanyeNest_splash.png">
+            <h3>Kanye Nest</h3></a>
         </div>
         <div class="image-blurb">
-          <a href="https://whac-a-diglett.herokuapp.com/" target="_blank"><img src="images/digglet.png"><h3>Whac-a-Diglett</h3></a>
+          <a href="https://whac-a-diglett.herokuapp.com/" rel="noopener noreferrer" target="_blank">
+            <img src="images/digglet.png">
+            <h3>Whac-a-Diglett</h3>
+          </a>
         </div>
         <div class="image-blurb">
-          <a href="http://www.bobbycanciello.com/witchualistic.html" target="_blank"><img src="images/Witchualistic.jpg"><h3>Witchualistic</h3></a>
+          <a href="http://www.bobbycanciello.com/witchualistic.html" rel="noopener noreferrer" target="_blank">
+            <img src="images/Witchualistic.jpg">
+              <h3>Witchualistic</h3>
+          </a>
         </div>
         <div class="image-blurb">
-          <img src="http://placehold.it/360x160"><h3>Information 5</h3>
+          <a href="http://techjobsacademy.com/" rel="noopener noreferrer" target="_blank">
+            <img src="images/MS_TJA.png">
+              <h3>Microsoft's Tech Jobs Academy</h3>
+          </a>
         </div>
         <div class="image-blurb">
-          <img src="http://placehold.it/360x160"><h3>Information 6</h3> 
+          <a href="http://ak.staticimgfarm.com/images/webtooltab/builds/prod/XP/S155255-myway/index.html" rel="noopener noreferrer" target="_blank">
+            <img src="images/TVFanatic_IAC.png">
+              <h3>IAC App's New TV Fanatic</h3>
+          </a>
         </div>
+        <div class="image-blurb">
+          <a href="https://civicgraph.io/" rel="noopener noreferrer" target="_blank">
+            <img src="//media.navigatored.com/images/civicgraph-network.jpg">
+              <h3>Microsoft's Civic Graph</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="https://animechase.herokuapp.com/" rel="noopener noreferrer" target="_blank">
+            <img src="images/Anime_Chase.png">
+              <h3>Anime Chase</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="http://ak.staticimgfarm.com/images/webtooltab/builds/dev/GIF/TTAB02CHR/index.html" rel="noopener noreferrer" target="_blank">
+            <img src="images/GifTabs.png">
+            <h3>Gif Tabs</h3>
+          </a>
+        </div>
+      </div>
+      <div class="more-btn">
+        <button class="long-button more-projects"><a href="#ex1" rel="modal:open" title="Link">See More Projects</a></button>
       </div>
     </section>
 
+    <!-- Modal HTML embedded directly into document -->
+    <div id="ex1" style="display:none;">
+      <h2>All The Projects</h2>
+      <div class="curriculum-blurbs">
+        <div class="image-blurb">
+          <a href="pages/dontlookaway.html"><img src="images/HessDLA_VR.png">
+            <h3>Don't Look Away VR</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+            <a href="http://kanyenest.com/" rel="noopener noreferrer" target="_blank"><img src="images/kanyeNest_splash.png">
+            <h3>Kanye Nest</h3></a>
+        </div>
+        <div class="image-blurb">
+          <a href="https://whac-a-diglett.herokuapp.com/" rel="noopener noreferrer" target="_blank">
+            <img src="images/digglet.png">
+            <h3>Whac-a-Diglett</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="http://www.bobbycanciello.com/witchualistic.html" rel="noopener noreferrer" target="_blank">
+            <img src="images/Witchualistic.jpg">
+              <h3>Witchualistic</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="http://techjobsacademy.com/" rel="noopener noreferrer" target="_blank">
+            <img src="images/MS_TJA.png">
+              <h3>Microsoft's Tech Jobs Academy</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="http://ak.staticimgfarm.com/images/webtooltab/builds/prod/XP/S155255-myway/index.html" rel="noopener noreferrer" target="_blank">
+            <img src="images/TVFanatic_IAC.png">
+              <h3>IAC App's New TV Fanatic</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="https://civicgraph.io/" rel="noopener noreferrer" target="_blank">
+            <img src="//media.navigatored.com/images/civicgraph-network.jpg">
+              <h3>Microsoft's Civic Graph</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="https://animechase.herokuapp.com/" rel="noopener noreferrer" target="_blank">
+            <img src="images/Anime_Chase.png">
+              <h3>Anime Chase</h3>
+          </a>
+        </div>
+        <div class="image-blurb">
+          <a href="http://ak.staticimgfarm.com/images/webtooltab/builds/dev/GIF/TTAB02CHR/index.html" rel="noopener noreferrer" target="_blank">
+            <img src="images/GifTabs.png">
+            <h3>Gif Tabs</h3>
+          </a>
+        </div>
+      </div>
+      <a href="#" rel="modal:close">Close</a>
+    </div>
+
     <section class="application" id="section-3">
-      <h2>Section 3 - Descriptive lists</h2>
+      <h2>Resume</h2>
       <div class="curriculum-blurbs">
         <div class="application-steps">
           <ol>
             <li>
-              <h3>Header 1</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis.</p>
+              <h3>IAC Applications</h3>
+              <p>A software company dedicated making products and applications that makes life better across a variety of platforms for consumers and business users.</p>
             </li>
             <li>
-              <h3>Header 2</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis.</p>
+              <h3>Microsoft Civic Technology</h3>
+              <p>Section of Microsoft dedicated to improving the public good through technology.</p>
             </li>
             <li>
-              <h3>Header 3</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis.</p>
+              <h3>Flatiron School</h3>
+              <p>A coding school offering NYC bootcamps that empower you to become a web developer, iOS developer, and more. Free coding classes available.</p>
             </li>
             <li>
-              <h3>Header 4</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis.</p>
+              <h3>Pixel Academy</h3>
+              <p>New York's hub for making, coding, designing, inventing, and more. Hands-on learning for kids ages 7 and up using cutting-edge technology.</p>
             </li>
             <li>
-              <h3>Header 5</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tristique velit sed convallis.</p>
+              <h3>Games for Change</h3>
+              <p>Catalyzing Social Impact Through Digital Games.</p>
             </li>
           </ol>
         </div>
         <div class="eligibility">
-          <h3>Template Bulleted List</h3>
+          <h3>Interests</h3>
           <ul>
-            <li>List Item 1</li>
-            <li>List Item 2</li>
-            <li>List Item 3</li>
-            <li>List Item 4</li>
-            <li>List Item 5</li>
-            <li>List Item 6</li>
-            <li>List Item 7</li>
-            <li>List Item 8</li>
-            <li><a href="http://www.microsoft.com" target="_blank">List Item 9 (with link)</a></li>
+            <li>Web Development</li>
+            <li>Game Development</li>
+            <li>Drawing</li>
+            <li>Hardware Building</li>
+            <li>Cycling</li>
+            <li>Origami</li>
+            <li>Raspberry Pi</li>
+            <li>Being Happy</li>
+            <li><a href="//www.canva.com/design/DACMinyjfuc/3QvKInYn8udniE5JnzcjZA/view?utm_content=DACMinyjfuc&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton" rel="noopener noreferrer" target="_blank">See My Resume</a></li>
           </ul>
           <div class="apply-button">
-            <button class="long-button"><a href="#" title="Link">Link</a></button> 
+            <button class="long-button"><a href="#section-2" class="moveTo" title="Link">See My Projects</a></button> 
           </div>
         </div>
       </div>
     </section>
 
     <section class="key-dates" id="section-4">
-      <h2>Section 4 - Timeline</h2>
+      <h2>My Timeline in Tech</h2>
       <div class="timeline">
         <div class="line">
           <div class="line-start">
@@ -147,70 +257,76 @@
         </div>
         <div class="key-date" id="dot1">
           <div class="callout">
-            <h3>EVENT 1</h3>
+            <h3>Games for Change & <br>Pixel Academy</h3>
             <b class="notch"></b>
           </div>
-          <h4>DATE 1</h4>
+          <h4>Volunteer Technology</h4>
           <span></span>
         </div>
         <div class="key-date" id="dot2">
           <div class="callout">
-            <h3>EVENT 2</h3>
+            <h3>Flatiron School</h3>
             <b class="notch"></b>
           </div>
-            <h4>DATE 2</h4>
+            <h4>Web Development Immersive Student</h4>
             <span></span>
         </div>
         <div class="key-date" id="dot3">
           <div class="callout">
-            <h3>EVENT 3</h3>
+            <h3>Microsoft<br>Civic Technology</h3>
             <b class="notch"></b>
           </div>
-          <h4>DATE 3</h4>
+          <h4>Web Developer Fellow</h4>
           <span></span>
         </div>
           <div class="key-date" id="dot4">
             <div class="callout">
-            <h3>EVENT 4</h3>
+            <h3>IAC Applications</h3>
             <b class="notch"></b>
           </div>
-          <h4>DATE 4</h4>
+          <h4>Software Engineer</h4>
           <span></span>
         </div>
         <div class="key-date" id="dot5">
           <div class="callout">
-            <h3>EVENT 5</h3>
+            <h3>Don't Look Away VR</h3>
             <b class="notch"></b>
           </div>
-          <h4>DATE 5</h4>
+          <h4>Creator and Lead Developer</h4>
           <span></span>
         </div>
           <div class="key-date" id="dot6">
             <div class="callout">
-              <h3>EVENT 6</h3>
+              <h3>Playcrafting</h3>
               <b class="notch"></b>
             </div>
-          <h4>DATE 6</h4>
+          <h4>VR Assistant Instructor</h4>
           <span></span>
         </div>
       </div>
     </section>
     <section class="partners">
-      <h2>Partners/Sponsors</h2>
+      <h2>Contact Me</h2>
       <div class="partner-logos">
-        <a href="http://www.microsoft.com" target="_blank" title="Name of Partner 1"><img src="http://placehold.it/360x160"></a>
-        <a href="http://www.microsoft.com" target="_blank" title="Name of Partner 2"><img src="http://placehold.it/360x160"></a>
-        <a href="http://www.microsoft.com" target="_blank" title="Name of Partner 3"><img src="http://placehold.it/360x160"></a>
+        <div class="twitter button-big">
+          <i class="fa fa-twitter"></i>
+        </div>
+        <div class="facebook button-big">
+          <i class="fa fa-linkedin"></i>
+        </div>
+        <div class="dribbble button-big">
+          <i class="fa fa-github"></i>
+        </div>
       </div>
     </section>
     <footer>
-       <nav>
+      <!--  <nav>
           <ul>
             <li><a href="#">Privacy</a></li>
             <li><a href="#">Terms & Conditions</a></li>
-            <li><a href="mailto:name@email.com">Contact</a></li>
+            <li><a href="mailto:madeinbrooklyngames@gmail.com">Contact</a></li>
           </ul>
-        </nav>
+        </nav> -->
     </footer>
   </body>
 </html>
