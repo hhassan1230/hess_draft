@@ -1,0 +1,104 @@
+.key-dates { 
+  position: relative;
+  @include clearfix;
+  h2 {
+    margin-bottom: -80px;
+  }
+}
+.timeline {
+  width: 100%;
+  position: relative;
+  @include clearfix;
+  .key-date { 
+    width: 100%;
+    h3, h4 { 
+      width: 50%;
+    }
+    span { 
+      margin-left: -8.5px; 
+      left: 50.1%;
+      top: 2px;
+    } 
+  }
+  #dot1{
+    position: absolute;
+    top: 180px;
+/*    left: 11.5%;
+*/  }
+  #dot2{
+    position: absolute;
+    top: 255px;
+/*    left: 20%;
+*/  }
+  #dot3{
+    position: absolute;
+    top: 340px;
+/*    left: 11%;
+*/  }
+  #dot4{
+    position: absolute;
+    top: 427px;
+/*    left: 22.5%;
+*/  }
+  #dot5{
+    position: absolute;
+    top: 580px;
+  }
+
+  #dot6{
+    position: absolute;
+    top: 675px;
+  }
+  h3 {
+    font-weight: 500;
+    display: block;
+    text-align: right;
+    float: left;
+    margin: 0;
+    padding-right: 27px;
+  }
+  span {
+    position: absolute;
+    text-align: center;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    z-index: 2;
+    background-color: black;
+  }
+  h4 {
+    margin: 0px;
+    display: block;
+    text-align: left;
+    float: left;
+    margin-top: 2px;
+    padding-left: 25px;
+    font-size: 15px;
+  }
+}
+.line {
+  margin-top: 45px;
+  z-index:0;
+  position: absolute;
+  top: 110px;
+  left: 49.5%;
+  height: 565px;
+  width: 3.5px;
+  background-color: $accent-color;
+  .line-start {
+    position: absolute;
+    height: 5px;
+    width: 16px;
+    top: -5px;
+    left: -6px;
+    background-color: $accent-color;
+  }
+  .line-end {
+    position: absolute;
+    height: 5px;
+    width: 16px;
+    top: 562px;
+    left: -6px;
+    background-color: $accent-color;
+  }
+}

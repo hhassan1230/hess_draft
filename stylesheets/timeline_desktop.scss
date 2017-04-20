@@ -1,0 +1,421 @@
+.key-dates { 
+  position: relative;
+  @include clearfix;
+  h2 {
+    margin-bottom: -40px;
+  }
+}
+.timeline {
+  width: 100%;
+  position: relative;
+  @include clearfix;
+  .key-date { 
+    width: 200px;
+    height: 200px;
+    span { 
+      margin-left: -8.5px; 
+      top: 40px;
+      left: 80px;
+    }
+    h3 {
+      width: 180px;
+      left: 20px;
+    } 
+    h4 {
+      width: 180px;
+      left: 10px;
+    }
+  } 
+   #dot1 {
+    left: -115px;
+    top: 177px;
+    h3 {
+      position: absolute;
+      left: -37px;
+      width: 205px;
+      top: 15px;
+    }
+    h4 {
+      position: absolute;
+      left: 96px;
+      width: 180px;
+      font-size: 1em;
+      top: -22px;
+    }
+    .callout {
+      position: relative;
+      top: -85px;
+      left: 29px;
+      height: 50px;
+      width: 200px;
+      margin: 18px 20px 3px;
+      padding: 44px 20px;
+      background-color: #eef4f9;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+    .callout .notch {
+      position: absolute;
+      top: 86px;
+      left: 20px;
+      margin: 0;
+      border-top: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 18px solid #eef4f9;
+      padding: 0;
+      width: 0;
+      height: 0;
+      font-size: 0;
+      line-height: 0;
+      _border-right-color: pink;
+      _border-left-color: pink;
+      _filter: chroma(color=pink);
+    }
+  }
+  #dot2 {
+    left: 12px;
+    top: 177px;
+    h3 {
+      position: absolute;
+      left: -25.5px;
+      width: 170px;
+      top: 15px;
+    }
+    h4 {
+      position: absolute;
+      left: 61px;
+      width: 180px;
+      font-size: 1em;
+      top: 120px;
+    }
+    .callout {
+      position: relative;
+      top: 59px;
+      left: 15px;
+      height: 50px;
+      width: 155px;
+      margin: 18px 20px 3px;
+      padding: 44px 20px;
+      background-color: #eef4f9;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+    .callout .notch {
+      position: absolute;
+      top: -18px;
+      left: 34px;
+      margin: 0;
+      border-top: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 18px solid #eef4f9;
+      padding: 0;
+      width: 0;
+      height: 0;
+      font-size: 0;
+      line-height: 0;
+      _border-right-color: pink;
+      _border-left-color: pink;
+      _filter: chroma(color=pink);
+    }
+  }
+  #dot3 {
+    left: 170px;
+    top: 177px;
+    h3 {
+      position: absolute;
+      left: -104px;
+      width: 250px;
+      top: 15px;
+    }
+    h4 {
+      position: absolute;
+      left: 18px;
+      width: 180px;
+      font-size: 1em;
+      top: -23px;
+    }
+    .callout {
+      position: relative;
+      top: -85px;
+      left: -28px;
+      height: 50px;
+      width: 155px;
+      margin: 18px 20px 3px;
+      padding: 44px 20px;
+      background-color: #eef4f9;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+    .callout .notch {
+      position: absolute;
+      top: 86px;
+      left: 77px;
+      margin: 0;
+      border-top: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 18px solid #eef4f9;
+      padding: 0;
+      width: 0;
+      height: 0;
+      font-size: 0;
+      line-height: 0;
+      _border-right-color: pink;
+      _border-left-color: pink;
+      _filter: chroma(color=pink);
+    }
+  }
+  #dot4 {
+    position: absolute;
+    left: 327px;
+    top: 177px;
+    h3 {
+      position: absolute;
+      left: -82px;
+      width: 250px;
+      top: 15px;
+    }
+    h4 {
+      position: absolute;
+      left: 53px;
+      width: 180px;
+      font-size: 1em;
+      top: 122px;
+    }
+    .callout {
+      position: relative;
+      top: 59px;
+      left: -15px;
+      height: 50px;
+      width: 200px;
+      margin: 18px 20px 3px;
+      padding: 44px 20px;
+      background-color: #eef4f9;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+    .callout .notch {
+      position: absolute;
+      top: -18px;
+      left: 64px;
+      margin: 0;
+      border-top: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 18px solid #eef4f9;
+      padding: 0;
+      width: 0;
+      height: 0;
+      font-size: 0;
+      line-height: 0;
+      _border-right-color: pink;
+      _border-left-color: pink;
+      _filter: chroma(color=pink);
+    }
+  }
+  #dot5 {
+    position: absolute;
+    left: 645px;
+    top: 177px;
+    h3 {
+      position: absolute;
+      left: -104.5px;
+      width: 250px;
+      top: 15px;
+    }
+    h4 {
+      position: absolute;
+      left: 37px;
+      width: 180px;
+      font-size: 1em;
+      top: -21px;
+    }
+    .callout {
+      position: relative;
+      top: -85px;
+      left: -9px;
+      height: 50px;
+      width: 155px;
+      margin: 18px 20px 3px;
+      padding: 44px 20px;
+      background-color: #eef4f9;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+    .callout .notch {
+      position: absolute;
+      top: 86px;
+      left: 58px;
+      margin: 0;
+      border-top: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 18px solid #eef4f9;
+      padding: 0;
+      width: 0;
+      height: 0;
+      font-size: 0;
+      line-height: 0;
+      _border-right-color: pink;
+      _border-left-color: pink;
+      _filter: chroma(color=pink);
+    }
+  }
+  #dot6 {
+    position: absolute;
+    left: 800px;
+    top: 177px;
+    h3 {
+      position: absolute;
+      left: -104px;
+      width: 250px;
+      top: 15px;
+    }
+    h4 {
+      position: absolute;
+      left: -21px;
+      width: 180px;
+      font-size: 1em;
+      top: 122px;
+    }
+    .callout {
+      position: relative;
+      top: 59px;
+      left: -65px;
+      height: 50px;
+      width: 155px;
+      margin: 18px 20px 3px;
+      padding: 44px 20px;
+      background-color: #eef4f9;
+      -moz-border-radius: 6px;
+      -webkit-border-radius: 6px;
+      border-radius: 6px;
+    }
+    .callout .notch {
+      position: absolute;
+      top: -18px;
+      left: 113px;
+      margin: 0;
+      border-top: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 18px solid #eef4f9;
+      padding: 0;
+      width: 0;
+      height: 0;
+      font-size: 0;
+      line-height: 0;
+      _border-right-color: pink;
+      _border-left-color: pink;
+      _filter: chroma(color=pink);
+    }
+  }
+  display: inline-block;
+  @include clearfix;
+  h3 {
+    font-weight: 500;
+    display: inline;
+    text-align: none;
+    float: none;
+    margin: 0;
+    padding-right: 27px;
+  }
+  span {
+    position: absolute;
+    text-align: center;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    z-index: 2;
+    background-color: black;
+  }
+  h4 {
+    position: absolute;
+    top: 68.5px;
+    left: 18px;
+    margin: 0;
+    display: inline;
+    text-align: none;
+    float: none;
+    padding-left: 25px;
+  }
+}
+.line {
+  z-index:0;
+  position: absolute;
+  top: 178px;
+  left: -90px;
+  height: 3.5px;
+  width: 1025px;
+  background-color: $accent-color;
+  .line-start {
+    position: absolute;
+    height: 16px;
+    width: 3px;
+    top: -6px;
+    left: 1025px;
+    background-color: $accent-color;
+  }
+  .line-end {
+    position: absolute;
+    height: 16px;
+    width: 3px;
+    top: -6px;
+    left: 0px;
+    background-color: $accent-color;
+  }
+}
+.timeline h3 {
+  font-size: 1em;
+}
+.timeline #dot1 h3 {
+  font-size: .9em;
+  left: 13px;
+}
+.timeline #dot3 h3 {
+  font-size: .9em;
+  left: -77px;
+}
+.timeline #dot2 h3 {
+  left: -11.5px;
+}
+.timeline #dot4 h3 {
+  left: -68px;
+}
+.timeline #dot5 h3 {
+  left: -72.5px;
+}
+
+.timeline #dot1 h4 {
+  font-size: .9em;
+  top: -12px;
+  left: 76px;
+}
+.timeline #dot2 h4 {
+  font-size: .9em;
+  left: 27px;
+}
+.timeline #dot3 h4 {
+  font-size: .9em;
+  top: -12px;
+  left: -24px;
+}
+.timeline #dot4 h4 {
+  font-size: .9em;
+  left: 12px;
+}
+.timeline #dot5 h4 {
+  font-size: .9em;
+  left: -5px;
+}
+.timeline #dot6 h4 {
+  font-size: .9em;
+  left: -64px;
+}

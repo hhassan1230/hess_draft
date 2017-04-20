@@ -1,0 +1,46 @@
+.partners {
+  margin-top: 150px;
+  .partner-logos {
+    @include span-columns(12);
+    a {
+      display:inline-block;
+      margin-right: 80px;
+      &:first-child {
+        margin-left: 90px;
+      }
+      img {
+        height: 60px;
+        width: auto;
+        text-align: center;
+        &:last-child {margin-right: 0px;}
+      }
+    }
+  }
+}
+.partners h2 {
+  margin-top: 310px;
+}
+footer {
+  @include span-columns(12);
+  background-color:black;
+  color: white;
+  clear: both;
+  text-align:center;
+  padding: 15px;  
+  max-width: none;
+  nav, ul { 
+    float: none;
+    width: auto;
+  }
+  li { 
+    text-transform: uppercase;
+    &:first-child {
+      margin-left: 560px;
+    }
+  }
+  ul {
+    display: inline-block;
+    padding: 0px;
+  }
+  nav { padding: 10px 0px; }
+}

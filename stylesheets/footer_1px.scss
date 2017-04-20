@@ -1,0 +1,154 @@
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+/* General rule */
+.button-big
+{
+  display: inline-block;
+  font-size: 2.5em;
+  width: 4em;
+  text-align:center;
+  padding: 0.2em 0em 0.2em 0em;
+  cursor: pointer;
+}
+/* Facebook class and animation */
+.facebook
+{
+  color: #3B5998;
+  border: 1px solid #3B5998;
+}
+
+.facebook:hover
+{
+  animation: facebookAnim 0.4s normal forwards linear;
+  -webkit-animation: facebookAnim 0.4s normal forwards linear;
+}
+
+@keyframes facebookAnim {
+  50% {
+    background-color: #3B5998;
+  }
+  100% {
+    background-color: #3B5998;
+    border: 1px solid #3B5998;
+    color: #fff;
+  }
+}
+
+@-webkit-keyframes facebookAnim {
+  50% {
+    background-color: #3B5998;
+  }
+  100% {
+    background-color: #3B5998;
+    border: 1px solid #3B5998;
+    color: #fff;
+  }
+}
+/* Dribble class and animation */
+.dribbble
+{
+  color: #24292E;
+  border: 1px solid #24292E;
+}
+
+.dribbble:hover
+{
+  animation: dribbbleAnim 0.4s normal forwards linear;
+  -webkit-animation: dribbbleAnim 0.4s normal forwards linear;
+}
+
+@-webkit-keyframes dribbbleAnim {
+  50% {
+    background-color: #24292E;
+  }
+  100% {
+    background-color: #24292E;
+    border: 1px solid #24292E;
+    color: #fff;
+  }
+}
+  
+@keyframes dribbbleAnim {
+  50% {
+    background-color: #24292E;
+  }
+  100% {
+    background-color: #24292E;
+    border: 1px solid #24292E;
+    color: #fff;
+  }
+}
+/* Twitter class and animation */
+.twitter
+{
+  color: #0096ff;
+  border: 1px solid #0096ff;
+}
+
+.twitter:hover
+{
+  animation: twitterAnim 0.4s normal forwards linear;
+  -webkit-animation: twitterAnim 0.4s normal forwards linear;
+}
+@keyframes twitterAnim {
+  50% {
+    background-color: #0096ff;
+  }
+  100% {
+    background-color: #0096ff;
+    border: 1px solid #0096ff;
+    color: #fff;
+  }
+}
+
+@-webkit-keyframes twitterAnim {
+  50% {
+    background-color: #0096ff;
+  }
+  100% {
+    background-color: #0096ff;
+    border: 1px solid #0096ff;
+    color: #fff;
+  }
+}
+
+.partners {
+  text-align: center;
+  .partner-logos {
+    padding: 20px 0px 40px;
+  }
+  h2 {
+    margin-top: 760px;
+  }
+  a {
+    display: block;
+    padding-bottom:20px;
+    img {
+      width:120px;
+    }
+  }
+}
+footer {
+  @include span-columns(12);
+  background-color:black;
+  color: white;
+  clear: both;
+  text-align:center;
+  padding: 15px;  
+  max-width: none;
+  nav, ul { 
+    float: none;
+    width: auto;
+  }
+  li { 
+    text-transform: uppercase;
+    a {
+      text-decoration: none;
+    }
+  }
+  ul {
+    list-style-type: none;
+    display: inline-block;
+    padding: 0px;
+  }
+  nav { padding: 10px 0px; }
+}

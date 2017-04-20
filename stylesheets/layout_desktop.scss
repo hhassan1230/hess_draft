@@ -1,0 +1,82 @@
+@mixin omega-reset($nth) {
+  &:nth-child(#{$nth}) { margin-right: flex-gutter(); }
+  &:nth-child(#{$nth}+1) { clear: none }
+}
+// .curriculum {
+  
+// }
+h1 {
+  font-size: modular-scale(5);
+  margin-bottom: 0px;
+}
+section.overview  .image-blurb {
+  @include omega-reset(1n);
+  @include span-columns(3);
+}
+nav ul li {
+  display: inline;
+}
+section.curriculum .image-blurb {
+  @include omega-reset(1n);
+  @include span-columns(4);
+  @include omega(3n);
+}
+.eligibility {
+  @include span-columns(6);
+  padding-left: 50px;
+  h3 { text-align: left; }
+  ul {
+    padding-left: 25px;
+    li {
+      margin-left: 0px;
+      margin-right: 0px;
+      padding-left: 20px;
+    }
+  }
+  p {
+    text-align: initial;
+    font-weight: 100;
+  }
+  .long-button {
+    padding-right:10px;
+    padding-left:10px;
+  }
+  .apply-button { text-align: left; }
+}
+.application-steps {
+  @include span-columns(6);
+  ol { margin-top: 25px; }
+}
+.hero {
+  width: 100%;
+  background-size: cover;
+  padding: 15%;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position-y: -186px;
+  /* background-size: 2800px; */
+  .hero-blurb { 
+    max-width: 80em;
+  }
+  p {
+    font-size: modular-scale(1);
+    font-weight: 100;
+  }
+}
+p {font-weight: 100;}
+.mail-signup #mc_embed_signup #input-box input[type="email"] {
+  font-family: $font;
+  font-size: modular-scale(0);
+  width: 60%;
+  box-shadow: none;
+  border-radius: none;
+  margin-right: auto;
+  webkit-appearance: none;
+  border: 1px solid #999;
+}
+.long-button {
+  width: 300px;
+}
+.curriculum .curriculum-blurbs .image-blurb {
+  margin-top: 40px;
+}

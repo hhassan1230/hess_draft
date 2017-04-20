@@ -1,0 +1,94 @@
+@mixin clearfix {
+  &::after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+}
+.modal{
+  margin-top: 61px;
+  max-width: 700px;
+}    
+header {
+  @include clearfix;
+}
+.hero {
+  @include span-columns(12);
+  background-image: url("../images/Hess_draft_cover.png");
+  background-repeat: no-repeat;
+  background-size: 750px;
+  background-color: rgba(237, 241,242, 0.7);
+  /* background: linear-gradient(to right, rgba(237, 241,242, 0.2) 0%, rgba(237, 241,242, .7) 5%, rgba(237, 241,242, .7) 95%, rgba(237, 241,242, .2) 100%);*/
+  /* background-position: -60px 0px; */
+  /* background-position: -558px -847px; */
+  padding-top: 15%;
+
+  p h1 { @include span-columns(12); }
+  h1 {color: white;}
+
+  .hero-blurb {
+    @include outer-container;
+    text-align: center;
+    padding: 50px 20% 75px;
+    p {font-weight: 400;}
+  }
+}
+.image-blurb {
+  @include span-columns(6);
+  @include omega(2n);
+  img, .icon { height: 70px; }
+  text-align: center;
+  h3 {
+    margin-bottom: 0px;
+  }
+  p {
+    margin-top: 0px;
+  }
+}
+.curriculum-blurbs {
+  @include outer-container;
+}
+button {
+  width: 200px;
+}
+section {
+  @include outer-container;
+  max-width: 58em;
+  padding: 30px;
+}
+h1, h2 {
+  text-align: center;
+}
+.overview p {
+  text-align: center;
+  font-weight: 100;
+  margin-bottom: 50px;
+}
+.eligibility {
+  @include span-columns(12);
+  h3 {
+    padding-left: 20px;
+  }
+  ul { padding-left: 0px; }
+  ul li {
+    margin-left: 40px;
+    padding-bottom: 30px;
+  }
+  p {
+    text-align: center;
+    font-weight: 100;
+    font-size: 1em
+  }
+  .apply-button { text-align: center; }
+  .long-button {
+    padding-right:10px;
+    padding-left:10px;
+    margin-left: 6px
+  }
+}
+.application-steps {
+  @include row();
+}
+.curriculum .curriculum-blurbs .image-blurb {
+  margin-top: 30px;
+}
