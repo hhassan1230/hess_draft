@@ -14,7 +14,7 @@ header {
 }
 .hero {
   @include span-columns(12);
-  background-image: url("../images/Hess_draft_cover.png");
+  background-image: url("../images/hess_draft_cover.png");
   background-repeat: no-repeat;
   background-size: 750px;
   background-color: rgba(237, 241,242, 0.7);
