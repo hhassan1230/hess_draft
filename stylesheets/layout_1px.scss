@@ -18,19 +18,26 @@ header {
   background-repeat: no-repeat;
   background-size: 750px;
   background-color: rgba(237, 241,242, 0.7);
+  background-position: -126px 0px;
   /* background: linear-gradient(to right, rgba(237, 241,242, 0.2) 0%, rgba(237, 241,242, .7) 5%, rgba(237, 241,242, .7) 95%, rgba(237, 241,242, .2) 100%);*/
   /* background-position: -60px 0px; */
   /* background-position: -558px -847px; */
   padding-top: 15%;
 
   p h1 { @include span-columns(12); }
-  h1 {color: white;}
+  h1 {
+    color: white;
+    text-shadow: 0 2px 5px rgba(0,0,255,0.75);
+  }
 
   .hero-blurb {
     @include outer-container;
     text-align: center;
     padding: 50px 20% 75px;
-    p {font-weight: 400;}
+    p {
+      font-weight: 400;
+      text-shadow: 0 2px 5px rgba(0,0,255,0.75);
+    }
   }
 }
 .image-blurb {
