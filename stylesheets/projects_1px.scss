@@ -15,7 +15,7 @@ $transition : .2s;
 		transition-duration: $transition/1.1;
 	}
 
-	.curriculum-blurbs:hover ~ li {
+	.curriculum-blurbs:hover {
 		transform: translateX(25%);
 	}
 }

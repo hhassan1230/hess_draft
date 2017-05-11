@@ -156,7 +156,10 @@ header::after {
   /* background: linear-gradient(to right, rgba(237, 241,242, 0.2) 0%, rgba(237, 241,242, .7) 5%, rgba(237, 241,242, .7) 95%, rgba(237, 241,242, .2) 100%);*/
   /* background-position: -60px 0px; */
   /* background-position: -558px -847px; */
-  padding-top: 15%; }
+  padding-top: 15%;
+  -webkit-animation: "fadein .5s 1";
+  -moz-animation: "fadein .5s 1";
+  animation: "fadein .5s 1"; }
   .hero:last-child {
     margin-right: 0; }
   .hero p h1 {
@@ -182,6 +185,29 @@ header::after {
     .hero .hero-blurb p {
       font-weight: 400;
       text-shadow: 0 2px 5px rgba(0, 0, 255, 0.75); }
+
+.featured-blurb {
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+  float: left;
+  display: block;
+  margin-right: 2.35765%;
+  width: 100%;
+  text-align: center; }
+  .featured-blurb::after {
+    clear: both;
+    content: "";
+    display: table; }
+  .featured-blurb:last-child {
+    margin-right: 0; }
+  .featured-blurb:nth-child(1n) {
+    margin-right: 0; }
+  .featured-blurb:nth-child(1n+1) {
+    clear: left; }
+  .featured-blurb img {
+    width: 90%; }
 
 .image-blurb {
   float: left;
@@ -268,6 +294,21 @@ h1, h2 {
 .curriculum .curriculum-blurbs .image-blurb {
   margin-top: 30px; }
 
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+@keyframes fadein {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
 .key-dates {
   position: relative; }
   .key-dates::after {
@@ -531,7 +572,7 @@ footer {
 .curriculum-blurbs:hover .curriculum-blurbs:hover {
   transform: scale(1.5);
   transition-duration: 0.18182s; }
-.curriculum-blurbs:hover .curriculum-blurbs:hover ~ li {
+.curriculum-blurbs:hover .curriculum-blurbs:hover {
   transform: translateX(25%); }
 
 .curriculum-blurbs {
@@ -760,6 +801,9 @@ footer {
 
   .curriculum .curriculum-blurbs .image-blurb {
     margin-top: 40px; }
+
+  #section-2 .curriculum-blurbs .image-blurb img {
+    height: 140px; }
 
   .key-dates {
     position: relative; }

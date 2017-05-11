@@ -81,3 +81,12 @@ p {font-weight: 100;}
 .curriculum .curriculum-blurbs .image-blurb {
   margin-top: 40px;
 }
+#section-2 {
+  .curriculum-blurbs {
+    .image-blurb {
+      img {
+        height:140px;
+      }
+    }
+  }
+}
