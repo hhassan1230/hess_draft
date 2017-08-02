@@ -286,7 +286,7 @@ iframe {
 }
 @media only screen and (min-width: 1416px) and (max-width: 1500px) {
   .vr-view {
-    top: -2%;
+    top: -1%;
   }
 }
 @media only screen and (min-width: 1326px) and (max-width: 1415px) {
