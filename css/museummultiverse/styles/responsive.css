@@ -341,6 +341,9 @@
   .ft-hover-item .ft-2 {
     background-size: 200%;
   }
+  .overflow-button {
+    display: none;
+  }
 }
 
 /* ---- CTA - Call to Action ---- */
