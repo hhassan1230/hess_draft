@@ -991,8 +991,17 @@
     margin-bottom: 15px;
   }
   .web-app-hero .hero-content-wrapper .hero-content .hero-lead {
-    font-size: 50px;
+    font-size: 46px;
     letter-spacing: 5px;
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+  .hero-subheading {
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+  .navbar .navbar-header .navbar-brand {
+    padding: 7px 0 7px 0;
   }
 }
 
