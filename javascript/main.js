@@ -61,4 +61,11 @@ $("document").ready(function(){
   $( "#h-logo" ).mouseover(function() {
     $( "#h-logo" ).attr( "src", "./images/Hessvacio_logo_hover.png" );
   });
+    // Change About me on Hover
+  $( "#hess-logo" ).mouseleave(function() {
+    $( "#hess-logo>#hess-logo-img" ).attr( "src", "./img/Hessvacio_logo.png" );
+  });
+  $( "#hess-logo" ).mouseover(function() {
+    $( "#hess-logo>#hess-logo-img" ).attr( "src", "./img/Hessvacio_logo_hover.png" );
+  });
 })
