@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Don't Look Away is a psychological horror experience that pits you against a mysterious entity bent on breaking down your mind, body, and soul before it feeds. Strapped to a chair, bound and gagged, with only a limited ability to reach for what's within your grasp, can you figure out the mystery of the room before it's too late?">
+	<meta name="keywords" content="games, vr, scary, gear, virtual, reality, cool, game, indie, hessvacio, oculus, amazing, mobile, samsung, gear">
+	<meta property="og:title" content="Don't Look Away VR">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="http://hessvacio.com/img/DontLookAway_Icon.png">
+	<meta property="og:url" content="http://hessvacio.com/pages/dontlookaway.html">
+	<meta property="og:description" content="Don't Look Away is a psychological horror experience that pits you against a mysterious entity bent on breaking down your mind, body, and soul before it feeds. Strapped to a chair, bound and gagged, with only a limited ability to reach for what's within your grasp, can you figure out the mystery of the room before it's too late?">
+	<meta property="og:site_name" content="Don't Look Away VR">
+	<link rel="shortcut icon" href="../img/DontLookAway_Icon.png">
+	<link href='//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' rel='stylesheet' type='text/css'>
+	<link href='//cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js' rel='stylesheet' type='text/css'>
+	<link href='//s3-us-west-2.amazonaws.com/s.cdpn.io/16327/ThrowPropsPlugin.min.js' rel='stylesheet' type='text/css'>
+	<link href='//cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/utils/Draggable.min.js' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Roboto:900,500,400,300,100' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="../css/postMortem1.css">
+	<title>Post Mortem: Don't Look Away VR</title>
+</head>
+<body>
+	<div>
+		<div></div>
+		<div>
+			<svg id="gallery" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1000">
+			  <defs>
+			    <mask id="masterMask">
+			      <rect x="50" y="100" width="100%" height="50%" fill="#fff" />
+			      <rect x="50" y="600" width="100%" height="50%" fill="#fff" rx="15" ry="15" />
+			    </mask>
+			    <mask id="slideMask">
+			      <rect id="theSquare" x="-95%" y="10%" width="100%" height="100%" fill="#fff" />
+			    </mask>
+			    <mask id="captionMask">
+			      <rect x="50"  y="0" width="100%" height="100%" fill="#fff"/>
+			    </mask>
+			    <mask id="draggerMask">
+			      <circle cx="50" cy="450" r="30" fill="#fff"/>
+			      <circle cx="1050" cy="450" r="30" fill="#fff"/>
+			      <rect x="50" y="0" width="100%" height="100%" fill="#fff" rx="18" ry="18" />
+			    </mask>
+			  </defs>
+			  <title>Before and After Gallery</title>
+			  <g mask="url(#masterMask)">
+			    <g class="allPics">
+			      <image xlink:href="//hhassan1230.github.io/CodePenImgs/DLA/209.JPG" x="50" y="100" width="100%" />
+			      <image xlink:href="" x="50" y="800" width="100%" />
+			    </g>
+			    <g mask="url(#slideMask)">
+			      <g class="allPics">
+			        <image xlink:href="//hhassan1230.github.io/CodePenImgs/DLA/Girl_02.jpg" x="50" y="100" width="100%"/>
+			      </g>
+			    </g>
+			  </g>
+			  <g mask="url(#captionMask)">
+			    <rect x="50"  y="50" width="100%" height="50" fill="#68B3AF"/>
+			    <rect x="50"  y="0" width="100%" height="100" rx="15" ry="15" fill="#68B3AF"/>
+			    <g class="allCaptions" fill="white">
+			      <g class="captions">
+			        <text x="130" transform="translate(80 67.05)" font-size="55">Don't Look Away Sketch to Final</text>
+			        <text transform="translate(561 40.33)" font-size="28" >
+			          <tspan x="0" y="33.6" xml:space="preserve"></tspan>
+			          <tspan x="230.88" y="33.6"></tspan>
+			        </text>
+			      </g>
+			    </g>
+			  </g>
+			  <rect x="52" y="2" width="100%" height="100%" fill="none" stroke-width="4" stroke="#fff" rx="15" ry="15" />
+			  <g mask="url(#draggerMask)">
+			    <g id="dragger">
+			      <line id="divider" x1="130" y1="100" x2="130" y2="1000" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10"/>
+			      <circle id="draggerBase" cx="130" cy="450" r="30" fill="#68B3AF"/>
+			      <circle id="outline" cx="130" cy="450" r="26" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2"/>
+			      <polygon id="leftTriangle" points="147.21 449.62 140.11 453.73 133 457.83 133 449.62 133 441.42 140.11 445.52 147.21 449.62" fill="#fff"/>
+			      <polygon id="rightTriangle" points="112.79 449.62 119.89 445.52 127 441.42 127 449.62 127 457.83 119.89 453.73 112.79 449.62" fill="#fff"/>
+			    </g>
+			  </g>
+			</svg>
+			      
+		</div>		
+	</div>
+	<script src="../js/time-slider.js"></script>
+</body>
+</html>

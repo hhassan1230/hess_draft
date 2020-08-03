@@ -1,0 +1,10 @@
+.container {
+	margin: auto;
+  width: 50%;
+  text-align: center;
+}
+
+.random-img img {
+	  text-align: center;
+	  max-width: 400px;
+}
