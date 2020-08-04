@@ -6,14 +6,20 @@ var images = [
 	"hess5.jpg",
 	"hess6.png",
 	"hess7.jpg",
-	"hess8.png",
+	"hess8.jpg",
 	"hess9.png",
 	"hess10.png",
+	"hess11.png",
+	"hess12.jpg",
+	"hess13.jpg",
+	"hess14.png",
+	"hess15.png",
+
 ];
 
 var getImgUrl = function(imageName)
 {
-	return "./img/hess/" + imageName;
+	return "//hessvacio.com/img/hess/" + imageName;
 }
 
 var getRandomImg = function () {
