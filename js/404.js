@@ -14,8 +14,16 @@ var images = [
 	"hess13.jpg",
 	"hess14.png",
 	"hess15.png",
-
 ];
+
+var colorComplement = {
+	0 "#62391d",
+	5:"#60ACDD",
+	6:"#F6931E",
+	14:"#6EA9D6",
+	13: "#C5E9F5",
+
+};
 
 var getImgUrl = function(imageName)
 {
