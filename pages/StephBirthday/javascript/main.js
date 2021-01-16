@@ -25,7 +25,7 @@ function createDragger() {
         type: "x",
         bounds: {
             minX: -75,
-            maxX: 1000
+            maxX: 992
         },
         throwProps: true,
         edgeResistance: 1,
