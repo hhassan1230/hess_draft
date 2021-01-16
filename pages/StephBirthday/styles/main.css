@@ -8,8 +8,7 @@ body {
     padding: 0;
     margin: 0;
     overflow-y: scroll !important;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
+    font-family: 'Playfair Display', serif;
     display: flex;
     align-content: center;
     flex-direction: column;
@@ -17,7 +16,6 @@ body {
     justify-content: flex-start;
     flex-wrap: wrap;
     background-color: #D47E04;
-    /*   d56217 */
 
 }
 
