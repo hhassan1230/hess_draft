@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Happy Birthday Steph</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;#39;">
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+
+<body>
+    <svg id="gallery" xmlns="http://www.w3.org/2000/svg" viewBox="52 3 1080 1695">
+        <defs>
+            <mask id="masterMask">
+                <rect x="50" y="100" width="100%" height="100%" fill="#fff" />
+                <rect x="50" y="600" width="100%" height="50%" fill="#fff" rx="15" ry="15" />
+            </mask>
+            <mask id="slideMask">
+                <rect id="theSquare" x="-95%" y="-6.5%" width="100%" height="110%" fill="#fff" />
+            </mask>
+            <mask id="captionMask">
+                <rect x="50" y="0" width="100%" height="100%" fill="#fff" />
+            </mask>
+            <mask id="draggerMask">
+                <circle cx="50" cy="450" r="30" fill="#fff" />
+                <circle cx="1050" cy="450" r="30" fill="#fff" />
+                <rect x="50" y="0" width="100%" height="100%" fill="#fff" rx="18" ry="18" />
+            </mask>
+        </defs>
+        <title>Steph & Milly</title>
+        <g mask="url(#masterMask)">
+            <g class="allPics">
+                <image xlink:href="//hhassan1230.github.io/PhotoChill/Steph+Milly.png" x="50" y="100" width="105%" />
+            </g>
+            <g mask="url(#slideMask)">
+                <g class="allPics">
+                    <image xlink:href="https://raw.githubusercontent.com/hhassan1230/PhotoChill/master/Steph%2BMillyv5.png" x="50" y="100" width="100%" />
+                </g>
+            </g>
+        </g>
+        <g mask="url(#captionMask)">
+            <rect x="50" y="50" width="100%" height="50" fill="#68B3AF" />
+            <rect x="50" y="0" width="100%" height="100" rx="15" ry="15" fill="#3CB371" />
+            <g class="allCaptions" fill="white">
+                <g class="captions">
+                    <text x="350" transform="translate(80 67.05)" font-size="65">Steph & Milly</text>
+                    <text transform="translate(561 40.33)" font-size="28">
+                        <tspan x="0" y="33.6" xml:space="preserve"></tspan>
+                        <tspan x="230.88" y="33.6"></tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+        <rect x="52" y="2" width="100%" height="100%" fill="none" stroke-width="4" stroke="#fff" rx="15" ry="15" />
+        <g mask="url(#draggerMask)">
+            <g id="dragger">
+                <line id="divider" x1="130" y1="100" x2="130" y2="2000" fill="none" stroke="#fff" stroke-width="2" stroke-miterlimit="10" />
+                <circle id="draggerBase" cx="130" cy="450" r="30" fill="#3CB371" />
+                <circle id="outline" cx="130" cy="450" r="26" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="2" />
+                <polygon id="leftTriangle" points="147.21 449.62 140.11 453.73 133 457.83 133 449.62 133 441.42 140.11 445.52 147.21 449.62" fill="#fff" />
+                <polygon id="rightTriangle" points="112.79 449.62 119.89 445.52 127 441.42 127 449.62 127 457.83 119.89 453.73 112.79 449.62" fill="#fff" />
+            </g>
+        </g>
+    </svg>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.0/gsap.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/utils/Draggable.min.js"></script> -->
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/Draggable-latest-beta.js"></script>
+
+<script src="/javascript/main.js"></script>
+
+</html>

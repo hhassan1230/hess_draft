@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    overflow-y: scroll !important;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    background-color: #D47E04;
+    /*   d56217 */
+
+}
+
+#gallery {
+    width: 100%;
+    max-width: 100%;
+}
+
+.resp-wrap {
+    position: relative;
+    padding-bottom: 131%;
+    height: 0;
+}
+
+.resp-wrap svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
