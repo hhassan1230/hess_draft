@@ -77,7 +77,7 @@ function enterApp() {
     // console.log("My element", elem)
 
     React360.init(
-        'index.bundle?platform=vr',
+        'index.bundle?platform=vr&dev=true',
         document.getElementById('initialize'), {
             assetRoot: 'static_assets/',
         }
@@ -87,5 +87,4 @@ function enterApp() {
       el.style.boxSizing = "inherit"
     });
 }
-// DEBUGGING
-// enterApp();
+
