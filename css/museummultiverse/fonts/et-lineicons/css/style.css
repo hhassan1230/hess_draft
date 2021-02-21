@@ -259,6 +259,18 @@
 	content: "\e63a";
 }
 
+.et-dla:before {
+	content: url("../../../../../images/dontlookaway@3x.png");
+}
+
+.et-witchual:before {
+	content: url("../../../../../images/witch2@2x.png");
+}
+
+.et-kayne:before {
+	content: url("../../../../../images/kanye@2x.png");
+}
+
 .et-newspaper:before {
 	content: "\e63b";
 }
