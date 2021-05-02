@@ -1,0 +1,2087 @@
+/* screen - mobilegameshowcase */
+
+.border-0-5px-quincy {
+  border: 0.5px solid var(--quincy);
+}
+.border-0-5px-zeus {
+  border: 0.5px solid var(--zeus);
+}
+.border-0-7px-quincy {
+  border: 0.7px solid var(--quincy);
+}
+.border-0-9px-quincy {
+  border: 0.9px solid var(--quincy);
+}
+.border-1-2px-zeus {
+  border: 1.2px solid var(--zeus);
+}
+.border-1px-rajah {
+  border: 1px solid var(--rajah);
+}
+.border-1px-white {
+  border: 1px solid var(--white);
+}
+.border-2px-rajah {
+  border: 2px solid var(--rajah);
+}
+.border-2px-white {
+  border: 2px solid var(--white);
+}
+.h2colorblack {
+  font-family: "Helvetica-Bold", Helvetica;
+  font-size: 48px;
+}
+.h2colorwhite {
+  font-family: "Helvetica-Bold", Helvetica;
+  font-size: 48px;
+}
+.interv-bold-white-26px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+}
+.interv-extra-light-white-12px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 200;
+}
+.interv-medium-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-medium-white-18px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-medium-white-26px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-normal-white-12px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-14px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-16px-2 {
+  color: rgba(255,255,255,0.501);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-semi-bold-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+}
+.mobilegameshowcase {
+  background-color: var(--white);
+  height: 100vh;
+  margin: 0px;
+  min-height: 2449px;
+  min-width: 320px;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+.mobilegameshowcase .about-us-C61RwL {
+  background-color: transparent;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 3px 0px 0px rgba(255,137,6,1.0);;
+  top: 840px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .all-rights-reserved-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2406px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .arrow-left-C61RwL {
+  background-color: transparent;
+  height: 31px;
+  left: 24px;
+  position: absolute;
+  top: 116px;
+  width: 17px;
+}
+.mobilegameshowcase .arrow-right-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 31px;
+  justify-content: flex-start;
+  min-width: 17px;
+  position: absolute;
+  right: 24px;
+  top: 116px;
+  width: auto;
+}
+.mobilegameshowcase .bg-1-C61RwL {
+  background-color: rgba(79,67,174,1.0);
+  height: 44px;
+  left: 0px;
+  position: absolute;
+  top: 220px;
+  width: 100%;
+}
+.mobilegameshowcase .bg-about-us-section-C61RwL {
+  background-color: rgba(79,67,174,1.0);
+  height: calc(100.00% - 1780px);
+  left: 0px;
+  position: absolute;
+  top: 806px;
+  width: 100%;
+}
+.mobilegameshowcase .bg-footer-mobile-C61RwL {
+  background-color: var(--outer-space);
+  height: calc(100.00% - 2252px);
+  left: 0px;
+  position: absolute;
+  top: 2252px;
+  width: 100%;
+}
+.mobilegameshowcase .bg-games-section-C61RwL {
+  background-color: var(--mirage);
+  height: calc(100.00% - 2258px);
+  left: 0px;
+  position: absolute;
+  top: 264px;
+  width: calc(100.00% + 1px);
+}
+.mobilegameshowcase .bg-image-C61RwL {
+  background-color: transparent;
+  height: calc(100.00% - 2135px);
+  left: 0px;
+  object-fit: cover;
+  position: absolute;
+  top: 492px;
+  width: 100%;
+}
+.mobilegameshowcase .bg-mobile-C61RwL {
+  background-color: rgba(103,46,103,1.0);
+  height: 37px;
+  left: 0px;
+  position: absolute;
+  top: 455px;
+  width: 100%;
+}
+.mobilegameshowcase .bubble-2-C61RwL {
+  align-items: center;
+  background-color: rgba(68,215,182,1.0);
+  border-radius: 14.5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 29px;
+  justify-content: flex-end;
+  left: 121px;
+  min-width: calc(100.00% - 242px);
+  padding: 0 2.5px;
+  position: absolute;
+  top: 506px;
+  width: auto;
+}
+.mobilegameshowcase .bubble-C61RwL {
+  align-items: center;
+  background-color: var(--rajah);
+  border-radius: 14.5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 29px;
+  justify-content: flex-end;
+  left: 21px;
+  min-width: calc(100.00% - 242px);
+  padding: 0 15.5px;
+  position: absolute;
+  top: 506px;
+  width: auto;
+}
+.mobilegameshowcase .close-C61RwL {
+  background-color: transparent;
+  background-image: url(../img/mobile-game-showcase-path-78F632B4-4E28-4FFE-B0CC-73F0F250EEFC@2x.png);
+  background-size: 100% 100%;
+  height: 18px;
+  left: 17px;
+  pointer-events: auto;
+  position: absolute;
+  top: 465px;
+  transition: all 0.2s ease-in-out;
+  width: 18px;
+}
+.mobilegameshowcase .close-C61RwL:hover {
+
+transform: rotate(-25deg);
+}
+.mobilegameshowcase .form-field-mobile-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  min-height: 603px;
+  position: absolute;
+  top: 1591px;
+  width: 210px;
+}
+.mobilegameshowcase .form-input-mobile-uoKZRS {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  height: auto;
+  justify-content: flex-start;
+  margin-top: 40px;
+  min-height: 119px;
+  position: relative;
+  width: 210px;
+}
+.mobilegameshowcase .games-C61RwL {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  left: 41px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 231px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .get-in-touch-C61RwL {
+  background-color: transparent;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 3px 0px 0px rgba(255,137,6,1.0);;
+  top: 1516px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .group-XEsRY4 {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 21px;
+  justify-content: flex-start;
+  min-width: 13px;
+  position: relative;
+  width: auto;
+}
+.mobilegameshowcase .group-gMa3ek {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 30px;
+  justify-content: flex-start;
+  min-width: 17px;
+  position: relative;
+  width: auto;
+}
+.mobilegameshowcase .hamburger-menu-icon-2IJkvB {
+  background-color: transparent;
+  height: 12px;
+  left: 16px;
+  pointer-events: auto;
+  position: absolute;
+  top: 16px;
+  transition: all 0.2s ease-in-out;
+  width: 20px;
+}
+.mobilegameshowcase .hamburger-menu-icon-2IJkvB:hover {
+
+transform: translate(-5px, 0);
+}
+.mobilegameshowcase .hero-image-mobile-C61RwL {
+  background-color: transparent;
+  height: calc(100.00% - 2272px);
+  left: 0px;
+  object-fit: cover;
+  position: absolute;
+  top: 43px;
+  width: 100%;
+}
+.mobilegameshowcase .input-message-box-mobile-FWZijx {
+  background-color: var(--chetwode-blue);
+  height: 256px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 210px;
+}
+.mobilegameshowcase .legal-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2325px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .logo-4qOjhn {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  height: auto;
+  justify-content: flex-start;
+  margin-right: 1.0px;
+  min-height: 31px;
+  position: relative;
+  width: 51px;
+}
+.mobilegameshowcase .logo-C61RwL {
+  background-color: transparent;
+  height: 83px;
+  position: absolute;
+  top: 916px;
+  width: 135px;
+}
+.mobilegameshowcase .logo-x1nRlC {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 31px;
+  position: relative;
+  width: 50px;
+}
+.mobilegameshowcase .made-in-brooklyn-gam-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 27px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: center;
+  top: 1047px;
+  width: calc(100.00% - 54px);
+}
+.mobilegameshowcase .merch-C61RwL {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 231px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .newgrounds-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 26px;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  pointer-events: auto;
+  position: absolute;
+  text-align: left;
+  top: 725px;
+  transition: all 0.3s ease-in-out;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .newgrounds-C61RwL:hover {
+
+transform: translate(5px, 0);
+}
+.mobilegameshowcase .noun-arrow2626410-copy-4-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 21px;
+  justify-content: flex-start;
+  left: 11px;
+  min-width: 13px;
+  position: absolute;
+  top: 349px;
+  transform: rotate(180deg);
+  width: auto;
+}
+.mobilegameshowcase .noun-arrow2626410-copy-5-C61RwL {
+  background-color: transparent;
+  height: 21px;
+  position: absolute;
+  right: 12px;
+  top: 349px;
+  transform: rotate(-180deg);
+  width: 11px;
+}
+.mobilegameshowcase .other-C61RwL {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  right: 50px;
+  text-align: left;
+  top: 231px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .oval-20RWIm {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 18px;
+  position: absolute;
+  top: 47px;
+  width: 1px;
+}
+.mobilegameshowcase .oval-3psFIE {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 38px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-5mphW3 {
+  background-color: var(--outer-space);
+  border-radius: 4px;
+  height: 4px;
+  left: 12px;
+  position: absolute;
+  top: 40px;
+  width: 4px;
+}
+.mobilegameshowcase .oval-6QWD40 {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 41px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-BRN6Gz {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 18px;
+  position: absolute;
+  top: 36px;
+  width: 1px;
+}
+.mobilegameshowcase .oval-BxWQgv {
+  background-color: var(--rajah);
+  border-radius: 18px/17px;
+  height: 17px;
+  left: 5px;
+  position: absolute;
+  top: 33px;
+  width: 18px;
+}
+.mobilegameshowcase .oval-C61RwL {
+  background-color: var(--flamenco);
+  border-radius: 16px;
+  height: 16px;
+  margin-left: -22px;
+  margin-right: 22px;
+  position: absolute;
+  top: 1422px;
+  width: 16px;
+}
+.mobilegameshowcase .oval-D0tSvt {
+  background-color: var(--outer-space);
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 40px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-DIk5Ku {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-Dff7nf {
+  background-color: var(--outer-space);
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-DzfFL4 {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 7px;
+  position: absolute;
+  top: 36px;
+  width: 1px;
+}
+.mobilegameshowcase .oval-QSxKfu {
+  background-color: var(--outer-space);
+  border-radius: 5px;
+  height: 5px;
+  left: 36px;
+  position: absolute;
+  top: 42px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-VmR1pI {
+  background-color: var(--rajah);
+  border-radius: 18px/17px;
+  height: 17px;
+  left: 5px;
+  position: absolute;
+  top: 32px;
+  width: 18px;
+}
+.mobilegameshowcase .oval-WEdFEm {
+  background-color: var(--flamenco);
+  border-radius: 16px;
+  flex-shrink: 1;
+  height: 16px;
+  position: relative;
+  width: 16px;
+}
+.mobilegameshowcase .oval-WFY39Q {
+  background-color: transparent;
+  border-radius: 11px;
+  height: 11px;
+  left: 8px;
+  position: absolute;
+  top: 37px;
+  width: 11px;
+}
+.mobilegameshowcase .oval-copy-2-WEdFEm {
+  background-color: transparent;
+  border-radius: 16px;
+  flex-shrink: 1;
+  height: 16px;
+  margin-left: 11px;
+  position: relative;
+  width: 16px;
+}
+.mobilegameshowcase .oval-copy-3-WEdFEm {
+  background-color: transparent;
+  border-radius: 16px;
+  flex-shrink: 1;
+  height: 16px;
+  margin-left: 11px;
+  position: relative;
+  width: 16px;
+}
+.mobilegameshowcase .oval-copy-4-WEdFEm {
+  background-color: transparent;
+  border-radius: 16px;
+  flex-shrink: 1;
+  height: 16px;
+  margin-left: 11px;
+  position: relative;
+  width: 16px;
+}
+.mobilegameshowcase .oval-copy-C61RwL {
+  background-color: transparent;
+  border-radius: 16px;
+  height: 16px;
+  margin-left: 22px;
+  margin-right: -22px;
+  position: absolute;
+  top: 1422px;
+  width: 16px;
+}
+.mobilegameshowcase .oval-e1w9Y5 {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 41px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-p2Xkh2 {
+  background-color: var(--flamenco);
+  border-radius: 14px/15px;
+  height: 15px;
+  left: 7px;
+  position: absolute;
+  top: 35px;
+  width: 14px;
+}
+.mobilegameshowcase .oval-p8uDOQ {
+  background-color: transparent;
+  border-radius: 18px/17px;
+  height: 17px;
+  left: 5px;
+  position: absolute;
+  top: 33px;
+  width: 18px;
+}
+.mobilegameshowcase .oval-t7wJkg {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 36px;
+  position: absolute;
+  top: 43px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-tFyvHR {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 36px;
+  position: absolute;
+  top: 42px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-wiMY6g {
+  background-color: var(--zeus);
+  border-radius: 11px;
+  height: 11px;
+  left: 8px;
+  position: absolute;
+  top: 37px;
+  width: 11px;
+}
+.mobilegameshowcase .oval-xWRwKD {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 40px;
+  width: 5px;
+}
+.mobilegameshowcase .oval-xoXbFx {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 7px;
+  position: absolute;
+  top: 47px;
+  width: 1px;
+}
+.mobilegameshowcase .oval-yc4e9u {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 38px;
+  width: 5px;
+}
+.mobilegameshowcase .overlap-group-uoKZRS {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 256px;
+  margin-top: 54px;
+  position: relative;
+  width: 210px;
+}
+.mobilegameshowcase .overlap-group1-GkpTuB {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 41px;
+  position: relative;
+  width: 210px;
+}
+.mobilegameshowcase .overlap-group2-GkpTuB {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 41px;
+  margin-top: 37px;
+  position: relative;
+  width: 210px;
+}
+.mobilegameshowcase .overlay-C61RwL {
+  background-color: rgba(60,22,237,1.0);
+  height: calc(100.00% - 2272px);
+  left: 0px;
+  opacity: 0.4;
+  position: absolute;
+  top: 43px;
+  width: 100%;
+}
+.mobilegameshowcase .overlay-game-ca-showcase-mobile-C61RwL {
+  background-color: rgba(103,46,103,1.0);
+  height: calc(100.00% - 2135px);
+  left: 0px;
+  opacity: 0.72;
+  position: absolute;
+  top: 492px;
+  width: calc(100.00% + 1px);
+}
+.mobilegameshowcase .page-indicator-mobile-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  justify-content: flex-start;
+  min-width: 97px;
+  position: absolute;
+  top: 432px;
+  width: auto;
+}
+.mobilegameshowcase .path-20RWIm {
+  background-color: transparent;
+  height: 10px;
+  left: 3px;
+  position: absolute;
+  top: 27px;
+  width: 53px;
+}
+.mobilegameshowcase .path-2x5zbR {
+  background-color: transparent;
+  height: 1px;
+  left: 41px;
+  position: absolute;
+  top: 31px;
+  width: 1px;
+}
+.mobilegameshowcase .path-3psFIE {
+  background-color: transparent;
+  height: 3px;
+  left: 11px;
+  position: absolute;
+  top: 41px;
+  width: 4px;
+}
+.mobilegameshowcase .path-5D0QnU {
+  background-color: transparent;
+  height: 2px;
+  left: 17px;
+  position: absolute;
+  top: 26px;
+  width: 24px;
+}
+.mobilegameshowcase .path-5mphW3 {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilegameshowcase .path-66jY0P {
+  background-color: transparent;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 40px;
+  width: 4px;
+}
+.mobilegameshowcase .path-6QWD40 {
+  background-color: transparent;
+  height: 5px;
+  left: 19px;
+  position: absolute;
+  top: 27px;
+  width: 22px;
+}
+.mobilegameshowcase .path-8sFj1H {
+  background-color: transparent;
+  height: 3px;
+  left: 49px;
+  position: absolute;
+  top: 36px;
+  width: 3px;
+}
+.mobilegameshowcase .path-8x7eA7 {
+  background-color: transparent;
+  height: 3px;
+  left: 37px;
+  position: absolute;
+  top: 42px;
+  width: 3px;
+}
+.mobilegameshowcase .path-BRN6Gz {
+  background-color: transparent;
+  height: 11px;
+  left: 3px;
+  position: absolute;
+  top: 27px;
+  width: 54px;
+}
+.mobilegameshowcase .path-BbxOTO {
+  background-color: transparent;
+  height: 3px;
+  left: 17px;
+  position: absolute;
+  top: 26px;
+  width: 24px;
+}
+.mobilegameshowcase .path-BxWQgv {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 32px;
+  width: 57px;
+}
+.mobilegameshowcase .path-D0tSvt {
+  background-color: transparent;
+  height: 3px;
+  left: 37px;
+  position: absolute;
+  top: 43px;
+  width: 3px;
+}
+.mobilegameshowcase .path-DIk5Ku {
+  background-color: transparent;
+  height: 18px;
+  left: 33px;
+  position: absolute;
+  top: 34px;
+  width: 24px;
+}
+.mobilegameshowcase .path-DZkVuT {
+  background-color: transparent;
+  height: 5px;
+  left: 15px;
+  position: absolute;
+  top: 25px;
+  width: 28px;
+}
+.mobilegameshowcase .path-Dff7nf {
+  background-color: transparent;
+  height: 3px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 3px;
+}
+.mobilegameshowcase .path-DzfFL4 {
+  background-color: transparent;
+  height: 35px;
+  left: 0px;
+  position: absolute;
+  top: 26px;
+  width: 59px;
+}
+.mobilegameshowcase .path-FBlhZy {
+  background-color: transparent;
+  height: 1px;
+  left: 39px;
+  position: absolute;
+  top: 32px;
+  width: 1px;
+}
+.mobilegameshowcase .path-KJ5wdY {
+  background-color: transparent;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 4px;
+}
+.mobilegameshowcase .path-L5vlcj {
+  background-color: transparent;
+  height: 26px;
+  left: 8px;
+  position: absolute;
+  top: 0px;
+  width: 39px;
+}
+.mobilegameshowcase .path-LVnPyW {
+  background-color: transparent;
+  height: 5px;
+  left: 40px;
+  position: absolute;
+  top: 35px;
+  width: 7px;
+}
+.mobilegameshowcase .path-QSxKfu {
+  background-color: transparent;
+  height: 16px;
+  left: 34px;
+  position: absolute;
+  top: 35px;
+  width: 22px;
+}
+.mobilegameshowcase .path-SN921X {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 20px;
+  position: relative;
+  width: 12px;
+}
+.mobilegameshowcase .path-VmR1pI {
+  background-color: transparent;
+  height: 27px;
+  left: 8px;
+  position: absolute;
+  top: 0px;
+  width: 39px;
+}
+.mobilegameshowcase .path-WFY39Q {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilegameshowcase .path-ZDcfra {
+  background-color: transparent;
+  height: 5px;
+  left: 37px;
+  position: absolute;
+  top: 43px;
+  width: 4px;
+}
+.mobilegameshowcase .path-ZeqrEL {
+  background-color: transparent;
+  height: 1px;
+  left: 13px;
+  position: absolute;
+  top: 48px;
+  width: 1px;
+}
+.mobilegameshowcase .path-aMUZQu {
+  background-color: transparent;
+  height: 1px;
+  left: 40px;
+  position: absolute;
+  top: 31px;
+  width: 1px;
+}
+.mobilegameshowcase .path-cWFVKd {
+  background-color: transparent;
+  height: 1px;
+  left: 21px;
+  position: absolute;
+  top: 42px;
+  width: 1px;
+}
+.mobilegameshowcase .path-e1w9Y5 {
+  background-color: transparent;
+  height: 10px;
+  left: 8px;
+  position: absolute;
+  top: 37px;
+  width: 11px;
+}
+.mobilegameshowcase .path-jw7h1q {
+  background-color: transparent;
+  height: 3px;
+  left: 42px;
+  position: absolute;
+  top: 40px;
+  width: 3px;
+}
+.mobilegameshowcase .path-m6zsv4 {
+  background-color: transparent;
+  height: 1px;
+  left: 13px;
+  position: absolute;
+  top: 34px;
+  width: 1px;
+}
+.mobilegameshowcase .path-p2Xkh2 {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilegameshowcase .path-p8uDOQ {
+  background-color: transparent;
+  height: 35px;
+  left: 0px;
+  position: absolute;
+  top: 26px;
+  width: 59px;
+}
+.mobilegameshowcase .path-t7wJkg {
+  background-color: transparent;
+  height: 15px;
+  left: 6px;
+  position: absolute;
+  top: 33px;
+  width: 17px;
+}
+.mobilegameshowcase .path-tFyvHR {
+  background-color: transparent;
+  height: 10px;
+  left: 34px;
+  position: absolute;
+  top: 34px;
+  width: 22px;
+}
+.mobilegameshowcase .path-wiMY6g {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilegameshowcase .path-xWRwKD {
+  background-color: transparent;
+  height: 3px;
+  left: 42px;
+  position: absolute;
+  top: 40px;
+  width: 3px;
+}
+.mobilegameshowcase .path-xoXbFx {
+  background-color: transparent;
+  height: 22px;
+  left: 1px;
+  position: absolute;
+  top: 38px;
+  width: 57px;
+}
+.mobilegameshowcase .path-xwzroh {
+  background-color: transparent;
+  height: 1px;
+  left: 5px;
+  position: absolute;
+  top: 42px;
+  width: 1px;
+}
+.mobilegameshowcase .path-yM71Qx {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 29px;
+  position: relative;
+  width: 16px;
+}
+.mobilegameshowcase .path-yc4e9u {
+  background-color: transparent;
+  height: 2px;
+  left: 11px;
+  position: absolute;
+  top: 40px;
+  width: 3px;
+}
+.mobilegameshowcase .play-C61RwL {
+  background-color: transparent;
+  font-weight: 600;
+  height: auto;
+  left: 25px;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 695px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .play-as-a-newly-mint-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 23px;
+  letter-spacing: 0.57px;
+  line-height: 17px;
+  position: absolute;
+  text-align: left;
+  top: 562px;
+  width: calc(100.00% - 46px);
+}
+.mobilegameshowcase .potion-panic-C61RwL {
+  background-color: transparent;
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 900;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 464px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .privacy-policy-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2273px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .puzzle-dTV4E2 {
+  background-color: transparent;
+  color: var(--white);
+  flex-shrink: 1;
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.49px;
+  line-height: 15px;
+  min-height: 15px;
+  min-width: 44px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .rated-10-vRb1RH {
+  background-color: transparent;
+  color: var(--white);
+  flex-shrink: 1;
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.49px;
+  line-height: 15px;
+  min-height: 15px;
+  min-width: 69px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .rectangle-20RWIm {
+  background-color: var(--thunder);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 24px;
+  width: 4px;
+}
+.mobilegameshowcase .rectangle-5mphW3 {
+  background-color: var(--thunder);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 22px;
+  width: 4px;
+}
+.mobilegameshowcase .rectangle-BG0UyK {
+  background-color: var(--rajah);
+  flex-shrink: 1;
+  height: 3px;
+  position: relative;
+  width: 36px;
+}
+.mobilegameshowcase .rectangle-BRN6Gz {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 24px;
+  width: 4px;
+}
+.mobilegameshowcase .rectangle-BxWQgv {
+  background-color: var(--flamenco);
+  border-radius: 1px;
+  height: 2px;
+  left: 39px;
+  position: absolute;
+  top: 33px;
+  transform: rotate(-21.77deg);
+  width: 6px;
+}
+.mobilegameshowcase .rectangle-C61RwL {
+  background-color: transparent;
+  height: calc(100.00% - 2299px);
+  left: 30px;
+  overflow: hidden;
+  position: absolute;
+  top: 274px;
+  width: calc(100.00% - 59px);
+}
+.mobilegameshowcase .rectangle-VMr6Om {
+  background-color: var(--mirage);
+  height: calc(100.00% - 1672px);
+  left: 0px;
+  position: absolute;
+  top: 1475px;
+  width: 100%;
+}
+.mobilegameshowcase .rectangle-VmR1pI {
+  background-color: var(--rajah);
+  border-radius: 1px;
+  height: 2px;
+  left: 38px;
+  position: absolute;
+  top: 33px;
+  transform: rotate(-21.80deg);
+  width: 7px;
+}
+.mobilegameshowcase .rectangle-WFY39Q {
+  background-color: var(--thunder);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 22px;
+  width: 4px;
+}
+.mobilegameshowcase .rectangle-Wv7rkX {
+  background-color: transparent;
+  height: 41px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 210px;
+}
+.mobilegameshowcase .rectangle-copy-2-BG0UyK {
+  background-color: var(--rajah);
+  flex-shrink: 1;
+  height: 3px;
+  margin-top: 3px;
+  position: relative;
+  width: 18px;
+}
+.mobilegameshowcase .rectangle-copy-2-dkxFTb {
+  background-color: var(--flamenco);
+  height: 2px;
+  left: 0px;
+  position: absolute;
+  top: 10px;
+  width: 20px;
+}
+.mobilegameshowcase .rectangle-copy-3-7shuxB {
+  background-color: transparent;
+  height: 41px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 210px;
+}
+.mobilegameshowcase .rectangle-copy-BG0UyK {
+  background-color: var(--rajah);
+  flex-shrink: 1;
+  height: 3px;
+  margin-top: 3px;
+  position: relative;
+  width: 27px;
+}
+.mobilegameshowcase .rectangle-copy-dkxFTb {
+  background-color: var(--flamenco);
+  height: 2px;
+  left: 0px;
+  position: absolute;
+  top: 5px;
+  width: 20px;
+}
+.mobilegameshowcase .rectangle-dkxFTb {
+  background-color: var(--flamenco);
+  height: 2px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 20px;
+}
+.mobilegameshowcase .rectangle-p2Xkh2 {
+  background-color: transparent;
+  border-radius: 1px;
+  height: 2px;
+  left: 39px;
+  position: absolute;
+  top: 33px;
+  transform: rotate(-21.77deg);
+  width: 6px;
+}
+.mobilegameshowcase .rectangle-p8uDOQ {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 22px;
+  width: 4px;
+}
+.mobilegameshowcase .rectangle-wiMY6g {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 20px;
+  width: 4px;
+}
+.mobilegameshowcase .rectangle-xoXbFx {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 25px;
+  width: 4px;
+}
+.mobilegameshowcase .retro-controller-1-C61RwL {
+  background-color: transparent;
+  height: 67px;
+  position: absolute;
+  right: 14px;
+  top: 806px;
+  width: 66px;
+}
+.mobilegameshowcase .retro-controller-2-C61RwL {
+  background-color: transparent;
+  height: 65px;
+  position: absolute;
+  right: 14px;
+  top: 1482px;
+  width: 59px;
+}
+.mobilegameshowcase .shape-BxWQgv {
+  background-color: transparent;
+  height: 1px;
+  left: 41px;
+  position: absolute;
+  top: 31px;
+  width: 1px;
+}
+.mobilegameshowcase .shape-VmR1pI {
+  background-color: transparent;
+  height: 1px;
+  left: 40px;
+  position: absolute;
+  top: 32px;
+  width: 1px;
+}
+.mobilegameshowcase .style-1-C61RwL {
+  align-items: flex-end;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: -90px;
+  margin-right: 90px;
+  min-height: 15px;
+  position: absolute;
+  top: 850px;
+  width: 36px;
+}
+.mobilegameshowcase .submit-btn-mobile-uoKZRS {
+  background-color: var(--flamenco);
+  flex-shrink: 1;
+  height: 45px;
+  margin-top: 56px;
+  pointer-events: auto;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  width: 210px;
+}
+.mobilegameshowcase .submit-btn-mobile-uoKZRS:hover {
+
+transform: scale(0.9);
+}
+.mobilegameshowcase .submit-qIoEbv {
+  background-color: transparent;
+  color: rgba(0,0,0,1.0);
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  height: auto;
+  left: 74px;
+  letter-spacing: 0.00px;
+  line-height: 21px;
+  position: absolute;
+  text-align: left;
+  top: 12px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .terms-condition-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2299px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .text-tell-me-about-yourself-FWZijx {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.696);
+  font-family: 'Inter V', Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  height: 238px;
+  left: 11px;
+  letter-spacing: 0.00px;
+  line-height: 17px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 13px;
+  width: 192px;
+}
+.mobilegameshowcase .text-tell-me-about-yourself-FWZijx::placeholder {
+  color: rgba(255,255,255,0.417);
+}
+.mobilegameshowcase .text-your-email-7shuxB {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.696);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  height: 30px;
+  left: 63px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 6px;
+  width: 80px;
+}
+.mobilegameshowcase .text-your-email-7shuxB::placeholder {
+  color: rgba(255,255,255,0.417);
+}
+.mobilegameshowcase .text-your-name-Wv7rkX {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.696);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  height: 30px;
+  left: 63px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 7px;
+  width: 84px;
+}
+.mobilegameshowcase .text-your-name-Wv7rkX::placeholder {
+  color: rgba(255,255,255,0.417);
+}
+.mobilegameshowcase .top-bar-2IJkvB {
+  align-items: center;
+  background-color: var(--outer-space);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  left: 0px;
+  min-height: 43px;
+  padding: 5px 134px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+.mobilegameshowcase .top-bar-mobile-C61RwL {
+  background-color: transparent;
+  height: 43px;
+  left: 0px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+}
+.mobilegameshowcase .topic-box-mobile-uoKZRS {
+  align-items: flex-end;
+  background-color: var(--chetwode-blue);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 33px;
+  justify-content: flex-end;
+  min-width: 210px;
+  padding: 6px 35px;
+  position: relative;
+  width: auto;
+}
+.mobilegameshowcase .whats-the-topic-9kc3cd {
+  background-color: transparent;
+  color: var(--white);
+  flex-shrink: 1;
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  min-height: 20px;
+  min-width: 139px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .x2021-madein-brooklyn-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2380px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilegameshowcase .xmlid10-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 14px;
+  position: absolute;
+  top: 46px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid11-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 18px;
+  position: absolute;
+  top: 50px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid12-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 14px;
+  position: absolute;
+  top: 55px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid13-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 50px;
+  position: absolute;
+  top: 46px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid14-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 28px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilegameshowcase .xmlid15-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 51px;
+  position: absolute;
+  top: 52px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid16-GpPr31 {
+  background-color: transparent;
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 45px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilegameshowcase .xmlid17-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 51px;
+  position: absolute;
+  top: 47px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid18-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 47px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid19-GpPr31 {
+  background-color: transparent;
+  height: 38px;
+  left: 9px;
+  opacity: 0.41;
+  position: absolute;
+  top: 0px;
+  width: 46px;
+}
+.mobilegameshowcase .xmlid2-GpPr31 {
+  background-color: transparent;
+  height: 10px;
+  left: 45px;
+  position: absolute;
+  top: 45px;
+  width: 11px;
+}
+.mobilegameshowcase .xmlid20-GpPr31 {
+  background-color: transparent;
+  height: 27px;
+  left: 0px;
+  opacity: 0.41;
+  position: absolute;
+  top: 40px;
+  width: 66px;
+}
+.mobilegameshowcase .xmlid32-GpPr31 {
+  background-color: transparent;
+  height: 27px;
+  left: 0px;
+  position: absolute;
+  top: 38px;
+  width: 66px;
+}
+.mobilegameshowcase .xmlid33-GpPr31 {
+  background-color: rgba(231,80,59,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 57px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid34-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 52px;
+  position: absolute;
+  top: 54px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid35-GpPr31 {
+  background-color: transparent;
+  height: 10px;
+  left: 49px;
+  position: absolute;
+  top: 47px;
+  width: 11px;
+}
+.mobilegameshowcase .xmlid36-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 9px;
+  position: absolute;
+  top: 37px;
+  width: 15px;
+}
+.mobilegameshowcase .xmlid37-GpPr31 {
+  background-color: var(--quincy);
+  height: 1px;
+  left: 31px;
+  position: absolute;
+  top: 37px;
+  width: 6px;
+}
+.mobilegameshowcase .xmlid38-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 35px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilegameshowcase .xmlid41-GpPr31 {
+  background-color: var(--quincy);
+  height: 1px;
+  left: 31px;
+  position: absolute;
+  top: 36px;
+  width: 4px;
+}
+.mobilegameshowcase .xmlid43-GpPr31 {
+  background-color: transparent;
+  height: 35px;
+  left: 9px;
+  position: absolute;
+  top: 0px;
+  width: 46px;
+}
+.mobilegameshowcase .xmlid44-GpPr31 {
+  background-color: transparent;
+  height: 25px;
+  left: 1px;
+  position: absolute;
+  top: 39px;
+  width: 64px;
+}
+.mobilegameshowcase .xmlid45-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 43px;
+  position: absolute;
+  top: 37px;
+  width: 15px;
+}
+.mobilegameshowcase .xmlid46-GpPr31 {
+  background-color: rgba(131,85,89,1.0);
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 7px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilegameshowcase .xmlid48-GpPr31 {
+  background-color: var(--rajah);
+  border-radius: 17px/16px;
+  height: 16px;
+  left: 6px;
+  position: absolute;
+  top: 43px;
+  width: 17px;
+}
+.mobilegameshowcase .xmlid49-GpPr31 {
+  background-color: rgba(131,85,89,1.0);
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 45px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilegameshowcase .xmlid50-GpPr31 {
+  background-color: rgba(149,103,107,1.0);
+  border-radius: 14px/13px;
+  height: 13px;
+  left: 7px;
+  position: absolute;
+  top: 44px;
+  width: 14px;
+}
+.mobilegameshowcase .xmlid51-GpPr31 {
+  background-color: var(--rajah);
+  border-radius: 17px/16px;
+  height: 16px;
+  left: 44px;
+  position: absolute;
+  top: 43px;
+  width: 17px;
+}
+.mobilegameshowcase .xmlid52-GpPr31 {
+  background-color: transparent;
+  height: 13px;
+  left: 1px;
+  position: absolute;
+  top: 50px;
+  width: 64px;
+}
+.mobilegameshowcase .xmlid53-GpPr31 {
+  background-color: transparent;
+  height: 13px;
+  left: 1px;
+  position: absolute;
+  top: 38px;
+  width: 64px;
+}
+.mobilegameshowcase .xmlid54-GpPr31 {
+  background-color: var(--quincy);
+  height: 1px;
+  left: 32px;
+  position: absolute;
+  top: 36px;
+  width: 3px;
+}
+.mobilegameshowcase .xmlid55-GpPr31 {
+  background-color: transparent;
+  height: 13px;
+  left: 8px;
+  position: absolute;
+  top: 45px;
+  width: 13px;
+}
+.mobilegameshowcase .xmlid56-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 35px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilegameshowcase .xmlid57-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 50px;
+  position: absolute;
+  top: 48px;
+  width: 9px;
+}
+.mobilegameshowcase .xmlid58-GpPr31 {
+  background-color: var(--flamenco);
+  border-radius: 3px;
+  height: 3px;
+  left: 13px;
+  position: absolute;
+  top: 50px;
+  width: 3px;
+}
+.mobilegameshowcase .xmlid59-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 46px;
+  position: absolute;
+  top: 46px;
+  width: 9px;
+}
+.mobilegameshowcase .xmlid6-GpPr31 {
+  background-color: transparent;
+  height: 11px;
+  left: 9px;
+  position: absolute;
+  top: 46px;
+  width: 11px;
+}
+.mobilegameshowcase .xmlid60-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 57px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid61-GpPr31 {
+  background-color: rgba(254,245,133,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 52px;
+  position: absolute;
+  top: 54px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid62-GpPr31 {
+  background-color: rgba(139,216,245,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 51px;
+  position: absolute;
+  top: 47px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid63-GpPr31 {
+  background-color: rgba(50,185,77,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 47px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilegameshowcase .xmlid64-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 51px;
+  opacity: 0.17;
+  position: absolute;
+  top: 49px;
+  width: 9px;
+}
+.mobilegameshowcase .xmlid65-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 46px;
+  opacity: 0.17;
+  position: absolute;
+  top: 46px;
+  width: 9px;
+}
+.mobilegameshowcase .xmlid66-GpPr31 {
+  background-color: rgba(149,103,107,1.0);
+  border-radius: 14px/13px;
+  height: 13px;
+  left: 46px;
+  position: absolute;
+  top: 44px;
+  width: 14px;
+}
+.mobilegameshowcase .xmlid67-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 28px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilegameshowcase .xmlid68-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 12px;
+  position: absolute;
+  top: 48px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid7-GpPr31 {
+  background-color: transparent;
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 7px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilegameshowcase .xmlid70-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 55px;
+  position: absolute;
+  top: 48px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid71-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 29px;
+  position: absolute;
+  top: 44px;
+  width: 11px;
+}
+.mobilegameshowcase .xmlid72-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 13px;
+  position: absolute;
+  top: 51px;
+  width: 3px;
+}
+.mobilegameshowcase .xmlid73-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 34px;
+  position: absolute;
+  top: 42px;
+  width: 6px;
+}
+.mobilegameshowcase .xmlid74-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 28px;
+  position: absolute;
+  top: 42px;
+  width: 4px;
+}
+.mobilegameshowcase .xmlid8-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 47px;
+  position: absolute;
+  top: 49px;
+  width: 1px;
+}
+.mobilegameshowcase .xmlid9-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 10px;
+  position: absolute;
+  top: 50px;
+  width: 1px;
+}
+.placeholder-18placeholder-18 {
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+.text-18text-18 {
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+:root {
+  --chetwode-blue: rgba(135,125,213,1.0);
+  --coral: rgba(244,133,81,1.0);
+  --flamenco: rgba(255,137,6,1.0);
+  --mirage: rgba(26,25,37,1.0);
+  --outer-space: rgba(65,64,75,1.0);
+  --quincy: rgba(102,60,59,1.0);
+  --rajah: rgba(251,179,98,1.0);
+  --thunder: rgba(48,46,44,1.0);
+  --white: rgba(255,255,255,1.0);
+  --zeus: rgba(40,37,34,1.0);
+}

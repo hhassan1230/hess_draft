@@ -1,0 +1,5144 @@
+/* screen - desktopmerch */
+
+.border-0-5px-quincy {
+  border: 0.5px solid var(--quincy);
+}
+.border-0-5px-zeus {
+  border: 0.5px solid var(--zeus);
+}
+.border-0-7px-quincy {
+  border: 0.7px solid var(--quincy);
+}
+.border-0-9px-quincy {
+  border: 0.9px solid var(--quincy);
+}
+.border-1-2px-zeus {
+  border: 1.2px solid var(--zeus);
+}
+.border-1px-rajah {
+  border: 1px solid var(--rajah);
+}
+.border-1px-white {
+  border: 1px solid var(--white);
+}
+.border-2px-rajah {
+  border: 2px solid var(--rajah);
+}
+.border-2px-white {
+  border: 2px solid var(--white);
+}
+.bp1-animate-enter {
+  animation: bp1-animate-enter-frames 0.70s ease-in-out 0.10s 1 normal forwards;
+  display: block;
+opacity: 0;
+filter: blur(10px);
+}
+.bp1-animate-enter1 {
+  animation: bp1-animate-enter1-frames 0.40s ease-in-out 0.40s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter10 {
+  animation: bp1-animate-enter10-frames 0.40s ease-in-out 0.00s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter11 {
+  animation: bp1-animate-enter11-frames 0.40s ease-in-out 0.70s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: scale(1.1);
+}
+.bp1-animate-enter12 {
+  animation: bp1-animate-enter12-frames 0.90s ease-in-out 0.00s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(0, 25px);
+}
+.bp1-animate-enter13 {
+  animation: bp1-animate-enter13-frames 0.50s ease-in-out 0.80s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter14 {
+  animation: bp1-animate-enter14-frames 0.50s ease-in-out 0.50s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter15 {
+  animation: bp1-animate-enter15-frames 0.50s ease-in-out 0.70s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter16 {
+  animation: bp1-animate-enter16-frames 0.50s ease-in-out 0.90s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter17 {
+  animation: bp1-animate-enter17-frames 0.40s ease-in-out 0.50s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter18 {
+  animation: bp1-animate-enter18-frames 0.70s ease-in-out 0.70s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter19 {
+  animation: bp1-animate-enter19-frames 0.80s ease-in-out 1.00s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter2 {
+  animation: bp1-animate-enter2-frames 0.50s ease-in-out 0.60s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter20 {
+  animation: bp1-animate-enter20-frames 0.40s ease-in-out 0.20s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: scale(1.1);
+}
+.bp1-animate-enter3 {
+  animation: bp1-animate-enter3-frames 0.50s ease-in-out 0.90s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter4 {
+  animation: bp1-animate-enter4-frames 0.50s ease-in-out 1.00s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter5 {
+  animation: bp1-animate-enter5-frames 0.50s ease-in-out 0.20s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter6 {
+  animation: bp1-animate-enter6-frames 0.40s ease-in-out 0.30s 1 normal forwards;
+  display: block;
+opacity: 0;
+}
+.bp1-animate-enter7 {
+  animation: bp1-animate-enter7-frames 0.40s ease-in-out 0.50s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.bp1-animate-enter8 {
+  animation: bp1-animate-enter8-frames 0.80s ease-in-out 0.00s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(0, 35px);
+}
+.bp1-animate-enter9 {
+  animation: bp1-animate-enter9-frames 0.50s ease-in-out 0.80s 1 normal forwards;
+  display: block;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch {
+  background-color: var(--white);
+  height: 100vh;
+  margin: 0px;
+  min-height: 2692px;
+  min-width: 1024px;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+.desktopmerch .about-7GbJks {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: 27px;
+  min-height: 20px;
+  min-width: 48px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .about-SIgoEM {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: 21px;
+  min-height: 20px;
+  min-width: 48px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .about-us-C61RwL {
+  background-color: transparent;
+  color: var(--white);
+  display: block;
+  font-weight: 700;
+  height: auto;
+  left: 122px;
+  line-height: 58px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 7px 0px 0px rgba(255,137,6,1.0);;
+  top: 1295px;
+  white-space: nowrap;
+  width: calc(100.00% - 810px);
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .active-e7verA {
+  background-color: var(--flamenco);
+  border-radius: 16px;
+  flex-shrink: 1;
+  height: 16px;
+  position: relative;
+  width: 16px;
+}
+.desktopmerch .background-contact-section-C61RwL {
+  background: linear-gradient(180deg, #1A1925 9%, #41404B 100%);
+  background-color: transparent;
+  height: calc(100.00% - 1984px);
+  left: 0px;
+  position: absolute;
+  top: 1830px;
+  width: 100%;
+}
+.desktopmerch .bg-grey-game-section-C61RwL {
+  background-color: var(--outer-space);
+  height: calc(100.00% - 2121px);
+  left: 124px;
+  position: absolute;
+  top: 638px;
+  width: calc(100.00% - 122px);
+}
+.desktopmerch .bg-purple-game-section-C61RwL {
+  background-color: rgba(79,67,174,1.0);
+  height: calc(100.00% - 2112px);
+  left: 0px;
+  position: absolute;
+  top: 1229px;
+  width: 100%;
+}
+.desktopmerch .brooklyn-img-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  background-image: url(../img/desktop--bg-image-7C97C025-4A3E-40C7-99FD-C8AA81F2AB80.jpg);
+  background-position: 50% 50%;
+  background-size: cover;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 571px;
+  justify-content: flex-start;
+  left: 0px;
+  min-width: 122px;
+  position: absolute;
+  top: 638px;
+  width: auto;
+}
+.desktopmerch .checkboxinactive-rn2NGm {
+  background-color: var(--rajah);
+  height: 16px;
+  left: 1px;
+  position: absolute;
+  top: 479px;
+  width: 18px;
+}
+.desktopmerch .contact-7GbJks {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: 34px;
+  min-height: 20px;
+  min-width: 63px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .contact-SIgoEM {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: 22px;
+  min-height: 20px;
+  min-width: 63px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .facebook-Xiy3pP {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 32px;
+  margin-bottom: 4.0px;
+  margin-left: 45px;
+  position: relative;
+  width: 32px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .featured-products-C61RwL {
+  background-color: transparent;
+  color: var(--white);
+  display: block;
+  font-family: 'Inter V', Helvetica;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.98px;
+  line-height: 29px;
+  margin-left: -110px;
+  margin-right: 110px;
+  position: absolute;
+  text-align: left;
+  top: 669px;
+  white-space: nowrap;
+  width: 241px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .footer-C61RwL {
+  background-color: var(--mirage);
+  bottom: 0px;
+  height: 154px;
+  left: 0px;
+  position: absolute;
+  width: 100%;
+}
+.desktopmerch .form-field-C61RwL {
+  background-color: transparent;
+  display: block;
+  height: calc(100.00% - 2188px);
+  position: absolute;
+  right: 122px;
+  top: 1979px;
+  width: 301px;
+opacity: 0;
+transform: scale(1.1);
+}
+.desktopmerch .form-field-box-1-n62dMv {
+  background-color: transparent;
+  height: 36px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 300px;
+}
+.desktopmerch .form-field-box-2-8UzHnk {
+  background-color: transparent;
+  height: 36px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 300px;
+}
+.desktopmerch .form-input-message-rn2NGm {
+  background-color: var(--chetwode-blue);
+  height: 201px;
+  left: 1px;
+  position: absolute;
+  top: 242px;
+  width: 300px;
+}
+.desktopmerch .form-input-rn2NGm {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  left: 0px;
+  min-height: 113px;
+  position: absolute;
+  top: 86px;
+  width: 301px;
+}
+.desktopmerch .games-7GbJks {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: 34px;
+  min-height: 20px;
+  min-width: 55px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .games-SIgoEM {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: 23px;
+  min-height: 20px;
+  min-width: 55px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .games-drDmqS {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  min-height: 31px;
+  pointer-events: auto;
+  position: relative;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+  white-space: nowrap;
+  width: 88px;
+}
+.desktopmerch .games-drDmqS:hover {
+
+transform: scale(0.9);
+}
+.desktopmerch .get-in-touch-C61RwL {
+  background-color: transparent;
+  color: var(--white);
+  display: block;
+  font-weight: 700;
+  height: auto;
+  left: 122px;
+  line-height: 58px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 7px 0px 0px rgba(255,137,6,1.0);;
+  top: 1896px;
+  white-space: nowrap;
+  width: calc(100.00% - 744px);
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .hero-image-C61RwL {
+  background-color: transparent;
+  display: block;
+  height: calc(100.00% - 2122px);
+  left: 0px;
+  overflow: hidden;
+  position: absolute;
+  top: 47px;
+  width: 100%;
+opacity: 0;
+filter: blur(10px);
+}
+.desktopmerch .hero-image-C61RwL img {
+  object-fit: cover;
+}
+.desktopmerch .hero-image-C61RwL video {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+.desktopmerch .home-7GbJks {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  min-height: 20px;
+  min-width: 47px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .home-SIgoEM {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  min-height: 20px;
+  min-width: 47px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .icons8-tetris-g-console-64-copy-C61RwL {
+  background-color: transparent;
+  display: block;
+  height: 96px;
+  left: 42px;
+  pointer-events: auto;
+  position: absolute;
+  top: 2184px;
+  transition: all 0.4s ease-in-out;
+  width: 96px;
+opacity: 0;
+transform: scale(1.1);
+}
+.desktopmerch .icons8-tetris-g-console-64-copy-C61RwL:hover {
+
+filter: grayscale(100%);
+}
+.desktopmerch .inactive-e7verA {
+  background-color: transparent;
+  border-radius: 16px;
+  flex-shrink: 1;
+  height: 16px;
+  margin-left: 65px;
+  position: relative;
+  width: 16px;
+}
+.desktopmerch .line-2-IggD9r {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  position: relative;
+  width: 197px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-2-copy-2-IggD9r {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  margin-left: 6px;
+  position: relative;
+  width: 10px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-2-copy-3-IggD9r {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  margin-left: 6px;
+  position: relative;
+  width: 6px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-2-copy-IggD9r {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  margin-left: 8px;
+  position: relative;
+  width: 15px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-VcSEoL {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  position: relative;
+  width: 100%;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-background-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  left: -1px;
+  min-height: 87px;
+  position: absolute;
+  top: 2320px;
+  width: calc(100.00% - 421px);
+}
+.desktopmerch .line-copy-2-VcSEoL {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  margin-top: 39px;
+  position: relative;
+  width: 100%;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-copy-VcSEoL {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 3px;
+  margin-top: 39px;
+  position: relative;
+  width: 100%;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .line-green-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 3px;
+  justify-content: flex-start;
+  margin-left: -106px;
+  margin-right: 106px;
+  min-width: 248px;
+  position: absolute;
+  top: 697px;
+  width: auto;
+}
+.desktopmerch .linkedin-Xiy3pP {
+  background-color: transparent;
+  display: block;
+  flex-shrink: 1;
+  height: 40px;
+  position: relative;
+  width: 40px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .links-iPe1yZ {
+  align-items: flex-start;
+  background-color: transparent;
+  bottom: 94px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  justify-content: flex-start;
+  min-width: 306px;
+  position: absolute;
+  right: 122px;
+  width: auto;
+}
+.desktopmerch .logo-C61RwL {
+  background-color: transparent;
+  background-image: url(../img/desktop--logo-298CC594-2CB8-4CE1-8162-DB1279AD44D8@2x.png);
+  background-size: 100% 100%;
+  display: block;
+  height: 106px;
+  position: absolute;
+  right: 168px;
+  top: 1352px;
+  width: 173px;
+opacity: 0;
+}
+.desktopmerch .logo-iPe1yZ {
+  background-color: transparent;
+  background-image: url(../img/desktop--logo-453D1EC6-CBEF-4A2E-93AC-79719E85C5D5@2x.png);
+  background-size: 100% 100%;
+  bottom: calc(-0.65% + 50px);
+  height: 55px;
+  left: 102px;
+  position: absolute;
+  width: 89px;
+}
+.desktopmerch .logo-zCOIAP {
+  background-color: transparent;
+  background-image: url(../img/desktop--logo-AA8B0E5F-9464-4A51-A450-F117749E1AC0@2x.png);
+  background-size: 100% 100%;
+  height: 36px;
+  left: 43px;
+  position: absolute;
+  top: 6px;
+  width: 58px;
+}
+.desktopmerch .made-in-brooklyn-gam-C61RwL {
+  background-color: transparent;
+  display: block;
+  font-weight: 400;
+  height: auto;
+  left: 122px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 1443px;
+  width: calc(100.00% - 644px);
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .madein-brooklyn-games-iPe1yZ {
+  background-color: transparent;
+  bottom: 56px;
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  height: auto;
+  left: 313px;
+  letter-spacing: 0.00px;
+  line-height: 17px;
+  position: absolute;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .merch-card-2-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  min-height: 214px;
+  position: absolute;
+  top: 729px;
+  width: 138px;
+}
+.desktopmerch .merch-card-3-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 160px;
+  margin-right: -160px;
+  min-height: 214px;
+  position: absolute;
+  top: 729px;
+  width: 138px;
+}
+.desktopmerch .merch-card-4-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 321px;
+  margin-right: -321px;
+  min-height: 214px;
+  position: absolute;
+  top: 729px;
+  width: 138px;
+}
+.desktopmerch .merch-card-5-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: -161px;
+  margin-right: 161px;
+  min-height: 214px;
+  position: absolute;
+  top: 1027px;
+  width: 140px;
+}
+.desktopmerch .merch-card-6-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 1px;
+  margin-right: -1px;
+  min-height: 214px;
+  position: absolute;
+  top: 1027px;
+  width: 138px;
+}
+.desktopmerch .merch-card-7-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 162px;
+  margin-right: -162px;
+  min-height: 214px;
+  position: absolute;
+  top: 1027px;
+  width: 138px;
+}
+.desktopmerch .merch-card-8-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 321px;
+  margin-right: -321px;
+  min-height: 214px;
+  position: absolute;
+  top: 1027px;
+  width: 138px;
+}
+.desktopmerch .merch-card-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: -161px;
+  margin-right: 161px;
+  min-height: 214px;
+  position: absolute;
+  top: 729px;
+  width: 140px;
+}
+.desktopmerch .merch-okDrSb {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  left: 0px;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  position: absolute;
+  text-align: left;
+  top: 0px;
+  white-space: nowrap;
+  width: 79px;
+}
+.desktopmerch .nav-bar-C61RwL {
+  background-color: var(--mirage);
+  height: 47px;
+  left: 0px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+}
+.desktopmerch .other-drDmqS {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  margin-left: 8px;
+  margin-top: 53px;
+  min-height: 31px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: 71px;
+}
+.desktopmerch .oval-20RWIm {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 34px;
+  position: absolute;
+  top: 89px;
+  width: 1px;
+}
+.desktopmerch .oval-3psFIE {
+  background-color: var(--zeus);
+  border-radius: 10px;
+  height: 10px;
+  left: 91px;
+  position: absolute;
+  top: 71px;
+  width: 10px;
+}
+.desktopmerch .oval-5mphW3 {
+  background-color: var(--outer-space);
+  border-radius: 7px;
+  height: 7px;
+  left: 21px;
+  position: absolute;
+  top: 76px;
+  width: 7px;
+}
+.desktopmerch .oval-6QWD40 {
+  background-color: var(--zeus);
+  border-radius: 10px;
+  height: 10px;
+  left: 79px;
+  position: absolute;
+  top: 76px;
+  width: 10px;
+}
+.desktopmerch .oval-BRN6Gz {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 34px;
+  position: absolute;
+  top: 68px;
+  width: 1px;
+}
+.desktopmerch .oval-BxWQgv {
+  background-color: var(--rajah);
+  border-radius: 33px;
+  height: 33px;
+  left: 8px;
+  position: absolute;
+  top: 63px;
+  width: 33px;
+}
+.desktopmerch .oval-D0tSvt {
+  background-color: var(--outer-space);
+  border-radius: 10px;
+  height: 10px;
+  left: 79px;
+  position: absolute;
+  top: 75px;
+  width: 10px;
+}
+.desktopmerch .oval-DIk5Ku {
+  background-color: transparent;
+  border-radius: 10px;
+  height: 10px;
+  left: 91px;
+  position: absolute;
+  top: 70px;
+  width: 10px;
+}
+.desktopmerch .oval-Dff7nf {
+  background-color: var(--outer-space);
+  border-radius: 10px;
+  height: 10px;
+  left: 91px;
+  position: absolute;
+  top: 70px;
+  width: 10px;
+}
+.desktopmerch .oval-DzfFL4 {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 13px;
+  position: absolute;
+  top: 68px;
+  width: 1px;
+}
+.desktopmerch .oval-QSxKfu {
+  background-color: var(--outer-space);
+  border-radius: 10px;
+  height: 10px;
+  left: 68px;
+  position: absolute;
+  top: 80px;
+  width: 10px;
+}
+.desktopmerch .oval-VmR1pI {
+  background-color: var(--rajah);
+  border-radius: 34px;
+  height: 34px;
+  left: 7px;
+  position: absolute;
+  top: 61px;
+  width: 34px;
+}
+.desktopmerch .oval-WFY39Q {
+  background-color: transparent;
+  border-radius: 21px;
+  height: 21px;
+  left: 14px;
+  position: absolute;
+  top: 69px;
+  width: 21px;
+}
+.desktopmerch .oval-e1w9Y5 {
+  background-color: var(--zeus);
+  border-radius: 10px;
+  height: 10px;
+  left: 79px;
+  position: absolute;
+  top: 76px;
+  width: 10px;
+}
+.desktopmerch .oval-p2Xkh2 {
+  background-color: var(--flamenco);
+  border-radius: 27px;
+  height: 27px;
+  left: 11px;
+  position: absolute;
+  top: 66px;
+  width: 27px;
+}
+.desktopmerch .oval-p8uDOQ {
+  background-color: transparent;
+  border-radius: 33px;
+  height: 33px;
+  left: 8px;
+  position: absolute;
+  top: 63px;
+  width: 33px;
+}
+.desktopmerch .oval-t7wJkg {
+  background-color: var(--zeus);
+  border-radius: 10px;
+  height: 10px;
+  left: 68px;
+  position: absolute;
+  top: 81px;
+  width: 10px;
+}
+.desktopmerch .oval-tFyvHR {
+  background-color: transparent;
+  border-radius: 10px;
+  height: 10px;
+  left: 68px;
+  position: absolute;
+  top: 80px;
+  width: 10px;
+}
+.desktopmerch .oval-wiMY6g {
+  background-color: var(--zeus);
+  border-radius: 21px;
+  height: 21px;
+  left: 14px;
+  position: absolute;
+  top: 69px;
+  width: 21px;
+}
+.desktopmerch .oval-xWRwKD {
+  background-color: transparent;
+  border-radius: 10px;
+  height: 10px;
+  left: 79px;
+  position: absolute;
+  top: 75px;
+  width: 10px;
+}
+.desktopmerch .oval-xoXbFx {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 13px;
+  position: absolute;
+  top: 89px;
+  width: 1px;
+}
+.desktopmerch .oval-yc4e9u {
+  background-color: var(--zeus);
+  border-radius: 10px;
+  height: 10px;
+  left: 91px;
+  position: absolute;
+  top: 71px;
+  width: 10px;
+}
+.desktopmerch .overlap-group-LxPoFL {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 36px;
+  margin-left: 1px;
+  position: relative;
+  width: 300px;
+}
+.desktopmerch .overlap-group-drDmqS {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 38px;
+  margin-left: 4px;
+  margin-top: 60px;
+  position: relative;
+  width: 79px;
+}
+.desktopmerch .overlap-group1-LxPoFL {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 36px;
+  margin-left: 1px;
+  margin-top: 41px;
+  position: relative;
+  width: 300px;
+}
+.desktopmerch .overlay-desktop-PpoUif {
+  background-color: rgba(36,33,236,1.0);
+  flex-shrink: 1;
+  height: 571px;
+  opacity: 0.3;
+  position: relative;
+  width: 122px;
+}
+.desktopmerch .page-border-desktop-C61RwL {
+  background-color: var(--rajah);
+  height: 21px;
+  left: 0px;
+  position: absolute;
+  top: 617px;
+  width: 100%;
+}
+.desktopmerch .page-border-desktop-VMr6Om {
+  background-color: var(--rajah);
+  height: 21px;
+  left: 0px;
+  position: absolute;
+  top: 1208px;
+  width: 100%;
+}
+.desktopmerch .page-border-desktop-mzXdH9 {
+  background-color: var(--rajah);
+  height: 21px;
+  left: 0px;
+  position: absolute;
+  top: 1809px;
+  width: 100%;
+}
+.desktopmerch .page-indicator-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  justify-content: flex-start;
+  min-width: 97px;
+  position: absolute;
+  top: 1771px;
+  width: auto;
+}
+.desktopmerch .path-20RWIm {
+  background-color: transparent;
+  height: 20px;
+  left: 4px;
+  position: absolute;
+  top: 50px;
+  width: 101px;
+}
+.desktopmerch .path-2x5zbR {
+  background-color: transparent;
+  height: 1px;
+  left: 77px;
+  position: absolute;
+  top: 59px;
+  width: 1px;
+}
+.desktopmerch .path-3psFIE {
+  background-color: transparent;
+  height: 5px;
+  left: 21px;
+  position: absolute;
+  top: 78px;
+  width: 6px;
+}
+.desktopmerch .path-5D0QnU {
+  background-color: transparent;
+  height: 3px;
+  left: 32px;
+  position: absolute;
+  top: 50px;
+  width: 43px;
+}
+.desktopmerch .path-5mphW3 {
+  background-color: transparent;
+  height: 63px;
+  left: 1px;
+  position: absolute;
+  top: 49px;
+  width: 107px;
+}
+.desktopmerch .path-66jY0P {
+  background-color: transparent;
+  height: 9px;
+  left: 80px;
+  position: absolute;
+  top: 76px;
+  width: 9px;
+}
+.desktopmerch .path-6QWD40 {
+  background-color: transparent;
+  height: 6px;
+  left: 35px;
+  position: absolute;
+  top: 54px;
+  width: 39px;
+}
+.desktopmerch .path-8sFj1H {
+  background-color: transparent;
+  height: 5px;
+  left: 91px;
+  position: absolute;
+  top: 70px;
+  width: 2px;
+}
+.desktopmerch .path-8x7eA7 {
+  background-color: transparent;
+  height: 5px;
+  left: 69px;
+  position: absolute;
+  top: 81px;
+  width: 2px;
+}
+.desktopmerch .path-BRN6Gz {
+  background-color: transparent;
+  height: 21px;
+  left: 4px;
+  position: absolute;
+  top: 50px;
+  width: 102px;
+}
+.desktopmerch .path-BbxOTO {
+  background-color: transparent;
+  height: 4px;
+  left: 32px;
+  position: absolute;
+  top: 49px;
+  width: 43px;
+}
+.desktopmerch .path-BxWQgv {
+  background-color: transparent;
+  height: 63px;
+  left: 1px;
+  position: absolute;
+  top: 60px;
+  width: 107px;
+}
+.desktopmerch .path-D0tSvt {
+  background-color: transparent;
+  height: 5px;
+  left: 69px;
+  position: absolute;
+  top: 82px;
+  width: 2px;
+}
+.desktopmerch .path-DIk5Ku {
+  background-color: transparent;
+  height: 31px;
+  left: 63px;
+  position: absolute;
+  top: 65px;
+  width: 43px;
+}
+.desktopmerch .path-DZkVuT {
+  background-color: transparent;
+  height: 6px;
+  left: 30px;
+  position: absolute;
+  top: 48px;
+  width: 47px;
+}
+.desktopmerch .path-Dff7nf {
+  background-color: transparent;
+  height: 5px;
+  left: 91px;
+  position: absolute;
+  top: 72px;
+  width: 2px;
+}
+.desktopmerch .path-DzfFL4 {
+  background-color: transparent;
+  height: 65px;
+  left: 0px;
+  position: absolute;
+  top: 48px;
+  width: 109px;
+}
+.desktopmerch .path-FBlhZy {
+  background-color: transparent;
+  height: 1px;
+  left: 72px;
+  position: absolute;
+  top: 61px;
+  width: 1px;
+}
+.desktopmerch .path-KJ5wdY {
+  background-color: transparent;
+  height: 9px;
+  left: 92px;
+  position: absolute;
+  top: 71px;
+  width: 9px;
+}
+.desktopmerch .path-L5vlcj {
+  background-color: transparent;
+  height: 49px;
+  left: 14px;
+  position: absolute;
+  top: 0px;
+  width: 72px;
+}
+.desktopmerch .path-LVnPyW {
+  background-color: transparent;
+  height: 7px;
+  left: 75px;
+  position: absolute;
+  top: 69px;
+  width: 12px;
+}
+.desktopmerch .path-QSxKfu {
+  background-color: transparent;
+  height: 29px;
+  left: 64px;
+  position: absolute;
+  top: 66px;
+  width: 41px;
+}
+.desktopmerch .path-VmR1pI {
+  background-color: transparent;
+  height: 51px;
+  left: 15px;
+  position: absolute;
+  top: 0px;
+  width: 72px;
+}
+.desktopmerch .path-WFY39Q {
+  background-color: transparent;
+  height: 63px;
+  left: 1px;
+  position: absolute;
+  top: 49px;
+  width: 107px;
+}
+.desktopmerch .path-ZDcfra {
+  background-color: transparent;
+  height: 9px;
+  left: 69px;
+  position: absolute;
+  top: 81px;
+  width: 9px;
+}
+.desktopmerch .path-ZeqrEL {
+  background-color: transparent;
+  height: 2px;
+  left: 23px;
+  position: absolute;
+  top: 93px;
+  width: 2px;
+}
+.desktopmerch .path-aMUZQu {
+  background-color: transparent;
+  height: 1px;
+  left: 73px;
+  position: absolute;
+  top: 60px;
+  width: 1px;
+}
+.desktopmerch .path-cWFVKd {
+  background-color: transparent;
+  height: 2px;
+  left: 38px;
+  position: absolute;
+  top: 78px;
+  width: 2px;
+}
+.desktopmerch .path-e1w9Y5 {
+  background-color: transparent;
+  height: 19px;
+  left: 15px;
+  position: absolute;
+  top: 70px;
+  width: 19px;
+}
+.desktopmerch .path-jw7h1q {
+  background-color: transparent;
+  height: 5px;
+  left: 80px;
+  position: absolute;
+  top: 76px;
+  width: 2px;
+}
+.desktopmerch .path-kT5t8C {
+  background-color: transparent;
+  height: 32px;
+  left: 0px;
+  pointer-events: auto;
+  position: absolute;
+  top: 0px;
+  transition: all 0.2s ease-in-out;
+  width: 32px;
+}
+.desktopmerch .path-kT5t8C:hover {
+
+transform: translate(0, -5px);
+}
+.desktopmerch .path-m6zsv4 {
+  background-color: transparent;
+  height: 2px;
+  left: 23px;
+  position: absolute;
+  top: 64px;
+  width: 2px;
+}
+.desktopmerch .path-p2Xkh2 {
+  background-color: transparent;
+  height: 63px;
+  left: 1px;
+  position: absolute;
+  top: 49px;
+  width: 107px;
+}
+.desktopmerch .path-p8uDOQ {
+  background-color: transparent;
+  height: 65px;
+  left: 0px;
+  position: absolute;
+  top: 48px;
+  width: 109px;
+}
+.desktopmerch .path-t7wJkg {
+  background-color: transparent;
+  height: 27px;
+  left: 10px;
+  position: absolute;
+  top: 62px;
+  width: 31px;
+}
+.desktopmerch .path-tFyvHR {
+  background-color: transparent;
+  height: 18px;
+  left: 64px;
+  position: absolute;
+  top: 66px;
+  width: 41px;
+}
+.desktopmerch .path-wiMY6g {
+  background-color: transparent;
+  height: 63px;
+  left: 1px;
+  position: absolute;
+  top: 49px;
+  width: 107px;
+}
+.desktopmerch .path-xWRwKD {
+  background-color: transparent;
+  height: 5px;
+  left: 80px;
+  position: absolute;
+  top: 77px;
+  width: 2px;
+}
+.desktopmerch .path-xoXbFx {
+  background-color: transparent;
+  height: 41px;
+  left: 1px;
+  position: absolute;
+  top: 71px;
+  width: 107px;
+}
+.desktopmerch .path-xwzroh {
+  background-color: transparent;
+  height: 2px;
+  left: 8px;
+  position: absolute;
+  top: 78px;
+  width: 2px;
+}
+.desktopmerch .path-yc4e9u {
+  background-color: transparent;
+  height: 3px;
+  left: 21px;
+  position: absolute;
+  top: 76px;
+  width: 2px;
+}
+.desktopmerch .privacy-policy-iPe1yZ {
+  background-color: transparent;
+  bottom: 55px;
+  font-weight: 200;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  right: 262px;
+  text-align: left;
+  white-space: nowrap;
+  width: 92px;
+}
+.desktopmerch .rectangle-20RWIm {
+  background-color: var(--thunder);
+  height: 2px;
+  left: 48px;
+  position: absolute;
+  top: 46px;
+  width: 8px;
+}
+.desktopmerch .rectangle-5mphW3 {
+  background-color: var(--thunder);
+  height: 2px;
+  left: 48px;
+  position: absolute;
+  top: 43px;
+  width: 8px;
+}
+.desktopmerch .rectangle-BG0UyK {
+  background-color: var(--rajah);
+  height: 5px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 71px;
+}
+.desktopmerch .rectangle-BRN6Gz {
+  background-color: var(--zeus);
+  height: 2px;
+  left: 49px;
+  position: absolute;
+  top: 45px;
+  width: 6px;
+}
+.desktopmerch .rectangle-BxWQgv {
+  background-color: var(--flamenco);
+  border-radius: 1.5px;
+  height: 3px;
+  left: 72px;
+  position: absolute;
+  top: 63px;
+  transform: rotate(-21.77deg);
+  width: 11px;
+}
+.desktopmerch .rectangle-RgSCAv {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  margin-left: 2px;
+  position: relative;
+  width: 138px;
+}
+.desktopmerch .rectangle-VmR1pI {
+  background-color: var(--rajah);
+  border-radius: 2.5px;
+  height: 5px;
+  left: 70px;
+  position: absolute;
+  top: 62px;
+  transform: rotate(-21.80deg);
+  width: 13px;
+}
+.desktopmerch .rectangle-WFY39Q {
+  background-color: var(--thunder);
+  height: 2px;
+  left: 48px;
+  position: absolute;
+  top: 40px;
+  width: 8px;
+}
+.desktopmerch .rectangle-Zsog3o {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  margin-left: 2px;
+  pointer-events: auto;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  width: 138px;
+}
+.desktopmerch .rectangle-Zsog3o:hover {
+
+transform: translate(0, -5px);
+box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
+}
+.desktopmerch .rectangle-copy-2-BG0UyK {
+  background-color: var(--rajah);
+  height: 5px;
+  left: 35px;
+  position: absolute;
+  top: 24px;
+  width: 36px;
+}
+.desktopmerch .rectangle-copy-3-ESkxxS {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  position: relative;
+  width: 138px;
+}
+.desktopmerch .rectangle-copy-3-drT1q8 {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  pointer-events: auto;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  width: 138px;
+}
+.desktopmerch .rectangle-copy-3-drT1q8:hover {
+
+transform: translate(0, -5px);
+box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
+}
+.desktopmerch .rectangle-copy-4-YzXgp7 {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  pointer-events: auto;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  width: 138px;
+}
+.desktopmerch .rectangle-copy-4-YzXgp7:hover {
+
+transform: translate(0, -5px);
+box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
+}
+.desktopmerch .rectangle-copy-4-rqS4JY {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  pointer-events: auto;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  width: 138px;
+}
+.desktopmerch .rectangle-copy-4-rqS4JY:hover {
+
+transform: translate(0, -5px);
+box-shadow: 0px 12px 5px -8px rgba(0,0,0,0.2);
+}
+.desktopmerch .rectangle-copy-5-2ibrk3 {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  position: relative;
+  width: 138px;
+}
+.desktopmerch .rectangle-copy-5-WrBig2 {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 147px;
+  position: relative;
+  width: 138px;
+}
+.desktopmerch .rectangle-copy-BG0UyK {
+  background-color: var(--rajah);
+  height: 5px;
+  left: 18px;
+  position: absolute;
+  top: 12px;
+  width: 53px;
+}
+.desktopmerch .rectangle-okDrSb {
+  background-color: var(--flamenco);
+  height: 8px;
+  left: 0px;
+  position: absolute;
+  top: 30px;
+  width: 79px;
+}
+.desktopmerch .rectangle-p2Xkh2 {
+  background-color: transparent;
+  border-radius: 1.5px;
+  height: 3px;
+  left: 72px;
+  position: absolute;
+  top: 63px;
+  transform: rotate(-21.77deg);
+  width: 11px;
+}
+.desktopmerch .rectangle-p8uDOQ {
+  background-color: var(--zeus);
+  height: 2px;
+  left: 49px;
+  position: absolute;
+  top: 41px;
+  width: 6px;
+}
+.desktopmerch .rectangle-wiMY6g {
+  background-color: var(--zeus);
+  height: 2px;
+  left: 49px;
+  position: absolute;
+  top: 38px;
+  width: 6px;
+}
+.desktopmerch .rectangle-xoXbFx {
+  background-color: var(--zeus);
+  height: 2px;
+  left: 49px;
+  position: absolute;
+  top: 47px;
+  width: 6px;
+}
+.desktopmerch .retro-controller-1-C61RwL {
+  background-color: transparent;
+  display: block;
+  height: 123px;
+  left: 382px;
+  position: absolute;
+  top: 1229px;
+  width: 123px;
+opacity: 0;
+transform: translate(0, 35px);
+}
+.desktopmerch .retro-controller-2-C61RwL {
+  background-color: transparent;
+  display: block;
+  height: 123px;
+  left: 475px;
+  position: absolute;
+  top: 1835px;
+  width: 109px;
+opacity: 0;
+transform: translate(0, 25px);
+}
+.desktopmerch .s-ide-nav-bar-C61RwL {
+  align-items: flex-start;
+  background-color: rgba(79,67,174,1.0);
+  box-shadow: 15px 2px 10px rgba(0,0,0,0.197);;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  left: 122px;
+  min-height: 611px;
+  padding: 144px 16px;
+  position: absolute;
+  top: 617px;
+  width: 145px;
+}
+.desktopmerch .shape-7mxTZx {
+  background-color: transparent;
+  height: 40px;
+  left: 0px;
+  pointer-events: auto;
+  position: absolute;
+  top: 0px;
+  transition: all 0.2s ease-in-out;
+  width: 40px;
+}
+.desktopmerch .shape-7mxTZx:hover {
+
+transform: translate(0, -5px);
+}
+.desktopmerch .shape-BxWQgv {
+  background-color: transparent;
+  height: 1px;
+  left: 76px;
+  position: absolute;
+  top: 59px;
+  width: 1px;
+}
+.desktopmerch .shape-VmR1pI {
+  background-color: transparent;
+  height: 1px;
+  left: 74px;
+  position: absolute;
+  top: 60px;
+  width: 1px;
+}
+.desktopmerch .sign-up-to-upcoming-rn2NGm {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 34px;
+  letter-spacing: 0.00px;
+  line-height: 17px;
+  position: absolute;
+  text-align: left;
+  top: 470px;
+  width: 136px;
+}
+.desktopmerch .social-media-icons-C61RwL {
+  align-items: center;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 40px;
+  justify-content: flex-start;
+  left: 150px;
+  min-width: 186px;
+  position: absolute;
+  top: 1995px;
+  width: auto;
+}
+.desktopmerch .style-1-C61RwL {
+  background-color: transparent;
+  display: block;
+  height: 29px;
+  left: 32px;
+  position: absolute;
+  top: 1310px;
+  width: 71px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .submit-btn-rn2NGm {
+  background-color: var(--flamenco);
+  height: 29px;
+  left: 221px;
+  pointer-events: auto;
+  position: absolute;
+  top: 472px;
+  transition: all 0.2s ease-in-out;
+  width: 80px;
+}
+.desktopmerch .submit-btn-rn2NGm:hover {
+
+transform: scale(0.9);
+}
+.desktopmerch .submit-oaqlGK {
+  background-color: transparent;
+  color: var(--mirage);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  height: auto;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 7px;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-RgSCAv {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-Zsog3o {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-copy-2-YzXgp7 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-copy-2-rqS4JY {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-copy-3-2ibrk3 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-copy-3-WrBig2 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-copy-ESkxxS {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .t-shirt-copy-drT1q8 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.74px;
+  line-height: 21px;
+  margin-left: 2px;
+  margin-top: 15px;
+  min-height: 21px;
+  min-width: 67px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .tabs-zCOIAP {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  justify-content: flex-start;
+  min-width: 277px;
+  position: absolute;
+  right: 64px;
+  top: 13px;
+  width: auto;
+}
+.desktopmerch .terms-conditions-iPe1yZ {
+  background-color: transparent;
+  bottom: 56px;
+  font-weight: 200;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  right: 122px;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .text-tell-me-about-yourself-rn2NGm {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.697);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  height: 170px;
+  left: 14px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 256px;
+  width: 277px;
+}
+.desktopmerch .text-tell-me-about-yourself-rn2NGm::placeholder {
+  color: rgba(255,255,255,0.418);
+}
+.desktopmerch .text-your-email-8UzHnk {
+  background-color: transparent;
+  border: 0;
+  font-weight: 400;
+  height: 30px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 4px;
+  width: 270px;
+}
+.desktopmerch .text-your-email-8UzHnk::placeholder {
+  color: rgba(255,255,255,0.301);
+}
+.desktopmerch .text-your-name-n62dMv {
+  background-color: transparent;
+  border: 0;
+  font-weight: 400;
+  height: 30px;
+  left: 20px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 4px;
+  width: 270px;
+}
+.desktopmerch .text-your-name-n62dMv::placeholder {
+  color: rgba(255,255,255,0.301);
+}
+.desktopmerch .topic-box-rn2NGm {
+  align-items: center;
+  background-color: var(--chetwode-blue);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 38px;
+  justify-content: flex-start;
+  left: 1px;
+  min-width: 300px;
+  padding: 0 20px;
+  position: absolute;
+  top: 0px;
+  width: auto;
+}
+.desktopmerch .twitter-Xiy3pP {
+  background-color: transparent;
+  background-image: url(../img/desktop--path-1FED97F6-438D-4665-B1BB-7F5BC38EF09C@2x.png);
+  background-size: 100% 100%;
+  display: block;
+  flex-shrink: 1;
+  height: 26px;
+  margin-bottom: 4.0px;
+  margin-left: 41px;
+  position: relative;
+  width: 32px;
+opacity: 0;
+transform: translate(-25px, 0);
+}
+.desktopmerch .whats-the-topic-5Ou2cz {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 600;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  min-height: 20px;
+  min-width: 136px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-RgSCAv {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-Zsog3o {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-copy-2-YzXgp7 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-copy-2-rqS4JY {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-copy-3-2ibrk3 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-copy-3-WrBig2 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-copy-ESkxxS {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .x1500-copy-drT1q8 {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.65px;
+  line-height: 20px;
+  margin-top: 11px;
+  min-height: 20px;
+  min-width: 58px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.desktopmerch .xmlid10-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 26px;
+  position: absolute;
+  top: 86px;
+  width: 2px;
+}
+.desktopmerch .xmlid11-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 34px;
+  position: absolute;
+  top: 93px;
+  width: 2px;
+}
+.desktopmerch .xmlid12-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 26px;
+  position: absolute;
+  top: 101px;
+  width: 2px;
+}
+.desktopmerch .xmlid13-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 94px;
+  position: absolute;
+  top: 86px;
+  width: 3px;
+}
+.desktopmerch .xmlid14-GpPr31 {
+  background-color: transparent;
+  height: 9px;
+  left: 53px;
+  position: absolute;
+  top: 89px;
+  width: 9px;
+}
+.desktopmerch .xmlid15-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 96px;
+  position: absolute;
+  top: 98px;
+  width: 3px;
+}
+.desktopmerch .xmlid16-GpPr31 {
+  background-color: transparent;
+  border-radius: 31px/30px;
+  height: 30px;
+  left: 83px;
+  position: absolute;
+  top: 79px;
+  width: 31px;
+}
+.desktopmerch .xmlid17-GpPr31 {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 95px;
+  position: absolute;
+  top: 86px;
+  width: 5px;
+}
+.desktopmerch .xmlid18-GpPr31 {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 87px;
+  position: absolute;
+  top: 93px;
+  width: 5px;
+}
+.desktopmerch .xmlid19-GpPr31 {
+  background-color: transparent;
+  height: 69px;
+  left: 16px;
+  opacity: 0.41;
+  position: absolute;
+  top: 1px;
+  width: 86px;
+}
+.desktopmerch .xmlid2-GpPr31 {
+  background-color: transparent;
+  height: 17px;
+  left: 85px;
+  position: absolute;
+  top: 84px;
+  width: 17px;
+}
+.desktopmerch .xmlid20-GpPr31 {
+  background-color: transparent;
+  height: 49px;
+  left: 0px;
+  opacity: 0.41;
+  position: absolute;
+  top: 74px;
+  width: 123px;
+}
+.desktopmerch .xmlid32-GpPr31 {
+  background-color: transparent;
+  height: 49px;
+  left: 1px;
+  position: absolute;
+  top: 70px;
+  width: 121px;
+}
+.desktopmerch .xmlid33-GpPr31 {
+  background-color: rgba(231,80,59,1.0);
+  border-radius: 5px;
+  height: 5px;
+  left: 104px;
+  position: absolute;
+  top: 91px;
+  width: 5px;
+}
+.desktopmerch .xmlid34-GpPr31 {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 96px;
+  position: absolute;
+  top: 98px;
+  width: 5px;
+}
+.desktopmerch .xmlid35-GpPr31 {
+  background-color: transparent;
+  height: 17px;
+  left: 93px;
+  position: absolute;
+  top: 88px;
+  width: 17px;
+}
+.desktopmerch .xmlid36-GpPr31 {
+  background-color: transparent;
+  height: 4px;
+  left: 15px;
+  position: absolute;
+  top: 68px;
+  width: 30px;
+}
+.desktopmerch .xmlid37-GpPr31 {
+  background-color: var(--quincy);
+  height: 2px;
+  left: 57px;
+  position: absolute;
+  top: 68px;
+  width: 11px;
+}
+.desktopmerch .xmlid38-GpPr31 {
+  background-color: transparent;
+  height: 9px;
+  left: 65px;
+  position: absolute;
+  top: 89px;
+  width: 9px;
+}
+.desktopmerch .xmlid41-GpPr31 {
+  background-color: var(--quincy);
+  height: 2px;
+  left: 58px;
+  position: absolute;
+  top: 67px;
+  width: 8px;
+}
+.desktopmerch .xmlid43-GpPr31 {
+  background-color: transparent;
+  height: 66px;
+  left: 16px;
+  position: absolute;
+  top: 0px;
+  width: 86px;
+}
+.desktopmerch .xmlid44-GpPr31 {
+  background-color: transparent;
+  height: 47px;
+  left: 2px;
+  position: absolute;
+  top: 71px;
+  width: 120px;
+}
+.desktopmerch .xmlid45-GpPr31 {
+  background-color: transparent;
+  height: 4px;
+  left: 79px;
+  position: absolute;
+  top: 68px;
+  width: 30px;
+}
+.desktopmerch .xmlid46-GpPr31 {
+  background-color: rgba(131,85,89,1.0);
+  border-radius: 31px/30px;
+  height: 30px;
+  left: 12px;
+  position: absolute;
+  top: 79px;
+  width: 31px;
+}
+.desktopmerch .xmlid48-GpPr31 {
+  background-color: var(--rajah);
+  border-radius: 32px/31px;
+  height: 31px;
+  left: 11px;
+  position: absolute;
+  top: 80px;
+  width: 32px;
+}
+.desktopmerch .xmlid49-GpPr31 {
+  background-color: rgba(131,85,89,1.0);
+  border-radius: 31px/30px;
+  height: 30px;
+  left: 83px;
+  position: absolute;
+  top: 79px;
+  width: 31px;
+}
+.desktopmerch .xmlid50-GpPr31 {
+  background-color: rgba(149,103,107,1.0);
+  border-radius: 26px/25px;
+  height: 25px;
+  left: 14px;
+  position: absolute;
+  top: 82px;
+  width: 26px;
+}
+.desktopmerch .xmlid51-GpPr31 {
+  background-color: var(--rajah);
+  border-radius: 32px/31px;
+  height: 31px;
+  left: 82px;
+  position: absolute;
+  top: 80px;
+  width: 32px;
+}
+.desktopmerch .xmlid52-GpPr31 {
+  background-color: transparent;
+  height: 25px;
+  left: 2px;
+  position: absolute;
+  top: 93px;
+  width: 120px;
+}
+.desktopmerch .xmlid53-GpPr31 {
+  background-color: transparent;
+  height: 25px;
+  left: 2px;
+  position: absolute;
+  top: 70px;
+  width: 120px;
+}
+.desktopmerch .xmlid54-GpPr31 {
+  background-color: var(--quincy);
+  height: 2px;
+  left: 60px;
+  position: absolute;
+  top: 66px;
+  width: 6px;
+}
+.desktopmerch .xmlid55-GpPr31 {
+  background-color: transparent;
+  height: 22px;
+  left: 16px;
+  position: absolute;
+  top: 83px;
+  width: 21px;
+}
+.desktopmerch .xmlid56-GpPr31 {
+  background-color: transparent;
+  height: 9px;
+  left: 65px;
+  position: absolute;
+  top: 89px;
+  width: 9px;
+}
+.desktopmerch .xmlid57-GpPr31 {
+  background-color: transparent;
+  height: 15px;
+  left: 94px;
+  position: absolute;
+  top: 89px;
+  width: 16px;
+}
+.desktopmerch .xmlid58-GpPr31 {
+  background-color: var(--flamenco);
+  border-radius: 6px;
+  height: 6px;
+  left: 24px;
+  position: absolute;
+  top: 91px;
+  width: 6px;
+}
+.desktopmerch .xmlid59-GpPr31 {
+  background-color: transparent;
+  height: 15px;
+  left: 86px;
+  position: absolute;
+  top: 85px;
+  width: 16px;
+}
+.desktopmerch .xmlid6-GpPr31 {
+  background-color: transparent;
+  height: 20px;
+  left: 17px;
+  position: absolute;
+  top: 84px;
+  width: 20px;
+}
+.desktopmerch .xmlid60-GpPr31 {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 104px;
+  position: absolute;
+  top: 91px;
+  width: 5px;
+}
+.desktopmerch .xmlid61-GpPr31 {
+  background-color: rgba(254,245,133,1.0);
+  border-radius: 5px;
+  height: 5px;
+  left: 96px;
+  position: absolute;
+  top: 98px;
+  width: 5px;
+}
+.desktopmerch .xmlid62-GpPr31 {
+  background-color: rgba(139,216,245,1.0);
+  border-radius: 5px;
+  height: 5px;
+  left: 95px;
+  position: absolute;
+  top: 86px;
+  width: 5px;
+}
+.desktopmerch .xmlid63-GpPr31 {
+  background-color: rgba(50,185,77,1.0);
+  border-radius: 5px;
+  height: 5px;
+  left: 87px;
+  position: absolute;
+  top: 93px;
+  width: 5px;
+}
+.desktopmerch .xmlid64-GpPr31 {
+  background-color: transparent;
+  height: 15px;
+  left: 95px;
+  opacity: 0.17;
+  position: absolute;
+  top: 90px;
+  width: 16px;
+}
+.desktopmerch .xmlid65-GpPr31 {
+  background-color: transparent;
+  height: 15px;
+  left: 86px;
+  opacity: 0.17;
+  position: absolute;
+  top: 85px;
+  width: 16px;
+}
+.desktopmerch .xmlid66-GpPr31 {
+  background-color: rgba(149,103,107,1.0);
+  border-radius: 26px/25px;
+  height: 25px;
+  left: 85px;
+  position: absolute;
+  top: 82px;
+  width: 26px;
+}
+.desktopmerch .xmlid67-GpPr31 {
+  background-color: transparent;
+  height: 9px;
+  left: 53px;
+  position: absolute;
+  top: 89px;
+  width: 9px;
+}
+.desktopmerch .xmlid68-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 24px;
+  position: absolute;
+  top: 91px;
+  width: 3px;
+}
+.desktopmerch .xmlid7-GpPr31 {
+  background-color: transparent;
+  border-radius: 31px/30px;
+  height: 30px;
+  left: 12px;
+  position: absolute;
+  top: 79px;
+  width: 31px;
+}
+.desktopmerch .xmlid70-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 103px;
+  position: absolute;
+  top: 91px;
+  width: 3px;
+}
+.desktopmerch .xmlid71-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 53px;
+  position: absolute;
+  top: 82px;
+  width: 21px;
+}
+.desktopmerch .xmlid72-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 24px;
+  position: absolute;
+  top: 94px;
+  width: 6px;
+}
+.desktopmerch .xmlid73-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 62px;
+  position: absolute;
+  top: 78px;
+  width: 12px;
+}
+.desktopmerch .xmlid74-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 53px;
+  position: absolute;
+  top: 78px;
+  width: 7px;
+}
+.desktopmerch .xmlid8-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 87px;
+  position: absolute;
+  top: 93px;
+  width: 3px;
+}
+.desktopmerch .xmlid9-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 19px;
+  position: absolute;
+  top: 93px;
+  width: 2px;
+}
+.h2colorblack {
+  font-family: "Helvetica-Bold", Helvetica;
+  font-size: 48px;
+}
+.h2colorwhite {
+  font-family: "Helvetica-Bold", Helvetica;
+  font-size: 48px;
+}
+.interv-bold-white-26px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+}
+.interv-extra-light-white-12px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 200;
+}
+.interv-medium-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-medium-white-18px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-medium-white-26px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-normal-white-12px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-14px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-16px-2 {
+  color: rgba(255,255,255,0.501);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-semi-bold-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+}
+.placeholder-18placeholder-18 {
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+.text-18text-18 {
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+:root {
+  --chetwode-blue: rgba(135,125,213,1.0);
+  --coral: rgba(244,133,81,1.0);
+  --flamenco: rgba(255,137,6,1.0);
+  --mirage: rgba(26,25,37,1.0);
+  --outer-space: rgba(65,64,75,1.0);
+  --quincy: rgba(102,60,59,1.0);
+  --rajah: rgba(251,179,98,1.0);
+  --thunder: rgba(48,46,44,1.0);
+  --white: rgba(255,255,255,1.0);
+  --zeus: rgba(40,37,34,1.0);
+}
+@keyframes bp1-animate-enter-frames {
+
+from{opacity: 0;
+filter: blur(10px);}
+to{opacity: 1;
+filter: none;}
+}
+@keyframes bp1-animate-enter1-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter10-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter11-frames {
+
+from{opacity: 0;
+transform: scale(1.1);}
+to{opacity: 1;
+transform: scale(1);}
+}
+@keyframes bp1-animate-enter12-frames {
+
+from{opacity: 0;
+transform: translate(0, 25px);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter13-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter14-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter15-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter16-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter17-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter18-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter19-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter2-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter20-frames {
+
+from{opacity: 0;
+transform: scale(1.1);}
+to{opacity: 1;
+transform: scale(1);}
+}
+@keyframes bp1-animate-enter3-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter4-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter5-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter6-frames {
+
+from{opacity: 0;}
+to{opacity: 1;}
+}
+@keyframes bp1-animate-enter7-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter8-frames {
+
+from{opacity: 0;
+transform: translate(0, 35px);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+@keyframes bp1-animate-enter9-frames {
+
+from{opacity: 0;
+transform: translate(-25px, 0);}
+to{opacity: 1;
+transform: translate(0,0);}
+}
+/* screen - mobilemerch */
+
+.border-0-5px-quincy {
+  border: 0.5px solid var(--quincy);
+}
+.border-0-5px-zeus {
+  border: 0.5px solid var(--zeus);
+}
+.border-0-7px-quincy {
+  border: 0.7px solid var(--quincy);
+}
+.border-0-9px-quincy {
+  border: 0.9px solid var(--quincy);
+}
+.border-1-2px-zeus {
+  border: 1.2px solid var(--zeus);
+}
+.border-1px-rajah {
+  border: 1px solid var(--rajah);
+}
+.border-1px-white {
+  border: 1px solid var(--white);
+}
+.border-2px-rajah {
+  border: 2px solid var(--rajah);
+}
+.border-2px-white {
+  border: 2px solid var(--white);
+}
+.h2colorblack {
+  font-family: "Helvetica-Bold", Helvetica;
+  font-size: 48px;
+}
+.h2colorwhite {
+  font-family: "Helvetica-Bold", Helvetica;
+  font-size: 48px;
+}
+.interv-bold-white-26px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+}
+.interv-extra-light-white-12px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 200;
+}
+.interv-medium-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-medium-white-18px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-medium-white-26px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 500;
+}
+.interv-normal-white-12px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-14px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-normal-white-16px-2 {
+  color: rgba(255,255,255,0.501);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+.interv-semi-bold-white-16px {
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+}
+.mobilemerch {
+  background-color: var(--white);
+  height: 100vh;
+  margin: 0px;
+  min-height: 2643px;
+  min-width: 320px;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+.mobilemerch .about-us-C61RwL {
+  background-color: transparent;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 3px 0px 0px rgba(255,137,6,1.0);;
+  top: 1033px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .all-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 41px;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  opacity: 0.7;
+  position: absolute;
+  text-align: left;
+  top: 298px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .all-rights-reserved-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2604px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .arrow-left-C61RwL {
+  background-color: transparent;
+  height: 31px;
+  left: 24px;
+  position: absolute;
+  top: 116px;
+  width: 17px;
+}
+.mobilemerch .arrow-platform-filter-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  justify-content: flex-start;
+  min-width: 12px;
+  position: absolute;
+  right: 43px;
+  top: 288px;
+  transform: rotate(90deg);
+  width: auto;
+}
+.mobilemerch .arrow-right-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 31px;
+  justify-content: flex-start;
+  min-width: 17px;
+  position: absolute;
+  right: 24px;
+  top: 116px;
+  width: auto;
+}
+.mobilemerch .arrow-sort-filter-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+  justify-content: flex-start;
+  min-width: 12px;
+  position: absolute;
+  right: 43px;
+  top: 350px;
+  transform: rotate(90deg);
+  width: auto;
+}
+.mobilemerch .arrow-sort-filter-VMr6Om {
+  background-color: transparent;
+  height: 20px;
+  position: absolute;
+  right: 43px;
+  top: 963px;
+  width: 12px;
+}
+.mobilemerch .arrow-sort-filter-copy-C61RwL {
+  background-color: transparent;
+  height: 20px;
+  left: 45px;
+  position: absolute;
+  top: 963px;
+  width: 12px;
+}
+.mobilemerch .bg-1-C61RwL {
+  background-color: rgba(79,67,174,1.0);
+  height: calc(100.00% - 2475px);
+  left: 0px;
+  position: absolute;
+  top: 220px;
+  width: 100%;
+}
+.mobilemerch .bg-about-us-section-C61RwL {
+  background-color: rgba(79,67,174,1.0);
+  height: calc(100.00% - 1974px);
+  left: 0px;
+  position: absolute;
+  top: 1000px;
+  width: 100%;
+}
+.mobilemerch .bg-footer-mobile-C61RwL {
+  background-color: var(--outer-space);
+  height: calc(100.00% - 2446px);
+  left: 0px;
+  position: absolute;
+  top: 2446px;
+  width: 100%;
+}
+.mobilemerch .bg-games-section-C61RwL {
+  background-color: var(--chetwode-blue);
+  height: calc(100.00% - 2086px);
+  left: 0px;
+  position: absolute;
+  top: 388px;
+  width: calc(100.00% + 1px);
+}
+.mobilemerch .bg-pages-C61RwL {
+  background-color: var(--outer-space);
+  height: 55px;
+  left: 0px;
+  position: absolute;
+  top: 945px;
+  width: 100%;
+}
+.mobilemerch .featured-products-C61RwL {
+  background-color: transparent;
+  color: var(--white);
+  font-family: 'Inter V', Helvetica;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.98px;
+  line-height: 29px;
+  position: absolute;
+  text-align: left;
+  top: 405px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .form-field-mobile-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  min-height: 603px;
+  position: absolute;
+  top: 1785px;
+  width: 210px;
+}
+.mobilemerch .form-input-mobile-uoKZRS {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  height: auto;
+  justify-content: flex-start;
+  margin-top: 40px;
+  min-height: 119px;
+  position: relative;
+  width: 210px;
+}
+.mobilemerch .games-C61RwL {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  left: 41px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 231px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .get-in-touch-C61RwL {
+  background-color: transparent;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 31px;
+  position: absolute;
+  text-align: left;
+  text-shadow: 3px 0px 0px rgba(255,137,6,1.0);;
+  top: 1706px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .group-2-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: -72px;
+  margin-right: 72px;
+  min-height: 210px;
+  position: absolute;
+  top: 469px;
+  width: 117px;
+}
+.mobilemerch .group-2-copy-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 72px;
+  margin-right: -72px;
+  min-height: 210px;
+  position: absolute;
+  top: 469px;
+  width: 117px;
+}
+.mobilemerch .group-3-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: -72px;
+  margin-right: 72px;
+  min-height: 210px;
+  position: absolute;
+  top: 719px;
+  width: 117px;
+}
+.mobilemerch .group-3-copy-C61RwL {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: 72px;
+  margin-right: -72px;
+  min-height: 210px;
+  position: absolute;
+  top: 719px;
+  width: 117px;
+}
+.mobilemerch .group-5DgRV0 {
+  align-items: flex-end;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 20px;
+  justify-content: flex-start;
+  min-width: 12px;
+  position: relative;
+  width: auto;
+}
+.mobilemerch .group-gMa3ek {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 30px;
+  justify-content: flex-start;
+  min-width: 17px;
+  position: relative;
+  width: auto;
+}
+.mobilemerch .group-hQ4Xd9 {
+  align-items: flex-end;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 20px;
+  justify-content: flex-start;
+  min-width: 12px;
+  position: relative;
+  width: auto;
+}
+.mobilemerch .hamburger-menu-icon-2IJkvB {
+  background-color: transparent;
+  height: 12px;
+  left: 16px;
+  pointer-events: auto;
+  position: absolute;
+  top: 16px;
+  transition: all 0.2s ease-in-out;
+  width: 20px;
+}
+.mobilemerch .hamburger-menu-icon-2IJkvB:hover {
+
+transform: translate(-5px, 0);
+}
+.mobilemerch .hero-image-mobile-C61RwL {
+  background-color: transparent;
+  height: calc(100.00% - 2466px);
+  left: 0px;
+  object-fit: cover;
+  position: absolute;
+  top: 43px;
+  width: 100%;
+}
+.mobilemerch .input-message-box-mobile-FWZijx {
+  background-color: var(--chetwode-blue);
+  height: 256px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 210px;
+}
+.mobilemerch .legal-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2523px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .line-4-C61RwL {
+  background-color: transparent;
+  height: 1px;
+  left: 0px;
+  position: absolute;
+  top: 262px;
+  width: calc(100.00% + 1px);
+}
+.mobilemerch .line-4-copy-C61RwL {
+  background-color: transparent;
+  height: 1px;
+  left: 0px;
+  position: absolute;
+  top: 324px;
+  width: calc(100.00% + 1px);
+}
+.mobilemerch .logo-4qOjhn {
+  align-items: flex-start;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 1;
+  height: auto;
+  justify-content: flex-start;
+  margin-right: 1.0px;
+  min-height: 31px;
+  position: relative;
+  width: 51px;
+}
+.mobilemerch .logo-C61RwL {
+  background-color: transparent;
+  background-image: url(../img/mobile-logo-26D07785-DDFC-44A8-ABAF-B1324A0981CA@2x.png);
+  background-size: 100% 100%;
+  height: 83px;
+  position: absolute;
+  top: 1109px;
+  width: 135px;
+}
+.mobilemerch .logo-x1nRlC {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 31px;
+  position: relative;
+  width: 50px;
+}
+.mobilemerch .made-in-brooklyn-gam-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 27px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: center;
+  top: 1240px;
+  width: calc(100.00% - 54px);
+}
+.mobilemerch .merch-C61RwL {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  text-align: left;
+  top: 231px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .newest-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 41px;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  opacity: 0.7;
+  position: absolute;
+  text-align: left;
+  top: 360px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .other-C61RwL {
+  background-color: transparent;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  position: absolute;
+  right: 50px;
+  text-align: left;
+  top: 231px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .oval-20RWIm {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 18px;
+  position: absolute;
+  top: 47px;
+  width: 1px;
+}
+.mobilemerch .oval-3psFIE {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 38px;
+  width: 5px;
+}
+.mobilemerch .oval-5mphW3 {
+  background-color: var(--outer-space);
+  border-radius: 4px;
+  height: 4px;
+  left: 12px;
+  position: absolute;
+  top: 40px;
+  width: 4px;
+}
+.mobilemerch .oval-6QWD40 {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 41px;
+  width: 5px;
+}
+.mobilemerch .oval-BRN6Gz {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 18px;
+  position: absolute;
+  top: 36px;
+  width: 1px;
+}
+.mobilemerch .oval-BxWQgv {
+  background-color: var(--rajah);
+  border-radius: 18px/17px;
+  height: 17px;
+  left: 5px;
+  position: absolute;
+  top: 33px;
+  width: 18px;
+}
+.mobilemerch .oval-C61RwL {
+  background-color: var(--flamenco);
+  border-radius: 16px;
+  height: 16px;
+  margin-left: -22px;
+  margin-right: 22px;
+  position: absolute;
+  top: 1615px;
+  width: 16px;
+}
+.mobilemerch .oval-D0tSvt {
+  background-color: var(--outer-space);
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 40px;
+  width: 5px;
+}
+.mobilemerch .oval-DIk5Ku {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 5px;
+}
+.mobilemerch .oval-Dff7nf {
+  background-color: var(--outer-space);
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 5px;
+}
+.mobilemerch .oval-DzfFL4 {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 7px;
+  position: absolute;
+  top: 36px;
+  width: 1px;
+}
+.mobilemerch .oval-QSxKfu {
+  background-color: var(--outer-space);
+  border-radius: 5px;
+  height: 5px;
+  left: 36px;
+  position: absolute;
+  top: 42px;
+  width: 5px;
+}
+.mobilemerch .oval-VmR1pI {
+  background-color: var(--rajah);
+  border-radius: 18px/17px;
+  height: 17px;
+  left: 5px;
+  position: absolute;
+  top: 32px;
+  width: 18px;
+}
+.mobilemerch .oval-WFY39Q {
+  background-color: transparent;
+  border-radius: 11px;
+  height: 11px;
+  left: 8px;
+  position: absolute;
+  top: 37px;
+  width: 11px;
+}
+.mobilemerch .oval-copy-C61RwL {
+  background-color: transparent;
+  border-radius: 16px;
+  height: 16px;
+  margin-left: 22px;
+  margin-right: -22px;
+  position: absolute;
+  top: 1615px;
+  width: 16px;
+}
+.mobilemerch .oval-e1w9Y5 {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 41px;
+  width: 5px;
+}
+.mobilemerch .oval-p2Xkh2 {
+  background-color: var(--flamenco);
+  border-radius: 14px/15px;
+  height: 15px;
+  left: 7px;
+  position: absolute;
+  top: 35px;
+  width: 14px;
+}
+.mobilemerch .oval-p8uDOQ {
+  background-color: transparent;
+  border-radius: 18px/17px;
+  height: 17px;
+  left: 5px;
+  position: absolute;
+  top: 33px;
+  width: 18px;
+}
+.mobilemerch .oval-t7wJkg {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 36px;
+  position: absolute;
+  top: 43px;
+  width: 5px;
+}
+.mobilemerch .oval-tFyvHR {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 36px;
+  position: absolute;
+  top: 42px;
+  width: 5px;
+}
+.mobilemerch .oval-wiMY6g {
+  background-color: var(--zeus);
+  border-radius: 11px;
+  height: 11px;
+  left: 8px;
+  position: absolute;
+  top: 37px;
+  width: 11px;
+}
+.mobilemerch .oval-xWRwKD {
+  background-color: transparent;
+  border-radius: 5px;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 40px;
+  width: 5px;
+}
+.mobilemerch .oval-xoXbFx {
+  background-color: var(--coral);
+  border-radius: 1px;
+  height: 1px;
+  left: 7px;
+  position: absolute;
+  top: 47px;
+  width: 1px;
+}
+.mobilemerch .oval-yc4e9u {
+  background-color: var(--zeus);
+  border-radius: 5px;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 38px;
+  width: 5px;
+}
+.mobilemerch .overlap-group-uoKZRS {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 256px;
+  margin-top: 54px;
+  position: relative;
+  width: 210px;
+}
+.mobilemerch .overlap-group1-GkpTuB {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 41px;
+  position: relative;
+  width: 210px;
+}
+.mobilemerch .overlap-group2-GkpTuB {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 41px;
+  margin-top: 37px;
+  position: relative;
+  width: 210px;
+}
+.mobilemerch .overlay-C61RwL {
+  background-color: rgba(60,22,237,1.0);
+  height: calc(100.00% - 2466px);
+  left: 0px;
+  opacity: 0.4;
+  position: absolute;
+  top: 43px;
+  width: 100%;
+}
+.mobilemerch .path-20RWIm {
+  background-color: transparent;
+  height: 10px;
+  left: 3px;
+  position: absolute;
+  top: 27px;
+  width: 53px;
+}
+.mobilemerch .path-2x5zbR {
+  background-color: transparent;
+  height: 1px;
+  left: 41px;
+  position: absolute;
+  top: 31px;
+  width: 1px;
+}
+.mobilemerch .path-2xmb1X {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 19px;
+  position: relative;
+  width: 11px;
+}
+.mobilemerch .path-3psFIE {
+  background-color: transparent;
+  height: 3px;
+  left: 11px;
+  position: absolute;
+  top: 41px;
+  width: 4px;
+}
+.mobilemerch .path-5D0QnU {
+  background-color: transparent;
+  height: 2px;
+  left: 17px;
+  position: absolute;
+  top: 26px;
+  width: 24px;
+}
+.mobilemerch .path-5mphW3 {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilemerch .path-66jY0P {
+  background-color: transparent;
+  height: 5px;
+  left: 43px;
+  position: absolute;
+  top: 40px;
+  width: 4px;
+}
+.mobilemerch .path-6QWD40 {
+  background-color: transparent;
+  height: 5px;
+  left: 19px;
+  position: absolute;
+  top: 27px;
+  width: 22px;
+}
+.mobilemerch .path-8sFj1H {
+  background-color: transparent;
+  height: 3px;
+  left: 49px;
+  position: absolute;
+  top: 36px;
+  width: 3px;
+}
+.mobilemerch .path-8x7eA7 {
+  background-color: transparent;
+  height: 3px;
+  left: 37px;
+  position: absolute;
+  top: 42px;
+  width: 3px;
+}
+.mobilemerch .path-BRN6Gz {
+  background-color: transparent;
+  height: 11px;
+  left: 3px;
+  position: absolute;
+  top: 27px;
+  width: 54px;
+}
+.mobilemerch .path-BbxOTO {
+  background-color: transparent;
+  height: 3px;
+  left: 17px;
+  position: absolute;
+  top: 26px;
+  width: 24px;
+}
+.mobilemerch .path-BxWQgv {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 32px;
+  width: 57px;
+}
+.mobilemerch .path-D0tSvt {
+  background-color: transparent;
+  height: 3px;
+  left: 37px;
+  position: absolute;
+  top: 43px;
+  width: 3px;
+}
+.mobilemerch .path-DIk5Ku {
+  background-color: transparent;
+  height: 18px;
+  left: 33px;
+  position: absolute;
+  top: 34px;
+  width: 24px;
+}
+.mobilemerch .path-DZkVuT {
+  background-color: transparent;
+  height: 5px;
+  left: 15px;
+  position: absolute;
+  top: 25px;
+  width: 28px;
+}
+.mobilemerch .path-Dff7nf {
+  background-color: transparent;
+  height: 3px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 3px;
+}
+.mobilemerch .path-DzfFL4 {
+  background-color: transparent;
+  height: 35px;
+  left: 0px;
+  position: absolute;
+  top: 26px;
+  width: 59px;
+}
+.mobilemerch .path-FBlhZy {
+  background-color: transparent;
+  height: 1px;
+  left: 39px;
+  position: absolute;
+  top: 32px;
+  width: 1px;
+}
+.mobilemerch .path-KJ5wdY {
+  background-color: transparent;
+  height: 5px;
+  left: 49px;
+  position: absolute;
+  top: 37px;
+  width: 4px;
+}
+.mobilemerch .path-L5vlcj {
+  background-color: transparent;
+  height: 26px;
+  left: 8px;
+  position: absolute;
+  top: 0px;
+  width: 39px;
+}
+.mobilemerch .path-LVnPyW {
+  background-color: transparent;
+  height: 5px;
+  left: 40px;
+  position: absolute;
+  top: 35px;
+  width: 7px;
+}
+.mobilemerch .path-QSxKfu {
+  background-color: transparent;
+  height: 16px;
+  left: 34px;
+  position: absolute;
+  top: 35px;
+  width: 22px;
+}
+.mobilemerch .path-VmR1pI {
+  background-color: transparent;
+  height: 27px;
+  left: 8px;
+  position: absolute;
+  top: 0px;
+  width: 39px;
+}
+.mobilemerch .path-WFY39Q {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilemerch .path-WxKSPG {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 19px;
+  position: relative;
+  width: 11px;
+}
+.mobilemerch .path-ZDcfra {
+  background-color: transparent;
+  height: 5px;
+  left: 37px;
+  position: absolute;
+  top: 43px;
+  width: 4px;
+}
+.mobilemerch .path-ZeqrEL {
+  background-color: transparent;
+  height: 1px;
+  left: 13px;
+  position: absolute;
+  top: 48px;
+  width: 1px;
+}
+.mobilemerch .path-aMUZQu {
+  background-color: transparent;
+  height: 1px;
+  left: 40px;
+  position: absolute;
+  top: 31px;
+  width: 1px;
+}
+.mobilemerch .path-cWFVKd {
+  background-color: transparent;
+  height: 1px;
+  left: 21px;
+  position: absolute;
+  top: 42px;
+  width: 1px;
+}
+.mobilemerch .path-e1w9Y5 {
+  background-color: transparent;
+  height: 10px;
+  left: 8px;
+  position: absolute;
+  top: 37px;
+  width: 11px;
+}
+.mobilemerch .path-jw7h1q {
+  background-color: transparent;
+  height: 3px;
+  left: 42px;
+  position: absolute;
+  top: 40px;
+  width: 3px;
+}
+.mobilemerch .path-m6zsv4 {
+  background-color: transparent;
+  height: 1px;
+  left: 13px;
+  position: absolute;
+  top: 34px;
+  width: 1px;
+}
+.mobilemerch .path-p2Xkh2 {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilemerch .path-p8uDOQ {
+  background-color: transparent;
+  height: 35px;
+  left: 0px;
+  position: absolute;
+  top: 26px;
+  width: 59px;
+}
+.mobilemerch .path-t7wJkg {
+  background-color: transparent;
+  height: 15px;
+  left: 6px;
+  position: absolute;
+  top: 33px;
+  width: 17px;
+}
+.mobilemerch .path-tFyvHR {
+  background-color: transparent;
+  height: 10px;
+  left: 34px;
+  position: absolute;
+  top: 34px;
+  width: 22px;
+}
+.mobilemerch .path-wiMY6g {
+  background-color: transparent;
+  height: 33px;
+  left: 1px;
+  position: absolute;
+  top: 27px;
+  width: 57px;
+}
+.mobilemerch .path-xWRwKD {
+  background-color: transparent;
+  height: 3px;
+  left: 42px;
+  position: absolute;
+  top: 40px;
+  width: 3px;
+}
+.mobilemerch .path-xoXbFx {
+  background-color: transparent;
+  height: 22px;
+  left: 1px;
+  position: absolute;
+  top: 38px;
+  width: 57px;
+}
+.mobilemerch .path-xwzroh {
+  background-color: transparent;
+  height: 1px;
+  left: 5px;
+  position: absolute;
+  top: 42px;
+  width: 1px;
+}
+.mobilemerch .path-yM71Qx {
+  background-color: transparent;
+  flex-shrink: 1;
+  height: 29px;
+  position: relative;
+  width: 16px;
+}
+.mobilemerch .path-yc4e9u {
+  background-color: transparent;
+  height: 2px;
+  left: 11px;
+  position: absolute;
+  top: 40px;
+  width: 3px;
+}
+.mobilemerch .platform-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 41px;
+  letter-spacing: 0.00px;
+  line-height: 17px;
+  position: absolute;
+  text-align: left;
+  top: 274px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .privacy-policy-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2471px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .rectangle-20RWIm {
+  background-color: var(--thunder);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 24px;
+  width: 4px;
+}
+.mobilemerch .rectangle-5fojzG {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 159px;
+  position: relative;
+  width: 117px;
+}
+.mobilemerch .rectangle-5mphW3 {
+  background-color: var(--thunder);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 22px;
+  width: 4px;
+}
+.mobilemerch .rectangle-BG0UyK {
+  background-color: var(--rajah);
+  flex-shrink: 1;
+  height: 3px;
+  position: relative;
+  width: 36px;
+}
+.mobilemerch .rectangle-BRN6Gz {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 24px;
+  width: 4px;
+}
+.mobilemerch .rectangle-BxWQgv {
+  background-color: var(--flamenco);
+  border-radius: 1px;
+  height: 2px;
+  left: 39px;
+  position: absolute;
+  top: 33px;
+  transform: rotate(-21.77deg);
+  width: 6px;
+}
+.mobilemerch .rectangle-C61RwL {
+  background-color: var(--flamenco);
+  height: 5px;
+  position: absolute;
+  top: 251px;
+  width: 56px;
+}
+.mobilemerch .rectangle-VMr6Om {
+  background-color: var(--mirage);
+  height: calc(100.00% - 1866px);
+  left: 0px;
+  position: absolute;
+  top: 1669px;
+  width: 100%;
+}
+.mobilemerch .rectangle-VmR1pI {
+  background-color: var(--rajah);
+  border-radius: 1px;
+  height: 2px;
+  left: 38px;
+  position: absolute;
+  top: 33px;
+  transform: rotate(-21.80deg);
+  width: 7px;
+}
+.mobilemerch .rectangle-WFY39Q {
+  background-color: var(--thunder);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 22px;
+  width: 4px;
+}
+.mobilemerch .rectangle-Wv7rkX {
+  background-color: transparent;
+  height: 41px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 210px;
+}
+.mobilemerch .rectangle-copy-2-BG0UyK {
+  background-color: var(--rajah);
+  flex-shrink: 1;
+  height: 3px;
+  margin-top: 3px;
+  position: relative;
+  width: 18px;
+}
+.mobilemerch .rectangle-copy-2-dkxFTb {
+  background-color: var(--flamenco);
+  height: 2px;
+  left: 0px;
+  position: absolute;
+  top: 10px;
+  width: 20px;
+}
+.mobilemerch .rectangle-copy-3-7shuxB {
+  background-color: transparent;
+  height: 41px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 210px;
+}
+.mobilemerch .rectangle-copy-5-hvAGCq {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 159px;
+  position: relative;
+  width: 117px;
+}
+.mobilemerch .rectangle-copy-5-kK8Vvv {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 159px;
+  position: relative;
+  width: 117px;
+}
+.mobilemerch .rectangle-copy-BG0UyK {
+  background-color: var(--rajah);
+  flex-shrink: 1;
+  height: 3px;
+  margin-top: 3px;
+  position: relative;
+  width: 27px;
+}
+.mobilemerch .rectangle-copy-dkxFTb {
+  background-color: var(--flamenco);
+  height: 2px;
+  left: 0px;
+  position: absolute;
+  top: 5px;
+  width: 20px;
+}
+.mobilemerch .rectangle-dkxFTb {
+  background-color: var(--flamenco);
+  height: 2px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 20px;
+}
+.mobilemerch .rectangle-p2Xkh2 {
+  background-color: transparent;
+  border-radius: 1px;
+  height: 2px;
+  left: 39px;
+  position: absolute;
+  top: 33px;
+  transform: rotate(-21.77deg);
+  width: 6px;
+}
+.mobilemerch .rectangle-p8uDOQ {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 22px;
+  width: 4px;
+}
+.mobilemerch .rectangle-wiMY6g {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 20px;
+  width: 4px;
+}
+.mobilemerch .rectangle-xoXbFx {
+  background-color: var(--zeus);
+  height: 1px;
+  left: 26px;
+  position: absolute;
+  top: 25px;
+  width: 4px;
+}
+.mobilemerch .rectangle-zUixHA {
+  background-color: rgba(215,215,215,1.0);
+  flex-shrink: 1;
+  height: 159px;
+  position: relative;
+  width: 117px;
+}
+.mobilemerch .retro-controller-1-C61RwL {
+  background-color: transparent;
+  height: 67px;
+  position: absolute;
+  right: 14px;
+  top: 1000px;
+  width: 66px;
+}
+.mobilemerch .retro-controller-2-C61RwL {
+  background-color: transparent;
+  height: 65px;
+  position: absolute;
+  right: 14px;
+  top: 1672px;
+  width: 59px;
+}
+.mobilemerch .shape-BxWQgv {
+  background-color: transparent;
+  height: 1px;
+  left: 41px;
+  position: absolute;
+  top: 31px;
+  width: 1px;
+}
+.mobilemerch .shape-VmR1pI {
+  background-color: transparent;
+  height: 1px;
+  left: 40px;
+  position: absolute;
+  top: 32px;
+  width: 1px;
+}
+.mobilemerch .sort-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  left: 41px;
+  letter-spacing: 0.00px;
+  line-height: 17px;
+  position: absolute;
+  text-align: left;
+  top: 336px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .style-1-C61RwL {
+  align-items: flex-end;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  margin-left: -90px;
+  margin-right: 90px;
+  min-height: 15px;
+  position: absolute;
+  top: 1043px;
+  width: 36px;
+}
+.mobilemerch .submit-btn-mobile-uoKZRS {
+  background-color: var(--flamenco);
+  flex-shrink: 1;
+  height: 45px;
+  margin-top: 56px;
+  pointer-events: auto;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  width: 210px;
+}
+.mobilemerch .submit-btn-mobile-uoKZRS:hover {
+
+transform: scale(0.9);
+}
+.mobilemerch .submit-qIoEbv {
+  background-color: transparent;
+  color: rgba(0,0,0,1.0);
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  height: auto;
+  left: 74px;
+  letter-spacing: 0.00px;
+  line-height: 21px;
+  position: absolute;
+  text-align: left;
+  top: 12px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .t-shirt-5fojzG {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 8px;
+  min-height: 20px;
+  min-width: 56px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .t-shirt-copy-hvAGCq {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 8px;
+  min-height: 20px;
+  min-width: 56px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .t-shirt-copy-kK8Vvv {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 8px;
+  min-height: 20px;
+  min-width: 56px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .t-shirt-zUixHA {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 500;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 8px;
+  min-height: 20px;
+  min-width: 56px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .terms-condition-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2497px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .text-tell-me-about-yourself-FWZijx {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.696);
+  font-family: 'Inter V', Helvetica;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  height: 238px;
+  left: 11px;
+  letter-spacing: 0.00px;
+  line-height: 17px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 13px;
+  width: 192px;
+}
+.mobilemerch .text-tell-me-about-yourself-FWZijx::placeholder {
+  color: rgba(255,255,255,0.417);
+}
+.mobilemerch .text-your-email-7shuxB {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.696);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  height: 30px;
+  left: 65px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 6px;
+  width: 80px;
+}
+.mobilemerch .text-your-email-7shuxB::placeholder {
+  color: rgba(255,255,255,0.417);
+}
+.mobilemerch .text-your-name-Wv7rkX {
+  background-color: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.696);
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  height: 30px;
+  left: 63px;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  padding: 0;
+  position: absolute;
+  resize: none;
+  text-align: left;
+  top: 7px;
+  width: 84px;
+}
+.mobilemerch .text-your-name-Wv7rkX::placeholder {
+  color: rgba(255,255,255,0.417);
+}
+.mobilemerch .top-bar-2IJkvB {
+  align-items: center;
+  background-color: var(--outer-space);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  justify-content: flex-start;
+  left: 0px;
+  min-height: 43px;
+  padding: 5px 134px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+}
+.mobilemerch .top-bar-mobile-C61RwL {
+  background-color: transparent;
+  height: 43px;
+  left: 0px;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+}
+.mobilemerch .topic-box-mobile-uoKZRS {
+  align-items: flex-end;
+  background-color: var(--chetwode-blue);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 1;
+  height: 33px;
+  justify-content: flex-end;
+  min-width: 210px;
+  padding: 6px 35px;
+  position: relative;
+  width: auto;
+}
+.mobilemerch .whats-the-topic-9kc3cd {
+  background-color: transparent;
+  color: var(--white);
+  flex-shrink: 1;
+  font-family: 'Inter V', Helvetica;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  min-height: 20px;
+  min-width: 139px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .x1-of-6-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-left: -1px;
+  margin-right: 1px;
+  position: absolute;
+  text-align: left;
+  top: 963px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .x1500-5fojzG {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 3px;
+  min-height: 20px;
+  min-width: 53px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .x1500-copy-hvAGCq {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 3px;
+  min-height: 20px;
+  min-width: 53px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .x1500-copy-kK8Vvv {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 3px;
+  min-height: 20px;
+  min-width: 53px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .x1500-zUixHA {
+  background-color: transparent;
+  flex-shrink: 1;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 20px;
+  margin-top: 3px;
+  min-height: 20px;
+  min-width: 53px;
+  position: relative;
+  text-align: left;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .x2021-madein-brooklyn-C61RwL {
+  background-color: transparent;
+  font-weight: 400;
+  height: auto;
+  letter-spacing: 0.00px;
+  line-height: 15px;
+  position: absolute;
+  text-align: left;
+  top: 2578px;
+  white-space: nowrap;
+  width: auto;
+}
+.mobilemerch .xmlid10-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 14px;
+  position: absolute;
+  top: 46px;
+  width: 1px;
+}
+.mobilemerch .xmlid11-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 18px;
+  position: absolute;
+  top: 50px;
+  width: 1px;
+}
+.mobilemerch .xmlid12-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 14px;
+  position: absolute;
+  top: 55px;
+  width: 1px;
+}
+.mobilemerch .xmlid13-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 50px;
+  position: absolute;
+  top: 46px;
+  width: 1px;
+}
+.mobilemerch .xmlid14-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 28px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilemerch .xmlid15-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 51px;
+  position: absolute;
+  top: 52px;
+  width: 1px;
+}
+.mobilemerch .xmlid16-GpPr31 {
+  background-color: transparent;
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 45px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilemerch .xmlid17-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 51px;
+  position: absolute;
+  top: 47px;
+  width: 2px;
+}
+.mobilemerch .xmlid18-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 47px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilemerch .xmlid19-GpPr31 {
+  background-color: transparent;
+  height: 38px;
+  left: 9px;
+  opacity: 0.41;
+  position: absolute;
+  top: 0px;
+  width: 46px;
+}
+.mobilemerch .xmlid2-GpPr31 {
+  background-color: transparent;
+  height: 10px;
+  left: 45px;
+  position: absolute;
+  top: 45px;
+  width: 11px;
+}
+.mobilemerch .xmlid20-GpPr31 {
+  background-color: transparent;
+  height: 27px;
+  left: 0px;
+  opacity: 0.41;
+  position: absolute;
+  top: 40px;
+  width: 66px;
+}
+.mobilemerch .xmlid32-GpPr31 {
+  background-color: transparent;
+  height: 27px;
+  left: 0px;
+  position: absolute;
+  top: 38px;
+  width: 66px;
+}
+.mobilemerch .xmlid33-GpPr31 {
+  background-color: rgba(231,80,59,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 57px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilemerch .xmlid34-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 52px;
+  position: absolute;
+  top: 54px;
+  width: 2px;
+}
+.mobilemerch .xmlid35-GpPr31 {
+  background-color: transparent;
+  height: 10px;
+  left: 49px;
+  position: absolute;
+  top: 47px;
+  width: 11px;
+}
+.mobilemerch .xmlid36-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 9px;
+  position: absolute;
+  top: 37px;
+  width: 15px;
+}
+.mobilemerch .xmlid37-GpPr31 {
+  background-color: var(--quincy);
+  height: 1px;
+  left: 31px;
+  position: absolute;
+  top: 37px;
+  width: 6px;
+}
+.mobilemerch .xmlid38-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 35px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilemerch .xmlid41-GpPr31 {
+  background-color: var(--quincy);
+  height: 1px;
+  left: 31px;
+  position: absolute;
+  top: 36px;
+  width: 4px;
+}
+.mobilemerch .xmlid43-GpPr31 {
+  background-color: transparent;
+  height: 35px;
+  left: 9px;
+  position: absolute;
+  top: 0px;
+  width: 46px;
+}
+.mobilemerch .xmlid44-GpPr31 {
+  background-color: transparent;
+  height: 25px;
+  left: 1px;
+  position: absolute;
+  top: 39px;
+  width: 64px;
+}
+.mobilemerch .xmlid45-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 43px;
+  position: absolute;
+  top: 37px;
+  width: 15px;
+}
+.mobilemerch .xmlid46-GpPr31 {
+  background-color: rgba(131,85,89,1.0);
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 7px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilemerch .xmlid48-GpPr31 {
+  background-color: var(--rajah);
+  border-radius: 17px/16px;
+  height: 16px;
+  left: 6px;
+  position: absolute;
+  top: 43px;
+  width: 17px;
+}
+.mobilemerch .xmlid49-GpPr31 {
+  background-color: rgba(131,85,89,1.0);
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 45px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilemerch .xmlid50-GpPr31 {
+  background-color: rgba(149,103,107,1.0);
+  border-radius: 14px/13px;
+  height: 13px;
+  left: 7px;
+  position: absolute;
+  top: 44px;
+  width: 14px;
+}
+.mobilemerch .xmlid51-GpPr31 {
+  background-color: var(--rajah);
+  border-radius: 17px/16px;
+  height: 16px;
+  left: 44px;
+  position: absolute;
+  top: 43px;
+  width: 17px;
+}
+.mobilemerch .xmlid52-GpPr31 {
+  background-color: transparent;
+  height: 13px;
+  left: 1px;
+  position: absolute;
+  top: 50px;
+  width: 64px;
+}
+.mobilemerch .xmlid53-GpPr31 {
+  background-color: transparent;
+  height: 13px;
+  left: 1px;
+  position: absolute;
+  top: 38px;
+  width: 64px;
+}
+.mobilemerch .xmlid54-GpPr31 {
+  background-color: var(--quincy);
+  height: 1px;
+  left: 32px;
+  position: absolute;
+  top: 36px;
+  width: 3px;
+}
+.mobilemerch .xmlid55-GpPr31 {
+  background-color: transparent;
+  height: 13px;
+  left: 8px;
+  position: absolute;
+  top: 45px;
+  width: 13px;
+}
+.mobilemerch .xmlid56-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 35px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilemerch .xmlid57-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 50px;
+  position: absolute;
+  top: 48px;
+  width: 9px;
+}
+.mobilemerch .xmlid58-GpPr31 {
+  background-color: var(--flamenco);
+  border-radius: 3px;
+  height: 3px;
+  left: 13px;
+  position: absolute;
+  top: 50px;
+  width: 3px;
+}
+.mobilemerch .xmlid59-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 46px;
+  position: absolute;
+  top: 46px;
+  width: 9px;
+}
+.mobilemerch .xmlid6-GpPr31 {
+  background-color: transparent;
+  height: 11px;
+  left: 9px;
+  position: absolute;
+  top: 46px;
+  width: 11px;
+}
+.mobilemerch .xmlid60-GpPr31 {
+  background-color: transparent;
+  border-radius: 2px;
+  height: 2px;
+  left: 57px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilemerch .xmlid61-GpPr31 {
+  background-color: rgba(254,245,133,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 52px;
+  position: absolute;
+  top: 54px;
+  width: 2px;
+}
+.mobilemerch .xmlid62-GpPr31 {
+  background-color: rgba(139,216,245,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 51px;
+  position: absolute;
+  top: 47px;
+  width: 2px;
+}
+.mobilemerch .xmlid63-GpPr31 {
+  background-color: rgba(50,185,77,1.0);
+  border-radius: 2px;
+  height: 2px;
+  left: 47px;
+  position: absolute;
+  top: 50px;
+  width: 2px;
+}
+.mobilemerch .xmlid64-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 51px;
+  opacity: 0.17;
+  position: absolute;
+  top: 49px;
+  width: 9px;
+}
+.mobilemerch .xmlid65-GpPr31 {
+  background-color: transparent;
+  height: 8px;
+  left: 46px;
+  opacity: 0.17;
+  position: absolute;
+  top: 46px;
+  width: 9px;
+}
+.mobilemerch .xmlid66-GpPr31 {
+  background-color: rgba(149,103,107,1.0);
+  border-radius: 14px/13px;
+  height: 13px;
+  left: 46px;
+  position: absolute;
+  top: 44px;
+  width: 14px;
+}
+.mobilemerch .xmlid67-GpPr31 {
+  background-color: transparent;
+  height: 5px;
+  left: 28px;
+  position: absolute;
+  top: 48px;
+  width: 5px;
+}
+.mobilemerch .xmlid68-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 12px;
+  position: absolute;
+  top: 48px;
+  width: 1px;
+}
+.mobilemerch .xmlid7-GpPr31 {
+  background-color: transparent;
+  border-radius: 16px/17px;
+  height: 17px;
+  left: 7px;
+  position: absolute;
+  top: 42px;
+  width: 16px;
+}
+.mobilemerch .xmlid70-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 55px;
+  position: absolute;
+  top: 48px;
+  width: 1px;
+}
+.mobilemerch .xmlid71-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 29px;
+  position: absolute;
+  top: 44px;
+  width: 11px;
+}
+.mobilemerch .xmlid72-GpPr31 {
+  background-color: transparent;
+  height: 2px;
+  left: 13px;
+  position: absolute;
+  top: 51px;
+  width: 3px;
+}
+.mobilemerch .xmlid73-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 34px;
+  position: absolute;
+  top: 42px;
+  width: 6px;
+}
+.mobilemerch .xmlid74-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 28px;
+  position: absolute;
+  top: 42px;
+  width: 4px;
+}
+.mobilemerch .xmlid8-GpPr31 {
+  background-color: transparent;
+  height: 3px;
+  left: 47px;
+  position: absolute;
+  top: 49px;
+  width: 1px;
+}
+.mobilemerch .xmlid9-GpPr31 {
+  background-color: transparent;
+  height: 1px;
+  left: 10px;
+  position: absolute;
+  top: 50px;
+  width: 1px;
+}
+.placeholder-18placeholder-18 {
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+.text-18text-18 {
+  font-family: 'Inter V', Helvetica;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+:root {
+  --chetwode-blue: rgba(135,125,213,1.0);
+  --coral: rgba(244,133,81,1.0);
+  --flamenco: rgba(255,137,6,1.0);
+  --mirage: rgba(26,25,37,1.0);
+  --outer-space: rgba(65,64,75,1.0);
+  --quincy: rgba(102,60,59,1.0);
+  --rajah: rgba(251,179,98,1.0);
+  --thunder: rgba(48,46,44,1.0);
+  --white: rgba(255,255,255,1.0);
+  --zeus: rgba(40,37,34,1.0);
+}
+@media screen and (max-width: 1023px) {
+  .desktopmerch { 
+    display: none;
+   }
+}
+@media screen and (min-width: 1024px) {
+  .mobilemerch { 
+    display: none;
+   }
+}

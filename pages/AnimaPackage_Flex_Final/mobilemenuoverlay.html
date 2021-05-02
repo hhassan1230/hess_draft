@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="shortcut icon" type="image/png" href="https://animaproject.s3.amazonaws.com/home/favicon.png" />
+    <meta name="og:type" content="website" />
+    <meta name="twitter:card" content="photo" />
+    <link rel="stylesheet" type="text/css" href="css/mobilemenuoverlay.css" />
+    <style>
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 900;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 200;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 500;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 600;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 700;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 400;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      .component-wrapper a,
+      .screen a {
+        text-decoration: none;
+        display: contents;
+      }
+
+      .full-width-a {
+        width: 100%;
+      }
+
+      .full-height-a {
+        height: 100%;
+      }
+
+      .screen textarea:focus,
+      .screen input:focus {
+        outline: none;
+      }
+
+      .screen *,
+      .component-wrapper * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .screen div {
+        -webkit-text-size-adjust: none;
+      }
+
+      .container-center-vertical,
+      .container-center-horizontal {
+        pointer-events: none;
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+        margin: 0;
+      }
+
+      .container-center-vertical {
+        align-items: center;
+        height: 100%;
+      }
+
+      .container-center-horizontal {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .container-center-vertical > *,
+      .container-center-horizontal > * {
+        pointer-events: auto;
+        flex-shrink: 0;
+      }
+
+      .component-wrapper,
+      .screen {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+      }
+
+      .auto-animated div {
+        opacity: 0;
+        position: absolute;
+        --z-index: -1;
+      }
+
+      .auto-animated .container-center-vertical,
+      .auto-animated .container-center-horizontal {
+        opacity: 1;
+      }
+
+      .overlay {
+        position: absolute;
+        opacity: 0;
+        display: none;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+      }
+
+      .animate-appear {
+        opacity: 0;
+        display: block;
+        animation: reveal 0.3s ease-in-out 1 normal forwards;
+      }
+
+      .animate-disappear {
+        opacity: 1;
+        display: block;
+        animation: reveal 0.3s ease-in-out 1 reverse forwards;
+      }
+
+      .animate-nodelay {
+        animation-delay: 0s;
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .align-self-flex-start {
+        align-self: flex-start;
+      }
+      .align-self-flex-end {
+        align-self: flex-end;
+      }
+      .align-self-flex-center {
+        align-self: center;
+      }
+      .valign-text-middle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .valign-text-bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      input:focus {
+        outline: none;
+      }
+      .component-wrapper,
+      .component-wrapper * {
+        pointer-events: none;
+      }
+
+      .component-wrapper a *,
+      .component-wrapper a,
+      .component-wrapper input,
+      .component-wrapper video,
+      .component-wrapper iframe,
+      .listeners-active,
+      .listeners-active * {
+        pointer-events: auto;
+      }
+
+      .hidden,
+      .hidden * {
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .smart-layers-pointers,
+      .smart-layers-pointers * {
+        pointer-events: auto;
+        visibility: visible;
+      }
+
+      .component-wrapper.not-ready,
+      .component-wrapper.not-ready * {
+        visibility: hidden !important;
+      }
+
+      .listeners-active-click,
+      .listeners-active-click * {
+        cursor: pointer;
+      }
+    </style>
+    <meta name="author" content="AnimaApp.com - Design to code, Automated." />
+  </head>
+  <body style="margin: 0; background: rgba(255, 255, 255, 1)">
+    <input type="hidden" id="anPageName" name="page" value="mobilemenuoverlay" />
+    <div class="mobilemenuoverlay screen">
+      <a href="javascript:HideOverlay('mobilemenuoverlay', 'animate-disappear');">
+        <div class="dismiss-overlay-C61RwL smart-layers-pointers"></div
+      ></a>
+      <div class="menu-list-links-C61RwL">
+        <div class="home-l38YOV interv-semi-bold-white-16px animate-enter" show-on-scroll>Home</div>
+        <div class="games-l38YOV interv-semi-bold-white-16px animate-enter2" show-on-scroll>Games</div>
+        <div class="about-l38YOV interv-semi-bold-white-16px animate-enter1" show-on-scroll>About</div>
+        <div class="contact-l38YOV interv-semi-bold-white-16px animate-enter3" show-on-scroll>Contact</div>
+      </div>
+      <div class="container-center-vertical">
+        <div class="social-media-icons-C61RwL" show-on-scroll>
+          <a href="https://www.linkedin.com/company/made-in-brooklyn-games/" target="_blank">
+            <div class="linkedin-Xiy3pP animate-enter4" show-on-scroll>
+              <img
+                class="shape-7mxTZx smart-layers-pointers"
+                src="img/mobile-menu-overlay-shape-EAB77E60-DA83-4AFB-B070-A59CC88BDFC0@2x.png"
+              /></div
+          ></a>
+          <div class="twitter-Xiy3pP animate-enter5" show-on-scroll></div>
+          <a href="https://www.facebook.com/MiBKG" target="_blank">
+            <div class="facebook-Xiy3pP animate-enter6" show-on-scroll>
+              <img
+                class="path-kT5t8C smart-layers-pointers"
+                src="img/mobile-menu-overlay-path-CA2DB456-2CEB-45BF-8D6E-2F41D27B334A@2x.png"
+              /></div
+          ></a>
+          <a href="https://www.instagram.com/madeinbkgames/" target="_blank">
+            <div class="instagram-Xiy3pP animate-enter7 smart-layers-pointers" show-on-scroll>
+              <img
+                class="shape-vRRNIw"
+                src="img/mobile-menu-overlay-shape-988B7600-1D1B-4E4B-98B7-6882237994EB@2x.png"
+              />
+              <img
+                class="path-vRRNIw"
+                src="img/mobile-menu-overlay-path-5DE0C9A7-C246-4F6D-9890-24C641C4FCA0@2x.png"
+              /></div
+          ></a>
+        </div>
+      </div>
+    </div>
+    <script>
+      function ShowOnScroll() {
+        this.toShow = [];
+        this.nextEventY = undefined;
+      }
+
+      ShowOnScroll.prototype.show = function (e) {
+        e.style.display = "";
+      };
+
+      ShowOnScroll.prototype.hide = function (e) {
+        e.style.display = "none";
+      };
+
+      ShowOnScroll.prototype.getTop = function (e) {
+        if (e.Top != undefined && e.Top != 0) {
+          return e.Top;
+        }
+        var top = 0;
+        var iter = e;
+        do {
+          top += iter.offsetTop || 0;
+          iter = iter.offsetParent;
+        } while (iter);
+        e.Top = top;
+        return top;
+      };
+
+      ShowOnScroll.prototype.onScroll = function () {
+        var screenBottom = window.pageYOffset + window.innerHeight;
+        if (this.nextEventY == undefined || this.nextEventY > screenBottom) {
+          return;
+        }
+        this.nextEventY = undefined;
+        for (var i = 0; i < this.toShow.length; i++) {
+          var e = this.toShow[i];
+          var top = this.getTop(e);
+          if (top < screenBottom) {
+            this.show(e);
+            this.toShow.shift();
+            i--;
+          } else {
+            this.nextEventY = top;
+            break;
+          }
+        }
+      };
+
+      ShowOnScroll.prototype.resetScrolling = function () {
+        // Clear state
+        var screenBottom = window.pageYOffset + window.innerHeight;
+        for (var i = 0; i < this.toShow.length; i++) {
+          var e = this.toShow[i];
+          this.show(e);
+        }
+        this.toShow = [];
+        this.nextEventY == undefined;
+
+        // Collect items
+        var itemsToShowOnScroll = Array.prototype.slice.call(document.getElementsByTagName("*"));
+        itemsToShowOnScroll = itemsToShowOnScroll.filter(function (e) {
+          return e.getAttribute("show-on-scroll") != undefined;
+        });
+        var getTop = this.getTop;
+        itemsToShowOnScroll.sort(function (a, b) {
+          return getTop(a) - getTop(b);
+        });
+        for (var i = 0; i < itemsToShowOnScroll.length; i++) {
+          var e = itemsToShowOnScroll[i];
+          var top = this.getTop(e);
+          if (top < screenBottom) {
+            continue;
+          }
+          this.toShow.push(e);
+          this.hide(e);
+          this.nextEventY = this.nextEventY != undefined ? this.nextEventY : top;
+        }
+      };
+
+      ShowOnScroll.prototype.handleEvent = function (e) {
+        switch (e.type) {
+          case "scroll":
+            this.onScroll();
+            break;
+          case "resize":
+            this.resetScrolling();
+            break;
+        }
+      };
+
+      ShowOnScroll.prototype.init = function () {
+        this.resetScrolling();
+        window.addEventListener("scroll", this);
+        window.addEventListener("resize", this);
+      };
+
+      // After anima-src
+      setTimeout(function () {
+        var instShowOnScroll = new ShowOnScroll();
+        instShowOnScroll.init();
+      }, 250);
+    </script>
+  </body>
+</html>

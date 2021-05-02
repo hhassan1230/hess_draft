@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <link rel="shortcut icon" type="image/png" href="https://animaproject.s3.amazonaws.com/home/favicon.png" />
+    <meta name="og:type" content="website" />
+    <meta name="twitter:card" content="photo" />
+    <link rel="stylesheet" type="text/css" href="css/mobilemerch.css" />
+    <link rel="stylesheet" type="text/css" href="css/mobilemenuoverlay.css" />
+    <style>
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 900;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 200;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 500;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 600;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 700;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      @font-face {
+        font-family: "Inter V";
+        font-weight: 400;
+        src: url("https://anima-uploads.s3.amazonaws.com/5ec418ec7acaf0274b9b56a8/Inter-V.otf") format("opentype");
+      }
+
+      .component-wrapper a,
+      .screen a {
+        text-decoration: none;
+        display: contents;
+      }
+
+      .full-width-a {
+        width: 100%;
+      }
+
+      .full-height-a {
+        height: 100%;
+      }
+
+      .screen textarea:focus,
+      .screen input:focus {
+        outline: none;
+      }
+
+      .screen *,
+      .component-wrapper * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .screen div {
+        -webkit-text-size-adjust: none;
+      }
+
+      .container-center-vertical,
+      .container-center-horizontal {
+        pointer-events: none;
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+        margin: 0;
+      }
+
+      .container-center-vertical {
+        align-items: center;
+        height: 100%;
+      }
+
+      .container-center-horizontal {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .container-center-vertical > *,
+      .container-center-horizontal > * {
+        pointer-events: auto;
+        flex-shrink: 0;
+      }
+
+      .component-wrapper,
+      .screen {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+      }
+
+      .auto-animated div {
+        opacity: 0;
+        position: absolute;
+        --z-index: -1;
+      }
+
+      .auto-animated .container-center-vertical,
+      .auto-animated .container-center-horizontal {
+        opacity: 1;
+      }
+
+      .overlay {
+        position: absolute;
+        opacity: 0;
+        display: none;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+      }
+
+      .animate-appear {
+        opacity: 0;
+        display: block;
+        animation: reveal 0.3s ease-in-out 1 normal forwards;
+      }
+
+      .animate-disappear {
+        opacity: 1;
+        display: block;
+        animation: reveal 0.3s ease-in-out 1 reverse forwards;
+      }
+
+      .animate-nodelay {
+        animation-delay: 0s;
+      }
+
+      @keyframes reveal {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .align-self-flex-start {
+        align-self: flex-start;
+      }
+      .align-self-flex-end {
+        align-self: flex-end;
+      }
+      .align-self-flex-center {
+        align-self: center;
+      }
+      .valign-text-middle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .valign-text-bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      input:focus {
+        outline: none;
+      }
+      .component-wrapper,
+      .component-wrapper * {
+        pointer-events: none;
+      }
+
+      .component-wrapper a *,
+      .component-wrapper a,
+      .component-wrapper input,
+      .component-wrapper video,
+      .component-wrapper iframe,
+      .listeners-active,
+      .listeners-active * {
+        pointer-events: auto;
+      }
+
+      .hidden,
+      .hidden * {
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .smart-layers-pointers,
+      .smart-layers-pointers * {
+        pointer-events: auto;
+        visibility: visible;
+      }
+
+      .component-wrapper.not-ready,
+      .component-wrapper.not-ready * {
+        visibility: hidden !important;
+      }
+
+      .listeners-active-click,
+      .listeners-active-click * {
+        cursor: pointer;
+      }
+    </style>
+    <meta name="author" content="AnimaApp.com - Design to code, Automated." />
+  </head>
+  <body style="margin: 0; background: rgba(255, 255, 255, 1)">
+    <input type="hidden" id="anPageName" name="page" value="mobilemerch" />
+    <div class="desktopmerch screen">
+      <div class="hero-image-C61RwL bp1-animate-enter">
+        <video
+          src="https://anima-uploads.s3.amazonaws.com/projects/60523ff4ec5e2ec86a4add42/files/mibkg-highlight-reel.mp4"
+          loop
+          autoplay="autoplay"
+          playsinline
+          muted
+        ></video>
+      </div>
+      <div class="brooklyn-img-C61RwL" show-on-scroll>
+        <div class="overlay-desktop-PpoUif"></div>
+      </div>
+      <div class="bg-grey-game-section-C61RwL" show-on-scroll></div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-C61RwL">
+          <div class="rectangle-Zsog3o smart-layers-pointers"></div>
+          <div class="t-shirt-Zsog3o interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-Zsog3o interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-5-C61RwL">
+          <div class="rectangle-RgSCAv"></div>
+          <div class="t-shirt-RgSCAv interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-RgSCAv interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-2-C61RwL">
+          <div class="rectangle-copy-3-ESkxxS"></div>
+          <div class="t-shirt-copy-ESkxxS interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-copy-ESkxxS interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-6-C61RwL">
+          <div class="rectangle-copy-3-drT1q8 smart-layers-pointers"></div>
+          <div class="t-shirt-copy-drT1q8 interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-copy-drT1q8 interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-3-C61RwL">
+          <div class="rectangle-copy-4-YzXgp7 smart-layers-pointers"></div>
+          <div class="t-shirt-copy-2-YzXgp7 interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-copy-2-YzXgp7 interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-7-C61RwL">
+          <div class="rectangle-copy-4-rqS4JY smart-layers-pointers"></div>
+          <div class="t-shirt-copy-2-rqS4JY interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-copy-2-rqS4JY interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-4-C61RwL">
+          <div class="rectangle-copy-5-2ibrk3"></div>
+          <div class="t-shirt-copy-3-2ibrk3 interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-copy-3-2ibrk3 interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="merch-card-8-C61RwL">
+          <div class="rectangle-copy-5-WrBig2"></div>
+          <div class="t-shirt-copy-3-WrBig2 interv-medium-white-18px">T-shirt</div>
+          <div class="x1500-copy-3-WrBig2 interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="line-green-C61RwL">
+          <img
+            class="line-2-IggD9r bp1-animate-enter1"
+            src="img/desktop--merch-line-2-2107EC14-7152-41FF-8DA2-EA774F1D5CDD@2x.png"
+          />
+          <img
+            class="line-2-copy-IggD9r bp1-animate-enter2"
+            show-on-scroll
+            src="img/desktop--merch-line-2-copy-2DDCCE33-3D3B-4187-81AD-5D9A7B457D1E@2x.png"
+          />
+          <img
+            class="line-2-copy-2-IggD9r bp1-animate-enter3"
+            src="img/desktop--merch-line-2-copy-2-A7B9F052-87D3-4540-A044-0FEB2708992C@2x.png"
+          />
+          <img
+            class="line-2-copy-3-IggD9r bp1-animate-enter4"
+            src="img/desktop--merch-line-2-copy-3-745DFCBE-72FC-4DC5-B707-076A46B860A3@2x.png"
+          />
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="featured-products-C61RwL bp1-animate-enter5">Featured Products</div>
+      </div>
+      <div class="bg-purple-game-section-C61RwL" id="bg-purple-game-section"></div>
+      <div class="container-center-horizontal">
+        <div class="page-indicator-C61RwL">
+          <div class="active-e7verA"></div>
+          <div class="inactive-e7verA border-1px-rajah"></div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="logo-C61RwL bp1-animate-enter6" show-on-scroll></div>
+      </div>
+      <div class="style-1-C61RwL bp1-animate-enter7" show-on-scroll>
+        <div class="rectangle-BG0UyK"></div>
+        <div class="rectangle-copy-BG0UyK"></div>
+        <div class="rectangle-copy-2-BG0UyK"></div>
+      </div>
+      <div class="retro-controller-1-C61RwL bp1-animate-enter8" show-on-scroll>
+        <img class="xmlid20-GpPr31" src="img/desktop--xmlid20-9ABFB9F9-929C-4934-B40A-35FBAF8017AB@2x.png" />
+        <img class="xmlid19-GpPr31" src="img/desktop--xmlid19-2FAC6091-FA3B-467F-9BC6-9709057DF8E7@2x.png" />
+        <img class="xmlid43-GpPr31" src="img/desktop--xmlid43-F529604D-B232-4A6C-AA0C-EDBB538D0AF1@2x.png" />
+        <div class="xmlid37-GpPr31"></div>
+        <div class="xmlid41-GpPr31"></div>
+        <div class="xmlid54-GpPr31"></div>
+        <img class="xmlid44-GpPr31" src="img/desktop--xmlid44-E7EF5675-78AE-4FC5-AE38-11048F199455@2x.png" />
+        <img class="xmlid74-GpPr31" src="img/desktop--xmlid74-B2A6680F-CE92-4355-B563-68C0AC249D4B@2x.png" />
+        <img class="xmlid73-GpPr31" src="img/desktop--xmlid73-7438B8EF-0622-48BD-B6A3-2A097425EC23@2x.png" />
+        <img class="xmlid71-GpPr31" src="img/desktop--xmlid71-36F6B77C-328B-4FE4-8E2B-C8379D4EF4C0@2x.png" />
+        <img class="xmlid67-GpPr31" src="img/desktop--xmlid67-E058B0B9-0A5E-4205-AAD3-B7F07C787642@2x.png" />
+        <img class="xmlid56-GpPr31" src="img/desktop--xmlid67-E058B0B9-0A5E-4205-AAD3-B7F07C787642@2x.png" />
+        <img class="xmlid53-GpPr31" src="img/desktop--xmlid53-90C70035-A4D1-457A-BE0F-D180CADEA069@2x.png" />
+        <img class="xmlid52-GpPr31" src="img/desktop--xmlid52-F87A625F-DA13-4D91-ADA3-A25F7F8D803B@2x.png" />
+        <div class="xmlid48-GpPr31"></div>
+        <div class="xmlid46-GpPr31"></div>
+        <div class="xmlid50-GpPr31"></div>
+        <img class="xmlid6-GpPr31" src="img/desktop--xmlid6-CD8AF8F2-3A5B-426E-9F0D-5FBD22B29BB8@2x.png" />
+        <div class="xmlid7-GpPr31 border-0-9px-quincy"></div>
+        <div class="xmlid51-GpPr31"></div>
+        <div class="xmlid49-GpPr31"></div>
+        <div class="xmlid66-GpPr31"></div>
+        <div class="xmlid16-GpPr31 border-0-9px-quincy"></div>
+        <img class="xmlid10-GpPr31" src="img/desktop--xmlid10-ADB383F8-CB52-4783-A6E7-C1CE1C84F0F4@2x.png" />
+        <img class="xmlid12-GpPr31" src="img/desktop--xmlid12-3F4287C0-97AC-44B6-B94D-2144F1902623@2x.png" />
+        <img class="xmlid55-GpPr31" src="img/desktop--xmlid55-CC3C0E59-01AB-42CB-903B-73B865ADC9F9@2x.png" />
+        <img class="xmlid11-GpPr31" src="img/desktop--xmlid11-EFF82D16-DFEF-44C7-9900-6CB03208BDBE@2x.png" />
+        <img class="xmlid9-GpPr31" src="img/desktop--xmlid9-2E2D6AD7-5D06-4E03-88A8-1244077DDE5F@2x.png" />
+        <img class="xmlid45-GpPr31" src="img/desktop--xmlid45-5B0F60F3-58DE-4D0F-AA8C-BE00813B5AB1@2x.png" />
+        <img class="xmlid36-GpPr31" src="img/desktop--xmlid36-205EE115-5524-41BA-9CE9-9C32254A577D@2x.png" />
+        <img class="xmlid32-GpPr31" src="img/desktop--xmlid32-6481C51A-EEDE-49A9-8C67-0CA2AEA0B903@2x.png" />
+        <img class="xmlid65-GpPr31" src="img/desktop--xmlid65-9E35BCCC-4E8A-4363-ADAA-DFADF87A61BF@2x.png" />
+        <img class="xmlid59-GpPr31" src="img/desktop--xmlid59-3E0DFAE6-6EB4-4D98-9DB1-DE897BA9D618@2x.png" />
+        <img class="xmlid2-GpPr31" src="img/desktop--xmlid2-065CD036-9F9B-48C5-A49F-1CE2E38A378B@2x.png" />
+        <div class="xmlid63-GpPr31"></div>
+        <img class="xmlid8-GpPr31" src="img/desktop--xmlid8-A2D86676-C577-4E12-9E41-E79A4C1434A2@2x.png" />
+        <div class="xmlid18-GpPr31 border-0-5px-quincy"></div>
+        <div class="xmlid62-GpPr31"></div>
+        <img class="xmlid13-GpPr31" src="img/desktop--xmlid15-E463BB69-31BC-4087-ADFE-052142478B63@2x.png" />
+        <div class="xmlid17-GpPr31 border-0-5px-quincy"></div>
+        <img class="xmlid64-GpPr31" src="img/desktop--xmlid64-5DDA416C-9950-4C78-ABA8-C6A5A7C0E0E7@2x.png" />
+        <img class="xmlid57-GpPr31" src="img/desktop--xmlid57-BB856B3D-72CC-4F13-B0A3-7814035BDD5A@2x.png" />
+        <img class="xmlid35-GpPr31" src="img/desktop--xmlid35-2EFEC5A1-5FC2-4E49-A2E0-CAF20989F5A9@2x.png" />
+        <div class="xmlid61-GpPr31"></div>
+        <img class="xmlid15-GpPr31" src="img/desktop--xmlid15-E463BB69-31BC-4087-ADFE-052142478B63@2x.png" />
+        <div class="xmlid34-GpPr31 border-0-5px-quincy"></div>
+        <div class="xmlid33-GpPr31"></div>
+        <img class="xmlid70-GpPr31" src="img/desktop--xmlid15-E463BB69-31BC-4087-ADFE-052142478B63@2x.png" />
+        <div class="xmlid60-GpPr31 border-0-5px-quincy"></div>
+        <img class="xmlid14-GpPr31" src="img/desktop--xmlid14-7706426C-04D0-4C47-B6DA-4C4AC780F430@2x.png" />
+        <img class="xmlid38-GpPr31" src="img/desktop--xmlid14-7706426C-04D0-4C47-B6DA-4C4AC780F430@2x.png" />
+        <div class="xmlid58-GpPr31"></div>
+        <img class="xmlid72-GpPr31" src="img/desktop--xmlid72-34A10E0B-C1FC-464A-8086-31BBA8469F65@2x.png" />
+        <img class="xmlid68-GpPr31" src="img/desktop--xmlid68-F2CB399D-7A4D-49E8-AACE-13725F917560@2x.png" />
+      </div>
+      <div class="s-ide-nav-bar-C61RwL" show-on-scroll>
+        <a href="desktop.html"><div class="games-drDmqS interv-medium-white-26px smart-layers-pointers">Games</div></a>
+        <div class="overlap-group-drDmqS">
+          <div class="merch-okDrSb interv-medium-white-26px">Merch</div>
+          <div class="rectangle-okDrSb"></div>
+        </div>
+        <div class="other-drDmqS interv-medium-white-26px">Other</div>
+      </div>
+      <div class="about-us-C61RwL h2colorblack h2colorwhite bp1-animate-enter9" show-on-scroll>About Us</div>
+      <div class="made-in-brooklyn-gam-C61RwL interv-normal-white-16px bp1-animate-enter10" show-on-scroll>
+        Made in Brooklyn Games is home to the underrepresented creators who have never been given a chance to show who
+        they or what they can do.<br /><br />We strive to further the medium of interactive experiences with dope
+        content because here at Made in Brooklyn Game, we focus on crreating rich experiecnes with social commentary.<br /><br />Come
+        through &amp; enjoy our content &amp; stay for our deeper meaning.
+      </div>
+      <div class="page-border-desktop-C61RwL"></div>
+      <div class="page-border-desktop-VMr6Om"></div>
+      <div class="page-border-desktop-mzXdH9"></div>
+      <div class="background-contact-section-C61RwL" id="background-contact-section"></div>
+      <div class="form-field-C61RwL bp1-animate-enter11" show-on-scroll>
+        <div class="checkboxinactive-rn2NGm"></div>
+        <div class="topic-box-rn2NGm">
+          <div class="whats-the-topic-5Ou2cz interv-semi-bold-white-16px">What’s the topic?</div>
+        </div>
+        <div class="submit-btn-rn2NGm smart-layers-pointers"><div class="submit-oaqlGK">Submit</div></div>
+        <div class="form-input-message-rn2NGm"></div>
+        <textarea
+          class="text-tell-me-about-yourself-rn2NGm"
+          name="texttellmeaboutyourself"
+          placeholder="Tell me about yourself"
+          type="text"
+          required
+        ></textarea>
+        <div class="sign-up-to-upcoming-rn2NGm interv-normal-white-14px">Sign up to upcoming news and events.</div>
+        <div class="form-input-rn2NGm">
+          <div class="overlap-group-LxPoFL">
+            <div class="form-field-box-1-n62dMv border-2px-white"></div>
+            <input
+              class="text-your-name-n62dMv interv-normal-white-16px-2"
+              name="textyourname"
+              placeholder="Your Name"
+              type="text"
+              required
+            />
+          </div>
+          <div class="overlap-group1-LxPoFL">
+            <div class="form-field-box-2-8UzHnk border-2px-white"></div>
+            <input
+              class="text-your-email-8UzHnk interv-normal-white-16px-2"
+              name="textyouremail"
+              placeholder="Your Email"
+              type="email"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="retro-controller-2-C61RwL bp1-animate-enter12" show-on-scroll>
+        <img class="path-VmR1pI" src="img/desktop--path-4747CACD-C47A-420B-9391-782676A2F44C@2x.png" />
+        <img class="path-BxWQgv" src="img/desktop--path-BF069BAA-B3F2-4D52-B56E-F96FD01022E3@2x.png" />
+        <img class="path-p2Xkh2" src="img/desktop--path-249578B1-CF01-4811-AEB0-AD29554FF2F5@2x.png" />
+        <img class="path-wiMY6g" src="img/desktop--path-249578B1-CF01-4811-AEB0-AD29554FF2F5@2x.png" />
+        <img class="path-WFY39Q" src="img/desktop--path-249578B1-CF01-4811-AEB0-AD29554FF2F5@2x.png" />
+        <img class="path-p8uDOQ" src="img/desktop--path-250EB0B3-2D4A-48D5-BB7C-14A1852A18A3@2x.png" />
+        <img class="path-5mphW3" src="img/desktop--path-E9DDD239-D11B-49A1-91BC-60F71EF6ABC8@2x.png" />
+        <div class="rectangle-VmR1pI"></div>
+        <div class="oval-VmR1pI"></div>
+        <img class="path-BRN6Gz" src="img/desktop--path-25B958E8-9444-4AA9-93B5-7D4FE316AB1A@2x.png" />
+        <img class="path-xoXbFx" src="img/desktop--path-420FCC61-D6C3-46D5-8449-1B7D03A543CA@2x.png" />
+        <img class="path-20RWIm" src="img/desktop--path-51323EA1-4991-4455-81FA-93B3B97B5DB4@2x.png" />
+        <img class="path-DzfFL4" src="img/desktop--path-36DA1EE6-A27D-4651-9A0A-68A1D0E21C9F@2x.png" />
+        <div class="oval-BxWQgv"></div>
+        <img class="path-t7wJkg" src="img/desktop--path-A6D37DB2-D247-48A0-82F3-98A9FB517FA1@2x.png" />
+        <img class="path-6QWD40" src="img/desktop--path-87B7CF0D-A7D0-45D8-BE40-B7C455D6843B@2x.png" />
+        <div class="oval-p2Xkh2"></div>
+        <div class="oval-wiMY6g"></div>
+        <div class="oval-WFY39Q border-1-2px-zeus"></div>
+        <img class="path-e1w9Y5" src="img/desktop--path-AA0C0F86-B5AC-4B3E-A10B-801978C3FB49@2x.png" />
+        <div class="oval-p8uDOQ border-1-2px-zeus"></div>
+        <div class="oval-5mphW3"></div>
+        <img class="path-yc4e9u" src="img/desktop--path-040ABA33-69AF-4A8D-A7BC-5BF136DFAF80@2x.png" />
+        <img class="path-3psFIE" src="img/desktop--path-0A326B3E-B35B-4C6B-902A-ABD9183EF8A3@2x.png" />
+        <div class="oval-BRN6Gz"></div>
+        <div class="oval-xoXbFx"></div>
+        <div class="oval-20RWIm"></div>
+        <div class="oval-DzfFL4"></div>
+        <img class="path-QSxKfu" src="img/desktop--path-AC2ECF8E-A8DD-4803-A22C-28D8B1557960@2x.png" />
+        <img class="path-tFyvHR" src="img/desktop--path-BCBCFBE1-0B46-4838-9554-FBB383F0B4BB@2x.png" />
+        <div class="oval-t7wJkg border-1-2px-zeus"></div>
+        <img class="path-D0tSvt" src="img/desktop--path-1AF41A07-7BB7-455E-B6F2-6AF600AACF6E@2x.png" />
+        <div class="oval-6QWD40 border-0-5px-zeus"></div>
+        <div class="oval-e1w9Y5 border-1-2px-zeus"></div>
+        <img class="path-xWRwKD" src="img/desktop--path-83334198-5A20-4A76-A5DA-E47F4AE3ABDD@2x.png" />
+        <div class="oval-yc4e9u border-0-5px-zeus"></div>
+        <div class="oval-3psFIE border-1-2px-zeus"></div>
+        <img class="path-Dff7nf" src="img/desktop--path-83334198-5A20-4A76-A5DA-E47F4AE3ABDD@2x.png" />
+        <img class="path-DIk5Ku" src="img/desktop--path-CDC3E3D1-D22F-4FC4-BC9E-DF782EB76B71@2x.png" />
+        <div class="oval-QSxKfu"></div>
+        <img class="path-ZDcfra" src="img/desktop--path-002E126D-5BCD-40DC-92A6-7FBBA961222A@2x.png" />
+        <div class="oval-tFyvHR border-1-2px-zeus"></div>
+        <img class="path-8x7eA7" src="img/desktop--path-F1EF2E25-6520-4B05-9C2E-1045F38B80AC@2x.png" />
+        <div class="oval-D0tSvt"></div>
+        <img class="path-66jY0P" src="img/desktop--path-A2DB2332-7468-4693-8E71-0D2AC0413918@2x.png" />
+        <div class="oval-xWRwKD border-1-2px-zeus"></div>
+        <img class="path-jw7h1q" src="img/desktop--path-B7C0FD09-DEFF-437C-9E44-57C05F29BE9E@2x.png" />
+        <div class="rectangle-BxWQgv"></div>
+        <div class="rectangle-p2Xkh2 border-1-2px-zeus"></div>
+        <img class="path-FBlhZy" src="img/mobile-game-showcase-path-24CCC560-9063-4552-A6E6-F558C48EC06B@2x.png" />
+        <img class="path-aMUZQu" src="img/mobile-path-8CC74B16-6C7F-4E03-B8B1-4634FA0E4ACA@2x.png" />
+        <img class="shape-VmR1pI" src="img/mobile-shape-DDDDB6BB-CB73-4EF2-AF1E-CD83884F36EB@2x.png" />
+        <img class="shape-BxWQgv" src="img/mobile-game-showcase-shape-50EDB684-A106-4694-B33D-749B451B6B4A@2x.png" />
+        <img class="path-2x5zbR" src="img/mobile-path-8CC74B16-6C7F-4E03-B8B1-4634FA0E4ACA@2x.png" />
+        <img class="path-BbxOTO" src="img/desktop--path-05BBEA37-74DA-498D-97B4-7BE9D48F4309@2x.png" />
+        <img class="path-5D0QnU" src="img/desktop--path-56A8933A-4628-4FF5-AD5D-9731965DD972@2x.png" />
+        <img class="path-DZkVuT" src="img/desktop--path-64F6137F-42A9-48D9-A66E-8E5C5071E0E8@2x.png" />
+        <div class="oval-Dff7nf"></div>
+        <img class="path-KJ5wdY" src="img/desktop--path-6CF838A3-53E2-4844-96D5-8C0C21EBF096@2x.png" />
+        <div class="oval-DIk5Ku border-1-2px-zeus"></div>
+        <img class="path-8sFj1H" src="img/desktop--path-B7C0FD09-DEFF-437C-9E44-57C05F29BE9E@2x.png" />
+        <img class="path-L5vlcj" src="img/desktop--path-9AA208BA-4010-4AA3-B5F7-FA3ABE99559C@2x.png" />
+        <div class="rectangle-wiMY6g"></div>
+        <div class="rectangle-WFY39Q"></div>
+        <div class="rectangle-p8uDOQ"></div>
+        <div class="rectangle-5mphW3"></div>
+        <div class="rectangle-BRN6Gz"></div>
+        <div class="rectangle-xoXbFx"></div>
+        <div class="rectangle-20RWIm"></div>
+        <img class="path-m6zsv4" src="img/desktop--path-8A53BF3D-2FCD-4AE7-92C4-BDDDB5FF3284@2x.png" />
+        <img class="path-ZeqrEL" src="img/desktop--path-24F36E38-1AE8-46BF-8D66-78A147821087@2x.png" />
+        <img class="path-cWFVKd" src="img/desktop--path-AA8C9F94-B0BD-4D78-8042-192CFEC1E7EC@2x.png" />
+        <img class="path-xwzroh" src="img/desktop--path-E4AE6D48-D88D-4CBC-A24D-596B4F0D4F38@2x.png" />
+        <img class="path-LVnPyW" src="img/desktop--path-354939DB-E006-4ACE-AC69-6825C976904A@2x.png" />
+      </div>
+      <div class="get-in-touch-C61RwL h2colorblack h2colorwhite bp1-animate-enter13" show-on-scroll>Get in touch</div>
+      <div class="social-media-icons-C61RwL" show-on-scroll>
+        <a href="https://www.linkedin.com/company/made-in-brooklyn-games/" target="_blank">
+          <div class="linkedin-Xiy3pP bp1-animate-enter14" show-on-scroll>
+            <img
+              class="shape-7mxTZx smart-layers-pointers"
+              src="img/desktop--shape-2AD9A0D5-12A2-4765-8657-E5DC47012802@2x.png"
+            /></div
+        ></a>
+        <div class="twitter-Xiy3pP bp1-animate-enter15" show-on-scroll></div>
+        <a href="https://www.facebook.com/MiBKG" target="_blank">
+          <div class="facebook-Xiy3pP bp1-animate-enter16" show-on-scroll>
+            <img
+              class="path-kT5t8C smart-layers-pointers"
+              src="img/desktop--path-8E71586B-EB5D-4378-A93F-C76DA75A305B@2x.png"
+            /></div
+        ></a>
+      </div>
+      <div class="line-background-C61RwL">
+        <img
+          class="line-VcSEoL bp1-animate-enter17"
+          show-on-scroll
+          src="img/desktop--line-copy-2-50DAABA0-6541-49AE-BF21-6FE8BDD75833.png"
+        />
+        <img
+          class="line-copy-VcSEoL bp1-animate-enter18"
+          show-on-scroll
+          src="img/desktop--line-copy-2-50DAABA0-6541-49AE-BF21-6FE8BDD75833.png"
+        />
+        <img
+          class="line-copy-2-VcSEoL bp1-animate-enter19"
+          show-on-scroll
+          src="img/desktop--line-copy-2-50DAABA0-6541-49AE-BF21-6FE8BDD75833.png"
+        />
+      </div>
+      <img
+        class="icons8-tetris-g-console-64-copy-C61RwL bp1-animate-enter20 smart-layers-pointers"
+        show-on-scroll
+        src="img/desktop--icons8-tetris-game-console-64-copy-9974B3F3-93DE-47EF-8D57-6E999AB925E6@2x.png"
+      />
+      <div class="footer-C61RwL">
+        <div class="madein-brooklyn-games-iPe1yZ">©MadeinBrooklynGames</div>
+        <div class="container-center-horizontal">
+          <div class="logo-iPe1yZ"></div>
+        </div>
+        <div class="links-iPe1yZ">
+          <div class="home-7GbJks interv-normal-white-16px">Home</div>
+          <div class="games-7GbJks interv-normal-white-16px">Games</div>
+          <div class="about-7GbJks interv-normal-white-16px">About</div>
+          <div class="contact-7GbJks interv-normal-white-16px">Contact</div>
+        </div>
+        <div class="privacy-policy-iPe1yZ interv-extra-light-white-12px">Privacy Policy</div>
+        <div class="terms-conditions-iPe1yZ interv-extra-light-white-12px">Terms &amp; Conditions</div>
+      </div>
+      <div class="nav-bar-C61RwL">
+        <div class="tabs-zCOIAP">
+          <div class="home-SIgoEM interv-normal-white-16px">Home</div>
+          <div class="games-SIgoEM interv-normal-white-16px">Games</div>
+          <a href="#bg-purple-game-section"><div class="about-SIgoEM interv-normal-white-16px">About</div></a>
+          <a href="#background-contact-section"><div class="contact-SIgoEM interv-normal-white-16px">Contact</div></a>
+        </div>
+        <div class="container-center-horizontal">
+          <div class="logo-zCOIAP"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mobilemerch screen">
+      <div class="bg-1-C61RwL"></div>
+      <div class="container-center-horizontal">
+        <div class="rectangle-C61RwL"></div>
+      </div>
+      <img
+        class="hero-image-mobile-C61RwL"
+        src="img/mobile-game-showcase-hero-image-mobile--A17A3CFD-1001-41F0-B69A-8440E534AC7B.jpg"
+      />
+      <div class="overlay-C61RwL"></div>
+      <img
+        class="arrow-left-C61RwL"
+        src="img/mobile-game-showcase-arrow-left-61A103DD-C3BE-4FB4-A630-011604A960A9@2x.png"
+      />
+      <div class="arrow-right-C61RwL">
+        <div class="group-gMa3ek">
+          <img class="path-yM71Qx" src="img/mobile-game-showcase-path-787E91D3-897E-440B-9C01-2E1839A4131A@2x.png" />
+        </div>
+      </div>
+      <div class="arrow-platform-filter-C61RwL">
+        <div class="group-hQ4Xd9">
+          <img class="path-WxKSPG" src="img/mobile-path-938035E1-6D6D-4DB7-9F76-4645F6920BF7@2x.png" />
+        </div>
+      </div>
+      <div class="arrow-sort-filter-C61RwL">
+        <div class="group-5DgRV0">
+          <img class="path-2xmb1X" src="img/mobile-path-938035E1-6D6D-4DB7-9F76-4645F6920BF7@2x.png" />
+        </div>
+      </div>
+      <a href="desktop.html"><div class="games-C61RwL interv-medium-white-16px">Games</div></a>
+      <div class="container-center-horizontal"><div class="merch-C61RwL interv-medium-white-16px">Merch</div></div>
+      <div class="other-C61RwL interv-medium-white-16px">Other</div>
+      <img class="line-4-C61RwL" src="img/mobile-line-4-84914276-D264-4C93-BC9D-E5A8BE20CD16.png" />
+      <img class="line-4-copy-C61RwL" src="img/mobile-line-4-84914276-D264-4C93-BC9D-E5A8BE20CD16.png" />
+      <div class="platform-C61RwL interv-normal-white-14px">Platform</div>
+      <div class="sort-C61RwL interv-normal-white-14px">Sort</div>
+      <div class="all-C61RwL interv-normal-white-12px">All</div>
+      <div class="newest-C61RwL interv-normal-white-12px">Newest</div>
+      <div class="bg-games-section-C61RwL"></div>
+      <div class="bg-pages-C61RwL"></div>
+      <img
+        class="arrow-sort-filter-VMr6Om"
+        src="img/mobile-arrow-sort-filter-72B8E1C2-8841-487B-B175-6C660CB98256@2x.png"
+      />
+      <img
+        class="arrow-sort-filter-copy-C61RwL"
+        src="img/mobile-arrow-sort-filter-copy-427BAE01-406E-4B10-9EF5-FABB9B1572A9@2x.png"
+      />
+      <div class="container-center-horizontal"><div class="x1-of-6-C61RwL interv-normal-white-16px">1 of 6</div></div>
+      <div class="bg-about-us-section-C61RwL"></div>
+      <div class="made-in-brooklyn-gam-C61RwL interv-normal-white-16px">
+        Made in Brooklyn Games is home to the underrepresented creators who have never been given a chance to show who
+        they or what they can do.<br /><br />We strive to further the medium of interactive experiences with dope
+        content because here at Made in Brooklyn Games, we focus on creating rich experiences with social commentary.<br /><br />Come
+        through &amp; enjoy our content &amp; stay for our deeper meaning.
+      </div>
+      <div class="container-center-horizontal">
+        <div class="style-1-C61RwL">
+          <div class="rectangle-BG0UyK"></div>
+          <div class="rectangle-copy-BG0UyK"></div>
+          <div class="rectangle-copy-2-BG0UyK"></div>
+        </div>
+      </div>
+      <div class="container-center-horizontal"><div class="about-us-C61RwL interv-bold-white-26px">About Us</div></div>
+      <div class="container-center-horizontal">
+        <div class="logo-C61RwL"></div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="oval-copy-C61RwL border-2px-rajah"></div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="oval-C61RwL"></div>
+      </div>
+      <div class="rectangle-VMr6Om"></div>
+      <div class="container-center-horizontal">
+        <div class="form-field-mobile-C61RwL">
+          <div class="topic-box-mobile-uoKZRS"><div class="whats-the-topic-9kc3cd">What’s the topic?</div></div>
+          <div class="form-input-mobile-uoKZRS">
+            <div class="overlap-group1-GkpTuB">
+              <div class="rectangle-Wv7rkX border-1px-white"></div>
+              <input class="text-your-name-Wv7rkX" name="textyourname" placeholder="Your Name" type="text" required />
+            </div>
+            <div class="overlap-group2-GkpTuB">
+              <div class="rectangle-copy-3-7shuxB border-1px-white"></div>
+              <input
+                class="text-your-email-7shuxB"
+                name="textyouremail"
+                placeholder="Your Email"
+                type="email"
+                required
+              />
+            </div>
+          </div>
+          <div class="overlap-group-uoKZRS">
+            <div class="input-message-box-mobile-FWZijx"></div>
+            <textarea
+              class="text-tell-me-about-yourself-FWZijx"
+              name="texttellmeaboutyourself"
+              placeholder="Tell me about yourself."
+              type="text"
+              required
+            ></textarea>
+          </div>
+          <div class="submit-btn-mobile-uoKZRS smart-layers-pointers"><div class="submit-qIoEbv">Submit</div></div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="get-in-touch-C61RwL interv-bold-white-26px">Get in touch</div>
+      </div>
+      <div class="retro-controller-1-C61RwL" show-on-scroll>
+        <img class="xmlid20-GpPr31" src="img/mobile-xmlid20-87F5C571-6F1C-4B78-B5E7-D36E1BC1588F@2x.png" />
+        <img class="xmlid19-GpPr31" src="img/mobile-xmlid19-0F7174E1-EA01-4201-8E32-1839669F2665@2x.png" />
+        <img class="xmlid43-GpPr31" src="img/mobile-xmlid43-DEEFCC30-91CF-456D-925F-23F55F611043@2x.png" />
+        <div class="xmlid37-GpPr31"></div>
+        <div class="xmlid41-GpPr31"></div>
+        <div class="xmlid54-GpPr31"></div>
+        <img class="xmlid44-GpPr31" src="img/mobile-xmlid44-61C53B07-C9BB-40A5-A5DF-2A56ADC5CC23@2x.png" />
+        <img class="xmlid74-GpPr31" src="img/mobile-xmlid74-1BAE05C1-1539-4D29-8675-232783F63AD0@2x.png" />
+        <img class="xmlid73-GpPr31" src="img/mobile-xmlid73-ED9D7A06-4E0B-4EBA-B9F4-0907ECE7A9B4@2x.png" />
+        <img class="xmlid71-GpPr31" src="img/mobile-xmlid71-7258DCAB-5A6F-417C-B5D4-66C5F2448DC0@2x.png" />
+        <img class="xmlid67-GpPr31" src="img/mobile-xmlid56-99DF7495-3C22-4F42-8D16-6FCAE59C1C77@2x.png" />
+        <img class="xmlid56-GpPr31" src="img/mobile-xmlid56-99DF7495-3C22-4F42-8D16-6FCAE59C1C77@2x.png" />
+        <img class="xmlid53-GpPr31" src="img/mobile-xmlid53-9B18A2FE-F53F-4838-B001-2028767D6362@2x.png" />
+        <img class="xmlid52-GpPr31" src="img/mobile-xmlid52-B108AA4F-0FC1-490D-AF33-D025119B2FA7@2x.png" />
+        <div class="xmlid48-GpPr31"></div>
+        <div class="xmlid46-GpPr31"></div>
+        <div class="xmlid50-GpPr31"></div>
+        <img class="xmlid6-GpPr31" src="img/mobile-xmlid6-3D619861-9AF7-4DDC-B87C-FC95CD8B3985@2x.png" />
+        <div class="xmlid7-GpPr31 border-0-7px-quincy"></div>
+        <div class="xmlid51-GpPr31"></div>
+        <div class="xmlid49-GpPr31"></div>
+        <div class="xmlid66-GpPr31"></div>
+        <div class="xmlid16-GpPr31 border-0-7px-quincy"></div>
+        <img
+          class="xmlid10-GpPr31"
+          src="img/mobile-game-showcase-xmlid10-F91F5CE3-A1CD-48E4-A579-C8DAA1CA6690@2x.png"
+        />
+        <img class="xmlid12-GpPr31" src="img/mobile-xmlid12-6C39E865-397D-47C3-B77C-6B8D936630A1@2x.png" />
+        <img class="xmlid55-GpPr31" src="img/mobile-xmlid55-A79FB170-951F-4E73-8F97-89B573A04592@2x.png" />
+        <img class="xmlid11-GpPr31" src="img/mobile-xmlid11-6E04EFED-3DCF-4A9B-9F5E-9C355FC82324@2x.png" />
+        <img class="xmlid9-GpPr31" src="img/mobile-game-showcase-xmlid9-C892286E-90ED-438D-86B4-4BE338B7AE23@2x.png" />
+        <img
+          class="xmlid45-GpPr31"
+          src="img/mobile-game-showcase-xmlid45-DAAE7FB2-DBCC-43A1-B9A4-D4C29299C4F7@2x.png"
+        />
+        <img
+          class="xmlid36-GpPr31"
+          src="img/mobile-game-showcase-xmlid36-F356CD16-6C08-42D2-A5C4-7584A9871203@2x.png"
+        />
+        <img
+          class="xmlid32-GpPr31"
+          src="img/mobile-game-showcase-xmlid32-DA269E73-E003-4ED3-9258-A966951C54ED@2x.png"
+        />
+        <img class="xmlid65-GpPr31" src="img/mobile-xmlid65-3E2B59F8-8AC0-46A8-8160-B6F7F3FEFB91@2x.png" />
+        <img
+          class="xmlid59-GpPr31"
+          src="img/mobile-game-showcase-xmlid59-CED0AF2B-7C9C-4EFB-8757-A5890F8C3F99@2x.png"
+        />
+        <img class="xmlid2-GpPr31" src="img/mobile-xmlid2-DCFDF700-D729-4497-8831-7624FE8E63F6@2x.png" />
+        <div class="xmlid63-GpPr31"></div>
+        <img class="xmlid8-GpPr31" src="img/mobile-game-showcase-xmlid8-B6F16904-0EC3-4FC5-B3B8-1EE793142B89@2x.png" />
+        <div class="xmlid18-GpPr31 border-0-5px-quincy"></div>
+        <div class="xmlid62-GpPr31"></div>
+        <img class="xmlid13-GpPr31" src="img/mobile-xmlid15-DCD44D89-11E4-4E4D-B9CE-758D7299B345@2x.png" />
+        <div class="xmlid17-GpPr31 border-0-5px-quincy"></div>
+        <img class="xmlid64-GpPr31" src="img/mobile-xmlid64-66F4D2D9-B0E5-4A2A-B320-0545537494FB@2x.png" />
+        <img
+          class="xmlid57-GpPr31"
+          src="img/mobile-game-showcase-xmlid57-C3F9732D-86B5-4538-A29B-3DB01A6A78EB@2x.png"
+        />
+        <img class="xmlid35-GpPr31" src="img/mobile-xmlid35-ADDBC88C-DCCA-46DF-8FE7-DDD3BE624FFB@2x.png" />
+        <div class="xmlid61-GpPr31"></div>
+        <img class="xmlid15-GpPr31" src="img/mobile-xmlid15-DCD44D89-11E4-4E4D-B9CE-758D7299B345@2x.png" />
+        <div class="xmlid34-GpPr31 border-0-5px-quincy"></div>
+        <div class="xmlid33-GpPr31"></div>
+        <img class="xmlid70-GpPr31" src="img/mobile-xmlid15-DCD44D89-11E4-4E4D-B9CE-758D7299B345@2x.png" />
+        <div class="xmlid60-GpPr31 border-0-5px-quincy"></div>
+        <img class="xmlid14-GpPr31" src="img/mobile-xmlid38-1E2F876F-8BD2-4101-9561-0FA2239882D5@2x.png" />
+        <img class="xmlid38-GpPr31" src="img/mobile-xmlid38-1E2F876F-8BD2-4101-9561-0FA2239882D5@2x.png" />
+        <div class="xmlid58-GpPr31"></div>
+        <img class="xmlid72-GpPr31" src="img/mobile-xmlid72-B8AC3D71-2C11-425B-85AD-E63D0794AF98@2x.png" />
+        <img
+          class="xmlid68-GpPr31"
+          src="img/mobile-game-showcase-xmlid68-10FA4803-D456-4BB6-BDEC-2CF28E138848@2x.png"
+        />
+      </div>
+      <div class="retro-controller-2-C61RwL" show-on-scroll>
+        <img class="path-VmR1pI" src="img/mobile-game-showcase-path-D6D9D161-98B3-4442-A47D-F60955AA049B@2x.png" />
+        <img class="path-BxWQgv" src="img/mobile-path-9B83BB94-3598-4CF1-B0C6-B1AC08880ED1@2x.png" />
+        <img class="path-p2Xkh2" src="img/mobile-game-showcase-path-D84E491B-8CD8-4763-B8BD-0033EE4B2A8C@2x.png" />
+        <img class="path-wiMY6g" src="img/mobile-game-showcase-path-D84E491B-8CD8-4763-B8BD-0033EE4B2A8C@2x.png" />
+        <img class="path-WFY39Q" src="img/mobile-game-showcase-path-D84E491B-8CD8-4763-B8BD-0033EE4B2A8C@2x.png" />
+        <img class="path-p8uDOQ" src="img/mobile-game-showcase-path-E9652276-2E28-4AF9-A9C9-DB4A75171B63@2x.png" />
+        <img class="path-5mphW3" src="img/mobile-path-0536CF34-1BE1-4A91-8B72-F8A9512466AC@2x.png" />
+        <div class="rectangle-VmR1pI"></div>
+        <div class="oval-VmR1pI"></div>
+        <img class="path-BRN6Gz" src="img/mobile-path-2CB2970B-1918-4188-A93A-935CD1928B37@2x.png" />
+        <img class="path-xoXbFx" src="img/mobile-game-showcase-path-5ECC70DB-80CD-4D55-A70A-E0539673ADF9@2x.png" />
+        <img class="path-20RWIm" src="img/mobile-game-showcase-path-061B2A4D-5B92-451F-B181-E6C40810E245@2x.png" />
+        <img class="path-DzfFL4" src="img/mobile-path-24D7C91F-4B4C-468F-8447-02B41114BFE4@2x.png" />
+        <div class="oval-BxWQgv"></div>
+        <img class="path-t7wJkg" src="img/mobile-game-showcase-path-B93B67CA-5230-47FA-9396-12C2499B3C61@2x.png" />
+        <img class="path-6QWD40" src="img/mobile-game-showcase-path-DB4A938E-2687-4EA0-9807-96D0E2C4EEE6@2x.png" />
+        <div class="oval-p2Xkh2"></div>
+        <div class="oval-wiMY6g"></div>
+        <div class="oval-WFY39Q border-1-2px-zeus"></div>
+        <img class="path-e1w9Y5" src="img/mobile-path-6CB24096-CF9F-483E-B47D-75CAC1AF5163@2x.png" />
+        <div class="oval-p8uDOQ border-1-2px-zeus"></div>
+        <div class="oval-5mphW3"></div>
+        <img class="path-yc4e9u" src="img/mobile-path-1DE07CB3-4246-4629-91EE-E32BABCC5663@2x.png" />
+        <img class="path-3psFIE" src="img/mobile-path-C21A628B-DE7D-4014-9302-1DBC254673E5@2x.png" />
+        <div class="oval-BRN6Gz"></div>
+        <div class="oval-xoXbFx"></div>
+        <div class="oval-20RWIm"></div>
+        <div class="oval-DzfFL4"></div>
+        <img class="path-QSxKfu" src="img/mobile-game-showcase-path-205B2557-C991-4905-B664-CA89626BBAB9@2x.png" />
+        <img class="path-tFyvHR" src="img/mobile-path-BF224D2E-67A3-4B97-A3CA-DDC13453FE19@2x.png" />
+        <div class="oval-t7wJkg border-1-2px-zeus"></div>
+        <img class="path-D0tSvt" src="img/mobile-game-showcase-path-EF35E575-7EDD-4ED8-91AC-7891CA347CA2@2x.png" />
+        <div class="oval-6QWD40 border-0-5px-zeus"></div>
+        <div class="oval-e1w9Y5 border-1-2px-zeus"></div>
+        <img class="path-xWRwKD" src="img/mobile-game-showcase-path-EF35E575-7EDD-4ED8-91AC-7891CA347CA2@2x.png" />
+        <div class="oval-yc4e9u border-0-5px-zeus"></div>
+        <div class="oval-3psFIE border-1-2px-zeus"></div>
+        <img class="path-Dff7nf" src="img/mobile-game-showcase-path-EF35E575-7EDD-4ED8-91AC-7891CA347CA2@2x.png" />
+        <img class="path-DIk5Ku" src="img/mobile-game-showcase-path-F84A8CB4-7A92-44FC-B924-80AA4F7BBDED@2x.png" />
+        <div class="oval-QSxKfu"></div>
+        <img class="path-ZDcfra" src="img/mobile-game-showcase-path-42645658-C028-49A9-A5C1-A661C81B7CD2@2x.png" />
+        <div class="oval-tFyvHR border-1-2px-zeus"></div>
+        <img class="path-8x7eA7" src="img/mobile-game-showcase-path-EF2DBAC3-42EE-42AA-8692-C9DF98EB571B@2x.png" />
+        <div class="oval-D0tSvt"></div>
+        <img class="path-66jY0P" src="img/mobile-game-showcase-path-759C45F2-08E2-4F9D-85DE-2636CB7CB5E0@2x.png" />
+        <div class="oval-xWRwKD border-1-2px-zeus"></div>
+        <img class="path-jw7h1q" src="img/mobile-game-showcase-path-EF2DBAC3-42EE-42AA-8692-C9DF98EB571B@2x.png" />
+        <div class="rectangle-BxWQgv"></div>
+        <div class="rectangle-p2Xkh2 border-1-2px-zeus"></div>
+        <img class="path-FBlhZy" src="img/mobile-game-showcase-path-24CCC560-9063-4552-A6E6-F558C48EC06B@2x.png" />
+        <img class="path-aMUZQu" src="img/mobile-path-8CC74B16-6C7F-4E03-B8B1-4634FA0E4ACA@2x.png" />
+        <img class="shape-VmR1pI" src="img/mobile-shape-DDDDB6BB-CB73-4EF2-AF1E-CD83884F36EB@2x.png" />
+        <img class="shape-BxWQgv" src="img/mobile-game-showcase-shape-50EDB684-A106-4694-B33D-749B451B6B4A@2x.png" />
+        <img class="path-2x5zbR" src="img/mobile-path-8CC74B16-6C7F-4E03-B8B1-4634FA0E4ACA@2x.png" />
+        <img class="path-BbxOTO" src="img/mobile-game-showcase-path-D74A322F-1B9F-47DB-8242-C5F9654BF358@2x.png" />
+        <img class="path-5D0QnU" src="img/mobile-path-2286CC8D-201F-4CE5-AD3D-26068F5D95CC@2x.png" />
+        <img class="path-DZkVuT" src="img/mobile-game-showcase-path-2969E2DD-190C-4230-A4EF-BB773F001913@2x.png" />
+        <div class="oval-Dff7nf"></div>
+        <img class="path-KJ5wdY" src="img/mobile-path-38B13249-98EF-4BCB-AA39-4DD6385F7AB4@2x.png" />
+        <div class="oval-DIk5Ku border-1-2px-zeus"></div>
+        <img class="path-8sFj1H" src="img/mobile-game-showcase-path-EF2DBAC3-42EE-42AA-8692-C9DF98EB571B@2x.png" />
+        <img class="path-L5vlcj" src="img/mobile-game-showcase-path-E76F1042-034F-4384-8A8F-221AA5BB6640@2x.png" />
+        <div class="rectangle-wiMY6g"></div>
+        <div class="rectangle-WFY39Q"></div>
+        <div class="rectangle-p8uDOQ"></div>
+        <div class="rectangle-5mphW3"></div>
+        <div class="rectangle-BRN6Gz"></div>
+        <div class="rectangle-xoXbFx"></div>
+        <div class="rectangle-20RWIm"></div>
+        <img class="path-m6zsv4" src="img/mobile-path-5A5F7E3F-88B0-4215-A39A-9EF1CD9B5484@2x.png" />
+        <img class="path-ZeqrEL" src="img/mobile-path-92E3CD68-11BA-40F1-B591-51CEE9AE3386@2x.png" />
+        <img class="path-cWFVKd" src="img/mobile-path-2556A500-B24E-4A6F-8EA0-0BCCAB8F4A0A@2x.png" />
+        <img class="path-xwzroh" src="img/mobile-path-2531D6BA-F322-4C56-83CF-FD3BB81E6EFB@2x.png" />
+        <img class="path-LVnPyW" src="img/mobile-path-E268841D-2449-49C0-8AD9-BF1D894EB37D@2x.png" />
+      </div>
+      <div class="bg-footer-mobile-C61RwL"></div>
+      <div class="container-center-horizontal">
+        <div class="all-rights-reserved-C61RwL interv-normal-white-12px">All rights reserved.</div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="privacy-policy-C61RwL interv-normal-white-12px">Privacy Policy</div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="terms-condition-C61RwL interv-normal-white-12px">Terms &amp; Condition</div>
+      </div>
+      <div class="container-center-horizontal"><div class="legal-C61RwL interv-normal-white-12px">Legal</div></div>
+      <div class="container-center-horizontal">
+        <div class="x2021-madein-brooklyn-C61RwL interv-normal-white-12px">©2021 MadeinBrooklynGames</div>
+      </div>
+      <div class="top-bar-mobile-C61RwL">
+        <div class="top-bar-2IJkvB">
+          <div class="container-center-horizontal">
+            <div class="logo-4qOjhn">
+              <div class="container-center-horizontal">
+                <img
+                  class="logo-x1nRlC"
+                  src="img/mobile-game-showcase-logo-8CD5B844-AEE2-4B13-9D3B-7B3840062300@2x.png"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="javascript:ShowOverlay('mobilemenuoverlay', 'animate-appear');">
+          <div class="hamburger-menu-icon-2IJkvB smart-layers-pointers">
+            <div class="rectangle-dkxFTb"></div>
+            <div class="rectangle-copy-dkxFTb"></div>
+            <div class="rectangle-copy-2-dkxFTb"></div></div
+        ></a>
+      </div>
+      <div class="container-center-horizontal"><div class="featured-products-C61RwL">Featured Products</div></div>
+      <div class="container-center-horizontal">
+        <div class="group-2-C61RwL">
+          <div class="rectangle-zUixHA"></div>
+          <div class="t-shirt-zUixHA interv-medium-white-16px">T-Shirt</div>
+          <div class="x1500-zUixHA interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="group-2-copy-C61RwL">
+          <div class="rectangle-5fojzG"></div>
+          <div class="t-shirt-5fojzG interv-medium-white-16px">T-Shirt</div>
+          <div class="x1500-5fojzG interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="group-3-C61RwL">
+          <div class="rectangle-copy-5-hvAGCq"></div>
+          <div class="t-shirt-copy-hvAGCq interv-medium-white-16px">T-Shirt</div>
+          <div class="x1500-copy-hvAGCq interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+      <div class="container-center-horizontal">
+        <div class="group-3-copy-C61RwL">
+          <div class="rectangle-copy-5-kK8Vvv"></div>
+          <div class="t-shirt-copy-kK8Vvv interv-medium-white-16px">T-Shirt</div>
+          <div class="x1500-copy-kK8Vvv interv-normal-white-16px">$15.00</div>
+        </div>
+      </div>
+    </div>
+    <div id="overlay-mobilemenuoverlay" class="overlay" style="min-height: 2643px">
+      <div class="mobilemenuoverlay screen">
+        <a href="javascript:HideOverlay('mobilemenuoverlay', 'animate-disappear');">
+          <div class="dismiss-overlay-C61RwL smart-layers-pointers"></div
+        ></a>
+        <div class="menu-list-links-C61RwL">
+          <div class="home-l38YOV interv-semi-bold-white-16px animate-enter" show-on-scroll>Home</div>
+          <div class="games-l38YOV interv-semi-bold-white-16px animate-enter2" show-on-scroll>Games</div>
+          <div class="about-l38YOV interv-semi-bold-white-16px animate-enter1" show-on-scroll>About</div>
+          <div class="contact-l38YOV interv-semi-bold-white-16px animate-enter3" show-on-scroll>Contact</div>
+        </div>
+        <div class="container-center-vertical">
+          <div class="social-media-icons-C61RwL" show-on-scroll>
+            <a href="https://www.linkedin.com/company/made-in-brooklyn-games/" target="_blank">
+              <div class="linkedin-Xiy3pP animate-enter4" show-on-scroll>
+                <img
+                  class="shape-7mxTZx smart-layers-pointers"
+                  src="img/mobile-menu-overlay-shape-EAB77E60-DA83-4AFB-B070-A59CC88BDFC0@2x.png"
+                /></div
+            ></a>
+            <div class="twitter-Xiy3pP animate-enter5" show-on-scroll></div>
+            <a href="https://www.facebook.com/MiBKG" target="_blank">
+              <div class="facebook-Xiy3pP animate-enter6" show-on-scroll>
+                <img
+                  class="path-kT5t8C smart-layers-pointers"
+                  src="img/mobile-menu-overlay-path-CA2DB456-2CEB-45BF-8D6E-2F41D27B334A@2x.png"
+                /></div
+            ></a>
+            <a href="https://www.instagram.com/madeinbkgames/" target="_blank">
+              <div class="instagram-Xiy3pP animate-enter7 smart-layers-pointers" show-on-scroll>
+                <img
+                  class="shape-vRRNIw"
+                  src="img/mobile-menu-overlay-shape-988B7600-1D1B-4E4B-98B7-6882237994EB@2x.png"
+                />
+                <img
+                  class="path-vRRNIw"
+                  src="img/mobile-menu-overlay-path-5DE0C9A7-C246-4F6D-9890-24C641C4FCA0@2x.png"
+                /></div
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var overlay_id = "overlay-mobilemenuoverlay";
+      document.getElementById(overlay_id).addEventListener(
+        "click",
+        function (event) {
+          var e = event || window.event;
+          var overlayElement = document.getElementById(overlay_id);
+          var clickedDiv = e.toElement || e.target;
+          if (overlayElement.contains(clickedDiv)) {
+            HideOverlay("mobilemenuoverlay", "animate-disappear");
+          }
+        },
+        false
+      );
+    </script>
+    <script>
+      ShowOverlay = function (overlayName, animationName) {
+        overlayName = "overlay-" + overlayName;
+        var cssClasses = document.getElementById(overlayName).className.split(" ");
+        var last = cssClasses.slice(-1)[0];
+        if (last.lastIndexOf("animate") == -1) {
+          document.getElementById(overlayName).className =
+            document.getElementById(overlayName).className + " " + animationName;
+        }
+        if (window.loadAsyncSrc != undefined) {
+          loadAsyncSrc();
+        }
+      };
+      HideOverlay = function (overlayName, animationName) {
+        overlayName = "overlay-" + overlayName;
+        var cssClasses = document.getElementById(overlayName).className.split(" ");
+        var last = cssClasses.slice(-1)[0];
+        if (last.lastIndexOf("animate") != -1) {
+          cssClasses.splice(-1);
+          cssClasses.push(animationName);
+          document.getElementById(overlayName).className = cssClasses.join(" ");
+
+          cssClasses.splice(-1);
+          setTimeout(function () {
+            document.getElementById(overlayName).className = cssClasses.join(" ");
+          }, 1100);
+        }
+        var vids = document.getElementsByTagName("video");
+        if (vids) {
+          for (var i = 0; i < vids.length; i++) {
+            var video = vids.item(i);
+            video.pause();
+          }
+        }
+      };
+    </script>
+    <script>
+      function ShowOnScroll() {
+        this.toShow = [];
+        this.nextEventY = undefined;
+      }
+
+      ShowOnScroll.prototype.show = function (e) {
+        e.style.display = "";
+      };
+
+      ShowOnScroll.prototype.hide = function (e) {
+        e.style.display = "none";
+      };
+
+      ShowOnScroll.prototype.getTop = function (e) {
+        if (e.Top != undefined && e.Top != 0) {
+          return e.Top;
+        }
+        var top = 0;
+        var iter = e;
+        do {
+          top += iter.offsetTop || 0;
+          iter = iter.offsetParent;
+        } while (iter);
+        e.Top = top;
+        return top;
+      };
+
+      ShowOnScroll.prototype.onScroll = function () {
+        var screenBottom = window.pageYOffset + window.innerHeight;
+        if (this.nextEventY == undefined || this.nextEventY > screenBottom) {
+          return;
+        }
+        this.nextEventY = undefined;
+        for (var i = 0; i < this.toShow.length; i++) {
+          var e = this.toShow[i];
+          var top = this.getTop(e);
+          if (top < screenBottom) {
+            this.show(e);
+            this.toShow.shift();
+            i--;
+          } else {
+            this.nextEventY = top;
+            break;
+          }
+        }
+      };
+
+      ShowOnScroll.prototype.resetScrolling = function () {
+        // Clear state
+        var screenBottom = window.pageYOffset + window.innerHeight;
+        for (var i = 0; i < this.toShow.length; i++) {
+          var e = this.toShow[i];
+          this.show(e);
+        }
+        this.toShow = [];
+        this.nextEventY == undefined;
+
+        // Collect items
+        var itemsToShowOnScroll = Array.prototype.slice.call(document.getElementsByTagName("*"));
+        itemsToShowOnScroll = itemsToShowOnScroll.filter(function (e) {
+          return e.getAttribute("show-on-scroll") != undefined;
+        });
+        var getTop = this.getTop;
+        itemsToShowOnScroll.sort(function (a, b) {
+          return getTop(a) - getTop(b);
+        });
+        for (var i = 0; i < itemsToShowOnScroll.length; i++) {
+          var e = itemsToShowOnScroll[i];
+          var top = this.getTop(e);
+          if (top < screenBottom) {
+            continue;
+          }
+          this.toShow.push(e);
+          this.hide(e);
+          this.nextEventY = this.nextEventY != undefined ? this.nextEventY : top;
+        }
+      };
+
+      ShowOnScroll.prototype.handleEvent = function (e) {
+        switch (e.type) {
+          case "scroll":
+            this.onScroll();
+            break;
+          case "resize":
+            this.resetScrolling();
+            break;
+        }
+      };
+
+      ShowOnScroll.prototype.init = function () {
+        this.resetScrolling();
+        window.addEventListener("scroll", this);
+        window.addEventListener("resize", this);
+      };
+
+      // After anima-src
+      setTimeout(function () {
+        var instShowOnScroll = new ShowOnScroll();
+        instShowOnScroll.init();
+      }, 250);
+    </script>
+  </body>
+</html>
