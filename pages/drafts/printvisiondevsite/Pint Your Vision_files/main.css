@@ -293,7 +293,7 @@ hr {
 }
 
 .gray-bg {
-  background: #f8f8f8;
+  background: #fdf5e6;
 }
 
 .bg-white {
@@ -4505,9 +4505,11 @@ fieldset[disabled] .form-control:hover {
   background-attachment: fixed;
 }
 
-.testimonials-bg-2 .bg-overlay {
-  background: rgba(17, 17, 17, 0.65);
-}
+/* .testimonials-bg-2 .bg-overlay {
+   background: rgba(17, 17, 17, 0.65);
+  background: rgba(0,0,0,1);
+} */
+
 
 .testimonials-dark {
   background: #111;
