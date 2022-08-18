@@ -903,7 +903,7 @@
 	} // .ft-item
 
 	.ft-1 {
-		background: #ccc url(http://placehold.it/900x580);
+		background: #ccc url(https://via.placeholder.com/900x580);
 		background-size: 100%;
 		background-position: 50%;
 		transition: background-size .3s;
@@ -922,7 +922,7 @@
 
 	.ft-2 {
 		@extend .ft-1;
-		background: #ccc url(http://placehold.it/900x580/999/eee);
+		background: #ccc url(https://via.placeholder.com/900x580/999/eee);
 		background-size: 100%;
 		background-position: 50%;
 
@@ -974,7 +974,7 @@
 
 .video-bg-section {
 	height: 365px;
-	background: #ccc url(http://placehold.it/2440x1578);
+	background: #ccc url(https://via.placeholder.com/2440x1578);
 	background-position: 50%;
 	background-size: cover;
 

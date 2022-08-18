@@ -742,15 +742,16 @@
 			var w_height = $(window).height();
 			var w_width = $(window).width();
 
+console.log("calling all placeholders");
 			$('.kenburns').attr('width', w_width);
 			$('.kenburns').attr('height', w_height);
 			$('.kenburns').kenburns({
-				images: ['http://placehold.it/2440x1578',
-						'http://placehold.it/2440x1578/999/eee',
-						'http://placehold.it/2440x1578/ccc/111'
+				images: ['https://via.placeholder.com/2440x1578',
+						'https://via.placeholder.com/2440x1578/999/eee',
+						'https://via.placeholder.com/2440x1578/ccc/111'
 						],
 				frames_per_second: 30,
-				display_time: 5000,
+				display_time: 1000,
 				fade_time: 1000,
 				zoom: 1.1,
 				background_color:'#000000'
