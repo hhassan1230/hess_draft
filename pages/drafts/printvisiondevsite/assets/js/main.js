@@ -17,9 +17,10 @@
 		initSliders();
 		initGallery();
 		initAnimation();
-		initVideoBg();
+
 		initKenburns();
 		initCountdown();
+		initVideoBg();
 
 		if ( document.getElementById('shop-slider-range') ) {
 			initRangeSlider();
@@ -722,7 +723,8 @@
 
 		if (hasBgVideo || hasFwBgVideo || hasSecBgVideo) {
 
-			$('.player').YTPlayer();
+			// Don't Need this Call?
+			//$('.player').YTPlayer();
 
 		}
 

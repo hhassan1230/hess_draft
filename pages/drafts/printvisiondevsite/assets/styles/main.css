@@ -3063,11 +3063,12 @@ fieldset[disabled] .form-control:hover {
 }
 
 .navbar-trans .navbar-logo {
-  content: url(../images/logo-light.png);
+  content: url(assets/img/pyv6.png);
 }
 
+/* tipity top nav bar */
 .navbar-trans .navbar-logo-dark {
-  content: url(../images/logo.png);
+  content: url(/assets/img/pyv6.png);
 }
 
 .navbar-trans:not(.navbar-inverse) .navbar-nav li a:focus,
