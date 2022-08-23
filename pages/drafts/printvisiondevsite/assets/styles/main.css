@@ -10285,3 +10285,15 @@ form .input-error-2:focus {
 }
 
 /*# sourceMappingURL=main.css.map */
+
+/* Features - top section */
+.col-lg-offset-1.col-lg-4.ft-x.ws-m {
+    margin-top: 88px;
+}
+
+
+/* Location section, additinoal */
+.info-center {
+    display: flex;
+    flex-direction: column;
+}

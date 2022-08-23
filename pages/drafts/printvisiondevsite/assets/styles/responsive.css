@@ -117,6 +117,68 @@
   }
 }
 
+
+
+/* nav bar for mac */
+@media (max-width: 1500px) {
+  .navbar-brand img{
+    margin-left: 30%;
+
+  }
+}
+
+/* nav bar for responive */
+@media (max-width: 1000px) {
+  .navbar-brand img{
+    margin-left: -5%;
+  }
+
+}
+
+/* nav bar for surface */
+@media (max-width: 915px) {
+  .navbar-brand img{
+    margin-left: 40%;
+
+  }
+}
+
+/* nav bar for ipad */
+@media (max-width: 825px) {
+  .navbar-brand img{
+    margin-left: 7%;
+
+  }
+}
+
+@media (max-width: 770px) {
+  .navbar-brand img{
+    margin-left: -12%;
+
+  }
+}
+
+/* nav bar for smaller phones */
+@media (max-width: 420px) {
+  .navbar-logo-dark{
+    margin-right: 25px;
+  }
+}
+
+@media (max-width: 412px) {
+  .navbar-brand img{
+    margin-top: -5px;
+}  }
+
+@media (max-width: 360px) {
+  .navbar-logo-dark{
+    margin-right: -10px;
+
+  }
+
+}
+
+
 /* ---- Headers ---- */
 @media (max-width: 770px) {
   .page-title {
@@ -209,6 +271,16 @@
 }
 
 /* ---- Features ---- */
+
+/* incons within Features section */
+/*
+@media (max-width: 2000px){
+.mb-sm-100 {
+    margin-bottom: 0px;
+    margin-left:  30%;
+} */
+
+
 @media (max-width: 1260px) {
   .ft-cards-2 .ft-card-item {
     width: 350px;
@@ -342,6 +414,49 @@
     background-size: 200%;
   }
 }
+
+
+@media (max-width: 544px) {
+  .fadeInLeft{
+    display: flex;
+    flex-direction: column;
+    height: 380px;
+  }
+
+  .fadeInLeft .ws-m {
+      padding-bottom: 0px;
+    }
+
+  .fadeInRight{
+    display: flex;
+    flex-direction: column;
+    height: 380px;
+  }
+
+.fadeInRight .ws-m {
+    padding-bottom: 45px;
+  }
+}
+
+@media (max-width: 415px) {
+
+/* removes stair-case CSS for top white section in 'Features' */
+  .ft-x .ft-item span, .ft-y .ft-item span, .ft-x .ft-item i, .ft-y .ft-item i {
+    margin: 0;
+  }
+
+  .fadeInRight .ft-item h5{
+    padding-left: 115px;
+  }
+
+
+/* testimonial / reviews resize */
+  .testimonials-parallax .t-wrapper, .testimonials-dark .t-wrapper {
+      padding-top: 35px;
+      padding-bottom: 30px;
+  }
+}
+
 
 /* ---- CTA - Call to Action ---- */
 @media (max-width: 992px) {
@@ -1117,6 +1232,41 @@
   .checkout-coupon-form .btn-ghost {
     margin-bottom: 15px;
   }
+}
+
+
+/* Galaxy fold resize */
+@media (max-width: 280px) {
+
+  .app-hero {
+    margin-top: 20px;
+  }
+  .navbar {
+      margin-top: -5px;
+      min-height: 62px;
+      position: fixed;
+  }
+
+  .navbar-brand img{
+    margin-left: -8%;
+    margin-top: 1px;
+  }
+
+  body{
+  margin-left: 15px;
+  width: 113%;
+  }
+
+  /* photo resize for the 330x615 */
+  .col-md-offset-2 img{
+    width: 100%;
+    object-fit: contain;
+    /* margin-right: 10px; */
+    /* display:block;
+    margin-left:auto;
+    margin-right:auto; */
+  }
+
 }
 
 /*# sourceMappingURL=responsive.css.map */
