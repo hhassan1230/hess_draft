@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Punch-Out Clone Demo</title>
+  <!-- Load Phaser from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #222;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // BootScene: Preloads assets
+    class BootScene extends Phaser.Scene {
+      constructor() {
+        super("BootScene");
+      }
+      preload() {
+        // For demo purposes, we use placeholder images from Phaser Labs.
+        // Replace these with your custom sprite sheets later.
+        this.load.image("littleMac", "https://labs.phaser.io/assets/sprites/phaser-dude.png");
+        this.load.image("opponent", "https://labs.phaser.io/assets/sprites/phaser-dude.png");
+      }
+      create() {
+        this.scene.start("GameScene");
+      }
+    }
+
+    // GameScene: Contains main gameplay logic
+    class GameScene extends Phaser.Scene {
+      constructor() {
+        super("GameScene");
+        this.enemyState = "idle";
+      }
+      create() {
+        // Create Little Mac (player) at bottom center
+        this.player = this.physics.add.sprite(400, 500, "littleMac");
+        this.player.setCollideWorldBounds(true);
+
+        // Create opponent at top center
+        this.opponent = this.physics.add.sprite(400, 150, "opponent");
+        this.opponent.setCollideWorldBounds(true);
+
+        // Input handling: On SPACE, simulate a punch
+        this.input.keyboard.on('keydown-SPACE', () => {
+          // For demo: briefly scale player to simulate a punch action
+          this.tweens.add({
+            targets: this.player,
+            scaleX: 1.1,
+            scaleY: 1.1,
+            yoyo: true,
+            duration: 100
+          });
+
+          // Simple hit detection: if within a certain distance, register a hit
+          if (Phaser.Math.Distance.Between(this.player.x, this.player.y, this.opponent.x, this.opponent.y) < 200) {
+            console.log("Hit opponent!");
+            // Flash the opponent with a tint to indicate a hit
+            this.opponent.setTint(0xff0000);
+            this.time.delayedCall(200, () => this.opponent.clearTint());
+          }
+        });
+
+        // Simple enemy AI: opponent telegraphs an attack every 2 seconds
+        this.time.addEvent({
+          delay: 2000,
+          callback: () => {
+            if (this.enemyState === "idle") {
+              this.enemyState = "telegraph";
+              this.opponent.setTint(0xff0000); // Show telegraph signal
+              this.time.delayedCall(500, () => {
+                this.opponent.clearTint();
+                this.enemyState = "idle";
+                console.log("Opponent attacked!");
+              });
+            }
+          },
+          loop: true
+        });
+      }
+      update() {
+        // Update loop for additional game logic if needed.
+      }
+    }
+
+    // Phaser game configuration
+    const config = {
+      type: Phaser.AUTO,
+      width: 800,
+      height: 600,
+      physics: {
+        default: "arcade",
+        arcade: {
+          gravity: { y: 0 },
+          debug: false
+        }
+      },
+      scene: [BootScene, GameScene]
+    };
+
+    // Initialize the game
+    const game = new Phaser.Game(config);
+  </script>
+</body>
+
+</html>

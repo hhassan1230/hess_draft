@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>My NFT AR: Animated Image Overlay</title>
+
+  <!-- Ensure proper mobile scaling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- A-Frame (locked at v1.4.2 for stability; check for updates if needed) -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+  <!-- AR.js NFT build (v3.3.2; see https://github.com/AR-js-org/AR.js for newer versions) -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.3.2/aframe/build/aframe-ar-nft.js"></script>
+
+  <style>
+    /* Basic reset for body and html to fill the screen */
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+      /* Optional: consistent font */
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      /* fallback color if AR fails to load */
+    }
+
+    .instructions {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 9999;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      max-width: 250px;
+      font-size: 0.9rem;
+    }
+
+    .error-message {
+      display: none;
+      /* Hidden by default */
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      z-index: 9999;
+      color: #fff;
+      background: rgba(255, 0, 0, 0.6);
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      max-width: 300px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Easily accessible variable for the GIF/PNG URL -->
+  <script>
+    /**
+     * Change this to your desired GIF or PNG link.
+     * Ensure HTTPS if your site is served over HTTPS.
+     * Large animated GIFs could impact performance.
+     */
+    let imageUrl = "https://hhassan1230.github.io/CodePenImgs/images/JR-TV-Thumbnail.png"; 
+    //"https://media.giphy.com/media/l41lI4bYmcsPJX9Go/giphy.gif";
+  </script>
+
+  <div id="container">
+
+    <!-- Optional instructions overlay for user guidance -->
+    <div class="instructions">
+      <strong>AR Instructions</strong>
+      <p>Point your camera at the target image to see the animated overlay.</p>
+    </div>
+
+    <!-- Fallback error message (e.g. if camera is blocked) -->
+    <div id="errorMsg" class="error-message">
+      <strong>Error:</strong> Unable to access camera or load image. <br />
+      Please check your permissions or URL paths.
+    </div>
+
+    <!-- Main A-Frame Scene -->
+    <a-scene embedded vr-mode-ui="enabled: false" renderer="logarithmicDepthBuffer: true;" arjs="
+      sourceType: webcam; 
+      debugUIEnabled: false;  /* Set to 'true' for debugging marker detection */
+    ">
+      <!-- A-Frame Assets -->
+      <a-assets>
+        <!-- We'll dynamically set the src of this image via JS -->
+        <img id="tracked-image" crossorigin="anonymous" />
+      </a-assets>
+
+      <!-- Script to set the <img> source. Could be in an external .js file -->
+      <script>
+        const imgEl = document.getElementById("tracked-image");
+        imgEl.src = imageUrl;
+
+        // Optional: add a simple error handler if the image fails to load
+        imgEl.onerror = function () {
+          document.getElementById('errorMsg').style.display = 'block';
+          console.error("Failed to load the GIF/PNG from:", imageUrl);
+        };
+      </script>
+
+      <!-- NFT-based tracking for your target image 
+         (Ensure 'myImage.fset', 'myImage.fset3', 'myImage.iset' etc. exist in 'nft-data/') -->
+      <a-nft type="nft" url="nft-data/myImage" smooth="true" smoothCount="10" smoothTolerance="0.01"
+        smoothThreshold="5">
+        <!-- The <a-image> entity that displays the GIF/PNG when target is detected. 
+           Adjust scale and position as necessary for your AR marker size. -->
+        <a-image src="#tracked-image" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-image>
+      </a-nft>
+
+      <!-- AR.js camera for NFT tracking -->
+      <a-entity camera></a-entity>
+    </a-scene>
+  </div>
+
+  <script>
+    /**
+     * If you'd like to handle camera permission failures,
+     * AR.js might log errors in the console. You could intercept them or
+     * catch them using a custom event. For simplicity, we just show the error
+     * message div if there's a load failure or permission issue.
+     */
+    // Example only (not an official AR.js event):
+    // window.addEventListener('camera-error', function() {
+    //   document.getElementById('errorMsg').style.display = 'block';
+    // });
+  </script>
+
+</body>
+
+</html>
