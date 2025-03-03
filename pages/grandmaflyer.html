@@ -5,14 +5,12 @@
   <meta charset="UTF-8">
   <title>Grandma's 80th Birthday Flyer</title>
   <style>
-    /* Reset */
-    body,
-    html {
+     /* Reset margins and set full-height */
+    body, html {
       margin: 0;
       padding: 0;
       height: 100%;
     }
-
     /* Background styling */
     .flyer-container {
       background: url('https://hhassan1230.github.io/CodePenImgs/imagesLesson1/GrandmsBdayMiniv1.png') no-repeat center center;
@@ -25,17 +23,16 @@
       font-family: 'Georgia', serif;
       color: #fff;
     }
-
-    /* Overlay to ensure text readability */
+    /* Overlay for text readability */
     .overlay {
       background-color: rgba(0, 0, 0, 0.85);
       padding: 40px 60px;
       border-radius: 10px;
       text-align: center;
-      max-width: 600px;
+      max-width: 854px;
+      box-sizing: border-box;
     }
-
-    /* Heading styles */
+    /* Base font sizes */
     .overlay h2 {
       font-size: 1.5em;
       margin-bottom: 10px;
@@ -50,7 +47,7 @@
 
     /* Event details styling */
     .overlay p {
-      font-size: 1.2em;
+      font-size: 1.5em;
       margin: 0.8em 0;
       line-height: 1.5;
     }
@@ -58,25 +55,51 @@
     /* Note styling */
     .overlay .note {
       font-style: italic;
-      font-size: 1em;
+      font-size: 1.2em;
       margin-top: 20px;
     }
-
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
+    /* Responsive adjustments for mobile devices */
+    @media (min-width: 1px) and (max-width: 750px) {
+      .flyer-container {
+        padding: 10px;
+        height: 105%;
+      }
       .overlay {
-        padding: 20px 30px;
+        width: 90%;
+        max-width: 90%;
+        height: 71vh; /* Occupy most of the viewport height */
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
-
+      .overlay h2 {
+        font-size: 1.9em;
+      }
       .overlay h1 {
-        font-size: 2em;
+        font-size: 5.8em;
       }
-
-      .overlay h2,
       .overlay p {
-        font-size: 1em;
+        font-size: 3.0em;
+      }
+      .overlay .note {
+        font-size: 1.6em;
       }
     }
+    /* @media (max-width: 751px) {
+        .overlay h2 {
+          font-size: 1.5em;
+        }
+        .overlay h1 {
+          font-size: 2.8em;
+        }
+        .overlay p {
+          font-size: 1.2em;
+        }
+        .overlay .note {
+          font-size: 1.0em;
+        }
+    } */
   </style>
 </head>
 
@@ -107,9 +130,11 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 <script>
-  const count = 200,
+  const count = 500,
       defaults = {
         origin: { y: 0.94 },
+        decay: 0.94,
+        scalar: 1.9,
       };
 
     function fire(particleRatio, opts) {
@@ -121,29 +146,29 @@
     }
 
     fire(0.25, {
-      spread: 26,
+      spread: 36,
       startVelocity: 55,
     });
 
     fire(0.2, {
-      spread: 60,
+      spread: 70,
     });
 
     fire(0.35, {
-      spread: 100,
+      spread: 110,
       decay: 0.91,
       scalar: 0.8,
     });
 
     fire(0.1, {
-      spread: 120,
+      spread: 130,
       startVelocity: 25,
       decay: 0.92,
       scalar: 1.2,
     });
 
     fire(0.1, {
-      spread: 120,
+      spread: 130,
       startVelocity: 45,
     });
 </script>
