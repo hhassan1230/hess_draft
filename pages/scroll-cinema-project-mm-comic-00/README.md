@@ -10,7 +10,7 @@ This is a standalone Scroll Cinema project export that can run independently in 
 
 ## Project Details
 
-- **Exported:** 2025-08-11 20:01:02
+- **Exported:** 2025-08-11 21:58:50
 - **Scenes:** 1
 - **Reels:** 0
 - **Font Families:** 0
