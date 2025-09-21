@@ -25,7 +25,7 @@ const colorComplement = {
 };
 
 function getImgUrl(imageName) {
-    return "//hessvacio.com/img/hess/" + imageName;
+    return "https://hessvacio.com/img/hess/" + imageName;
 }
 
 function getRandomImg () {
