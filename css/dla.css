@@ -347,3 +347,148 @@ iframe {
     top: 35%;
   }
 }
+
+/* ── 360 Panorama Viewer ── */
+
+/* Prevent A-Frame from hijacking page layout in embedded mode */
+html.a-fullscreen,
+body.a-fullscreen {
+  position: static !important;
+  overflow: visible !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+.a-canvas {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.panorama-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.panorama-container a-scene {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.panorama-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+}
+
+.panorama-play-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  color: white;
+  cursor: pointer;
+  transition: all 300ms ease;
+  justify-content: center;
+}
+
+.panorama-play-btn i {
+  padding-left: 6px;
+}
+
+.panorama-play-btn span {
+  display: none;
+}
+
+.panorama-play-btn:hover,
+.panorama-play-btn:focus {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.08);
+}
+
+.panorama-hint {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: Avenir, sans-serif;
+}
+
+.panorama-fs-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: white;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panorama-fs-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: white;
+}
+
+/* Fullscreen state */
+.panorama-container:fullscreen {
+  max-width: none;
+  border-radius: 0;
+  border: none;
+  aspect-ratio: auto;
+}
+
+.panorama-container:-webkit-full-screen {
+  max-width: none;
+  border-radius: 0;
+  border: none;
+  aspect-ratio: auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .panorama-container {
+    border-radius: 4px;
+  }
+  .panorama-hint {
+    font-size: 12px;
+  }
+  .panorama-play-btn {
+    width: 80px;
+    height: 80px;
+  }
+  .panorama-play-btn i.fa-3x {
+    font-size: 1.8em;
+  }
+}
