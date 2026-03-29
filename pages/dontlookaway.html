@@ -366,11 +366,36 @@
           }
         });
 
+        // Force A-Frame canvas to resize after fullscreen change
+        function resizeScene() {
+          var sceneEl = document.getElementById("panorama-scene");
+          if (sceneEl && sceneEl.canvas) {
+            setTimeout(function () {
+              var w = viewer.clientWidth;
+              var h = viewer.clientHeight;
+              sceneEl.canvas.width = w;
+              sceneEl.canvas.height = h;
+              if (sceneEl.renderer) {
+                sceneEl.renderer.setSize(w, h);
+              }
+              var cam = sceneEl.camera;
+              if (cam) {
+                cam.aspect = w / h;
+                cam.updateProjectionMatrix();
+              }
+            }, 100);
+          }
+        }
+
         document.addEventListener("fullscreenchange", function () {
           if (!document.fullscreenElement) {
             fsBtn.querySelector("i").classList.remove("fa-compress");
             fsBtn.querySelector("i").classList.add("fa-expand");
           }
+          resizeScene();
+        });
+        document.addEventListener("webkitfullscreenchange", function () {
+          resizeScene();
         });
       })();
     </script>

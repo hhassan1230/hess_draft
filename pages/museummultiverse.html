@@ -34,6 +34,9 @@
         <link rel="stylesheet" href="../css/museummultiverse/styles/main.css">
         <link rel="stylesheet" href="../css/museummultiverse/styles/responsive.css">
 
+        <!-- A-Frame for 360 Viewer -->
+        <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
         <!-- JS -->
         <script src="../js/museummultiverse/vendor/modernizr-2.8.3.min.js"></script>
     </head>
@@ -255,6 +258,37 @@
         </div><!-- / .gray-bg -->
 
 
+        <!-- ========== 360 Viewer ========== -->
+
+        <div class="gray-bg cta-dark">
+          <section class="container section">
+            <div class="row">
+
+              <header class="sec-heading">
+                <h2 style="color: #ececec;">360&deg; View</h2>
+                <span class="subheading">Explore the Museum Multiverse world</span>
+              </header>
+
+              <div class="col-xs-12">
+                <div id="mm-panorama-viewer" class="mm-panorama-container">
+                  <div id="mm-panorama-overlay" class="mm-panorama-overlay">
+                    <button id="mm-panorama-play-btn" class="mm-panorama-play-btn" aria-label="Start 360 viewer">
+                      <i class="fa fa-play fa-3x" aria-hidden="true"></i>
+                    </button>
+                    <p class="mm-panorama-hint">Click to explore in 360&deg;</p>
+                  </div>
+                  <button id="mm-panorama-fs-btn" class="mm-panorama-fs-btn" aria-label="Toggle fullscreen" style="display:none;">
+                    <i class="fa fa-expand" aria-hidden="true"></i>
+                  </button>
+                  <!-- A-Frame scene injected dynamically on play -->
+                </div>
+              </div>
+
+            </div><!-- / .row -->
+          </section><!-- / .container -->
+        </div><!-- / .gray-bg -->
+
+
         <!-- ========== Testimonials ========== -->
         
         <div id="testimonials" class="gray-bg">
@@ -444,6 +478,38 @@
                 </div><!-- / .blog-post -->
               </div><!-- / .col-lg-4 -->
 
+              
+              <!-- Blog Post 4 -->
+              <div class="col-lg-4 col-md-6">
+                <div class="blog-post wow fadeIn" data-wow-duration="2s" data-wow-delay=".9s">
+
+                  <!-- Image -->
+                  <a href="https://www.meta.com/en-gb/experiences/app/developer-post/1365296154789592/" class="post-img" rel="noopener noreferrer" target="_blank"><img src="../images/MMShots/MMScreenshot-03.png" alt="Anime NYC Blog Post"></a>
+
+                  <div class="bp-content">
+                    
+                    <!-- Meta data -->
+                    <div class="post-meta">
+                      <a href="#" class="post-date">
+                        <i class="fa fa-calendar-o"></i>
+                        <span>February 2025</span>
+                      </a>
+                    </div><!-- / .meta -->
+
+                    <!-- Post Title -->
+                    <a href="https://www.meta.com/en-gb/experiences/app/developer-post/1365296154789592/" class="post-title" rel="noopener noreferrer" target="_blank"><h4>We Brought Museum Multiverse VR to Anime NYC!</h4></a>
+
+                    <!-- Blurb -->
+                    <p>We showcased Museum Multiverse VR as an exhibitor at Anime NYC! As huge anime fans ourselves, it was a dream come true to share our game with fellow enthusiasts...</p>
+
+                    <!-- Link -->
+                    <a href="https://www.meta.com/en-gb/experiences/app/developer-post/1365296154789592/" class="btn btn-small" rel="noopener noreferrer" target="_blank">Read More</a>
+
+                  </div><!-- / .bp-content -->
+
+                </div><!-- / .blog-post -->
+              </div><!-- / .col-lg-4 -->
+
 
             </div><!-- / .row -->
           </section><!-- / .container -->
@@ -557,5 +623,143 @@
 
         <!-- Definity JS -->
         <script src="../js/museummultiverse/vendor/main.js"></script>
+
+        <!-- 360 Panorama Viewer -->
+        <script>
+        (function () {
+          var overlay = document.getElementById('mm-panorama-overlay');
+          var playBtn = document.getElementById('mm-panorama-play-btn');
+          var fsBtn = document.getElementById('mm-panorama-fs-btn');
+          var viewer = document.getElementById('mm-panorama-viewer');
+          var sceneCreated = false;
+
+          // Split a 6-face horizontal strip cubemap into individual face textures
+          function loadCubemapFromStrip(src, faceSize, callback) {
+            var img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function () {
+              var faces = [];
+              // Standard cubemap face order for Three.js CubeTexture:
+              // +X (right), -X (left), +Y (top), -Y (bottom), +Z (front), -Z (back)
+              // Strip order is typically: right, left, top, bottom, front, back
+              for (var i = 0; i < 6; i++) {
+                var canvas = document.createElement('canvas');
+                canvas.width = faceSize;
+                canvas.height = faceSize;
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(img, i * faceSize, 0, faceSize, faceSize, 0, 0, faceSize, faceSize);
+                faces.push(canvas);
+              }
+              callback(faces);
+            };
+            img.onerror = function () {
+              console.error('Failed to load cubemap image:', src);
+            };
+            img.src = src;
+          }
+
+          function createScene() {
+            if (sceneCreated) return;
+            sceneCreated = true;
+
+            var scene = document.createElement('a-scene');
+            scene.setAttribute('id', 'mm-panorama-scene');
+            scene.setAttribute('embedded', '');
+            scene.setAttribute('vr-mode-ui', 'enabled: false');
+            scene.setAttribute('loading-screen', 'enabled: false');
+            scene.setAttribute('renderer', 'antialias: true; alpha: true');
+
+            var cam = document.createElement('a-entity');
+            cam.setAttribute('camera', '');
+            cam.setAttribute('look-controls', 'reverseMouseDrag: false; touchEnabled: true; magicWindowTrackingEnabled: true');
+            cam.setAttribute('position', '0 1.6 0');
+            scene.appendChild(cam);
+
+            viewer.appendChild(scene);
+
+            scene.addEventListener('loaded', function () {
+              // Override A-Frame body hijack
+              document.documentElement.style.position = '';
+              document.documentElement.style.overflow = '';
+              document.body.style.position = '';
+              document.body.style.overflow = '';
+              document.body.style.height = '';
+              document.body.style.width = '';
+
+              // Load cubemap strip and apply as CubeTexture
+              loadCubemapFromStrip('../img/MM_Cubemap_v2.png', 2048, function (faces) {
+                var loader = new THREE.CubeTextureLoader();
+                var textures = faces.map(function (canvas) {
+                  var tex = new THREE.CanvasTexture(canvas);
+                  return tex;
+                });
+
+                var cubeTexture = new THREE.CubeTexture(faces);
+                cubeTexture.needsUpdate = true;
+
+                var threeScene = scene.object3D;
+                threeScene.background = cubeTexture;
+              });
+            });
+          }
+
+          function startViewer() {
+            overlay.style.display = 'none';
+            fsBtn.style.display = '';
+            createScene();
+          }
+
+          playBtn.addEventListener('click', startViewer);
+          overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) startViewer();
+          });
+
+          fsBtn.addEventListener('click', function () {
+            if (!document.fullscreenElement) {
+              if (viewer.requestFullscreen) viewer.requestFullscreen();
+              else if (viewer.webkitRequestFullscreen) viewer.webkitRequestFullscreen();
+              fsBtn.querySelector('i').classList.remove('fa-expand');
+              fsBtn.querySelector('i').classList.add('fa-compress');
+            } else {
+              if (document.exitFullscreen) document.exitFullscreen();
+              else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+              fsBtn.querySelector('i').classList.remove('fa-compress');
+              fsBtn.querySelector('i').classList.add('fa-expand');
+            }
+          });
+
+          // Force A-Frame canvas to resize after fullscreen change
+          function resizeScene() {
+            var sceneEl = document.getElementById('mm-panorama-scene');
+            if (sceneEl && sceneEl.canvas) {
+              setTimeout(function () {
+                var w = viewer.clientWidth;
+                var h = viewer.clientHeight;
+                sceneEl.canvas.width = w;
+                sceneEl.canvas.height = h;
+                if (sceneEl.renderer) {
+                  sceneEl.renderer.setSize(w, h);
+                }
+                var cam = sceneEl.camera;
+                if (cam) {
+                  cam.aspect = w / h;
+                  cam.updateProjectionMatrix();
+                }
+              }, 100);
+            }
+          }
+
+          document.addEventListener('fullscreenchange', function () {
+            if (!document.fullscreenElement) {
+              fsBtn.querySelector('i').classList.remove('fa-compress');
+              fsBtn.querySelector('i').classList.add('fa-expand');
+            }
+            resizeScene();
+          });
+          document.addEventListener('webkitfullscreenchange', function () {
+            resizeScene();
+          });
+        })();
+        </script>
     </body>
 </html>
