@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#1a0b2e" />
+    <title>A 360° Experience — for Alison</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #1a0b2e;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      #intro {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(
+          circle at center,
+          #2d1654 0%,
+          #1a0b2e 70%,
+          #000 100%
+        );
+        color: #fff;
+        text-align: center;
+        padding: 24px;
+        transition: opacity 0.8s ease;
+      }
+
+      #intro.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #intro h1 {
+        font-size: 2rem;
+        margin: 0 0 12px;
+        font-weight: 300;
+        letter-spacing: 0.15em;
+        color: #ffd86b;
+        text-shadow: 0 0 24px rgba(255, 216, 107, 0.6);
+      }
+
+      #intro p {
+        max-width: 320px;
+        margin: 0 0 28px;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        opacity: 0.85;
+      }
+
+      #enter {
+        background: linear-gradient(135deg, #ffd86b 0%, #ff8e6b 100%);
+        color: #1a0b2e;
+        border: none;
+        padding: 14px 36px;
+        font-size: 1rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(255, 142, 107, 0.4);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      #enter:active {
+        transform: scale(0.97);
+        box-shadow: 0 4px 12px rgba(255, 142, 107, 0.4);
+      }
+
+      #hint {
+        margin-top: 24px;
+        font-size: 0.8rem;
+        opacity: 0.55;
+      }
+
+      .a-enter-vr-button {
+        background-color: rgba(255, 216, 107, 0.9) !important;
+      }
+
+      #mute-toggle {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 9;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(26, 11, 46, 0.65);
+        color: #ffd86b;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: transform 0.15s ease, background 0.2s ease;
+      }
+
+      #mute-toggle.visible {
+        display: flex;
+      }
+
+      #mute-toggle:active {
+        transform: scale(0.92);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="intro">
+      <h1>FOR ALISON</h1>
+      <p>
+        Step inside a 360° gathering of your favorite characters. Move your
+        phone around to look — they're all waiting for you.
+      </p>
+      <button id="enter">ENTER ✦</button>
+      <div id="hint">Best with headphones, in a quiet moment.</div>
+    </div>
+
+    <button id="mute-toggle" aria-label="Toggle sound">♪</button>
+
+    <audio
+      id="ambience"
+      src="assets/audio/Lanterns_on_the_Stone_Path.mp3"
+      loop
+      preload="auto"
+      playsinline
+    ></audio>
+
+    <a-scene
+      loading-screen="dotsColor: #ffd86b; backgroundColor: #1a0b2e"
+      vr-mode-ui="enabled: true"
+      device-orientation-permission-ui="enabled: true"
+      renderer="antialias: true; colorManagement: true"
+    >
+      <a-assets>
+        <img
+          id="panorama"
+          src="assets/1779194916893mini.png"
+          crossorigin="anonymous"
+        />
+      </a-assets>
+
+      <a-sky src="#panorama" rotation="0 -90 0"></a-sky>
+
+      <a-entity position="0 1.6 0">
+        <a-camera
+          look-controls="reverseMouseDrag: false; touchEnabled: true; magicWindowTrackingEnabled: true"
+          wasd-controls-enabled="false"
+        ></a-camera>
+      </a-entity>
+
+      <a-entity
+        id="greeting"
+        position="0 4.2 -3.5"
+        animation="property: position; to: 0 4.3 -3.5; dir: alternate; loop: true; dur: 2400; easing: easeInOutSine"
+      >
+        <a-plane
+          width="5.2"
+          height="0.7"
+          color="#1a0b2e"
+          opacity="0.55"
+          position="0 0 -0.01"
+        ></a-plane>
+        <a-text
+          value="Have a Wonderful Adventure Alison ♡"
+          align="center"
+          color="#ffffff"
+          width="6"
+          font="kelsonsans"
+          anchor="center"
+          baseline="center"
+        ></a-text>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      const intro = document.getElementById("intro");
+      const enterBtn = document.getElementById("enter");
+      const ambience = document.getElementById("ambience");
+      const muteBtn = document.getElementById("mute-toggle");
+
+      const TARGET_GAIN = 0.55;
+      const FADE_IN_SEC = 2.4;
+      const FADE_OUT_SEC = 0.4;
+      const FADE_UNMUTE_SEC = 0.6;
+
+      let audioCtx = null;
+      let gainNode = null;
+      let muted = false;
+
+      function setupAudioGraph() {
+        if (audioCtx) return;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        audioCtx = new AC();
+        const source = audioCtx.createMediaElementSource(ambience);
+        gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0;
+        source.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+      }
+
+      function fadeTo(target, seconds) {
+        if (!gainNode || !audioCtx) return;
+        const now = audioCtx.currentTime;
+        gainNode.gain.cancelScheduledValues(now);
+        gainNode.gain.setValueAtTime(gainNode.gain.value, now);
+        gainNode.gain.linearRampToValueAtTime(target, now + seconds);
+      }
+
+      enterBtn.addEventListener("click", async () => {
+        if (
+          typeof DeviceOrientationEvent !== "undefined" &&
+          typeof DeviceOrientationEvent.requestPermission === "function"
+        ) {
+          try {
+            await DeviceOrientationEvent.requestPermission();
+          } catch (e) {
+            // permission denied — drag still works as a fallback
+          }
+        }
+
+        try {
+          setupAudioGraph();
+          if (audioCtx && audioCtx.state === "suspended") {
+            await audioCtx.resume();
+          }
+          await ambience.play();
+          fadeTo(TARGET_GAIN, FADE_IN_SEC);
+          muteBtn.classList.add("visible");
+        } catch (e) {
+          // audio file missing or blocked — silently continue
+        }
+
+        intro.classList.add("hidden");
+        setTimeout(() => {
+          intro.style.display = "none";
+        }, 800);
+      });
+
+      muteBtn.addEventListener("click", () => {
+        if (!gainNode) return;
+        if (muted) {
+          fadeTo(TARGET_GAIN, FADE_UNMUTE_SEC);
+          muteBtn.textContent = "♪";
+        } else {
+          fadeTo(0, FADE_OUT_SEC);
+          muteBtn.textContent = "♪̸";
+        }
+        muted = !muted;
+      });
+    </script>
+  </body>
+</html>
