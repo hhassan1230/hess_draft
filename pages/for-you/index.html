@@ -269,6 +269,15 @@
         }
         muted = !muted;
       });
+
+      document.addEventListener("visibilitychange", () => {
+        if (!audioCtx) return;
+        if (document.hidden) {
+          ambience.pause();
+        } else if (!muted) {
+          audioCtx.resume().then(() => ambience.play().catch(() => {}));
+        }
+      });
     </script>
   </body>
 </html>
