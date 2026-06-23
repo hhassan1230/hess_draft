@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back Around — One block. One looping day.</title>
+<meta name="description" content="A cozy life-sim set on one looping Brooklyn block. Carry memory forward each loop, learn the rhythms of eight neighbors, and make the whole neighborhood glow at once.">
+
+<!-- Open Graph / share card -->
+<meta property="og:title" content="Back Around — One block. One looping day.">
+<meta property="og:description" content="A cozy Brooklyn life-sim where collecting means reconnecting and the loop is for savoring. Come back around.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og-card.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* the day, as a palette — dawn through neon night */
+    --dawn-1:#FBE3D6;  --dawn-2:#F6C9B8;
+    --noon-1:#FFF4E2;  --noon-2:#FFE7C2;
+    --golden:#F4A259;  --golden-deep:#E0772E;
+    --dusk-1:#5B3A6B;  --dusk-2:#3A2150;
+    --night:#1B1130;
+    --neon-pink:#FF5D8F;
+    --neon-cyan:#5BE0E6;
+    --neon-amber:#FFC857;
+
+    --plum:#5B3A6B;
+    --pink:#B0476A;
+    --ink:#2B2730;
+    --cream:#FFF8F0;
+    --muted:#8A8594;
+    --rule:#E7D4EE;
+
+    --maxw:1080px;
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+  /* ---------- the loop-arrow mark ---------- */
+  .mark{display:inline-flex;align-items:center;gap:.55rem;font-family:'Fraunces',serif;font-weight:800;letter-spacing:-.01em}
+  .mark svg{flex:0 0 auto}
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;
+    background:rgba(255,248,240,.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--rule);
+  }
+  header.nav .mark{font-size:1.15rem;color:var(--plum)}
+  header.nav nav{display:flex;gap:1.6rem;align-items:center}
+  header.nav nav a{color:var(--ink);text-decoration:none;font-size:.92rem;font-weight:500;opacity:.78;transition:opacity .2s}
+  header.nav nav a:hover{opacity:1}
+  header.nav nav a.cta{
+    background:var(--plum);color:#fff;padding:.5rem 1.05rem;border-radius:999px;opacity:1;
+    font-weight:600;transition:transform .2s var(--ease),background .2s
+  }
+  header.nav nav a.cta:hover{transform:translateY(-1px);background:#6c4a7e}
+  @media(max-width:680px){header.nav nav a:not(.cta){display:none}}
+
+  /* ---------- HERO — dawn ---------- */
+  .hero{
+    position:relative;min-height:100svh;display:flex;align-items:center;
+    padding:120px 0 80px;
+    background:
+      radial-gradient(120% 80% at 75% 15%, rgba(255,200,87,.45), transparent 55%),
+      linear-gradient(165deg, var(--dawn-1) 0%, var(--noon-1) 60%, #fff 100%);
+    overflow:hidden;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;width:100%}
+  @media(max-width:860px){.hero .wrap{grid-template-columns:1fr;gap:36px}}
+
+  .hero .eyebrow{
+    display:inline-flex;align-items:center;gap:.5rem;
+    font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--golden-deep);margin-bottom:1.1rem
+  }
+  .hero .eyebrow::before{content:"";width:26px;height:1px;background:var(--golden-deep)}
+
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:800;
+    font-size:clamp(3rem,8vw,5.6rem);line-height:.96;letter-spacing:-.025em;
+    color:var(--plum);margin-bottom:.4rem
+  }
+  .hero h1 .glow{
+    background:linear-gradient(92deg,var(--pink),var(--golden-deep));
+    -webkit-background-clip:text;background-clip:text;color:transparent
+  }
+  .hero .tag{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:500;
+    font-size:clamp(1.15rem,2.6vw,1.5rem);color:var(--pink);margin-bottom:1.4rem
+  }
+  .hero p.lede{font-size:1.08rem;color:#4b4550;max-width:34ch;margin-bottom:1.8rem}
+  .hero .row{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+  .btn{
+    font-weight:600;text-decoration:none;border-radius:999px;
+    padding:.85rem 1.5rem;font-size:.98rem;transition:transform .2s var(--ease),box-shadow .25s
+  }
+  .btn-primary{background:var(--plum);color:#fff;box-shadow:0 8px 22px -10px rgba(91,58,107,.7)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(91,58,107,.8)}
+  .btn-ghost{color:var(--plum);border:1.5px solid var(--rule)}
+  .btn-ghost:hover{transform:translateY(-2px);border-color:var(--plum)}
+  .hero .meta{margin-top:1.6rem;font-size:.85rem;color:var(--muted);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+  .hero .meta b{color:var(--ink);font-weight:600}
+  .hero .meta .dot{opacity:.4}
+
+  /* hero art slot — the block at dawn */
+  .heroart{position:relative;aspect-ratio:4/3;border-radius:22px;overflow:hidden}
+  .artslot{
+    position:relative;width:100%;height:100%;
+    border-radius:22px;overflow:hidden;
+    border:1px solid rgba(91,58,107,.14);
+    box-shadow:0 30px 60px -28px rgba(58,33,80,.45);
+    background:linear-gradient(160deg,#FCE9D8,#F3C6AE 55%,#E89B86);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .artslot img{width:100%;height:100%;object-fit:cover;display:block}
+  .artslot .ph{
+    text-align:center;color:#7a4a52;padding:1.5rem;
+    font-size:.82rem;font-weight:600;letter-spacing:.02em
+  }
+  .artslot .ph code{display:block;margin-top:.4rem;font-family:ui-monospace,monospace;
+    font-size:.74rem;color:#9a5a62;background:rgba(255,255,255,.55);
+    padding:.3rem .55rem;border-radius:6px}
+  /* the SVG block silhouette behind the slot, as a fallback identity */
+  .blockline{position:absolute;left:0;right:0;bottom:0;width:100%;opacity:.9}
+
+  /* ---------- generic section ---------- */
+  section{padding:96px 0;position:relative}
+  .sec-eyebrow{
+    font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--pink);margin-bottom:.9rem;display:flex;align-items:center;gap:.6rem
+  }
+  .sec-eyebrow .hr{height:1px;width:34px;background:var(--pink);display:inline-block}
+  h2.sec{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(2rem,4.5vw,2.9rem);
+    line-height:1.05;letter-spacing:-.02em;color:var(--plum);margin-bottom:1rem;max-width:18ch}
+  .sec-lede{font-size:1.08rem;color:#4b4550;max-width:56ch;margin-bottom:2.6rem}
+
+  /* ---------- pillars ---------- */
+  .pillars{background:linear-gradient(180deg,#fff,var(--noon-1))}
+  .pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+  @media(max-width:780px){.pillar-grid{grid-template-columns:1fr}}
+  .pillar{
+    background:#fff;border:1px solid var(--rule);border-radius:18px;padding:1.8rem;
+    transition:transform .25s var(--ease),box-shadow .25s
+  }
+  .pillar:hover{transform:translateY(-4px);box-shadow:0 22px 44px -26px rgba(91,58,107,.4)}
+  .pillar .ico{width:42px;height:42px;margin-bottom:1rem}
+  .pillar h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;color:var(--plum);margin-bottom:.5rem;letter-spacing:-.01em}
+  .pillar p{font-size:.98rem;color:#52505a}
+
+  /* ---------- loop / how it plays ---------- */
+  .loop{background:
+      linear-gradient(180deg,var(--noon-1),#FFE9D2 50%,#F8D7C0 100%)}
+  .loop-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:1rem}
+  @media(max-width:820px){.loop-steps{grid-template-columns:1fr 1fr;gap:1rem}}
+  .step{position:relative;padding:1.3rem 1rem;background:rgba(255,255,255,.6);
+    border:1px solid rgba(176,71,106,.18);border-radius:14px}
+  .step .n{font-family:'Fraunces',serif;font-weight:800;font-size:1.4rem;color:var(--golden-deep);line-height:1}
+  .step .t{font-weight:600;font-size:.95rem;margin:.4rem 0 .2rem;color:var(--ink)}
+  .step .d{font-size:.84rem;color:#5e5a64}
+  .loop-note{margin-top:2rem;font-family:'Fraunces',serif;font-style:italic;
+    font-size:1.15rem;color:var(--pink);max-width:50ch}
+
+  /* ---------- cast — golden hour ---------- */
+  .cast{background:linear-gradient(180deg,#F8D7C0,var(--golden) 120%)}
+  .cast h2.sec,.cast .sec-lede{color:#3a2150}
+  .cast .sec-eyebrow{color:#7a2f52}
+  .cast .sec-eyebrow .hr{background:#7a2f52}
+  .cast-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+  @media(max-width:820px){.cast-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){.cast-grid{grid-template-columns:1fr}}
+  .card{background:rgba(27,17,48,.82);border-radius:16px;overflow:hidden;
+    border:1px solid rgba(255,255,255,.12);transition:transform .25s var(--ease)}
+  .card:hover{transform:translateY(-5px)}
+  .card .portrait{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(150deg,#6c4a7e,#3a2150);position:relative;overflow:hidden}
+  .card .portrait img{width:100%;height:100%;object-fit:cover}
+  .card .portrait .slotlabel{font-size:.66rem;color:#caa9d6;font-family:ui-monospace,monospace;
+    text-align:center;padding:.5rem}
+  .card .body{padding:.9rem 1rem 1.1rem}
+  .card .name{font-family:'Fraunces',serif;font-weight:600;color:#fff;font-size:1.08rem}
+  .card .hour{font-size:.74rem;color:var(--neon-amber);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin:.15rem 0 .45rem}
+  .card .role{font-size:.84rem;color:#d9cfe0;line-height:1.45}
+
+  /* ---------- signature: phased echoes — night ---------- */
+  .echoes{background:radial-gradient(120% 90% at 50% 0%, #3a2150, var(--night) 70%);color:#EFE6F5;text-align:center;overflow:hidden}
+  .echoes .sec-eyebrow{justify-content:center;color:var(--neon-cyan)}
+  .echoes .sec-eyebrow .hr{background:var(--neon-cyan)}
+  .echoes h2.sec{color:#fff;margin:0 auto 1rem;max-width:20ch}
+  .echoes .sec-lede{color:#c8bcd6;margin:0 auto 3rem;text-align:center}
+  .echo-stage{position:relative;height:260px;max-width:680px;margin:0 auto}
+  .echo{position:absolute;top:50%;border-radius:50%;filter:blur(.3px);
+    transform:translateY(-50%);animation:drift 9s linear infinite}
+  .echo span{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;
+    font-size:.66rem;color:rgba(255,255,255,.55);transform:translateY(140%)}
+  @keyframes drift{
+    0%{transform:translate(-40px,-50%) scale(.96);opacity:0}
+    12%{opacity:1}
+    88%{opacity:1}
+    100%{transform:translate(720px,-50%) scale(1.04);opacity:0}
+  }
+  .aliveness{margin-top:2.4rem;max-width:420px;margin-left:auto;margin-right:auto}
+  .aliveness .label{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--neon-cyan);margin-bottom:.5rem}
+  .bar{height:12px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+  .bar i{display:block;height:100%;width:0;border-radius:999px;
+    background:linear-gradient(90deg,var(--neon-cyan),var(--neon-pink),var(--neon-amber));
+    transition:width 1.6s var(--ease)}
+  @media(prefers-reduced-motion:reduce){
+    .echo{animation:none;opacity:.85;position:static;display:inline-flex;margin:.5rem}
+    .echo span{position:static;transform:none;display:block;margin-top:.3rem}
+    .echo-stage{height:auto;display:flex;flex-wrap:wrap;justify-content:center}
+  }
+
+  /* ---------- docs / downloads ---------- */
+  .docs{background:linear-gradient(180deg,var(--night),#241640)}
+  .docs h2.sec{color:#fff}
+  .docs .sec-eyebrow{color:var(--neon-pink)}
+  .docs .sec-eyebrow .hr{background:var(--neon-pink)}
+  .docs .sec-lede{color:#c8bcd6}
+  .doc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+  @media(max-width:680px){.doc-grid{grid-template-columns:1fr}}
+  .doc{display:flex;gap:1rem;align-items:center;text-decoration:none;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;padding:1.1rem 1.3rem;transition:background .2s,transform .2s var(--ease)}
+  .doc:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+  .doc .di{flex:0 0 auto;width:40px;height:40px;border-radius:10px;
+    background:linear-gradient(150deg,var(--neon-pink),var(--plum));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.7rem;font-family:'Fraunces',serif}
+  .doc .dt{font-weight:600;color:#fff;font-size:1rem}
+  .doc .dd{font-size:.82rem;color:#b6a9c6}
+
+  /* ---------- final CTA — neon night ---------- */
+  .final{background:radial-gradient(110% 120% at 50% 120%, #3a2150, var(--night));text-align:center;color:#fff}
+  .final h2{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(2.4rem,6vw,4rem);
+    letter-spacing:-.02em;line-height:1;margin-bottom:1rem}
+  .final h2 .glow{background:linear-gradient(92deg,var(--neon-pink),var(--neon-amber));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .final p{color:#c8bcd6;max-width:46ch;margin:0 auto 2rem;font-size:1.08rem}
+
+  footer{background:var(--night);color:#8d80a0;text-align:center;padding:38px 28px;font-size:.84rem;border-top:1px solid rgba(255,255,255,.08)}
+  footer .mark{color:#cbb9d8;font-size:1rem;margin-bottom:.6rem}
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- reusable loop-arrow mark -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="loop" viewBox="0 0 32 32">
+    <path d="M16 5a11 11 0 1 1-10.4 7.4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M5.6 5.2 L5.6 12.6 L13 12.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <span class="mark"><svg width="22" height="22" style="color:var(--golden-deep)"><use href="#loop"/></svg>Back Around</span>
+  <nav>
+    <a href="#play">How it plays</a>
+    <a href="#cast">The block</a>
+    <a href="#echoes">Together</a>
+    <a href="#docs" class="cta">Design docs</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Cozy Simulation &amp; Management · Meta Horizon Worlds</span>
+      <h1>Back<br><span class="glow">Around</span></h1>
+      <p class="tag">One block. One looping day. Come back around.</p>
+      <p class="lede">A returning local relives one joyful day on their old Brooklyn block — carrying memory forward each loop until the whole neighborhood glows at once.</p>
+      <div class="row">
+        <a href="#play" class="btn btn-primary">See how it plays</a>
+        <a href="#docs" class="btn btn-ghost">Read the design</a>
+      </div>
+      <div class="meta">
+        <b>Made in Brooklyn Games</b><span class="dot">·</span>
+        <span>No villain</span><span class="dot">·</span>
+        <span>No fail state</span><span class="dot">·</span>
+        <span>Collecting = reconnecting</span>
+      </div>
+    </div>
+
+    <div class="heroart">
+      <!-- ART SLOT: drop your hero image at hero-block.jpg to replace the placeholder -->
+      <div class="artslot">
+        <!-- To use your art: delete the .ph div below and uncomment the <img> -->
+        <!-- <img src="hero-block.jpg" alt="The block at dawn"> -->
+        <div class="ph">
+          HERO ART SLOT — the block at dawn
+          <code>hero-block.jpg</code>
+        </div>
+        <svg class="blockline" viewBox="0 0 600 180" preserveAspectRatio="none" aria-hidden="true">
+          <g fill="rgba(91,58,107,.16)">
+            <rect x="0" y="90" width="70" height="90"/>
+            <rect x="70" y="60" width="60" height="120"/>
+            <rect x="130" y="100" width="80" height="80"/>
+            <rect x="210" y="50" width="70" height="130"/>
+            <rect x="280" y="84" width="64" height="96"/>
+            <rect x="344" y="40" width="76" height="140"/>
+            <rect x="420" y="96" width="70" height="84"/>
+            <rect x="490" y="64" width="60" height="116"/>
+            <rect x="550" y="100" width="50" height="80"/>
+          </g>
+          <g fill="rgba(255,200,87,.5)">
+            <rect x="86" y="84" width="10" height="12"/><rect x="104" y="84" width="10" height="12"/>
+            <rect x="226" y="74" width="10" height="12"/><rect x="244" y="74" width="10" height="12"/>
+            <rect x="360" y="64" width="10" height="12"/><rect x="378" y="64" width="10" height="12"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PILLARS ============ -->
+<section class="pillars" id="pillars">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow"><span class="hr"></span>What it is</div>
+      <h2 class="sec">A management game where the resource is a neighborhood.</h2>
+      <p class="sec-lede">No loot, no XP bar, no enemy. You optimize relationships and timing — and the only thing standing between you and a glowing block is your own incomplete attention.</p>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar reveal">
+        <svg class="ico" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="6" stroke="var(--pink)" stroke-width="2.5"/><path d="M9 32c0-6 5-9 11-9s11 3 11 9" stroke="var(--pink)" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <h3>Collecting is reconnecting</h3>
+        <p>You don't gather loot — you gather people, routines, and the small knowledge of a place. Progress is intimacy, not inventory.</p>
+      </div>
+      <div class="pillar reveal">
+        <svg class="ico" viewBox="0 0 40 40" style="color:var(--golden-deep)"><use href="#loop"/></svg>
+        <h3>The loop is for savoring</h3>
+        <p>Repeating the day is how you notice what you missed the first time. The reset is a second chance — never a punishment.</p>
+      </div>
+      <div class="pillar reveal">
+        <svg class="ico" viewBox="0 0 40 40" fill="none"><path d="M20 6l3.6 9.2 9.9.5-7.7 6.2 2.6 9.6L20 26l-8 5.5 2.6-9.6-7.7-6.2 9.9-.5z" stroke="var(--plum)" stroke-width="2.2" stroke-linejoin="round"/></svg>
+        <h3>No villain, no fail state</h3>
+        <p>Tension comes from near-misses and warmth, not threat. The whole game is the pleasure of a place becoming legible, then becoming yours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT PLAYS ============ -->
+<section class="loop" id="play">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow"><span class="hr"></span>The core loop</div>
+      <h2 class="sec">Live the day. Read the rhythm. Come back smarter.</h2>
+      <p class="sec-lede">Items reset each loop; memory persists. So every loop you start more fluent — until you can catch every neighbor at their perfect hour, all at once.</p>
+    </div>
+    <div class="loop-steps">
+      <div class="step reveal"><div class="n">1</div><div class="t">Wake at dawn</div><div class="d">The day is yours, dawn to neon night.</div></div>
+      <div class="step reveal"><div class="n">2</div><div class="t">Read the block</div><div class="d">Mister Softee's jingle and the changing light tell the hour.</div></div>
+      <div class="step reveal"><div class="n">3</div><div class="t">Be early</div><div class="d">Catch a neighbor at exactly their moment. Timing is the game.</div></div>
+      <div class="step reveal"><div class="n">4</div><div class="t">Light the block</div><div class="d">Every well-timed connection raises Block Aliveness.</div></div>
+      <div class="step reveal"><div class="n">5</div><div class="t">Come back around</div><div class="d">Night falls — and the day begins again. You keep what you learned.</div></div>
+    </div>
+    <p class="loop-note">The first loop ends on a near-miss — a connection you can see but can't quite reach. You loop again not because a meter nags you, but because now you know you <em>can</em> catch it.</p>
+  </div>
+</section>
+
+<!-- ============ THE CAST ============ -->
+<section class="cast" id="cast">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow"><span class="hr"></span>The block — eight nodes in one day</div>
+      <h2 class="sec">Eight neighbors. Each a character and a clock.</h2>
+      <p class="sec-lede">A real NYC crossroads of diasporas — Caribbean, West African, Puerto Rican, second-generation — used as the actual texture of a block, not decoration. Learn how their hours interlock and the whole day opens up.</p>
+    </div>
+    <div class="cast-grid">
+      <!-- Each portrait is an ART SLOT: replace the .slotlabel with <img src="cast-NAME.jpg"> -->
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-missdot.jpg</div></div><div class="body"><div class="name">Miss Dot</div><div class="hour">Dawn · stoop matriarch</div><div class="role">The block's memory. She names who's worth knowing.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-tito.jpg</div></div><div class="body"><div class="name">Tito</div><div class="hour">Morning · bodega owner</div><div class="role">The hub. His counter is where the block's errands route.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-pelusa.jpg</div></div><div class="body"><div class="name">Pelusa</div><div class="hour">Wanders · the cat</div><div class="role">A living waypoint. Follow her and the hidden paths reveal themselves.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-osei.jpg</div></div><div class="body"><div class="name">Mr. Osei</div><div class="hour">Midday · tailor</div><div class="role">A patience economy. Returns favors slowly; rewards players who come back.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-softee.jpg</div></div><div class="body"><div class="name">Mister Softee</div><div class="hour">~4 PM · the jingle</div><div class="role">Not a person — a diegetic clock. You learn to read time by ear.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-donrafa.jpg</div></div><div class="body"><div class="name">Don Rafa</div><div class="hour">Evening · the domino table</div><div class="role">You must be vouched for to earn the fourth seat.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-yaya.jpg</div></div><div class="body"><div class="name">Yaya</div><div class="hour">Golden hour · garden keeper</div><div class="role">The soft welcome-home. Wants things returned where they belong.</div></div></div>
+      <div class="card reveal"><div class="portrait"><div class="slotlabel">cast-junior.jpg</div></div><div class="body"><div class="name">Junior</div><div class="hour">All day · the kid</div><div class="role">Your mirror — who you used to be. The wordless tutorial; the block's future.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHASED ECHOES (signature) ============ -->
+<section class="echoes" id="echoes">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow"><span class="hr"></span>Together, on your own time</div>
+      <h2 class="sec">Other players drift past as luminous echoes.</h2>
+      <p class="sec-lede">Everyone runs their own loop — but you see each other as soft, out-of-phase forms moving through their version of the day. The block always feels inhabited and shared, yet your loop is never disrupted. And Block Aliveness is communal, so a living world greets every returning player.</p>
+    </div>
+    <div class="echo-stage" aria-hidden="true">
+      <div class="echo" style="left:0;width:54px;height:54px;background:radial-gradient(circle,rgba(91,224,230,.9),rgba(91,224,230,0));animation-delay:0s"><span>a neighbor, two hours ahead</span></div>
+      <div class="echo" style="left:0;width:44px;height:44px;background:radial-gradient(circle,rgba(255,93,143,.85),rgba(255,93,143,0));animation-delay:3s"><span>someone you'll meet at dusk</span></div>
+      <div class="echo" style="left:0;width:60px;height:60px;background:radial-gradient(circle,rgba(255,200,87,.85),rgba(255,200,87,0));animation-delay:6s"><span>a stranger, mid-loop</span></div>
+    </div>
+    <div class="aliveness">
+      <div class="label">Block Aliveness — communal</div>
+      <div class="bar"><i id="alive"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESIGN DOCS ============ -->
+<section class="docs" id="docs">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-eyebrow"><span class="hr"></span>The full pre-production package</div>
+      <h2 class="sec">Read the design.</h2>
+      <p class="sec-lede">A complete, coherent vision — backbone, journey, look, and build plan. Drop your files beside this page and these links go live.</p>
+    </div>
+    <div class="doc-grid">
+      <a class="doc reveal" href="back-around-gdd.pdf"><span class="di">GDD</span><span><span class="dt">Game Design Document</span><br><span class="dd">Concept, loop, progression, retention — the backbone.</span></span></a>
+      <a class="doc reveal" href="back-around-production-plan.pdf"><span class="di">PROD</span><span><span class="dt">Production Plan</span><br><span class="dd">Build sequencing, MVP scope, Horizon dependencies, testing.</span></span></a>
+      <a class="doc reveal" href="back-around-journey-map.pdf"><span class="di">MAP</span><span><span class="dt">Player Journey Map</span><br><span class="dd">The first fifteen minutes and the emotional curve.</span></span></a>
+      <a class="doc reveal" href="back-around-visual-package.pdf"><span class="di">ART</span><span><span class="dt">Visual Concept Package</span><br><span class="dd">Palette, the block, the cast, key scenes, UI.</span></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final">
+  <div class="wrap">
+    <h2>Come <span class="glow">back around.</span></h2>
+    <p>One block. One looping day. A whole neighborhood waiting to glow at once.</p>
+    <a href="#docs" class="btn btn-primary" style="background:linear-gradient(92deg,var(--neon-pink),var(--golden-deep))">Explore the design</a>
+  </div>
+</section>
+
+<footer>
+  <div class="mark" style="justify-content:center"><svg width="20" height="20"><use href="#loop"/></svg>Back Around</div>
+  Made in Brooklyn Games · Simulation &amp; Management · Meta Horizon Worlds<br>
+  <span style="opacity:.6">A cozy life-sim about coming home.</span>
+</footer>
+
+<script>
+  // scroll reveal
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{
+    el.style.transitionDelay=(i%5*60)+'ms'; io.observe(el);
+  });
+  // aliveness bar fills when the echoes section enters view
+  const alive=document.getElementById('alive');
+  const ao=new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ alive.style.width='88%'; ao.unobserve(e.target);} });
+  },{threshold:.4});
+  ao.observe(document.getElementById('echoes'));
+</script>
+</body>
+</html>
