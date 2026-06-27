@@ -1,20 +1,564 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ColdChainMed — Medical-Grade Cold Storage</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap"
-      rel="stylesheet"
-    />
-    <script type="module" crossorigin src="./assets/index-rxlaaEOu.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DrB9LRXx.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ColdChainMed — Cold storage, specified to the degree</title>
+<meta name="description" content="A B2B medical cold-storage storefront. Clinical buyers filter refrigeration by temperature, compliance, and capacity, then hand off a precise, SKU-tagged lead." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --void: #07110f;
+    --deep: #0b1a17;
+    --deep-2: #0f2420;
+    --frost: #eaf2ef;
+    --paper: #f4f6f5;
+    --ink: #16241f;
+    --steel: #74847e;
+    --line: #d9e2de;
+    --teal: #0f9d8f;
+    --teal-bright: #1ad4bd;
+    --ice: #84e3d4;
+    --amber: #e0814a;
+    --alert: #d8593b;
+    --maxw: 1140px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- top nav ---------- */
+  .cc-nav {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--maxw); margin: 0 auto; padding: 24px 28px;
+  }
+  .cc-logo {
+    font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px;
+    letter-spacing: -0.3px; color: var(--frost); display: flex; align-items: center; gap: 9px;
+  }
+  .cc-logo .spark { color: var(--teal-bright); font-size: 17px; }
+  .cc-logo b { color: var(--teal-bright); font-weight: 700; }
+  .cc-nav a.nav-cta {
+    font-size: 13.5px; font-weight: 600; color: var(--void);
+    background: var(--teal-bright); padding: 9px 17px; border-radius: 7px;
+    text-decoration: none; transition: transform .15s, background .15s;
+  }
+  .cc-nav a.nav-cta:hover { background: #fff; transform: translateY(-1px); }
+
+  /* ---------- hero ---------- */
+  .cc-hero {
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(120% 80% at 80% -10%, rgba(26,212,189,.10), transparent 55%),
+      radial-gradient(90% 70% at 8% 110%, rgba(26,212,189,.06), transparent 60%),
+      linear-gradient(180deg, var(--void), var(--deep));
+    color: var(--frost);
+    padding: 150px 0 76px;
+  }
+  .cc-hero::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px);
+    mix-blend-mode: overlay;
+  }
+  .cc-eyebrow {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--ice); margin-bottom: 26px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .cc-eyebrow .pulse {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--teal-bright);
+    box-shadow: 0 0 0 0 rgba(26,212,189,.6);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cc-eyebrow .pulse { animation: ping 2.6s ease-out infinite; }
+    @keyframes ping {
+      0% { box-shadow: 0 0 0 0 rgba(26,212,189,.55); }
+      70%,100% { box-shadow: 0 0 0 9px rgba(26,212,189,0); }
+    }
+  }
+  .cc-h1 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(40px, 6.4vw, 76px); line-height: 1.02; letter-spacing: -1.5px;
+    max-width: 16ch;
+  }
+  .cc-h1 em { font-style: italic; color: var(--ice); }
+  .cc-sub {
+    margin-top: 26px; max-width: 56ch; font-size: clamp(15.5px, 1.5vw, 18px);
+    line-height: 1.6; color: #b9ccc5;
+  }
+  .cc-cta-row { margin-top: 38px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .btn {
+    font-size: 15px; font-weight: 600; text-decoration: none; border-radius: 9px;
+    padding: 14px 24px; display: inline-flex; align-items: center; gap: 9px;
+    transition: transform .15s, background .15s, box-shadow .15s; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--teal-bright); color: var(--void); box-shadow: 0 6px 26px rgba(26,212,189,.28); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 34px rgba(26,212,189,.4); }
+  .btn-ghost { background: transparent; color: var(--frost); border: 1px solid rgba(255,255,255,.22); }
+  .btn-ghost:hover { background: rgba(255,255,255,.06); transform: translateY(-2px); }
+  .btn .arr { transition: transform .15s; }
+  .btn:hover .arr { transform: translateX(3px); }
+
+  /* ---------- the instrument ---------- */
+  .cc-instrument {
+    margin-top: 62px;
+    border: 1px solid rgba(132,227,212,.18);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(15,36,32,.7), rgba(7,17,15,.5));
+    padding: 26px 28px 30px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 30px 60px -30px rgba(0,0,0,.6);
+  }
+  .cc-inst-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #6f8e87; margin-bottom: 22px;
+  }
+  .cc-inst-top .reading { color: var(--ice); font-size: 13px; }
+  .cc-inst-top .reading .lock { color: var(--teal-bright); }
+  .cc-scale { position: relative; height: 66px; border-radius: 9px; overflow: hidden;
+    background:
+      linear-gradient(90deg,
+        rgba(54,98,168,.55) 0%,
+        rgba(40,74,120,.40) 26%,
+        rgba(28,52,60,.30) 52%,
+        rgba(224,129,74,.32) 84%,
+        rgba(216,89,59,.45) 100%);
+    border: 1px solid rgba(255,255,255,.07);
+  }
+  /* safe band: +2C..+8C on a -30..+15 scale => 71.1% .. 84.4% */
+  .cc-band {
+    position: absolute; top: 0; bottom: 0; left: 71.1%; width: 13.3%;
+    background: linear-gradient(180deg, rgba(26,212,189,.42), rgba(26,212,189,.16));
+    border-left: 1.5px solid var(--teal-bright); border-right: 1.5px solid var(--teal-bright);
+    box-shadow: 0 0 24px rgba(26,212,189,.45);
+  }
+  .cc-band-label {
+    position: absolute; top: -2px; left: 71.1%; width: 13.3%; text-align: center;
+    transform: translateY(-100%);
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .5px;
+    color: var(--ice); padding-bottom: 6px; white-space: nowrap;
+  }
+  .cc-readout {
+    position: absolute; top: 50%; left: 14%; transform: translate(-50%,-50%);
+    background: var(--void); border: 1.5px solid var(--teal-bright); border-radius: 7px;
+    padding: 5px 10px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600;
+    color: #fff; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.5);
+    transition: left 2.1s cubic-bezier(.22,1,.36,1);
+  }
+  .cc-readout::after {
+    content: ""; position: absolute; left: 50%; bottom: -7px; transform: translateX(-50%);
+    border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid var(--teal-bright);
+  }
+  .cc-ticks {
+    display: flex; justify-content: space-between; margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5f7a74; letter-spacing: .5px;
+  }
+  .cc-scroll-cue {
+    margin-top: 54px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px;
+    letter-spacing: 2px; text-transform: uppercase; color: #5f7a74;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cc-scroll-cue .ln { width: 34px; height: 1px; background: #3a514b; display: inline-block; }
+
+  /* ---------- thin compliance strip ---------- */
+  .cc-strip {
+    background: var(--deep-2); color: #9fb4ad; border-top: 1px solid rgba(255,255,255,.05);
+  }
+  .cc-strip .wrap {
+    display: flex; flex-wrap: wrap; gap: 14px 30px; align-items: center; justify-content: center;
+    padding: 16px 28px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .cc-strip .hot { color: var(--ice); }
+  .cc-strip .sep { color: #34453f; }
+
+  /* ---------- generic section ---------- */
+  .cc-section { padding: 96px 0; }
+  .cc-kicker {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal); margin-bottom: 18px;
+  }
+  .cc-h2 {
+    font-family: 'Newsreader', serif; font-weight: 500;
+    font-size: clamp(28px, 4vw, 44px); line-height: 1.08; letter-spacing: -1px; max-width: 20ch;
+  }
+  .cc-lead { margin-top: 20px; max-width: 62ch; font-size: 17px; color: #41514b; line-height: 1.6; }
+  .cc-lead strong { color: var(--ink); font-weight: 600; }
+
+  /* problem split */
+  .cc-problem { background: var(--frost); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .cc-split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+  .cc-compare { display: flex; flex-direction: column; gap: 14px; }
+  .cc-chip-row { display: flex; align-items: center; gap: 14px; }
+  .cc-state {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 7px 12px; border-radius: 6px; white-space: nowrap;
+  }
+  .cc-state.bad { background: rgba(216,89,59,.1); color: #b03f25; border: 1px solid rgba(216,89,59,.25); }
+  .cc-state.good { background: rgba(15,157,143,.1); color: #0c6b60; border: 1px solid rgba(15,157,143,.28); }
+  .cc-compare p { font-size: 14.5px; color: #41514b; }
+
+  /* how it works — real sequence */
+  .cc-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; }
+  .cc-step {
+    border-top: 2px solid var(--ink); padding-top: 20px;
+  }
+  .cc-step .num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--teal); font-weight: 600;
+    letter-spacing: 1px; margin-bottom: 14px;
+  }
+  .cc-step h3 { font-family: 'Newsreader', serif; font-weight: 600; font-size: 23px; letter-spacing: -.4px; margin-bottom: 9px; }
+  .cc-step p { font-size: 15px; color: #4a5a54; line-height: 1.58; }
+
+  /* feature spotlight — live slider */
+  .cc-spot { background: var(--paper); }
+  .cc-spot-grid { display: grid; grid-template-columns: .95fr 1.05fr; gap: 56px; align-items: center; }
+  .cc-panel {
+    background: linear-gradient(180deg, var(--void), var(--deep)); border-radius: 16px;
+    padding: 30px 30px 34px; color: var(--frost); border: 1px solid rgba(132,227,212,.16);
+    box-shadow: 0 30px 60px -34px rgba(0,0,0,.5);
+  }
+  .cc-panel .plabel {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #6f8e87; display: flex; justify-content: space-between;
+  }
+  .cc-panel .plabel .val { color: var(--ice); }
+  .cc-slider { width: 100%; margin: 22px 0 6px; accent-color: var(--teal-bright); height: 4px; }
+  .cc-slider-ticks { display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5f7a74; }
+  .cc-result {
+    margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08);
+    font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: #b9ccc5;
+  }
+  .cc-result b { color: var(--teal-bright); }
+  .cc-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .cc-tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .5px;
+    color: var(--ice); border: 1px solid rgba(132,227,212,.3); background: rgba(26,212,189,.08);
+    padding: 4px 9px; border-radius: 20px;
+  }
+
+  /* trust band */
+  .cc-trust { background: var(--deep); color: var(--frost); }
+  .cc-trust .wrap { padding: 84px 28px; }
+  .cc-trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; margin-top: 48px; }
+  .cc-cred .mk {
+    font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: var(--teal-bright);
+    letter-spacing: .5px; padding-bottom: 12px; border-bottom: 1px solid rgba(132,227,212,.2); margin-bottom: 14px;
+  }
+  .cc-cred p { font-size: 14px; color: #9fb4ad; line-height: 1.55; }
+  .cc-trust .cc-h2 { color: var(--frost); }
+  .cc-trust .cc-kicker { color: var(--ice); }
+
+  /* final cta */
+  .cc-final {
+    background:
+      radial-gradient(80% 120% at 50% 0%, rgba(26,212,189,.12), transparent 60%),
+      linear-gradient(180deg, var(--void), #050d0b);
+    color: var(--frost); text-align: center;
+  }
+  .cc-final .wrap { padding: 110px 28px; }
+  .cc-final h2 {
+    font-family: 'Newsreader', serif; font-weight: 500; font-size: clamp(32px, 5vw, 56px);
+    line-height: 1.05; letter-spacing: -1.4px; max-width: 18ch; margin: 0 auto;
+  }
+  .cc-final h2 em { font-style: italic; color: var(--ice); }
+  .cc-final .cc-cta-row { justify-content: center; margin-top: 36px; }
+  .cc-final .note {
+    margin-top: 26px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    letter-spacing: 1px; color: #5f7a74; text-transform: uppercase;
+  }
+
+  /* footer */
+  .cc-footer { background: #050d0b; color: #5f7a74; }
+  .cc-footer .wrap {
+    display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: center;
+    padding: 30px 28px; font-size: 13px;
+  }
+  .cc-footer .cc-logo { color: #9fb4ad; font-size: 15px; }
+  .cc-footer a { color: var(--ice); text-decoration: none; }
+
+  /* reveal animation */
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+    .reveal.in { opacity: 1; transform: none; }
+    .hero-anim { opacity: 0; transform: translateY(16px); animation: heroRise .9s cubic-bezier(.22,1,.36,1) forwards; }
+    .d1 { animation-delay: .05s; } .d2 { animation-delay: .18s; } .d3 { animation-delay: .32s; }
+    .d4 { animation-delay: .46s; } .d5 { animation-delay: .60s; }
+    @keyframes heroRise { to { opacity: 1; transform: none; } }
+  }
+
+  /* responsive */
+  @media (max-width: 880px) {
+    .cc-split, .cc-spot-grid { grid-template-columns: 1fr; gap: 36px; }
+    .cc-steps { grid-template-columns: 1fr; gap: 22px; }
+    .cc-trust-grid { grid-template-columns: 1fr 1fr; }
+    .cc-nav .links { display: none; }
+    .cc-hero { padding-top: 120px; }
+  }
+  @media (max-width: 520px) {
+    .cc-trust-grid { grid-template-columns: 1fr; }
+    .wrap { padding: 0 20px; }
+    .cc-nav { padding: 18px 20px; }
+    .cc-section { padding: 70px 0; }
+    .cc-band-label { font-size: 10px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="cc-nav">
+    <div class="cc-logo"><span class="spark">❄</span> COLDCHAIN<b>MED</b></div>
+    <a class="nav-cta" href="./app/">Open the demo</a>
+  </nav>
+
+  <!-- HERO -->
+  <header class="cc-hero">
+    <div class="wrap">
+      <div class="cc-eyebrow hero-anim d1"><span class="pulse"></span> B2B Medical Cold-Storage Storefront</div>
+      <h1 class="cc-h1 hero-anim d2">Cold storage,<br>specified <em>to the degree.</em></h1>
+      <p class="cc-sub hero-anim d3">
+        Pharmacies, vaccine clinics, labs, and blood banks don't shop by brand — they shop by the
+        temperature they have to hold, the compliance they have to meet, and the capacity they have room for.
+        ColdChainMed is built around those specs, and ends every search in a precise, SKU-tagged lead.
+      </p>
+      <div class="cc-cta-row hero-anim d4">
+        <a class="btn btn-primary" href="./app/">Open the live demo <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+
+      <!-- THE INSTRUMENT -->
+      <div class="cc-instrument hero-anim d5">
+        <div class="cc-inst-top">
+          <span>Storage temperature · target band</span>
+          <span class="reading"><span id="liveTemp">+14.0°C</span> · <span class="lock" id="lockState">SETTLING</span></span>
+        </div>
+        <div class="cc-scale">
+          <div class="cc-band"></div>
+          <div class="cc-band-label">SAFE · +2 → +8°C</div>
+          <div class="cc-readout" id="readout">+14°C</div>
+        </div>
+        <div class="cc-ticks">
+          <span>−30°C</span><span>−20°C</span><span>−10°C</span><span>0°C</span><span>+8°C</span><span>+15°C</span>
+        </div>
+      </div>
+
+      <div class="cc-scroll-cue hero-anim d5"><span class="ln"></span> Scroll — step inside the storefront</div>
+    </div>
+  </header>
+
+  <!-- COMPLIANCE STRIP -->
+  <div class="cc-strip">
+    <div class="wrap">
+      <span class="hot">Holds −30°C → +15°C</span>
+      <span class="sep">/</span><span>FDA</span>
+      <span class="sep">/</span><span>CDC-Vaccine</span>
+      <span class="sep">/</span><span>NSF</span>
+      <span class="sep">/</span><span>DIN-58345</span>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="cc-section cc-problem">
+    <div class="wrap">
+      <div class="cc-split">
+        <div class="reveal">
+          <div class="cc-kicker">The problem</div>
+          <h2 class="cc-h2">A catalog full of cabinets isn't a buying tool.</h2>
+          <p class="cc-lead">
+            Most distributor sites list refrigerators like office furniture — a brand, a price, a photo.
+            But a lab director with a <strong>+2°C to +8°C</strong> requirement and an <strong>NSF mandate</strong>
+            can't shop that way. They need to filter by the band they're obligated to hold, and confirm
+            compliance long before they ever ask about price.
+          </p>
+        </div>
+        <div class="cc-compare reveal">
+          <div class="cc-chip-row">
+            <span class="cc-state bad">Out of band</span>
+            <p>+11°C in a vaccine fridge — a reportable loss, and a buyer who never finds the right unit.</p>
+          </div>
+          <div class="cc-chip-row">
+            <span class="cc-state good">In band</span>
+            <p>Filter to +2→+8°C, CDC-Vaccine certified, 2.2 cu.ft. — three clicks to the exact match.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="cc-section" id="how">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="cc-kicker">How it works</div>
+        <h2 class="cc-h2">Three steps from requirement to qualified lead.</h2>
+      </div>
+      <div class="cc-steps">
+        <div class="cc-step reveal">
+          <div class="num">STEP 01</div>
+          <h3>Filter by what matters</h3>
+          <p>Temperature band, compliance marks, capacity, lock and monitoring — the same axes a buyer already has on their requisition. The grid updates instantly.</p>
+        </div>
+        <div class="cc-step reveal">
+          <div class="num">STEP 02</div>
+          <h3>Match the exact unit</h3>
+          <p>Spec-accurate detail pages: temperature range, refrigerant, dimensions, monitoring method — modeled on real cold-chain attributes, not marketing copy.</p>
+        </div>
+        <div class="cc-step reveal">
+          <div class="num">STEP 03</div>
+          <h3>Hand off a precise lead</h3>
+          <p>One request sends a structured, SKU-tagged inquiry to your specialist queue. Your team knows the facility, the unit, and the question before they reply.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE SPOTLIGHT: live band slider -->
+  <section class="cc-section cc-spot">
+    <div class="wrap">
+      <div class="cc-spot-grid">
+        <div class="reveal">
+          <div class="cc-kicker">The signature filter</div>
+          <h2 class="cc-h2">Shop by the band you have to hold.</h2>
+          <p class="cc-lead">
+            Drag the target temperature. The catalog keeps only the units that can hold
+            <strong>at or below</strong> it — the way a buyer with a storage obligation actually thinks.
+            No conversion, no guesswork.
+          </p>
+        </div>
+        <div class="cc-panel reveal">
+          <div class="plabel"><span>Max storage temperature</span><span class="val" id="sliderVal">+8°C</span></div>
+          <input class="cc-slider" id="bandSlider" type="range" min="-30" max="15" value="8" step="1" />
+          <div class="cc-slider-ticks"><span>−30°C</span><span>0°C</span><span>+15°C</span></div>
+          <div class="cc-result">
+            Showing <b id="unitCount">5</b> of 6 units that hold at or below <b id="unitTemp">+8°C</b>
+            <div class="cc-tags" id="unitTags"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="cc-trust">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="cc-kicker">Compliance, modeled as data</div>
+        <h2 class="cc-h2">Every certification is a filter, not a footnote.</h2>
+      </div>
+      <div class="cc-trust-grid">
+        <div class="cc-cred reveal"><div class="mk">FDA</div><p>Surfaced as a first-class facet, so regulated buyers narrow to qualifying units immediately.</p></div>
+        <div class="cc-cred reveal"><div class="mk">CDC-Vaccine</div><p>The distinct standard vaccine storage demands — separated from general refrigeration, never assumed.</p></div>
+        <div class="cc-cred reveal"><div class="mk">NSF</div><p>Sanitation certification carried as a tag on the unit, filterable alongside temperature and capacity.</p></div>
+        <div class="cc-cred reveal"><div class="mk">DIN-58345</div><p>Room for EU pharmacy-grade standards as the catalog expands beyond domestic brands.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cc-final">
+    <div class="wrap reveal">
+      <h2>See how your catalog could <em>work for the buyer.</em></h2>
+      <div class="cc-cta-row">
+        <a class="btn btn-primary" href="./app/">Open the live demo <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#how">Walk through the flow</a>
+      </div>
+      <p class="note">Early prototype · structure first, full design pass to follow</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="cc-footer">
+    <div class="wrap">
+      <div class="cc-logo"><span class="spark">❄</span> COLDCHAIN<b>MED</b></div>
+      <div>Medical cold-storage storefront · prototype</div>
+      <a href="./app/">Open the demo →</a>
+    </div>
+  </footer>
+
+<script>
+  // ---- hero readout: drift from warm into the safe band, then lock ----
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var readout = document.getElementById('readout');
+    var live = document.getElementById('liveTemp');
+    var lock = document.getElementById('lockState');
+    // safe-band center ~ +5C => position on -30..+15 scale = (5+30)/45 = 77.8%
+    var targetLeft = 77.8, startLeft = 14;
+    if (reduce) {
+      readout.style.left = targetLeft + '%';
+      readout.textContent = '+5°C';
+      live.textContent = '+5.0°C'; lock.textContent = 'HOLDING';
+      return;
+    }
+    readout.style.left = startLeft + '%';
+    // animate the displayed number from +14 down to +5 over ~2.1s
+    requestAnimationFrame(function () {
+      setTimeout(function () {
+        readout.style.left = targetLeft + '%';
+        var t0 = performance.now(), dur = 2100, from = 14, to = 5;
+        (function tick(now) {
+          var p = Math.min((now - t0) / dur, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          var v = (from + (to - from) * eased);
+          readout.textContent = '+' + v.toFixed(0) + '°C';
+          live.textContent = '+' + v.toFixed(1) + '°C';
+          if (p < 1) requestAnimationFrame(tick);
+          else { lock.textContent = 'HOLDING'; }
+        })(t0);
+      }, 650);
+    });
+  })();
+
+  // ---- feature slider: live filter count ----
+  (function () {
+    // mirrors the app's inventory (min temp each unit can hold)
+    var units = [
+      { sku: 'AR-115', min: 2 }, { sku: 'AR-500', min: 2 }, { sku: 'VX-220', min: 2 },
+      { sku: 'NB-UC', min: 2 }, { sku: 'NB-PH1', min: 1 }, { sku: 'BF-900', min: -30 }
+    ];
+    var slider = document.getElementById('bandSlider');
+    var val = document.getElementById('sliderVal');
+    var count = document.getElementById('unitCount');
+    var temp = document.getElementById('unitTemp');
+    var tags = document.getElementById('unitTags');
+    function fmt(n) { return (n > 0 ? '+' : '') + n + '°C'; }
+    function update() {
+      var t = parseInt(slider.value, 10);
+      val.textContent = fmt(t); temp.textContent = fmt(t);
+      var matched = units.filter(function (u) { return u.min <= t; });
+      count.textContent = matched.length;
+      tags.innerHTML = matched.map(function (u) { return '<span class="cc-tag">' + u.sku + '</span>'; }).join('');
+    }
+    slider.addEventListener('input', update);
+    update();
+  })();
+
+  // ---- scroll reveals ----
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.16 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
 </html>
