@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#151313">
+<title>RAT CITY</title>
+<!--
+  RAT CITY — Made in Brooklyn Games — prototype build
+  Meta Horizon Creator Competition: Game Prototype — Tower Defense & Strategy
+
+  This file is assembled by build.js from src/*.js and src/style.css.
+  Edit the sources, run `node build.js`, and this file is regenerated
+  unminified so it stays readable for judging. Do not hand-edit this file.
+-->
+<style>
+/* @@STYLE@@ */
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="390" height="844"></canvas>
+
+  <div id="hud-top" data-ui="1">
+    <div class="cell"><span class="lbl">night</span><span class="val"><span id="n-night">1</span><span class="sub">/10</span></span></div>
+    <div class="cell"><span class="lbl">truck</span><span class="val" id="n-truck">in 3</span></div>
+    <div class="cell infest"><span class="lbl" id="infest-label">infestation</span><div class="bar"><div id="infest-fill"></div></div><span id="infest-pct">0%</span></div>
+  </div>
+
+  <div id="graffiti" class="hidden"></div>
+  <div id="alert"></div>
+  <div id="teach"></div>
+
+  <div id="day-panel" data-ui="1" class="hidden">
+    <div id="unlock"></div>
+    <div id="preview"><div id="preview-rats"></div><div id="preview-text"></div></div>
+    <button id="btn-nightfall">NIGHTFALL</button>
+  </div>
+
+  <div id="hud-bottom" data-ui="1">
+    <div class="cell"><span class="lbl">bags</span><span class="val"><span id="n-bags">0</span><span class="sub" id="n-binned"></span></span></div>
+    <div class="cell"><span class="lbl">tokens</span><span class="val" id="n-tokens">0/0</span></div>
+    <div class="cell"><span class="lbl">banked</span><span class="val" id="n-score">0</span></div>
+    <button id="btn-pause" aria-label="pause">II</button>
+  </div>
+
+  <div id="radial" data-ui="1" class="hidden"></div>
+  <div id="ripples"></div>
+  <div id="flash"></div>
+  <div id="overlay" data-ui="1"></div>
+</div>
+
+<!-- @@THREE@@ -->
+<!-- @@SCRIPTS@@ -->
+</body>
+</html>

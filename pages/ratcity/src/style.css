@@ -1,0 +1,114 @@
+/* RAT CITY — src/style.css
+   Palette = the five GDD tokens + ink. Danger red is for danger only.
+   Display type is a scrawl (system handwriting fallbacks; a bundled face can
+   drop in later). HUD numbers use a plain sans so they read at a glance. */
+:root {
+  --bag-yellow: #F2C14E;
+  --rat-plum: #6B4E71;
+  --tower-teal: #2A9D8F;
+  --bone-white: #F4F1EA;
+  --danger-red: #E63946;
+  --ink: #151313;
+  --scrawl: 'Marker Felt', 'Bradley Hand', 'Chalkboard SE', 'Segoe Print', 'Comic Sans MS', cursive;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+html, body { margin: 0; height: 100%; background: var(--ink); overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+#stage { position: absolute; left: 50%; top: 50%; width: 390px; height: 844px; transform-origin: center; background: var(--bone-white); overflow: hidden; font-family: var(--sans); color: var(--ink); }
+#gl { position: absolute; inset: 0; width: 390px; height: 844px; display: block; }
+.hidden { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; -webkit-appearance: none; appearance: none; }
+
+/* ---- HUD bands ---- */
+#hud-top, #hud-bottom { position: absolute; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; box-sizing: border-box; background: rgba(244, 241, 234, 0.78); backdrop-filter: blur(2px); z-index: 5; }
+#hud-top { top: 0; height: 56px; border-bottom: 3px solid var(--ink); }
+#hud-bottom { bottom: 0; height: 84px; border-top: 3px solid var(--ink); background: var(--bone-white); }
+.cell { display: flex; flex-direction: column; line-height: 1; }
+.cell .lbl { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px; }
+.cell .val { font-size: 22px; font-weight: 800; }
+.cell .val .sub { font-size: 12px; font-weight: 600; opacity: 0.6; margin-left: 4px; }
+.cell.infest { align-items: flex-end; }
+.bar { width: 118px; height: 12px; border: 2px solid var(--ink); background: var(--bone-white); position: relative; }
+.bar > div { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--danger-red); transition: width 0.25s; }
+#infest-pct { font-size: 11px; font-weight: 700; margin-top: 3px; }
+#hud-top.marked #infest-label { color: var(--danger-red); animation: pulse 0.9s infinite alternate; }
+@keyframes pulse { from { opacity: 0.55; } to { opacity: 1; } }
+#btn-pause { width: 48px; height: 48px; border-radius: 50%; border: 3px solid var(--ink); background: var(--bone-white); font-weight: 900; font-size: 16px; letter-spacing: 2px; }
+
+/* ---- day panel: the greed decision, staring at you ---- */
+#day-panel { position: absolute; left: 0; right: 0; bottom: 84px; height: 108px; padding: 8px 12px 10px; box-sizing: border-box; background: rgba(244, 241, 234, 0.92); border-top: 3px solid var(--ink); z-index: 4; display: flex; flex-direction: column; justify-content: space-between; }
+#preview { display: flex; flex-direction: column; gap: 4px; min-height: 30px; }
+#preview-rats { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; min-height: 12px; transform-origin: left center; }
+#preview-rats.grow { animation: grow 0.35s cubic-bezier(.2,1.6,.4,1); }
+@keyframes grow { from { transform: scaleX(0.7); } to { transform: scaleX(1); } }
+.rat { width: 15px; height: 9px; background: var(--rat-plum); border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%; position: relative; }
+.rat::after { content: ''; position: absolute; right: -5px; top: 3px; width: 6px; height: 2px; background: var(--rat-plum); border-radius: 2px; }
+.rat.own { box-shadow: 0 0 0 2px var(--bag-yellow); }
+.rat.boss { width: 34px; height: 20px; background: #4A3350; border: 2px solid var(--ink); }
+.plus { font-size: 11px; font-weight: 800; margin-left: 4px; }
+#preview-text { font-size: 13px; }
+#preview-text b { font-weight: 800; } #preview-text b.red { color: var(--danger-red); }
+#unlock { position: absolute; right: 12px; top: -30px; font-family: var(--scrawl); font-size: 15px; color: var(--tower-teal); background: var(--bone-white); border: 2px solid var(--tower-teal); padding: 2px 8px; transform: rotate(-3deg); opacity: 0; }
+#unlock.pulse { opacity: 1; animation: unlockPulse 0.8s 4 alternate; }
+@keyframes unlockPulse { from { transform: rotate(-3deg) scale(1); } to { transform: rotate(-3deg) scale(1.12); } }
+#btn-nightfall { height: 52px; width: 100%; background: var(--ink); color: var(--bone-white); border: 0; font-family: var(--scrawl); font-size: 26px; letter-spacing: 0.06em; }
+#btn-nightfall:active { transform: scale(0.98); }
+
+/* ---- alerts, teach lines, graffiti ---- */
+#alert { position: absolute; top: 66px; left: 0; right: 0; text-align: center; font-family: var(--scrawl); font-size: 22px; pointer-events: none; opacity: 0; transform: rotate(-2deg) translateY(6px); transition: opacity 0.15s, transform 0.15s; z-index: 6; }
+#alert.show { opacity: 1; transform: rotate(-2deg) translateY(0); }
+#alert.theft { color: var(--danger-red); } #alert.good { color: var(--tower-teal); } #alert.boss { color: var(--rat-plum); font-size: 30px; }
+#alert.bank { color: var(--ink); } #alert.bank::after { content: ''; display: block; width: 120px; height: 4px; background: var(--bag-yellow); margin: 2px auto 0; }
+#alert.quiet { opacity: 0.6; font-size: 18px; }
+#teach { position: absolute; left: 50%; bottom: 210px; transform: translateX(-50%) rotate(-2deg); font-family: var(--scrawl); font-size: 20px; background: var(--ink); color: var(--bag-yellow); padding: 4px 12px; pointer-events: none; opacity: 0; z-index: 6; white-space: nowrap; transition: opacity 0.15s; }
+#teach.show { opacity: 1; }
+#teach.at { bottom: auto; transform: translateX(-50%) rotate(-4deg); font-size: 26px; }
+#graffiti { position: absolute; top: 58px; left: 16px; width: 300px; font-family: var(--scrawl); font-size: 15px; line-height: 1.05; color: var(--danger-red); transform: rotate(-4deg); pointer-events: none; z-index: 3; }
+#graffiti.slam { animation: slam 0.28s cubic-bezier(.2,1.5,.5,1) forwards; }
+@keyframes slam { from { transform: rotate(-4deg) scale(3.2); opacity: 0; } to { transform: rotate(-4deg) scale(1); opacity: 1; } }
+
+/* ---- radial slot menu (Kingdom Rush pattern) ---- */
+#radial { position: absolute; width: 0; height: 0; z-index: 7; }
+.rbtn { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 3px solid var(--ink); background: var(--bone-white); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0; animation: rpop 0.18s cubic-bezier(.2,1.6,.4,1) both; box-shadow: 0 3px 0 var(--ink); }
+.rbtn .rname { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+.rbtn .rcost { font-size: 11px; font-weight: 600; opacity: 0.75; }
+.rbtn.off { opacity: 0.5; border-style: dashed; box-shadow: none; }
+.rbtn.maxed { opacity: 0.6; }
+.rbtn.shake { animation: shake 0.3s; }
+@keyframes rpop { from { transform: scale(0.3); } to { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.rlabel { position: absolute; left: -60px; width: 120px; top: 34px; text-align: center; font-family: var(--scrawl); font-size: 15px; pointer-events: none; }
+
+/* ---- juice ---- */
+#ripples { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
+.ripple { position: absolute; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 3px solid var(--ink); opacity: 0.6; animation: ripple 0.4s ease-out forwards; }
+@keyframes ripple { to { transform: scale(1.9); opacity: 0; } }
+#flash { position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 9; transition: opacity 0.12s; }
+#flash.theft { background: var(--danger-red); opacity: 0.28; }
+#flash.storm { background: var(--ink); opacity: 0.93; transition: opacity 2.2s ease-in; }
+
+/* ---- cards ---- */
+#overlay { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; z-index: 20; background: rgba(21, 19, 19, 0.55); }
+#overlay.show { display: flex; }
+#overlay.title { background: var(--bone-white); }
+.card { width: 300px; background: var(--bone-white); border: 4px solid var(--ink); padding: 22px 22px 18px; box-sizing: border-box; transform: rotate(-1.5deg); box-shadow: 8px 8px 0 var(--ink); }
+.eyebrow { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.65; margin-bottom: 8px; }
+.card h1 { font-family: var(--scrawl); font-size: 92px; line-height: 0.82; margin: 6px 0 14px; letter-spacing: -0.02em; }
+.card h2 { font-family: var(--scrawl); font-size: 40px; line-height: 1; margin: 0 0 14px; }
+.card .tag { font-size: 16px; line-height: 1.3; margin: 0 0 26px; }
+.card .cta { font-family: var(--scrawl); font-size: 24px; margin: 0; color: var(--tower-teal); animation: pulse 1s infinite alternate; }
+.big { display: block; width: 100%; height: 60px; margin: 8px 0 0; background: var(--ink); color: var(--bone-white); border: 3px solid var(--ink); font-family: var(--scrawl); font-size: 26px; }
+.big.ghost { background: transparent; color: var(--ink); }
+.score-big { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 10px; }
+.score-big .num { font-size: 64px; font-weight: 900; line-height: 1; }
+.score-big .lbl { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
+.score-row { display: flex; justify-content: space-between; font-size: 15px; padding: 5px 0; border-top: 2px solid var(--ink); }
+.score-row.small { font-size: 12px; opacity: 0.8; border-top-width: 1px; }
+.mono { font-variant-numeric: tabular-nums; font-weight: 800; }
+.tokens-line { font-family: var(--scrawl); font-size: 14px; margin: 2px 0 8px; opacity: 0.8; }
+#overlay.win .card { border-color: var(--tower-teal); box-shadow: 8px 8px 0 var(--tower-teal); }
+#overlay.loss .card { border-color: var(--danger-red); box-shadow: 8px 8px 0 var(--danger-red); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* ---- diagnostics ---- */
+#err { position: absolute; top: 56px; left: 0; right: 0; z-index: 30; background: var(--danger-red); color: var(--bone-white); font: 11px/1.3 ui-monospace, Menlo, monospace; padding: 4px 8px; white-space: pre-wrap; }
+#dbg { position: absolute; left: 6px; bottom: 196px; z-index: 30; background: rgba(21,19,19,0.8); color: var(--bone-white); font: 10px/1.2 ui-monospace, Menlo, monospace; padding: 3px 6px; pointer-events: none; }

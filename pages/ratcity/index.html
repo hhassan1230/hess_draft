@@ -1,0 +1,2386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#151313">
+<title>RAT CITY</title>
+<!--
+  RAT CITY — Made in Brooklyn Games — prototype build
+  Meta Horizon Creator Competition: Game Prototype — Tower Defense & Strategy
+
+  This file is assembled by build.js from src/*.js and src/style.css.
+  Edit the sources, run `node build.js`, and this file is regenerated
+  unminified so it stays readable for judging. Do not hand-edit this file.
+-->
+<style>
+/* RAT CITY — src/style.css
+   Palette = the five GDD tokens + ink. Danger red is for danger only.
+   Display type is a scrawl (system handwriting fallbacks; a bundled face can
+   drop in later). HUD numbers use a plain sans so they read at a glance. */
+:root {
+  --bag-yellow: #F2C14E;
+  --rat-plum: #6B4E71;
+  --tower-teal: #2A9D8F;
+  --bone-white: #F4F1EA;
+  --danger-red: #E63946;
+  --ink: #151313;
+  --scrawl: 'Marker Felt', 'Bradley Hand', 'Chalkboard SE', 'Segoe Print', 'Comic Sans MS', cursive;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+html, body { margin: 0; height: 100%; background: var(--ink); overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+#stage { position: absolute; left: 50%; top: 50%; width: 390px; height: 844px; transform-origin: center; background: var(--bone-white); overflow: hidden; font-family: var(--sans); color: var(--ink); }
+#gl { position: absolute; inset: 0; width: 390px; height: 844px; display: block; }
+.hidden { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; -webkit-appearance: none; appearance: none; }
+
+/* ---- HUD bands ---- */
+#hud-top, #hud-bottom { position: absolute; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; box-sizing: border-box; background: rgba(244, 241, 234, 0.78); backdrop-filter: blur(2px); z-index: 5; }
+#hud-top { top: 0; height: 56px; border-bottom: 3px solid var(--ink); }
+#hud-bottom { bottom: 0; height: 84px; border-top: 3px solid var(--ink); background: var(--bone-white); }
+.cell { display: flex; flex-direction: column; line-height: 1; }
+.cell .lbl { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 4px; }
+.cell .val { font-size: 22px; font-weight: 800; }
+.cell .val .sub { font-size: 12px; font-weight: 600; opacity: 0.6; margin-left: 4px; }
+.cell.infest { align-items: flex-end; }
+.bar { width: 118px; height: 12px; border: 2px solid var(--ink); background: var(--bone-white); position: relative; }
+.bar > div { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--danger-red); transition: width 0.25s; }
+#infest-pct { font-size: 11px; font-weight: 700; margin-top: 3px; }
+#hud-top.marked #infest-label { color: var(--danger-red); animation: pulse 0.9s infinite alternate; }
+@keyframes pulse { from { opacity: 0.55; } to { opacity: 1; } }
+#btn-pause { width: 48px; height: 48px; border-radius: 50%; border: 3px solid var(--ink); background: var(--bone-white); font-weight: 900; font-size: 16px; letter-spacing: 2px; }
+
+/* ---- day panel: the greed decision, staring at you ---- */
+#day-panel { position: absolute; left: 0; right: 0; bottom: 84px; height: 108px; padding: 8px 12px 10px; box-sizing: border-box; background: rgba(244, 241, 234, 0.92); border-top: 3px solid var(--ink); z-index: 4; display: flex; flex-direction: column; justify-content: space-between; }
+#preview { display: flex; flex-direction: column; gap: 4px; min-height: 30px; }
+#preview-rats { display: flex; flex-wrap: wrap; align-items: center; gap: 3px; min-height: 12px; transform-origin: left center; }
+#preview-rats.grow { animation: grow 0.35s cubic-bezier(.2,1.6,.4,1); }
+@keyframes grow { from { transform: scaleX(0.7); } to { transform: scaleX(1); } }
+.rat { width: 15px; height: 9px; background: var(--rat-plum); border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%; position: relative; }
+.rat::after { content: ''; position: absolute; right: -5px; top: 3px; width: 6px; height: 2px; background: var(--rat-plum); border-radius: 2px; }
+.rat.own { box-shadow: 0 0 0 2px var(--bag-yellow); }
+.rat.boss { width: 34px; height: 20px; background: #4A3350; border: 2px solid var(--ink); }
+.plus { font-size: 11px; font-weight: 800; margin-left: 4px; }
+#preview-text { font-size: 13px; }
+#preview-text b { font-weight: 800; } #preview-text b.red { color: var(--danger-red); }
+#unlock { position: absolute; right: 12px; top: -30px; font-family: var(--scrawl); font-size: 15px; color: var(--tower-teal); background: var(--bone-white); border: 2px solid var(--tower-teal); padding: 2px 8px; transform: rotate(-3deg); opacity: 0; }
+#unlock.pulse { opacity: 1; animation: unlockPulse 0.8s 4 alternate; }
+@keyframes unlockPulse { from { transform: rotate(-3deg) scale(1); } to { transform: rotate(-3deg) scale(1.12); } }
+#btn-nightfall { height: 52px; width: 100%; background: var(--ink); color: var(--bone-white); border: 0; font-family: var(--scrawl); font-size: 26px; letter-spacing: 0.06em; }
+#btn-nightfall:active { transform: scale(0.98); }
+
+/* ---- alerts, teach lines, graffiti ---- */
+#alert { position: absolute; top: 66px; left: 0; right: 0; text-align: center; font-family: var(--scrawl); font-size: 22px; pointer-events: none; opacity: 0; transform: rotate(-2deg) translateY(6px); transition: opacity 0.15s, transform 0.15s; z-index: 6; }
+#alert.show { opacity: 1; transform: rotate(-2deg) translateY(0); }
+#alert.theft { color: var(--danger-red); } #alert.good { color: var(--tower-teal); } #alert.boss { color: var(--rat-plum); font-size: 30px; }
+#alert.bank { color: var(--ink); } #alert.bank::after { content: ''; display: block; width: 120px; height: 4px; background: var(--bag-yellow); margin: 2px auto 0; }
+#alert.quiet { opacity: 0.6; font-size: 18px; }
+#teach { position: absolute; left: 50%; bottom: 210px; transform: translateX(-50%) rotate(-2deg); font-family: var(--scrawl); font-size: 20px; background: var(--ink); color: var(--bag-yellow); padding: 4px 12px; pointer-events: none; opacity: 0; z-index: 6; white-space: nowrap; transition: opacity 0.15s; }
+#teach.show { opacity: 1; }
+#teach.at { bottom: auto; transform: translateX(-50%) rotate(-4deg); font-size: 26px; }
+#graffiti { position: absolute; top: 58px; left: 16px; width: 300px; font-family: var(--scrawl); font-size: 15px; line-height: 1.05; color: var(--danger-red); transform: rotate(-4deg); pointer-events: none; z-index: 3; }
+#graffiti.slam { animation: slam 0.28s cubic-bezier(.2,1.5,.5,1) forwards; }
+@keyframes slam { from { transform: rotate(-4deg) scale(3.2); opacity: 0; } to { transform: rotate(-4deg) scale(1); opacity: 1; } }
+
+/* ---- radial slot menu (Kingdom Rush pattern) ---- */
+#radial { position: absolute; width: 0; height: 0; z-index: 7; }
+.rbtn { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; border: 3px solid var(--ink); background: var(--bone-white); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0; animation: rpop 0.18s cubic-bezier(.2,1.6,.4,1) both; box-shadow: 0 3px 0 var(--ink); }
+.rbtn .rname { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+.rbtn .rcost { font-size: 11px; font-weight: 600; opacity: 0.75; }
+.rbtn.off { opacity: 0.5; border-style: dashed; box-shadow: none; }
+.rbtn.maxed { opacity: 0.6; }
+.rbtn.shake { animation: shake 0.3s; }
+@keyframes rpop { from { transform: scale(0.3); } to { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.rlabel { position: absolute; left: -60px; width: 120px; top: 34px; text-align: center; font-family: var(--scrawl); font-size: 15px; pointer-events: none; }
+
+/* ---- juice ---- */
+#ripples { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
+.ripple { position: absolute; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 3px solid var(--ink); opacity: 0.6; animation: ripple 0.4s ease-out forwards; }
+@keyframes ripple { to { transform: scale(1.9); opacity: 0; } }
+#flash { position: absolute; inset: 0; pointer-events: none; opacity: 0; z-index: 9; transition: opacity 0.12s; }
+#flash.theft { background: var(--danger-red); opacity: 0.28; }
+#flash.storm { background: var(--ink); opacity: 0.93; transition: opacity 2.2s ease-in; }
+
+/* ---- cards ---- */
+#overlay { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; z-index: 20; background: rgba(21, 19, 19, 0.55); }
+#overlay.show { display: flex; }
+#overlay.title { background: var(--bone-white); }
+.card { width: 300px; background: var(--bone-white); border: 4px solid var(--ink); padding: 22px 22px 18px; box-sizing: border-box; transform: rotate(-1.5deg); box-shadow: 8px 8px 0 var(--ink); }
+.eyebrow { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.65; margin-bottom: 8px; }
+.card h1 { font-family: var(--scrawl); font-size: 92px; line-height: 0.82; margin: 6px 0 14px; letter-spacing: -0.02em; }
+.card h2 { font-family: var(--scrawl); font-size: 40px; line-height: 1; margin: 0 0 14px; }
+.card .tag { font-size: 16px; line-height: 1.3; margin: 0 0 26px; }
+.card .cta { font-family: var(--scrawl); font-size: 24px; margin: 0; color: var(--tower-teal); animation: pulse 1s infinite alternate; }
+.big { display: block; width: 100%; height: 60px; margin: 8px 0 0; background: var(--ink); color: var(--bone-white); border: 3px solid var(--ink); font-family: var(--scrawl); font-size: 26px; }
+.big.ghost { background: transparent; color: var(--ink); }
+.score-big { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 10px; }
+.score-big .num { font-size: 64px; font-weight: 900; line-height: 1; }
+.score-big .lbl { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
+.score-row { display: flex; justify-content: space-between; font-size: 15px; padding: 5px 0; border-top: 2px solid var(--ink); }
+.score-row.small { font-size: 12px; opacity: 0.8; border-top-width: 1px; }
+.mono { font-variant-numeric: tabular-nums; font-weight: 800; }
+.tokens-line { font-family: var(--scrawl); font-size: 14px; margin: 2px 0 8px; opacity: 0.8; }
+#overlay.win .card { border-color: var(--tower-teal); box-shadow: 8px 8px 0 var(--tower-teal); }
+#overlay.loss .card { border-color: var(--danger-red); box-shadow: 8px 8px 0 var(--danger-red); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* ---- diagnostics ---- */
+#err { position: absolute; top: 56px; left: 0; right: 0; z-index: 30; background: var(--danger-red); color: var(--bone-white); font: 11px/1.3 ui-monospace, Menlo, monospace; padding: 4px 8px; white-space: pre-wrap; }
+#dbg { position: absolute; left: 6px; bottom: 196px; z-index: 30; background: rgba(21,19,19,0.8); color: var(--bone-white); font: 10px/1.2 ui-monospace, Menlo, monospace; padding: 3px 6px; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" width="390" height="844"></canvas>
+
+  <div id="hud-top" data-ui="1">
+    <div class="cell"><span class="lbl">night</span><span class="val"><span id="n-night">1</span><span class="sub">/10</span></span></div>
+    <div class="cell"><span class="lbl">truck</span><span class="val" id="n-truck">in 3</span></div>
+    <div class="cell infest"><span class="lbl" id="infest-label">infestation</span><div class="bar"><div id="infest-fill"></div></div><span id="infest-pct">0%</span></div>
+  </div>
+
+  <div id="graffiti" class="hidden"></div>
+  <div id="alert"></div>
+  <div id="teach"></div>
+
+  <div id="day-panel" data-ui="1" class="hidden">
+    <div id="unlock"></div>
+    <div id="preview"><div id="preview-rats"></div><div id="preview-text"></div></div>
+    <button id="btn-nightfall">NIGHTFALL</button>
+  </div>
+
+  <div id="hud-bottom" data-ui="1">
+    <div class="cell"><span class="lbl">bags</span><span class="val"><span id="n-bags">0</span><span class="sub" id="n-binned"></span></span></div>
+    <div class="cell"><span class="lbl">tokens</span><span class="val" id="n-tokens">0/0</span></div>
+    <div class="cell"><span class="lbl">banked</span><span class="val" id="n-score">0</span></div>
+    <button id="btn-pause" aria-label="pause">II</button>
+  </div>
+
+  <div id="radial" data-ui="1" class="hidden"></div>
+  <div id="ripples"></div>
+  <div id="flash"></div>
+  <div id="overlay" data-ui="1"></div>
+</div>
+
+<!-- PROTOTYPE ONLY: competition build must use vendor/three.min.js (run: node build.js --vendor) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ======================= src/config.js ======================= */
+/* ============================================================================
+   RAT CITY — src/config.js
+   Every tunable number in the game lives here. The sim reads from CONFIG and
+   nothing else, so balance passes never touch logic. Numbers come from the GDD
+   v1.0 (Aug 29, 2026); anything marked TEMP is a prototype guess awaiting
+   playtest and is not a locked design decision.
+   ========================================================================== */
+
+const CONFIG = {
+  VIEW: { W: 390, H: 844 }, // design viewport, logical px, fixed portrait
+
+  // World units: x = left/right on screen, z = far (top of screen, negative)
+  // to near (bottom of screen, positive). y = up.
+  BOARD: {
+    halfW: 4.0,     // visible half-width of the board
+    edge: 4.35,     // |x| at which a dragged bag counts as escaped
+    spawnZ: -9.0,   // sewer line at the top of the screen
+    gutterZ: 3.55,  // tokens roll here and stop
+    curbZ: 3.2,     // black curb line
+  },
+
+  // Three fixed bag piles across the curb (GDD §3)
+  // where dawn bags wait until the player places them (bait placement — fun pass #1)
+  HAND: { x: 0, z: 4.15 },
+  PILE_CAP: 6,                 // a curb pile only stacks so high — wealth past this must spread or be binned
+  RECOVER: { radius: 0.95 },   // tap a dragging rat to make it drop the bag (fun pass #3; boss excluded)
+
+  PILES: [
+    { id: 'stoop',   label: 'stoop',   x: -2.55, z: 2.35 },
+    { id: 'center',  label: 'curb',    x:  0.0,  z: 2.65 },
+    { id: 'hydrant', label: 'hydrant', x:  2.55, z: 2.35 },
+  ],
+
+  // Four fixed build slots, mirrored spacing (GDD §4)
+  SLOTS: [
+    { id: 'stoopRail',   label: 'stoop rail',  x: -2.95, z:  0.35 },
+    { id: 'hydrant',     label: 'hydrant',     x:  2.95, z:  0.35 },
+    { id: 'lamppost',    label: 'lamppost',    x: -1.65, z: -3.3  },
+    { id: 'scaffolding', label: 'scaffolding', x:  1.65, z: -3.3  },
+  ],
+
+  // Rat entries. `from` = first night this entry is open (GDD §5)
+  SPAWNS: [
+    { id: 'leftGrate',  x: -3.0, z: -9.0, from: 1 },
+    { id: 'rightAlley', x:  3.1, z: -9.3, from: 1 },
+    { id: 'manhole',    x:  0.0, z: -7.9, from: 6 }, // rattles during night 5
+  ],
+
+  ECON: {
+    startBags: 4,
+    dawnBags: 3,
+    sellRate: 0.5,     // rounded down
+    centerBias: 0.45,  // TEMP — playtest question #1
+  },
+
+  TOWERS: {
+    cat:  { cost: 2, l2: 4, radius: 2.2, l2Radius: 3.3, dmg: 1, period: 0.8 },
+    trap: { cost: 1, l2: 2, radius: 0.8, dmg: 2, cooldown: 8, l2Cooldown: 4, rearmCost: 1 },
+    bin:  { cost: 3, l2: 4, cap: 4, l2Cap: 7 },
+  },
+  UNLOCKS: { cat: 1, trap: 2, bin: 4 },
+  CAT_NAMES: ['Mango', 'Cheeto', 'Biscuit', 'Ash'],
+
+  RATS: {
+    scout: { hp: 1,  speed: 2.5,  carry: 1, grabTime: 0.55, target: 'nearest', size: 1.0 },
+    fat:   { hp: 3,  speed: 1.35, carry: 2, grabTime: 1.0,  target: 'richest', size: 1.5, tokenOnHit: 0.3 },
+    boss:  { hp: 60, speed: 0.8,  carry: 3, grabTime: 2.0,  target: 'richest', size: 2.6,
+             enrageAt: 0.5, enrageSpeed: 1.6, tokenPerHp: 10, returnDelay: 4,
+             stalk: 12, stalkAgain: 6 }, // beat 1: stalks the pile before grabbing (TEMP durations)
+  },
+  DRAG_FACTOR: 0.4,   // dragging speed as a fraction of walk speed
+  FLEE_FACTOR: 1.3,
+
+  // Night-by-night curve (GDD §7). Index = night number.
+  // `fat` is how many of `base` are fat rats (TEMP composition — playtest).
+  NIGHTS: [
+    null,
+    { len: 20, base: 3,  fat: 0, beat: 'near-miss' },
+    { len: 22, base: 4,  fat: 0 },
+    { len: 26, base: 5,  fat: 1 },
+    { len: 30, base: 6,  fat: 1 },
+    { len: 34, base: 7,  fat: 2, rattle: true },
+    { len: 38, base: 9,  fat: 2 },
+    { len: 42, base: 11, fat: 3 },
+    { len: 50, base: 13, fat: 4 },
+    { len: 35, base: 4,  fat: 1, quiet: true },
+    { len: 90, base: 0,  fat: 0, boss: true },
+  ],
+  TRUCK_NIGHTS: [3, 6, 9],
+
+  INFEST: { perBag: 12, marked: 50, storm: 100, markedMult: 1.25 },
+
+  TOKENS: {
+    onBagHit: 0.3, onDeath: 0.15, cap: 10, life: 4.0,
+    tapRadius: 0.85, bossBurst: 12,
+    scale: [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26], // pentatonic semitone ladder
+  },
+
+  TIMING: {
+    silence: 3.0,      // seconds of near-silence after NIGHTFALL before rats
+    spawnWindow: 0.62,  // spawns land in the first 70% of the night
+    pulseSize: 3,
+    pulseGap: 0.28,    // seconds between rats inside a pulse
+    resolveCap: 20,    // seconds past nightLen before the night is forced to end
+    quietBeat: 1.3,    // held beat after wave clear
+    truckDur: 3.8,
+    bagsLand: 0.8,
+    stormDur: 2.6,
+  },
+  BOSS_PULSES: { first: 9, every: 15, scouts: 3, extraAt: 5 },
+  VICTORY_BONUS: 20,
+  TAP: { slot: 0.95, pile: 0.95 },
+  SIM_HZ: 60,
+};
+
+// Five design tokens (GDD §9). Danger red is for danger only.
+const PALETTE = {
+  bagYellow: '#F2C14E',
+  ratPlum: '#6B4E71',
+  ratPlumDeep: '#4A3350',
+  towerTeal: '#2A9D8F',
+  towerTealL2: '#3FC4B3',
+  boneWhite: '#F4F1EA',
+  boneShade: '#E4DFD3',
+  dangerRed: '#E63946',
+  ink: '#151313',
+};
+
+// Voice (GDD §11). LOCKED lines are verbatim from the GDD.
+// TEMP lines are placeholders so the build speaks; replace before submit.
+const COPY = {
+  title: 'The rats want what you want: more.',                        // LOCKED
+  tokens: 'Exact fare for a train that no longer runs.',               // LOCKED
+  marked: "the first bag was enough. it's never enough now.",          // LOCKED
+  theft: (name) => `They got past ${name}.`,                            // LOCKED format
+  teachTrash: 'more trash, more rats.',                                 // LOCKED
+  teachTap: 'TAP.',                                                     // LOCKED
+  teachCat: 'place a cat first.',                                       // TEMP (night-1 nudge, shown once)
+  teachPlace: 'your trash. tap a pile.',                                // TEMP (bait placement, day 1)
+  teachDropFirst: 'drop your trash first.',                             // TEMP (nightfall pressed with bags in hand)
+  recovered: 'dropped it.',                                             // TEMP (tap-recovered a dragged bag)
+  binNote: 'bins are safe. trucks don\'t look inside.',                 // TEMP (first stash, once)
+  pileFull: 'pile\'s full.',                                            // TEMP (placement refused, once per run)
+  binLeft: 'left in the bin. safe. worthless.',                         // TEMP (score card, if bags died binned)
+  theftNoCat: 'nobody home.',                                           // TEMP
+  nearMiss: (name) => `${name}. at the edge.`,                          // TEMP
+  nightfall: 'NIGHTFALL',
+  storm: 'RAT STORM',
+  victory: 'you kept it.',                                              // TEMP
+  loss: 'they took the block.',                                         // TEMP
+  restart: 'again',
+  truck: 'DSNY',
+};
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { CONFIG, PALETTE, COPY };
+}
+</script>
+
+<script>
+/* ======================= src/sim.js ======================= */
+/* ============================================================================
+   RAT CITY — src/sim.js
+   The game, with no pictures. Pure state + fixed-timestep update. Emits events
+   into g.events; the render/audio/ui layers drain them every frame. Nothing in
+   here touches the DOM or THREE, which is why it can run headless in node.
+   ========================================================================== */
+
+const Sim = (() => {
+  const C = (typeof CONFIG !== 'undefined') ? CONFIG : require('./config.js').CONFIG;
+
+  const dist = (ax, az, bx, bz) => Math.hypot(ax - bx, az - bz);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const emit = (g, type, data) => { const ev = Object.assign({}, data || {}); ev.type = type; g.events.push(ev); };
+
+  // ---------------------------------------------------------------- state ---
+  function fresh(rng) {
+    return {
+      rng,
+      phase: 'title',          // title | day | night | dawn | storm | over
+      night: 0,                // the upcoming (day) or current (night) night
+      t: 0, nightLen: 0,
+      dawn: null,
+      piles: C.PILES.map((p, i) => ({ idx: i, id: p.id, label: p.label, x: p.x, z: p.z, bags: 0 })),
+      slots: C.SLOTS.map(s => ({ id: s.id, label: s.label, x: s.x, z: s.z, tower: null })),
+      rats: [], tokens: [], flying: [], queue: [], events: [],
+      hand: 0,
+      infestation: 0, marked: false,
+      score: 0,
+      tokensGrabbed: 0, tokensTotal: 0, tokensNight: 0, grabsNight: 0, firstTokenSeen: false,
+      unlocked: { cat: false, trap: false, bin: false },
+      catNameIdx: 0,
+      lostTotal: 0, lostNight: 0,
+      script: { nearMissDone: false },
+      boss: null,
+      stormT: 0,
+      result: null,
+      stats: { kills: 0, thefts: 0, escapes: 0, banked: [], nightsSurvived: 0 },
+      ids: 1,
+    };
+  }
+
+  function createGame(rng) { return fresh(rng || Math.random); }
+
+  function startRun(g) {
+    Object.assign(g, fresh(g.rng));
+    g.phase = 'day';
+    g.night = 1;
+    checkUnlocks(g);
+    landBags(g, C.ECON.startBags, 0.22);
+    emit(g, 'run');
+    emit(g, 'day', { night: 1 });
+  }
+
+  // -------------------------------------------------------------- queries ---
+  const spendable = g => g.piles.reduce((s, p) => s + p.bags, 0) + g.hand;
+  const carried = g => g.rats.reduce((s, r) => s + (r.carry || 0), 0);
+  const liquidBags = g => spendable(g) + carried(g) + g.flying.length;
+  const handCount = g => g.hand;
+  const binned = g => g.slots.reduce((s, sl) => s + (sl.tower && sl.tower.type === 'bin' ? sl.tower.bags : 0), 0);
+  const canAfford = (g, n) => spendable(g) >= n;
+  const nightCfg = g => C.NIGHTS[g.night];
+
+  function waveSize(g, night) {
+    const cfg = C.NIGHTS[night || g.night];
+    if (!cfg) return 0;
+    let n = cfg.base + Math.floor(liquidBags(g) / 2);
+    if (g.marked) n = Math.ceil(n * C.INFEST.markedMult);
+    return n;
+  }
+
+  function nextTruckIn(g) {
+    const t = C.TRUCK_NIGHTS.find(n => n >= g.night);
+    return t ? t - g.night + 1 : 0;
+  }
+
+  function preview(g) {
+    const cfg = nightCfg(g) || {};
+    const extra = Math.floor(liquidBags(g) / 2);
+    return {
+      night: g.night, len: cfg.len || 0, base: cfg.base || 0, extra,
+      size: waveSize(g), boss: !!cfg.boss, quiet: !!cfg.quiet, marked: g.marked,
+      truckIn: nextTruckIn(g), truckAfterThis: C.TRUCK_NIGHTS.includes(g.night),
+      liquid: liquidBags(g), binnedBags: binned(g),
+    };
+  }
+
+  function nearestCat(g, x, z) {
+    let best = null, bd = Infinity;
+    for (const s of g.slots) {
+      if (!s.tower || s.tower.type !== 'cat') continue;
+      const d = dist(s.x, s.z, x, z);
+      if (d < bd) { bd = d; best = s; }
+    }
+    return best;
+  }
+
+  function nearestPileIdx(g, x, z) {
+    let bi = 0, bd = Infinity;
+    g.piles.forEach((p, i) => { const d = dist(p.x, p.z, x, z); if (d < bd) { bd = d; bi = i; } });
+    return bi;
+  }
+
+  // ----------------------------------------------------------------- bags ---
+  function pickPile(g) {
+    if (g.rng() < C.ECON.centerBias) return 1;
+    return Math.floor(g.rng() * g.piles.length);
+  }
+
+  function landBags(g, n, stagger) {
+    // dawn bags land at the curb edge, in the player's hands. Placing them is the day's first verb.
+    for (let i = 0; i < n; i++) {
+      g.flying.push({
+        id: g.ids++, kind: 'drop', to: 'hand',
+        x0: C.HAND.x + (g.rng() - 0.5) * 0.9, z0: C.HAND.z + (g.rng() - 0.5) * 0.2, y0: 5.5,
+        tx: C.HAND.x + (i - (n - 1) / 2) * 0.42, tz: C.HAND.z,
+        t: -(stagger || 0) * i, dur: C.TIMING.bagsLand,
+      });
+    }
+  }
+
+  // the player drops one bag from the hand onto a pile — the bait verb (fun pass #1)
+  function pickPileCapped(g) {
+    const open = g.piles.filter(p => pilePlanned(g, p.idx) < C.PILE_CAP);
+    if (!open.length) { let least = g.piles[0]; for (const p of g.piles) if (pilePlanned(g, p.idx) < pilePlanned(g, least.idx)) least = p; return least.idx; }
+    return open[Math.floor(g.rng() * open.length)].idx;
+  }
+
+  function placeBag(g, pileIdx) {
+    if (g.phase !== 'day' || g.hand <= 0) return false;
+    if (pilePlanned(g, pileIdx) >= C.PILE_CAP) { emit(g, 'pileFull', { pile: pileIdx }); return false; }
+    g.hand--;
+    const p = g.piles[pileIdx];
+    g.flying.push({
+      id: g.ids++, kind: 'place', to: 'pile', pile: pileIdx,
+      x0: C.HAND.x, z0: C.HAND.z, y0: 0,
+      t: 0, dur: 0.38 + dist(C.HAND.x, C.HAND.z, p.x, p.z) * 0.045,
+    });
+    emit(g, 'placeBag', { pile: pileIdx, x: p.x, z: p.z, left: g.hand });
+    return true;
+  }
+
+  function returnBag(g, x, z, pileIdx) {
+    const p = g.piles[pileIdx];
+    g.flying.push({ id: g.ids++, kind: 'return', to: 'pile', pile: pileIdx, x0: x, z0: z, y0: 0, t: 0, dur: 0.55 + dist(x, z, p.x, p.z) * 0.06 });
+  }
+
+  function spend(g, n) {
+    if (!canAfford(g, n)) return false;
+    for (let i = 0; i < n; i++) {
+      if (g.hand > 0) { g.hand--; emit(g, 'spend', { from: 'hand', x: C.HAND.x, z: C.HAND.z }); continue; }
+      let best = null;
+      for (const p of g.piles) if (p.bags > 0 && (!best || p.bags > best.bags)) best = p;
+      best.bags--;
+      emit(g, 'spend', { from: 'pile', pile: best.idx, x: best.x, z: best.z });
+    }
+    return true;
+  }
+
+  function refund(g, n, x, z) {
+    for (let i = 0; i < n; i++) {
+      g.flying.push({ id: g.ids++, kind: 'return', to: 'hand', x0: x, z0: z, y0: 0.2, t: i * 0.08, dur: 0.5 });
+    }
+  }
+
+
+  function updateFlying(g, dt) {
+    for (let i = g.flying.length - 1; i >= 0; i--) {
+      const f = g.flying[i];
+      f.t += dt;
+      if (f.t >= f.dur) {
+        if (f.to === 'hand') { g.hand++; emit(g, 'bagLand', { to: 'hand', kind: f.kind, x: C.HAND.x, z: C.HAND.z }); }
+        else { g.piles[f.pile].bags++; emit(g, 'bagLand', { to: 'pile', pile: f.pile, kind: f.kind, x: g.piles[f.pile].x, z: g.piles[f.pile].z }); }
+        g.flying.splice(i, 1);
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------- towers ---
+  function makeTower(g, type, slot) {
+    const T = C.TOWERS[type];
+    const t = { type, level: 1, spent: T.cost };
+    if (type === 'cat') {
+      t.name = C.CAT_NAMES[g.catNameIdx++ % C.CAT_NAMES.length];
+      t.radius = T.radius; t.timer = 0; t.face = 0; t.lunge = null;
+    } else if (type === 'trap') {
+      t.armed = true; t.cooldown = 0; t.cd = T.cooldown;
+    } else if (type === 'bin') {
+      t.bags = 0; t.cap = T.cap; t.pile = nearestPileIdx(g, slot.x, slot.z);
+    }
+    return t;
+  }
+
+  function place(g, slotId, type) {
+    if (g.phase !== 'day') return false;
+    const slot = g.slots.find(s => s.id === slotId);
+    if (!slot || slot.tower || !g.unlocked[type]) return false;
+    const T = C.TOWERS[type];
+    if (!spend(g, T.cost)) return false;
+    slot.tower = makeTower(g, type, slot);
+    emit(g, 'place', { slotId, tower: type, name: slot.tower.name || null, x: slot.x, z: slot.z });
+    return true;
+  }
+
+  function upgrade(g, slotId) {
+    if (g.phase !== 'day') return false;
+    const slot = g.slots.find(s => s.id === slotId);
+    const t = slot && slot.tower;
+    if (!t || t.level !== 1) return false;
+    const T = C.TOWERS[t.type];
+    if (!spend(g, T.l2)) return false;
+    t.level = 2; t.spent += T.l2;
+    if (t.type === 'cat') t.radius = T.l2Radius;
+    if (t.type === 'trap') t.cd = T.l2Cooldown;
+    if (t.type === 'bin') t.cap = T.l2Cap;
+    emit(g, 'upgrade', { slotId, tower: t.type, x: slot.x, z: slot.z });
+    return true;
+  }
+
+  function sell(g, slotId) {
+    if (g.phase !== 'day') return false;
+    const slot = g.slots.find(s => s.id === slotId);
+    const t = slot && slot.tower;
+    if (!t) return false;
+    const back = Math.floor(t.spent * C.ECON.sellRate);
+    if (t.type === 'bin') for (let i = 0; i < t.bags; i++) returnBag(g, slot.x, slot.z, t.pile);
+    refund(g, back, slot.x, slot.z);
+    slot.tower = null;
+    emit(g, 'sell', { slotId, tower: t.type, refund: back, x: slot.x, z: slot.z });
+    return true;
+  }
+
+  function stash(g, pileIdx) {
+    if (g.phase !== 'day') return false;
+    const p = g.piles[pileIdx];
+    if (!p || p.bags <= 0) return false;
+    const slot = g.slots.find(s => s.tower && s.tower.type === 'bin' && s.tower.pile === pileIdx && s.tower.bags < s.tower.cap);
+    if (!slot) return false;
+    p.bags--; slot.tower.bags++;
+    emit(g, 'stash', { slotId: slot.id, pile: pileIdx, x: slot.x, z: slot.z });
+    return true;
+  }
+
+  function unload(g, slotId) {
+    if (g.phase !== 'day') return false;
+    const slot = g.slots.find(s => s.id === slotId);
+    const t = slot && slot.tower;
+    if (!t || t.type !== 'bin' || t.bags <= 0) return false;
+    t.bags--;
+    g.flying.push({ id: g.ids++, kind: 'return', to: 'hand', x0: slot.x, z0: slot.z, y0: 0.4, t: 0, dur: 0.5 });
+    emit(g, 'unload', { slotId, x: slot.x, z: slot.z });
+    return true;
+  }
+
+  function rearm(g, slotId) {
+    if (g.phase !== 'night') return false;
+    const slot = g.slots.find(s => s.id === slotId);
+    const t = slot && slot.tower;
+    if (!t || t.type !== 'trap' || t.armed) return false;
+    if (!spend(g, C.TOWERS.trap.rearmCost)) { emit(g, 'denied', { slotId, x: slot.x, z: slot.z }); return false; }
+    t.armed = true; t.cooldown = 0;
+    emit(g, 'rearm', { slotId, free: false, x: slot.x, z: slot.z });
+    return true;
+  }
+
+  function slotOptions(g, slot) {
+    if (!slot.tower) {
+      return ['cat', 'trap', 'bin'].filter(k => g.unlocked[k])
+        .map(k => ({ action: 'place', type: k, cost: C.TOWERS[k].cost, ok: canAfford(g, C.TOWERS[k].cost) }));
+    }
+    const t = slot.tower, T = C.TOWERS[t.type];
+    return [
+      { action: 'upgrade', cost: T.l2, ok: t.level === 1 && canAfford(g, T.l2), maxed: t.level === 2 },
+      { action: 'sell', refund: Math.floor(t.spent * C.ECON.sellRate), ok: true },
+    ];
+  }
+
+  function updateTowers(g, dt) {
+    for (const s of g.slots) {
+      const t = s.tower;
+      if (!t) continue;
+      if (t.type === 'cat') {
+        if (t.lunge) { t.lunge.t += dt; if (t.lunge.t >= t.lunge.dur) t.lunge = null; continue; }
+        t.timer -= dt;
+        if (t.timer > 0) continue;
+        let target = null, bestScore = -Infinity;
+        for (const r of g.rats) {
+          if (r.dead || r.state === 'caught' || r.state === 'flee') continue;
+          const d = dist(s.x, s.z, r.x, r.z);
+          if (d > t.radius) continue;
+          const score = (r.state === 'drag' ? 100 : r.state === 'grab' ? 50 : 0) - d;
+          if (score > bestScore) { bestScore = score; target = r; }
+        }
+        if (target) {
+          t.timer = C.TOWERS.cat.period;
+          t.face = Math.atan2(target.x - s.x, target.z - s.z);
+          emit(g, 'swat', { slotId: s.id, name: t.name, x: target.x, z: target.z, ratId: target.id });
+          damage(g, target, C.TOWERS.cat.dmg, 'cat');
+        } else t.timer = 0;
+      } else if (t.type === 'trap') {
+        if (t.armed) {
+          for (const r of g.rats) {
+            if (r.dead || r.state === 'caught' || r.state === 'flee') continue;
+            if (dist(s.x, s.z, r.x, r.z) <= C.TOWERS.trap.radius) {
+              t.armed = false; t.cooldown = t.cd;
+              emit(g, 'snap', { slotId: s.id, x: s.x, z: s.z, ratId: r.id });
+              damage(g, r, C.TOWERS.trap.dmg, 'trap');
+              break;
+            }
+          }
+        } else {
+          t.cooldown -= dt;
+          if (t.cooldown <= 0) { t.armed = true; t.cooldown = 0; emit(g, 'rearm', { slotId: s.id, free: true, x: s.x, z: s.z }); }
+        }
+      }
+    }
+  }
+
+  // ------------------------------------------------------------------ rats ---
+  function activeSpawns(g) { return C.SPAWNS.filter(s => s.from <= g.night); }
+
+  function buildQueue(g) {
+    const cfg = nightCfg(g), q = [], T = C.TIMING;
+    const spawns = activeSpawns(g);
+    const pick = () => spawns[Math.floor(g.rng() * spawns.length)];
+    if (cfg.boss) {
+      q.push({ at: T.silence + 0.6, type: 'boss', spawn: pick() });
+      const extra = waveSize(g), s0 = pick();
+      for (let i = 0; i < extra; i++) q.push({ at: C.BOSS_PULSES.extraAt + i * T.pulseGap, type: 'scout', spawn: s0 });
+      for (let at = C.BOSS_PULSES.first; at < cfg.len - 10; at += C.BOSS_PULSES.every) {
+        const s = pick();
+        for (let i = 0; i < C.BOSS_PULSES.scouts; i++) q.push({ at: at + i * T.pulseGap, type: 'scout', spawn: s });
+      }
+    } else {
+      const n = waveSize(g), fat = Math.min(cfg.fat, n);
+      const types = new Array(n).fill('scout');
+      for (let k = 0; k < fat; k++) types[Math.min(n - 1, Math.floor((k + 0.5) * n / fat))] = 'fat';
+      const pulses = Math.ceil(n / T.pulseSize);
+      const window = Math.max(0, cfg.len * T.spawnWindow - T.silence);
+      const pulseSpawn = []; for (let p = 0; p < pulses; p++) pulseSpawn.push(pick());
+      for (let i = 0; i < n; i++) {
+        const p = Math.floor(i / T.pulseSize), k = i % T.pulseSize;
+        const at = T.silence + (pulses > 1 ? p * window / (pulses - 1) : 0) + k * T.pulseGap;
+        q.push({ at, type: types[i], spawn: pulseSpawn[p] });
+      }
+    }
+    q.sort((a, b) => a.at - b.at);
+    return q;
+  }
+
+  function pickTarget(g, r) {
+    const R = C.RATS[r.type];
+    let best = null, bv = -Infinity;
+    for (const p of g.piles) {
+      if (p.bags <= 0) continue;
+      const d = dist(r.x, r.z, p.x, p.z);
+      const v = R.target === 'richest' ? p.bags * 100 - d : -d;
+      if (v > bv) { bv = v; best = p; }
+    }
+    return best ? best.idx : -1;
+  }
+
+  // nothing to steal? rats still come looking: nearest pile, sniff, run home (visible, swattable)
+  function nearestPile(g, r) {
+    let best = -1, bd = Infinity;
+    for (const p of g.piles) { const d = dist(r.x, r.z, p.x, p.z); if (d < bd) { bd = d; best = p.idx; } }
+    return best;
+  }
+
+  function spawnRat(g, type, spawn) {
+    const R = C.RATS[type];
+    const r = {
+      id: g.ids++, type, hp: R.hp, maxHp: R.hp, speed: R.speed, size: R.size,
+      x: spawn.x + (g.rng() - 0.5) * 0.7, z: spawn.z, sx: spawn.x, sz: spawn.z,
+      state: 'walk', timer: 0, carry: 0, origin: -1, target: -1, dir: 0, enraged: false, tokenAcc: 0,
+      wig: g.rng() * 6.28,
+    };
+    r.target = pickTarget(g, r);
+    if (r.target < 0) r.target = nearestPile(g, r);   // nothing to steal: come looking anyway
+    if (type === 'boss') {
+      g.boss = g.boss || { dead: false };
+      // A boss who escaped comes back with the wounds he left with.
+      if (g.boss.hp !== undefined) { r.hp = g.boss.hp; r.enraged = g.boss.enraged; if (r.enraged) r.speed *= R.enrageSpeed; }
+      g.boss.alive = true; g.boss.id = r.id;
+    }
+    g.rats.push(r);
+    emit(g, 'spawn', { ratId: r.id, rat: type, x: r.x, z: r.z, spawnId: spawn.id });
+    if (type === 'boss') emit(g, 'bossEnter', { ratId: r.id, x: r.x, z: r.z, hp: r.hp, maxHp: r.maxHp, returning: g.boss.passes > 0 });
+    return r;
+  }
+
+  function moveToward(r, tx, tz, speed, dt) {
+    const dx = tx - r.x, dz = tz - r.z, d = Math.hypot(dx, dz);
+    if (d < 1e-4) return 0;
+    const step = Math.min(d, speed * dt);
+    r.x += dx / d * step; r.z += dz / d * step;
+    r.dir = Math.atan2(dx, dz);
+    return d - step;
+  }
+
+  function escape(g, r) {
+    const lost = r.carry;
+    r.carry = 0;
+    g.lostTotal += lost; g.lostNight += lost;
+    g.infestation = clamp(g.infestation + C.INFEST.perBag * lost, 0, 100);
+    g.stats.escapes++;
+    const cat = nearestCat(g, r.x, r.z);
+    emit(g, 'escape', { ratId: r.id, rat: r.type, bags: lost, x: r.x, z: r.z, name: cat ? cat.tower.name : null, infestation: g.infestation });
+    if (!g.marked && g.infestation >= C.INFEST.marked) { g.marked = true; emit(g, 'marked', { infestation: g.infestation }); }
+    if (r.type === 'boss') { g.boss.alive = false; g.boss.hp = r.hp; g.boss.enraged = r.enraged; g.boss.returnAt = g.t + C.RATS.boss.returnDelay; }
+    r.gone = true;
+    if (g.infestation >= C.INFEST.storm) startStorm(g);
+  }
+
+  function updateRat(g, r, dt) {
+    const R = C.RATS[r.type];
+    switch (r.state) {
+      case 'walk': {
+        if (r.target < 0 || g.piles[r.target].bags <= 0) {
+          const t = pickTarget(g, r);
+          if (t >= 0) r.target = t;
+          else if (r.target < 0) r.target = nearestPile(g, r);
+        }
+        if (r.target < 0) { r.state = 'flee'; break; }
+        const p = g.piles[r.target];
+        const left = moveToward(r, p.x, p.z, r.speed, dt);
+        if (left <= 0.42) {
+          emit(g, 'arrive', { ratId: r.id, rat: r.type, pile: r.target, empty: p.bags <= 0, x: r.x, z: r.z });
+          if (r.type === 'boss' && !r.enraged) {
+            r.state = 'stalk'; r.timer = g.boss.passes ? R.stalkAgain : R.stalk; g.boss.passes = (g.boss.passes || 0) + 1; r.stalkA = 0;
+            emit(g, 'bossStalk', { ratId: r.id, pile: r.target, x: r.x, z: r.z });
+          } else { r.state = 'grab'; r.timer = p.bags > 0 ? R.grabTime : R.grabTime * 0.7; } // empty pile: a sniff, then home
+        }
+        break;
+      }
+      case 'stalk': {
+        // Beat 1: pace in front of the pile, shrugging off chip damage. Enrage ends it early.
+        r.timer -= dt;
+        r.stalkA += dt * 0.9;
+        const p = g.piles[r.target];
+        moveToward(r, p.x + Math.cos(r.stalkA) * 1.3, p.z - 0.9 + Math.sin(r.stalkA * 2) * 0.35, r.speed, dt);
+        if (p.bags <= 0) { const t = pickTarget(g, r); if (t >= 0) { r.target = t; r.state = 'walk'; break; } }
+        if (r.timer <= 0 || r.enraged) { r.state = 'grab'; r.timer = R.grabTime; }
+        break;
+      }
+      case 'grab': {
+        r.timer -= dt;
+        if (r.timer > 0) break;
+        const p = g.piles[r.target];
+        const take = Math.min(R.carry, p.bags);
+        if (take <= 0) {
+          const t = pickTarget(g, r);
+          if (t >= 0) { r.target = t; r.state = 'walk'; }
+          else if (r.type === 'boss') { r.state = 'stalk'; r.timer = R.stalkAgain; r.stalkA = 0; }
+          else { r.state = 'flee'; emit(g, 'sniff', { ratId: r.id, x: r.x, z: r.z }); }
+          break;
+        }
+        p.bags -= take; r.carry = take; r.origin = r.target;
+        r.state = 'drag';
+        r.edgeDir = r.x < -0.01 ? -1 : r.x > 0.01 ? 1 : (g.rng() < 0.5 ? -1 : 1);
+        g.stats.thefts++;
+        emit(g, 'grab', { ratId: r.id, rat: r.type, pile: r.target, bags: take, x: r.x, z: r.z });
+        if (g.rng() < C.TOKENS.onBagHit) spawnToken(g, r.x, r.z, false);
+        break;
+      }
+      case 'drag': {
+        moveToward(r, r.edgeDir * (C.BOARD.edge + 0.6), r.z, r.speed * C.DRAG_FACTOR, dt);
+        // GDD §7 night-1 scripted near-miss: the first thief on night 1 is caught at the edge by a cat.
+        if (g.night === 1 && !g.script.nearMissDone && Math.abs(r.x) >= C.BOARD.edge - 0.75) {
+          const cat = nearestCat(g, r.x, r.z);
+          if (cat) {
+            g.script.nearMissDone = true;
+            r.state = 'caught'; r.timer = 0.32;
+            cat.tower.lunge = { x: r.x, z: r.z, t: 0, dur: 0.75, ratId: r.id };
+            cat.tower.face = Math.atan2(r.x - cat.x, r.z - cat.z);
+            emit(g, 'lunge', { slotId: cat.id, name: cat.tower.name, x: r.x, z: r.z, ratId: r.id });
+            break;
+          }
+        }
+        if (Math.abs(r.x) >= C.BOARD.edge) escape(g, r);
+        break;
+      }
+      case 'flee': {
+        const left = moveToward(r, r.sx, r.sz, r.speed * C.FLEE_FACTOR, dt);
+        if (left <= 0.3) { r.gone = true; emit(g, 'despawn', { ratId: r.id }); }
+        break;
+      }
+      case 'caught': {
+        r.timer -= dt;
+        if (r.timer <= 0) {
+          const cat = nearestCat(g, r.x, r.z);
+          killRat(g, r, 'lunge');
+          emit(g, 'nearMiss', { name: cat ? cat.tower.name : '', x: r.x, z: r.z });
+        }
+        break;
+      }
+    }
+  }
+
+  function damage(g, r, amt, src) {
+    if (r.dead || r.state === 'caught') return;
+    r.hp -= amt;
+    emit(g, 'hit', { ratId: r.id, rat: r.type, x: r.x, z: r.z, amt, src, hp: r.hp, maxHp: r.maxHp });
+    if (r.type === 'fat' && g.rng() < C.RATS.fat.tokenOnHit) spawnToken(g, r.x, r.z, false);
+    if (r.type === 'boss') {
+      const B = C.RATS.boss;
+      if (!r.enraged && r.hp <= r.maxHp * B.enrageAt) {
+        r.enraged = true; r.speed *= B.enrageSpeed;
+        emit(g, 'bossEnrage', { ratId: r.id, x: r.x, z: r.z });
+      }
+      if (r.enraged) { r.tokenAcc += amt; while (r.tokenAcc >= B.tokenPerHp) { r.tokenAcc -= B.tokenPerHp; spawnToken(g, r.x, r.z, true); } }
+    }
+    if (r.hp <= 0) killRat(g, r, src);
+  }
+
+  function killRat(g, r, src) {
+    if (r.dead) return;
+    r.dead = true;
+    for (let i = 0; i < r.carry; i++) returnBag(g, r.x + (g.rng() - 0.5) * 0.4, r.z, r.origin);
+    r.carry = 0;
+    g.stats.kills++;
+    emit(g, 'death', { ratId: r.id, rat: r.type, x: r.x, z: r.z, src, size: r.size });
+    if (r.type === 'boss') {
+      g.boss.alive = false; g.boss.dead = true;
+      for (let i = 0; i < C.TOKENS.bossBurst; i++) spawnToken(g, r.x, r.z, true, i / C.TOKENS.bossBurst * Math.PI * 2);
+      emit(g, 'bossDeath', { x: r.x, z: r.z });
+    } else if (g.rng() < C.TOKENS.onDeath) spawnToken(g, r.x, r.z, false);
+  }
+
+  function updateRats(g, dt) {
+    for (const r of g.rats) if (!r.dead && !r.gone) updateRat(g, r, dt);
+    if (g.rats.some(r => r.dead || r.gone)) g.rats = g.rats.filter(r => !r.dead && !r.gone);
+  }
+
+  // ---------------------------------------------------------------- tokens ---
+  function spawnToken(g, x, z, force, angle) {
+    if (!force && g.tokensNight >= C.TOKENS.cap) return null;
+    g.tokensNight++; g.tokensTotal++;
+    const burst = angle !== undefined;
+    const tok = {
+      id: g.ids++, x, z, y: 0.35, age: 0,
+      vx: burst ? Math.cos(angle) * 2.4 : (g.rng() - 0.5) * 1.6,
+      vz: burst ? Math.sin(angle) * 2.4 + 0.5 : 0.9 + g.rng() * 1.2,
+      vy: burst ? 3.6 : 2.6 + g.rng() * 1.2,
+    };
+    if (z > C.BOARD.gutterZ - 0.4 && !burst) tok.vz = -0.3;
+    g.tokens.push(tok);
+    emit(g, 'tokenSpawn', { id: tok.id, x, z, first: !g.firstTokenSeen });
+    g.firstTokenSeen = true;
+    return tok;
+  }
+
+  function updateTokens(g, dt) {
+    for (let i = g.tokens.length - 1; i >= 0; i--) {
+      const k = g.tokens[i];
+      k.age += dt;
+      k.vy -= 9.5 * dt; k.y += k.vy * dt;
+      if (k.y <= 0) { k.y = 0; k.vy = Math.abs(k.vy) > 0.6 ? -k.vy * 0.35 : 0; }
+      k.x += k.vx * dt; k.z += k.vz * dt;
+      k.vx *= Math.max(0, 1 - 1.4 * dt); k.vz *= Math.max(0, 1 - 0.5 * dt);
+      if (k.z >= C.BOARD.gutterZ) { k.z = C.BOARD.gutterZ; k.vz = 0; }
+      const lim = C.BOARD.halfW - 0.35;
+      if (k.x > lim) { k.x = lim; k.vx = -Math.abs(k.vx) * 0.5; }
+      if (k.x < -lim) { k.x = -lim; k.vx = Math.abs(k.vx) * 0.5; }
+      if (k.age >= C.TOKENS.life) { emit(g, 'tokenLost', { id: k.id, x: k.x, z: k.z }); g.tokens.splice(i, 1); }
+    }
+  }
+
+  // ----------------------------------------------------------------- phase ---
+  function checkUnlocks(g) {
+    for (const k of Object.keys(C.UNLOCKS)) {
+      if (!g.unlocked[k] && g.night >= C.UNLOCKS[k]) { g.unlocked[k] = true; emit(g, 'unlock', { what: k, night: g.night }); }
+    }
+  }
+
+  // bags on the pile plus bags already flying to it — the cap counts both
+  function pilePlanned(g, pileIdx) {
+    let n = g.piles[pileIdx].bags;
+    for (const f of g.flying) if (f.to === 'pile' && f.pile === pileIdx && f.kind !== 'return') n++;
+    return n;
+  }
+
+  function placeBagScatter(g) {
+    if (g.hand <= 0) return;
+    g.hand--;
+    const pi = pickPileCapped(g), p = g.piles[pi];
+    g.flying.push({ id: g.ids++, kind: 'place', to: 'pile', pile: pi, x0: C.HAND.x, z0: C.HAND.z, y0: 0, t: 0, dur: 0.3 + dist(C.HAND.x, C.HAND.z, p.x, p.z) * 0.04 });
+  }
+
+  function nightfall(g) {
+    if (g.phase !== 'day') return false;
+    const cfg = nightCfg(g);
+    while (g.hand > 0) { placeBagScatter(g); }
+    for (const f of g.flying) if (f.to === 'hand') { f.to = 'pile'; f.pile = pickPileCapped(g); delete f.tx; delete f.tz; }  // nothing rides out the night in your hands
+    g.phase = 'night'; g.t = 0; g.nightLen = cfg.len;
+    g.lostNight = 0; g.tokensNight = 0; g.grabsNight = 0;
+    g.queue = buildQueue(g);
+    if (cfg.boss) g.boss = { alive: false, dead: false, returnAt: -1, id: null };
+    emit(g, 'nightfall', { night: g.night, size: waveSize(g), boss: !!cfg.boss, quiet: !!cfg.quiet, rattle: !!cfg.rattle, len: cfg.len });
+    return true;
+  }
+
+  function endNight(g) {
+    const cfg = nightCfg(g);
+    for (const r of g.rats) { for (let i = 0; i < r.carry; i++) returnBag(g, r.x, r.z, r.origin); r.carry = 0; r.gone = true; }
+    g.rats = [];
+    for (const s of g.slots) {
+      const t = s.tower; if (!t) continue;
+      if (t.type === 'trap') { t.armed = true; t.cooldown = 0; }
+      if (t.type === 'cat') { t.lunge = null; t.timer = 0; }
+    }
+    g.stats.nightsSurvived = g.night;
+    emit(g, 'nightClear', { night: g.night, lost: g.lostNight, tokens: g.grabsNight, boss: !!cfg.boss, bossDead: !!(g.boss && g.boss.dead) });
+    g.phase = 'dawn';
+    g.dawn = cfg.boss ? { step: 'victory', timer: 2.2 } : { step: 'quiet', timer: C.TIMING.quietBeat };
+  }
+
+  function bank(g, bonus) {
+    // The truck takes what's on the CURB. Binned bags are safe from rats and invisible
+    // to the truck alike — wealth that never risked the night is worth nothing (fun pass #2).
+    let total = 0;
+    for (const p of g.piles) { total += p.bags; p.bags = 0; }
+    for (const f of g.flying) if (f.to !== 'hand') total++;   // curb-bound bags mid-air count
+    g.flying = g.flying.filter(f => f.to === 'hand');
+    total += g.hand; g.hand = 0;                              // nightfall scatters the hand, so this is 0 except in edge cases
+    total += bonus || 0;
+    g.score += total;
+    g.stats.banked.push(total);
+    emit(g, 'bank', { amount: total, score: g.score, night: g.night, bonus: bonus || 0, leftBin: binned(g) });
+    return total;
+  }
+
+  function startStorm(g) {
+    if (g.phase === 'storm' || g.phase === 'over') return;
+    g.phase = 'storm'; g.stormT = C.TIMING.stormDur;
+    emit(g, 'storm', {});
+  }
+
+  function finish(g, result) {
+    g.phase = 'over'; g.result = result;
+    emit(g, 'over', { result, score: g.score, night: g.night, tokens: g.tokensGrabbed, tokensTotal: g.tokensTotal });
+  }
+
+  function updateDawn(g, dt) {
+    const d = g.dawn, T = C.TIMING;
+    d.timer -= dt;
+    if (d.timer > 0) return;
+    switch (d.step) {
+      case 'quiet':
+        if (C.TRUCK_NIGHTS.includes(g.night)) { bank(g, 0); d.step = 'truck'; d.timer = T.truckDur; }
+        else { landBags(g, C.ECON.dawnBags, 0.2); d.step = 'land'; d.timer = T.bagsLand + 0.5; }
+        break;
+      case 'truck':
+        landBags(g, C.ECON.dawnBags, 0.2); d.step = 'land'; d.timer = T.bagsLand + 0.5;
+        break;
+      case 'land':
+        g.night++; g.phase = 'day'; g.dawn = null;
+        checkUnlocks(g);
+        emit(g, 'day', { night: g.night });
+        break;
+      case 'victory':
+        bank(g, C.VICTORY_BONUS);
+        finish(g, 'victory');
+        break;
+    }
+  }
+
+  function updateNight(g, dt) {
+    g.t += dt;
+    while (g.queue.length && g.queue[0].at <= g.t) { const q = g.queue.shift(); spawnRat(g, q.type, q.spawn); }
+    const cfg = nightCfg(g);
+    if (cfg.boss && g.boss && !g.boss.alive && !g.boss.dead && g.boss.returnAt >= 0 && g.t >= g.boss.returnAt) {
+      const spawns = activeSpawns(g);
+      spawnRat(g, 'boss', spawns[Math.floor(g.rng() * spawns.length)]);
+      g.boss.returnAt = -1;
+    }
+    updateTowers(g, dt);
+    updateRats(g, dt);
+    if (g.phase !== 'night') return; // a storm may have started
+    if (cfg.boss) {
+      if (g.boss.dead || g.t >= g.nightLen) endNight(g);
+    } else if (g.t >= g.nightLen && g.queue.length === 0 && g.rats.length === 0) endNight(g);
+    else if (g.t >= g.nightLen + C.TIMING.resolveCap) endNight(g);
+  }
+
+  function update(g, dt) {
+    if (g.phase === 'night') updateNight(g, dt);
+    else if (g.phase === 'dawn') updateDawn(g, dt);
+    else if (g.phase === 'storm') { g.stormT -= dt; if (g.stormT <= 0) finish(g, 'storm'); }
+    updateTokens(g, dt);
+    updateFlying(g, dt);
+  }
+
+  // ----------------------------------------------------------------- input ---
+  function hitSlot(g, x, z) {
+    let best = null, bd = C.TAP.slot;
+    for (const s of g.slots) { const d = dist(s.x, s.z, x, z); if (d < bd) { bd = d; best = s; } }
+    return best;
+  }
+  function hitPile(g, x, z) {
+    let best = null, bd = C.TAP.pile;
+    for (const p of g.piles) { const d = dist(p.x, p.z, x, z); if (d < bd) { bd = d; best = p; } }
+    return best;
+  }
+  function hitToken(g, x, z) {
+    let best = null, bd = C.TOKENS.tapRadius;
+    for (const k of g.tokens) { const d = dist(k.x, k.z, x, z); if (d < bd) { bd = d; best = k; } }
+    return best;
+  }
+
+  function tapDay(g, x, z) {
+    const slot = hitSlot(g, x, z);
+    if (slot) {
+      if (slot.tower && slot.tower.type === 'bin' && slot.tower.bags > 0 && unload(g, slot.id)) return { kind: 'unload', slot };
+      return { kind: 'slot', slot };
+    }
+    const pile = hitPile(g, x, z);
+    if (pile) {
+      if (g.hand > 0 && placeBag(g, pile.idx)) return { kind: 'placeBag', pile };
+      return { kind: stash(g, pile.idx) ? 'stash' : 'pile', pile };
+    }
+    if (g.hand > 0) { const near = nearestPileTo(g, x, z); if (near >= 0 && placeBag(g, near)) return { kind: 'placeBag', pile: g.piles[near] }; }
+    return null;
+  }
+
+  function nearestPileTo(g, x, z) {
+    let best = -1, bd = 1.9;
+    for (const p of g.piles) { const d = dist(x, z, p.x, p.z); if (d < bd) { bd = d; best = p.idx; } }
+    return best;
+  }
+
+  function tapNight(g, x, z) {
+    const tok = hitToken(g, x, z);
+    if (tok) {
+      g.tokens.splice(g.tokens.indexOf(tok), 1);
+      g.tokensGrabbed++; g.grabsNight++;
+      emit(g, 'tokenGrab', { id: tok.id, x: tok.x, z: tok.z, step: g.grabsNight - 1, grabbed: g.tokensGrabbed, total: g.tokensTotal });
+      return { kind: 'token' };
+    }
+    let dragger = null, dd = C.RECOVER.radius;
+    for (const r of g.rats) {
+      if (r.state !== 'drag' || r.carry <= 0 || r.type === 'boss') continue;
+      const d = dist(x, z, r.x, r.z);
+      if (d < dd) { dd = d; dragger = r; }
+    }
+    if (dragger) {
+      for (let i = 0; i < dragger.carry; i++) returnBag(g, dragger.x, dragger.z, dragger.origin);
+      const dropped = dragger.carry;
+      dragger.carry = 0; dragger.state = 'flee';
+      g.stats.recovers++;
+      emit(g, 'recover', { ratId: dragger.id, rat: dragger.type, bags: dropped, x: dragger.x, z: dragger.z });
+      return { kind: 'recover' };
+    }
+    const slot = hitSlot(g, x, z);
+    if (slot && slot.tower && slot.tower.type === 'trap' && !slot.tower.armed) return { kind: 'rearm', ok: rearm(g, slot.id), slot };
+    return null;
+  }
+
+  return {
+    createGame, startRun, update, nightfall,
+    place, upgrade, sell, stash, unload, rearm, slotOptions, placeBag,
+    tapDay, tapNight, hitSlot, hitPile, hitToken,
+    preview, waveSize, liquidBags, spendable, binned, canAfford, nextTruckIn, nearestPileIdx, handCount,
+  };
+})();
+
+if (typeof module !== 'undefined' && module.exports) module.exports = { Sim };
+</script>
+
+<script>
+/* ======================= src/audio.js ======================= */
+/* ============================================================================
+   RAT CITY — src/audio.js
+   All procedural Web Audio. Zero audio files (GDD §10). The context unlocks on
+   the first user tap (mobile autoplay rule). One signature sound per rarity
+   tier: if everything dings, nothing dings.
+   ========================================================================== */
+
+const Audio = (() => {
+  const C = CONFIG;
+  let ctx = null, master = null, humGain = null, purrGain = null, noiseBuf = null;
+  let muted = false, ready = false, mode = 'day', bossTimer = 0, bossNote = 0, pigeonTimer = 6;
+  const SEMI = 1.059463094359;
+
+  function ensure() {
+    if (ready) return true;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = muted ? 0 : 0.9; master.connect(ctx.destination);
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+    const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    startHum();
+    ready = true;
+    return true;
+  }
+  function resume() { if (ctx && ctx.state === 'suspended') ctx.resume(); }
+
+  // --- ambient beds ----------------------------------------------------------
+  function startHum() {
+    // city hum: bandpassed noise + a 55Hz "traffic" sine with a slow wobble
+    humGain = ctx.createGain(); humGain.gain.value = 0.0; humGain.connect(master);
+    const n = ctx.createBufferSource(); n.buffer = noiseBuf; n.loop = true;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 190; bp.Q.value = 0.8;
+    const ng = ctx.createGain(); ng.gain.value = 0.06;
+    n.connect(bp); bp.connect(ng); ng.connect(humGain); n.start();
+    const s = ctx.createOscillator(); s.type = 'sine'; s.frequency.value = 55;
+    const sg = ctx.createGain(); sg.gain.value = 0.05;
+    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.13; const lg = ctx.createGain(); lg.gain.value = 0.025;
+    lfo.connect(lg); lg.connect(sg.gain); lfo.start();
+    s.connect(sg); sg.connect(humGain); s.start();
+    // night-9 purr: low sawtooth with a 24Hz tremolo, normally silent
+    purrGain = ctx.createGain(); purrGain.gain.value = 0; purrGain.connect(master);
+    const p = ctx.createOscillator(); p.type = 'sawtooth'; p.frequency.value = 42;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 220;
+    const trem = ctx.createOscillator(); trem.frequency.value = 24; const tg = ctx.createGain(); tg.gain.value = 0.5;
+    const pg = ctx.createGain(); pg.gain.value = 0.5;
+    trem.connect(tg); tg.connect(pg.gain); trem.start();
+    p.connect(lp); lp.connect(pg); pg.connect(purrGain); p.start();
+    humGain.gain.setTargetAtTime(1.0, ctx.currentTime, 1.5);
+  }
+
+  function setMode(m, opts) {
+    mode = m;
+    if (!ready) return;
+    const t = ctx.currentTime;
+    if (m === 'day') { humGain.gain.setTargetAtTime(1.0, t, 0.8); purrGain.gain.setTargetAtTime(0, t, 0.5); }
+    else if (m === 'night') {
+      // hum ducks -8dB into 3s of near-silence, then the wave (GDD §10)
+      humGain.gain.cancelScheduledValues(t); humGain.gain.setTargetAtTime(opts && opts.quiet ? 0.12 : 0.4, t, 0.25);
+      purrGain.gain.setTargetAtTime(opts && opts.quiet ? 0.09 : 0, t, 1.0);
+    } else if (m === 'storm') { humGain.gain.setTargetAtTime(0, t, 0.4); purrGain.gain.setTargetAtTime(0, t, 0.2); }
+  }
+
+  // --- one-shot voices -------------------------------------------------------
+  function tone(type, f0, f1, dur, gain, opts) {
+    if (!ready || muted) return;
+    const t = ctx.currentTime + (opts && opts.delay || 0);
+    const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f0, t);
+    if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(Math.max(20, f1), t + dur);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain, t + (opts && opts.attack || 0.006));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    let node = o;
+    if (opts && opts.lp) { const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = opts.lp; o.connect(f); node = f; }
+    node.connect(g); g.connect(master);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  function noise(dur, gain, filt, freq, opts) {
+    if (!ready || muted) return;
+    const t = ctx.currentTime + (opts && opts.delay || 0);
+    const n = ctx.createBufferSource(); n.buffer = noiseBuf;
+    const f = ctx.createBiquadFilter(); f.type = filt || 'highpass'; f.frequency.value = freq || 2000; f.Q.value = opts && opts.q || 1;
+    const g = ctx.createGain(); g.gain.setValueAtTime(gain, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    n.connect(f); f.connect(g); g.connect(master); n.start(t); n.stop(t + dur + 0.02);
+  }
+
+  const sfx = {
+    tick() { tone('square', 1800, 1200, 0.03, 0.05); },
+    swat() { tone('sine', 320, 70, 0.11, 0.5); tone('sine', 95, 42, 0.13, 0.4); noise(0.05, 0.14, 'bandpass', 900); },
+    snap() { noise(0.06, 0.5, 'highpass', 1500); tone('square', 1300, 300, 0.05, 0.25, { delay: 0.01 }); tone('sine', 120, 50, 0.16, 0.4, { delay: 0.02 }); },
+    squeak() { tone('sawtooth', 2400 + Math.random() * 900, 3400 + Math.random() * 600, 0.07, 0.05, { lp: 5000 }); },
+    grab() { tone('square', 660, 660, 0.08, 0.16); tone('square', 880, 880, 0.08, 0.16, { delay: 0.09 }); tone('square', 660, 660, 0.08, 0.16, { delay: 0.18 }); },
+    alarm() { for (let i = 0; i < 3; i++) { tone('square', i % 2 ? 880 : 660, 0, 0.09, 0.3, { delay: i * 0.1 }); } noise(0.3, 0.16, 'bandpass', 1400, { delay: 0.05 }); },
+    ding(step) {
+      const semis = C.TOKENS.scale[Math.min(step, C.TOKENS.scale.length - 1)] + (step >= C.TOKENS.scale.length ? 12 * Math.floor(step / C.TOKENS.scale.length) : 0);
+      const f = 523.25 * Math.pow(SEMI, semis);
+      tone('sine', f, f, 0.28, 0.32, { attack: 0.004 }); tone('sine', f * 2, f * 2, 0.16, 0.12); tone('triangle', f * 3.01, f * 3, 0.1, 0.06);
+    },
+    lost() { tone('sine', 300, 180, 0.12, 0.05); },
+    horn() { tone('sawtooth', 110, 108, 0.7, 0.28, { lp: 900, attack: 0.03 }); tone('sawtooth', 165, 162, 0.7, 0.2, { lp: 900, attack: 0.03 }); },
+    tally() { tone('square', 1500, 1500, 0.025, 0.07); },
+    place() { tone('sine', 240, 400, 0.12, 0.25); noise(0.08, 0.15, 'lowpass', 600); },
+    upgrade() { tone('sine', 400, 600, 0.12, 0.2); tone('sine', 600, 900, 0.16, 0.2, { delay: 0.1 }); },
+    sell() { tone('sine', 500, 250, 0.14, 0.18); },
+    stash() { noise(0.08, 0.25, 'lowpass', 900); tone('sine', 180, 90, 0.12, 0.3); },
+    unload() { tone('sine', 140, 260, 0.1, 0.22); },
+    rearm() { noise(0.04, 0.3, 'highpass', 3000); tone('square', 900, 1400, 0.05, 0.15); },
+    denied() { tone('square', 200, 160, 0.12, 0.12); },
+    marked() { tone('sine', 90, 35, 0.5, 0.7); noise(0.45, 0.35, 'lowpass', 500); noise(0.2, 0.25, 'highpass', 2500, { delay: 0.05 }); },
+    nightfall() { tone('sine', 220, 110, 0.9, 0.12, { attack: 0.2 }); },
+    dawn() { tone('sine', 330, 330, 0.5, 0.06, { attack: 0.2 }); tone('sine', 495, 495, 0.6, 0.05, { attack: 0.3, delay: 0.15 }); },
+    recover() { noise(0.05, 0.35, 'highpass', 2500); tone('sine', 700, 220, 0.14, 0.32, { delay: 0.02 }); tone('sine', 110, 55, 0.12, 0.35, { delay: 0.05 }); },
+    dropBag() { tone('sine', 150, 65, 0.1, 0.28); noise(0.05, 0.12, 'lowpass', 700); },
+    catch() { tone('sine', 500, 900, 0.18, 0.3); tone('sine', 900, 1200, 0.2, 0.2, { delay: 0.12 }); },
+    bossEnter() { for (let i = 0; i < 4; i++) tone('sine', 55, 40, 0.28, 0.9, { delay: i * 0.3 }); noise(1.2, 0.2, 'lowpass', 300); },
+    bossThump(hi) { tone('sine', hi ? 65 : 49, 30, 0.2, 0.8); noise(0.06, 0.15, 'lowpass', 400); },
+    bossEnrage() { tone('sawtooth', 120, 400, 0.5, 0.3, { lp: 1200 }); noise(0.5, 0.3, 'bandpass', 900); },
+    bossDeath() { for (let i = 0; i < 10; i++) tone('sine', 523 * Math.pow(SEMI, C.TOKENS.scale[i % 10]), 0, 0.2, 0.18, { delay: i * 0.06 }); noise(0.8, 0.4, 'lowpass', 700); },
+    storm() { noise(2.4, 0.6, 'bandpass', 500, { q: 0.4 }); tone('sawtooth', 60, 25, 2.2, 0.5, { lp: 200, attack: 0.5 }); },
+    victory() { [0, 4, 7, 12, 16].forEach((s, i) => tone('sine', 392 * Math.pow(SEMI, s), 0, 0.5, 0.22, { delay: i * 0.14 })); },
+    pigeon() { tone('sine', 420, 300, 0.16, 0.05, { attack: 0.03 }); tone('sine', 400, 280, 0.2, 0.05, { attack: 0.03, delay: 0.19 }); },
+  };
+
+  function handleEvent(ev, g) {
+    switch (ev.type) {
+      case 'nightfall': setMode('night', { quiet: ev.quiet }); sfx.nightfall(); break;
+      case 'nightClear': setMode('day'); sfx.dawn(); break;
+      case 'spawn': if (ev.rat !== 'boss' && Math.random() < 0.35) sfx.squeak(); break;
+      case 'swat': sfx.swat(); break;
+      case 'snap': sfx.snap(); break;
+      case 'grab': sfx.alarm(); break;
+      case 'escape': sfx.lost(); break;
+      case 'tokenGrab': sfx.ding(ev.step); break;
+      case 'place': sfx.place(); break;
+      case 'upgrade': sfx.upgrade(); break;
+      case 'sell': sfx.sell(); break;
+      case 'stash': sfx.stash(); break;
+      case 'unload': sfx.unload(); break;
+      case 'rearm': if (!ev.free) sfx.rearm(); else sfx.tick(); break;
+      case 'denied': sfx.denied(); break;
+      case 'marked': sfx.marked(); break;
+      case 'bank': sfx.horn(); break;
+      case 'nearMiss': sfx.catch(); break;
+      case 'recover': sfx.recover(); break;
+      case 'placeBag': sfx.dropBag(); break;
+      case 'bossEnter': sfx.bossEnter(); bossTimer = 1.0; break;
+      case 'bossEnrage': sfx.bossEnrage(); break;
+      case 'bossDeath': sfx.bossDeath(); break;
+      case 'storm': setMode('storm'); sfx.storm(); break;
+      case 'over': if (ev.result === 'victory') sfx.victory(); break;
+    }
+  }
+
+  // called every frame: boss bass pulse tempo tied to boss HP; occasional day pigeon
+  function update(dt, g) {
+    if (!ready || muted) return;
+    if (g.phase === 'night' && g.boss && g.boss.alive) {
+      const b = g.rats.find(r => r.type === 'boss');
+      const hp = b ? b.hp / b.maxHp : 1;
+      bossTimer -= dt;
+      if (bossTimer <= 0) { bossNote ^= 1; sfx.bossThump(bossNote === 1); bossTimer = 0.32 + 0.9 * hp; }
+    }
+    if (g.phase === 'day') { pigeonTimer -= dt; if (pigeonTimer <= 0) { sfx.pigeon(); pigeonTimer = 7 + Math.random() * 9; } }
+  }
+
+  function setMuted(m) { muted = m; if (master) master.gain.setTargetAtTime(m ? 0 : 0.9, ctx.currentTime, 0.05); }
+  function isMuted() { return muted; }
+
+  return { ensure, resume, handleEvent, update, setMode, setMuted, isMuted, sfx, isReady: () => ready };
+})();
+</script>
+
+<script>
+/* ======================= src/render.js ======================= */
+/* ============================================================================
+   RAT CITY — src/render.js
+   Temp assets, the Nintendo way: every creature is a handful of primitives so
+   the mechanic can be judged before the art exists. Each entity type has ONE
+   factory (makeRat, makeCat, makeBag ...). When final sprites land through
+   assets/manifest.json, the factories change and nothing else does.
+
+   Clarity system (GDD §9): thick black outlines via inverted hulls, flat
+   palette, state = silhouette (level = size, trap timer = jaw angle, bin fill
+   = bags above the rim, infestation = tags accumulating on the wall).
+   ========================================================================== */
+
+const Render = (() => {
+  const C = CONFIG, P = PALETTE;
+  const W = C.VIEW.W, H = C.VIEW.H;
+  const VIEW_HALF_W = 4.3;             // world units visible left/right
+  const CAM_TILT = 60 * Math.PI / 180;  // camera pitch below horizontal
+  const LOOK_AT = { x: 0, y: 0, z: -1.2 };
+
+  let renderer, scene, camera, camBase, raycaster, groundPlane;
+  let ambient, sun, lamp, lampBulb;
+  let shake = 0, clock = 0, mode = 'day';
+  const light = { amb: 0.85, sun: 0.7, lamp: 0, tint: new THREE.Color('#ffffff') };
+  const target = { amb: 0.85, sun: 0.7, lamp: 0, tint: new THREE.Color('#ffffff') };
+
+  const mat = {};
+  const geo = {};
+  const slotViews = {};      // slotId -> { ring, prop, tower, key }
+  const ratViews = new Map();
+  const tokenViews = new Map();
+  const flyViews = new Map();
+  const pileBags = [[], [], []];
+  const handBags = [];
+  let pileRings = [];
+  const facadeParts = [];
+  let facadeArt = null;
+  let pickup = [];           // bags waiting for the truck
+  let truck = null, truckT = -1;
+  let manhole = null, manholeCover = null, facadeFront = 0;
+  const tags = [];           // graffiti planes
+  let stormRats = [];
+  let particles = [], rings = [];
+  let sliceFx = null;
+  const alerts = [];
+
+  // ------------------------------------------------------------- helpers ---
+  const col = h => new THREE.Color(h);
+  function phong(hex) { return new THREE.MeshPhongMaterial({ color: col(hex), flatShading: true, specular: col('#000000'), shininess: 1 }); }
+  function basic(hex, opts) { return new THREE.MeshBasicMaterial(Object.assign({ color: col(hex) }, opts || {})); }
+
+  function outline(mesh, k) {
+    const o = new THREE.Mesh(mesh.geometry, mat.hull);
+    o.scale.setScalar(k || 1.08);
+    mesh.add(o);
+    return mesh;
+  }
+  function box(w, h, d, m, o) { const me = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); return o === false ? me : outline(me, o); }
+  function sphere(r, m, ws, hs, o) { const me = new THREE.Mesh(new THREE.SphereGeometry(r, ws || 7, hs || 5), m); return o === false ? me : outline(me, o); }
+  function cone(r, h, m, seg, o) { const me = new THREE.Mesh(new THREE.ConeGeometry(r, h, seg || 6), m); return o === false ? me : outline(me, o); }
+  function cyl(rt, rb, h, m, seg, o) { const me = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 8), m); return o === false ? me : outline(me, o); }
+  function at(obj, x, y, z) { obj.position.set(x, y, z); return obj; }
+
+  function makePool(factory) {
+    const free = [];
+    return {
+      get() { const m = free.pop() || factory(); m.visible = true; if (!m.parent) scene.add(m); return m; },
+      release(m) { m.visible = false; free.push(m); },
+    };
+  }
+  let pools = {};
+
+  // ------------------------------------------------- final-art pipeline ---
+  // Sprites drop in by filename: assets/<id>.png. Anything missing (or any
+  // load failure, e.g. file:// texture restrictions) keeps its low-poly
+  // stand-in, so partial art can never break the build. mode 'flat' lies on
+  // the ground and rotates with heading (draw the subject top-down, facing
+  // the TOP of the canvas); mode 'up' stands and faces the camera (draw a
+  // front view, facing RIGHT when direction matters). w = world width.
+  const ART_IDS = {
+    rat_scout: { mode: 'flat', w: 0.95 },
+    rat_fat: { mode: 'flat', w: 0.95 },
+    rat_boss: { mode: 'flat', w: 1.05 },
+    cat_l1: { mode: 'up', w: 1.05 },
+    cat_l2: { mode: 'up', w: 1.05 },
+    bag: { mode: 'up', w: 0.66 },
+    trap_armed: { mode: 'flat', w: 0.74 },
+    trap_sprung: { mode: 'flat', w: 0.74 },
+    bin: { mode: 'up', w: 0.95 },
+    token: { mode: 'up', w: 0.42 },
+    truck: { mode: 'up', w: 3.4 },
+    pizza_slice: { mode: 'up', w: 0.8 },
+    facade: { mode: 'up', w: 9.2 },
+    prop_hydrant: { mode: 'up', w: 0.62 },
+    prop_lamppost: { mode: 'up', w: 1.1 },
+    prop_stoop: { mode: 'up', w: 1.5 },
+    prop_scaffolding: { mode: 'up', w: 1.7 },
+    tag: { mode: 'up', w: 1.0 },
+  };
+  const art = {};
+  function loadArt() {
+    if (!THREE.TextureLoader) return;
+    const loader = new THREE.TextureLoader();
+    Object.keys(ART_IDS).forEach(id => {
+      loader.load('assets/' + id + '.png',
+        tex => { const im = tex.image || {}; art[id] = { tex, aspect: (im.height || 1) / (im.width || 1) }; },
+        undefined, () => {});
+    });
+  }
+  // Dress a live group in its final art: hide the low-poly parts (keeps stay),
+  // add one textured plane. Re-checked each frame until the texture arrives.
+  function applyArt(group, id, keeps, scl) {
+    const u = group.userData;
+    if (u.artDone) return true;
+    const a = art[id];
+    if (!a) return false;
+    const spec = ART_IDS[id];
+    const w = spec.w, h = w * a.aspect;
+    const geo2 = new THREE.PlaneGeometry(w, h);
+    const m = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.3 }));
+    if (spec.mode === 'flat') { m.rotation.x = -Math.PI / 2; m.rotation.z = Math.PI; m.position.y = 0.045; }
+    else { geo2.translate(0, h / 2, 0); m.rotation.x = -CAM_TILT; m.position.y = 0.02; m.position.z = 0.01; }
+    if (scl) m.scale.setScalar(scl);
+    const keep = new Set(keeps || []);
+    for (const c of group.children) if (!keep.has(c)) c.visible = false;
+    group.add(m);
+    u.artDone = true; u.artMesh = m;
+    return true;
+  }
+
+  // ------------------------------------------------------------ factories ---
+  function makeBag(mini) {
+    const s = mini ? 0.55 : 1;
+    const g = new THREE.Group();
+    const body = new THREE.Mesh(geo.bag, mat.bag); outline(body, 1.1);
+    body.scale.set(s, s * 0.85, s); body.position.y = 0.26 * s;
+    g.add(body);
+    const knot = cone(0.07 * s, 0.14 * s, mat.ink, 5, false); knot.position.y = 0.52 * s; g.add(knot);
+    g.userData = { body, land: 0 };
+    return g;
+  }
+
+  function makeToken() {
+    const g = new THREE.Group();
+    const coin = new THREE.Mesh(geo.coin, mat.bone); outline(coin, 1.12);
+    coin.rotation.z = Math.PI / 2;
+    const dot = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.07, 8), mat.ink); dot.rotation.z = Math.PI / 2;
+    g.add(coin); g.add(dot);
+    const shadow = new THREE.Mesh(geo.shadow, mat.shadow); shadow.rotation.x = -Math.PI / 2; shadow.scale.setScalar(0.4); g.add(shadow);
+    g.userData = { coin, shadow, roll: 0 };
+    return g;
+  }
+
+  function makeRat(type) {
+    const R = C.RATS[type];
+    const m = type === 'boss' ? mat.ratDeep : mat.rat;
+    const g = new THREE.Group();
+    const body = sphere(0.27, m, 7, 5, 1.1); body.scale.set(1, 0.72, 1.45); body.position.y = 0.24; g.add(body);
+    const nose = cone(0.1, 0.26, m, 5, 1.15); nose.rotation.x = Math.PI / 2; at(nose, 0, 0.24, 0.5); g.add(nose);
+    const earL = sphere(0.075, m, 5, 4, 1.15); at(earL, -0.13, 0.42, 0.26); g.add(earL);
+    const earR = sphere(0.075, m, 5, 4, 1.15); at(earR, 0.13, 0.42, 0.26); g.add(earR);
+    const eyeL = sphere(0.035, mat.ink, 4, 3, false); at(eyeL, -0.09, 0.34, 0.44); g.add(eyeL);
+    const eyeR = sphere(0.035, mat.ink, 4, 3, false); at(eyeR, 0.09, 0.34, 0.44); g.add(eyeR);
+    const tail = cone(0.045, 0.62, m, 4, 1.25); tail.rotation.x = -Math.PI / 2 + 0.45; at(tail, 0, 0.16, -0.62); g.add(tail);
+    const shadow = new THREE.Mesh(geo.shadow, mat.shadow); shadow.rotation.x = -Math.PI / 2; shadow.scale.setScalar(0.75); g.add(shadow);
+    const bags = [];
+    for (let i = 0; i < 3; i++) { const b = makeBag(true); at(b, (i - 1) * 0.22, 0.42, -0.1 - (i % 2) * 0.1); b.visible = false; g.add(b); bags.push(b); }
+    let crown = null, slice = null;
+    if (type === 'boss') {
+      crown = new THREE.Group();
+      for (let i = 0; i < 3; i++) { const c = cone(0.06, 0.16, mat.bag, 4, false); at(c, (i - 1) * 0.11, 0.58, 0.2); crown.add(c); }
+      g.add(crown);
+      slice = new THREE.Mesh(geo.slice, mat.bag); outline(slice, 1.1);
+      slice.rotation.set(0, 0, 0.3); at(slice, 0.5, 0.45, 0.1);
+      g.add(slice);
+    }
+    g.scale.setScalar(R.size);
+    g.userData = { type, body, nose, eyeL, eyeR, tail, bags, shadow, crown, slice, hitT: 0, flashT: 0, phase: Math.random() * 6 };
+    return g;
+  }
+
+  function makeCat(level) {
+    const m = level === 2 ? mat.tealL2 : mat.teal;
+    const g = new THREE.Group();
+    const body = box(0.82, 0.48, 0.5, m); body.position.y = 0.4; g.add(body);
+    const head = box(0.46, 0.42, 0.42, m); at(head, 0, 0.72, 0.36); g.add(head);
+    const earL = cone(0.1, 0.2, m, 4); at(earL, -0.16, 1.0, 0.36); g.add(earL);
+    const earR = cone(0.1, 0.2, m, 4); at(earR, 0.16, 1.0, 0.36); g.add(earR);
+    const eyeL = sphere(0.05, mat.ink, 4, 3, false); at(eyeL, -0.12, 0.76, 0.58); g.add(eyeL);
+    const eyeR = sphere(0.05, mat.ink, 4, 3, false); at(eyeR, 0.12, 0.76, 0.58); g.add(eyeR);
+    const nose = sphere(0.035, mat.ink, 4, 3, false); at(nose, 0, 0.66, 0.6); g.add(nose);
+    const tail = cone(0.06, 0.6, m, 4, 1.2); tail.rotation.x = -Math.PI / 2 + 1.0; at(tail, 0, 0.55, -0.5); g.add(tail);
+    const shadow = new THREE.Mesh(geo.shadow, mat.shadow); shadow.rotation.x = -Math.PI / 2; shadow.scale.setScalar(1.05); g.add(shadow);
+    const s = level === 2 ? 1.4 : 1.0;   // Chonky: +40% size. Level = size, period.
+    g.scale.setScalar(s);
+    g.userData = { kind: 'cat', level, tail, swatT: 0, baseScale: s, homeX: 0, homeZ: 0, shadowRef: shadow };
+    return g;
+  }
+
+  function makeTrap(level) {
+    const m = level === 2 ? mat.tealL2 : mat.teal;
+    const g = new THREE.Group();
+    const base = box(0.74, 0.08, 0.6, m); base.position.y = 0.04; g.add(base);
+    const jawGeoA = new THREE.BoxGeometry(0.68, 0.05, 0.27); jawGeoA.translate(0, 0, 0.14);
+    const jawGeoB = new THREE.BoxGeometry(0.68, 0.05, 0.27); jawGeoB.translate(0, 0, -0.14);
+    const jawA = outline(new THREE.Mesh(jawGeoA, m), 1.06); jawA.position.y = 0.1; g.add(jawA);
+    const jawB = outline(new THREE.Mesh(jawGeoB, m), 1.06); jawB.position.y = 0.1; g.add(jawB);
+    const bait = box(0.11, 0.11, 0.11, mat.bone); at(bait, 0, 0.16, 0); g.add(bait);
+    g.userData = { kind: 'trap', level, jawA, jawB, angle: 1.1, dust: 0 };
+    return g;
+  }
+
+  function makeBin(level) {
+    const m = level === 2 ? mat.tealL2 : mat.teal;
+    const h = level === 2 ? 0.92 : 0.72;
+    const g = new THREE.Group();
+    const body = box(0.64, h, 0.64, m); body.position.y = h / 2; g.add(body);
+    const lidGeo = new THREE.BoxGeometry(0.7, 0.06, 0.7); lidGeo.translate(0, 0, 0.35);
+    const lid = outline(new THREE.Mesh(lidGeo, m), 1.06); at(lid, 0, h + 0.03, -0.35); lid.rotation.x = -1.25; g.add(lid);
+    if (level === 2) { const lock = box(0.16, 0.16, 0.08, mat.ink, false); at(lock, 0, 0.14, 0.72); lid.add(lock); }
+    const bags = [];
+    for (let i = 0; i < 7; i++) { const b = makeBag(true); const cx = (i % 2) * 0.28 - 0.14, row = Math.floor(i / 2); at(b, cx, 0.12 + row * 0.24 + (level === 2 ? 0.1 : 0), (i % 2 ? -0.1 : 0.08)); b.visible = false; g.add(b); bags.push(b); }
+    g.userData = { kind: 'bin', level, lid, bags, bump: 0 };
+    return g;
+  }
+
+  function makeTruck() {
+    const g = new THREE.Group();
+    const body = box(2.4, 1.2, 1.05, mat.bag); at(body, -0.3, 0.9, 0); g.add(body);
+    const cab = box(0.9, 0.85, 1.0, mat.bag); at(cab, 1.35, 0.72, 0); g.add(cab);
+    const win = box(0.3, 0.35, 0.8, mat.ink, false); at(win, 1.7, 0.85, 0); g.add(win);
+    for (const [x, z] of [[-1.0, 0.5], [-1.0, -0.5], [1.1, 0.5], [1.1, -0.5]]) { const w = cyl(0.26, 0.26, 0.2, mat.ink, 8, false); w.rotation.x = Math.PI / 2; at(w, x, 0.26, z); g.add(w); }
+    const badge = box(0.8, 0.5, 0.02, mat.bone, false); at(badge, -0.3, 0.95, 0.54); g.add(badge);
+    g.visible = false;
+    return g;
+  }
+
+  function makeParticle() { const m = new THREE.Mesh(geo.chip, mat.rat); m.visible = false; return m; }
+  function makeRing() { const m = new THREE.Mesh(geo.ring, mat.ringFx.clone()); m.rotation.x = -Math.PI / 2; m.visible = false; return m; }
+
+  // ---------------------------------------------------------------- board ---
+  function buildBoard() {
+    // sidewalk (bone white) with paving seams, road below the curb
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 40), mat.bone.clone()); ground.rotation.x = -Math.PI / 2; at(ground, 0, -0.02, -4); scene.add(ground);
+    const road = new THREE.Mesh(new THREE.PlaneGeometry(20, 8), mat.boneShade); road.rotation.x = -Math.PI / 2; at(road, 0, -0.01, C.BOARD.curbZ + 4); scene.add(road);
+    const curb = new THREE.Mesh(new THREE.BoxGeometry(20, 0.08, 0.1), mat.ink); at(curb, 0, 0.03, C.BOARD.curbZ); scene.add(curb);
+    for (let z = -8; z <= 1.6; z += 2.4) { const seam = new THREE.Mesh(new THREE.PlaneGeometry(20, 0.03), mat.boneShade); seam.rotation.x = -Math.PI / 2; at(seam, 0, 0.0, z); scene.add(seam); }
+    for (let x = -4; x <= 4; x += 2) { const seam = new THREE.Mesh(new THREE.PlaneGeometry(0.03, 14), mat.boneShade); seam.rotation.x = -Math.PI / 2; at(seam, x, 0.0, -4); scene.add(seam); }
+
+    // facade wall along the top: the alley is the gap on the right
+    facadeFront = -9.8;
+    const wallH = 3.0;
+    const left = new THREE.Mesh(new THREE.BoxGeometry(7.2, wallH, 1.6), mat.wall); at(left, -1.0, wallH / 2, facadeFront - 0.8); scene.add(left); facadeParts.push(left);
+    const right = new THREE.Mesh(new THREE.BoxGeometry(1.4, wallH, 1.6), mat.wall); at(right, 4.3, wallH / 2, facadeFront - 0.8); scene.add(right); facadeParts.push(right);
+    for (let x = -4.0; x < 2.4; x += 1.05) for (let y = 0.9; y < 2.7; y += 1.0) { const w = new THREE.Mesh(new THREE.PlaneGeometry(0.45, 0.6), mat.window); at(w, x, y, facadeFront + 0.01); scene.add(w); facadeParts.push(w); }
+    const alleyFloor = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 3), mat.ink); alleyFloor.rotation.x = -Math.PI / 2; at(alleyFloor, 3.1, 0.005, facadeFront - 0.5); scene.add(alleyFloor);
+
+    // sidewalk grate (left), manhole (center)
+    const grate = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.06, 0.8), mat.ink); at(grate, -3.0, 0.02, -9.0); scene.add(grate);
+    for (let i = 0; i < 5; i++) { const slit = new THREE.Mesh(new THREE.PlaneGeometry(0.08, 0.6), mat.boneShade); slit.rotation.x = -Math.PI / 2; at(slit, -3.4 + i * 0.2, 0.06, -9.0); scene.add(slit); }
+    manhole = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.04, 12), mat.ink); at(manhole, 0, 0.01, -7.9); scene.add(manhole);
+    manholeCover = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 0.07, 12), mat.wall); outline(manholeCover, 1.06); at(manholeCover, 0, 0.05, -7.9); scene.add(manholeCover);
+
+    // piles: a shaded patch and an ink ring where trash goes
+    C.PILES.forEach(p => {
+      const patch = new THREE.Mesh(new THREE.CircleGeometry(0.8, 14), mat.boneShade); patch.rotation.x = -Math.PI / 2; at(patch, p.x, 0.003, p.z); scene.add(patch);
+      const ring = new THREE.Mesh(new THREE.RingGeometry(0.74, 0.8, 24), mat.pileRing.clone()); ring.rotation.x = -Math.PI / 2; at(ring, p.x, 0.004, p.z); scene.add(ring);
+      pileRings.push(ring);
+    });
+
+    // slots: sidewalk furniture behind each slot so the names read, plus a teal ring
+    C.SLOTS.forEach(s => {
+      const ring = new THREE.Mesh(new THREE.RingGeometry(0.5, 0.6, 28), mat.slotRing.clone()); ring.rotation.x = -Math.PI / 2; at(ring, s.x, 0.006, s.z); scene.add(ring);
+      const prop = new THREE.Group();
+      if (s.id === 'stoopRail') {
+        for (let i = -1; i <= 1; i++) { const post = cyl(0.03, 0.03, 0.9, mat.ink, 5, false); at(post, i * 0.34, 0.45, 0); prop.add(post); }
+        const bar = box(0.8, 0.05, 0.05, mat.ink, false); at(bar, 0, 0.9, 0); prop.add(bar);
+        const step = box(1.1, 0.16, 0.5, mat.boneShade, false); at(step, 0, 0.08, -0.4); prop.add(step);
+        at(prop, s.x - 0.1, 0, s.z - 0.85);
+      } else if (s.id === 'hydrant') {
+        const body = cyl(0.14, 0.17, 0.62, mat.ink, 8, false); at(body, 0, 0.31, 0); prop.add(body);
+        const cap = sphere(0.16, mat.bone, 6, 4, false); at(cap, 0, 0.66, 0); prop.add(cap);
+        const nub = cyl(0.06, 0.06, 0.16, mat.bone, 6, false); nub.rotation.z = Math.PI / 2; at(nub, 0.2, 0.42, 0); prop.add(nub);
+        at(prop, s.x + 0.15, 0, s.z - 0.85);
+      } else if (s.id === 'lamppost') {
+        const pole = cyl(0.05, 0.08, 3.4, mat.ink, 6, false); at(pole, 0, 1.7, 0); prop.add(pole);
+        lampBulb = sphere(0.18, mat.bulb, 8, 6, false); at(lampBulb, 0, 3.45, 0); prop.add(lampBulb);
+        lamp = new THREE.PointLight(col(P.bagYellow), 0, 7); at(lamp, 0, 3.2, 0.5); prop.add(lamp);
+        at(prop, s.x - 0.45, 0, s.z - 0.6);
+      } else if (s.id === 'scaffolding') {
+        for (const x of [-0.55, 0.55]) { const pole = cyl(0.04, 0.04, 2.4, mat.ink, 5, false); at(pole, x, 1.2, 0); prop.add(pole); }
+        const bar = box(1.2, 0.05, 0.05, mat.ink, false); at(bar, 0, 2.35, 0); prop.add(bar);
+        const plank = box(1.25, 0.06, 0.4, mat.boneShade, false); at(plank, 0, 1.3, 0); prop.add(plank);
+        const brace = box(0.05, 0.05, 1.4, mat.ink, false); brace.rotation.y = 0.9; at(brace, 0, 0.7, 0); prop.add(brace);
+        at(prop, s.x + 0.2, 0, s.z - 0.75);
+      }
+      scene.add(prop);
+      slotViews[s.id] = { ring, prop, tower: null, key: null, x: s.x, z: s.z };
+    });
+
+    truck = makeTruck(); scene.add(truck);
+  }
+
+  // ----------------------------------------------------------------- init ---
+  function init(canvas) {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(W, H, false);
+    scene = new THREE.Scene();
+    scene.background = col(P.boneWhite);
+
+    const halfW = VIEW_HALF_W, halfH = halfW * H / W;
+    camera = new THREE.OrthographicCamera(-halfW, halfW, halfH, -halfH, 0.1, 100);
+    const d = 30;
+    camBase = new THREE.Vector3(LOOK_AT.x, LOOK_AT.y + d * Math.sin(CAM_TILT), LOOK_AT.z + d * Math.cos(CAM_TILT));
+    camera.position.copy(camBase);
+    camera.lookAt(new THREE.Vector3(LOOK_AT.x, LOOK_AT.y, LOOK_AT.z));
+    camera.updateMatrixWorld();
+    raycaster = new THREE.Raycaster();
+    groundPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+    ambient = new THREE.AmbientLight(0xffffff, light.amb); scene.add(ambient);
+    sun = new THREE.DirectionalLight(0xffffff, light.sun); sun.position.set(-4, 9, 5); scene.add(sun);
+
+    // materials — the five tokens, plus ink and a wall shade
+    mat.bag = phong(P.bagYellow);
+    mat.rat = phong(P.ratPlum);
+    mat.ratDeep = phong(P.ratPlumDeep);
+    mat.teal = phong(P.towerTeal);
+    mat.tealL2 = phong(P.towerTealL2);
+    mat.bone = phong(P.boneWhite);
+    mat.boneShade = basic(P.boneShade);
+    mat.hull = basic(P.ink, { side: THREE.BackSide });
+    mat.ink = basic(P.ink);
+    mat.wall = phong('#2B2628');
+    mat.window = basic('#3F3839');
+    mat.bulb = new THREE.MeshPhongMaterial({ color: col(P.bagYellow), emissive: col(P.bagYellow), emissiveIntensity: 0, flatShading: true });
+    mat.shadow = basic(P.ink, { transparent: true, opacity: 0.16, depthWrite: false });
+    mat.slotRing = basic(P.towerTeal, { transparent: true, opacity: 0.55, depthWrite: false });
+    mat.ringFx = basic(P.boneWhite, { transparent: true, opacity: 0.9, depthWrite: false });
+    mat.tag = basic(P.dangerRed);
+    mat.pileRing = basic(P.ink, { transparent: true, opacity: 1, depthWrite: false });
+    mat.bagAlert = phong(P.dangerRed);
+    mat.bagAlert.emissive = col(P.dangerRed); mat.bagAlert.emissiveIntensity = 0.5;
+
+    geo.bag = new THREE.DodecahedronGeometry(0.28, 0);
+    geo.coin = new THREE.CylinderGeometry(0.18, 0.18, 0.06, 10);
+    geo.shadow = new THREE.CircleGeometry(0.42, 12);
+    geo.chip = new THREE.BoxGeometry(0.12, 0.12, 0.12);
+    geo.ring = new THREE.RingGeometry(0.3, 0.42, 20);
+    geo.slice = new THREE.CylinderGeometry(0.38, 0.38, 0.09, 3);
+
+    pools = {
+      scout: makePool(() => makeRat('scout')),
+      fat: makePool(() => makeRat('fat')),
+      boss: makePool(() => makeRat('boss')),
+      token: makePool(makeToken),
+      bag: makePool(() => makeBag(false)),
+      particle: makePool(makeParticle),
+      ring: makePool(makeRing),
+    };
+    buildBoard();
+    // pre-warm pools so the first wave never hitches
+    const warm = []; for (let i = 0; i < 24; i++) warm.push(pools.scout.get()); warm.forEach(m => pools.scout.release(m));
+    const warm2 = []; for (let i = 0; i < 12; i++) warm2.push(pools.token.get()); warm2.forEach(m => pools.token.release(m));
+    loadArt();
+    setMode('day', true);
+  }
+
+  function reset() {
+    for (const [, m] of ratViews) pools[m.userData.type].release(m); ratViews.clear();
+    for (const [, m] of tokenViews) pools.token.release(m); tokenViews.clear();
+    for (const [, m] of flyViews) pools.bag.release(m); flyViews.clear();
+    pileBags.forEach(list => { list.forEach(b => pools.bag.release(b)); list.length = 0; });
+    handBags.forEach(b => pools.bag.release(b)); handBags.length = 0;
+    pickup.forEach(p => pools.bag.release(p.mesh)); pickup = [];
+    stormRats.forEach(m => pools[m.userData.type].release(m)); stormRats = [];
+    tags.forEach(t => scene.remove(t)); tags.length = 0;
+    for (const id in slotViews) { const v = slotViews[id]; if (v.tower) scene.remove(v.tower); v.tower = null; v.key = null; }
+    truck.visible = false; truckT = -1; shake = 0;
+    manholeCover.position.set(0, 0.05, -7.9); manholeCover.rotation.set(0, 0, 0);
+    scene.background = col(P.boneWhite);
+    setMode('day', true);
+  }
+
+  function setMode(m, instant) {
+    mode = m;
+    if (m === 'day') { target.amb = 0.85; target.sun = 0.7; target.lamp = 0; target.tint.set('#ffffff'); }
+    else if (m === 'night') { target.amb = 0.42; target.sun = 0.3; target.lamp = 1.4; target.tint.set('#B8BEE0'); }
+    else if (m === 'storm') { target.amb = 0.03; target.sun = 0.0; target.lamp = 0; target.tint.set('#6A5F8A'); }
+    if (instant) { light.amb = target.amb; light.sun = target.sun; light.lamp = target.lamp; light.tint.copy(target.tint); applyLight(); }
+  }
+  function applyLight() {
+    ambient.intensity = light.amb; ambient.color.copy(light.tint);
+    sun.intensity = light.sun;
+    if (lamp) { lamp.intensity = light.lamp; mat.bulb.emissiveIntensity = light.lamp * 0.8; }
+    scene.background.copy(col(P.boneWhite)).multiply(light.tint).multiplyScalar(0.55 + 0.45 * Math.min(1, light.amb / 0.85 + 0.1));
+  }
+
+  // ----------------------------------------------------------- projection ---
+  const _v = new THREE.Vector3(), _hit = new THREE.Vector3(), _ndc = new THREE.Vector2();
+  function project(x, y, z) {
+    _v.set(x, y, z).project(camera);
+    return { sx: (_v.x + 1) / 2 * W, sy: (1 - _v.y) / 2 * H };
+  }
+  function unproject(sx, sy) {
+    const saved = camera.position.clone();
+    camera.position.copy(camBase); camera.updateMatrixWorld();
+    _ndc.set(sx / W * 2 - 1, -(sy / H * 2 - 1));
+    raycaster.setFromCamera(_ndc, camera);
+    const ok = raycaster.ray.intersectPlane(groundPlane, _hit);
+    camera.position.copy(saved); camera.updateMatrixWorld();
+    return ok ? { x: _hit.x, z: _hit.z } : null;
+  }
+
+  // ------------------------------------------------------------------ fx ---
+  function burst(x, y, z, m, n, spread) {
+    for (let i = 0; i < n; i++) {
+      const p = pools.particle.get(); p.material = m;
+      p.position.set(x, y, z);
+      p.userData.v = new THREE.Vector3((Math.random() - 0.5) * (spread || 4), 2 + Math.random() * 3, (Math.random() - 0.5) * (spread || 4));
+      p.userData.life = 0.55 + Math.random() * 0.3; p.userData.age = 0;
+      p.scale.setScalar(0.6 + Math.random() * 0.8);
+      particles.push(p);
+    }
+  }
+  function ringFx(x, z, hex, size, dur) {
+    const r = pools.ring.get(); r.position.set(x, 0.04, z); r.material.color.set(hex || P.boneWhite); r.material.opacity = 0.9;
+    r.userData = { age: 0, dur: dur || 0.35, size: size || 1.6 }; r.scale.setScalar(0.3); rings.push(r);
+  }
+  function addTag(count) {
+    for (let i = 0; i < count; i++) {
+      const w = 0.35 + Math.random() * 0.6, h = 0.12 + Math.random() * 0.22;
+      const t = art.tag
+        ? new THREE.Mesh(new THREE.PlaneGeometry(w * 1.6, w * 1.6 * art.tag.aspect), new THREE.MeshBasicMaterial({ map: art.tag.tex, transparent: true, alphaTest: 0.1 }))
+        : new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat.tag);
+      at(t, -4.2 + Math.random() * 6.4, 0.35 + Math.random() * 2.1, facadeFront + 0.03);
+      t.rotation.z = (Math.random() - 0.5) * 0.8;
+      t.userData.pop = 0.25;
+      scene.add(t); tags.push(t);
+    }
+  }
+
+  function handleEvent(ev, g) {
+    switch (ev.type) {
+      case 'nightfall': setMode('night'); break;
+      case 'nightClear': setMode('day'); break;
+      case 'storm': setMode('storm'); startStorm(); shake = 0.5; break;
+      case 'swat': { const v = slotViews[ev.slotId]; if (v && v.tower) v.tower.userData.swatT = 0.26; const rm = ratViews.get(ev.ratId); if (rm) rm.userData.hitT = 0.14; ringFx(ev.x, ev.z, P.boneWhite, 1.1, 0.22); break; }
+      case 'snap': { const v = slotViews[ev.slotId]; if (v && v.tower) { v.tower.userData.angle = 0; v.tower.userData.dust = 0.3; } burst(ev.x, 0.2, ev.z, mat.bone, 6, 3); ringFx(ev.x, ev.z, P.boneWhite, 1.3, 0.25); const rm = ratViews.get(ev.ratId); if (rm) rm.userData.hitT = 0.14; break; }
+      case 'hit': { const rm = ratViews.get(ev.ratId); if (rm) rm.userData.hitT = 0.12; break; }
+      case 'death': { burst(ev.x, 0.3, ev.z, ev.rat === 'boss' ? mat.ratDeep : mat.rat, ev.rat === 'boss' ? 26 : ev.rat === 'fat' ? 12 : 8, ev.rat === 'boss' ? 7 : 4); ringFx(ev.x, ev.z, P.boneWhite, ev.rat === 'boss' ? 4 : 1.8, 0.4); break; }
+      case 'grab': { const rm = ratViews.get(ev.ratId); if (rm) { rm.userData.flashT = 0.5; } shake = Math.max(shake, 0.22); ringFx(ev.x, ev.z, P.dangerRed, 1.6, 0.35); break; }
+      case 'escape': shake = Math.max(shake, 0.28); addTag(ev.bags); break;
+      case 'marked': { shake = 0.55; addTag(3); const x = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 0.22), mat.tag); at(x, -1, 1.6, facadeFront + 0.04); x.rotation.z = 0.35; x.userData.pop = 0.3; scene.add(x); tags.push(x); const x2 = x.clone(); x2.rotation.z = -0.35; scene.add(x2); tags.push(x2); break; }
+      case 'place': { ringFx(ev.x, ev.z, P.towerTeal, 1.6, 0.35); burst(ev.x, 0.4, ev.z, mat.bone, 5, 2); break; }
+      case 'upgrade': { ringFx(ev.x, ev.z, P.towerTealL2, 2.4, 0.45); burst(ev.x, 0.6, ev.z, mat.tealL2, 10, 3); break; }
+      case 'sell': ringFx(ev.x, ev.z, P.boneWhite, 1.4, 0.3); break;
+      case 'stash': case 'unload': { const v = slotViews[ev.slotId]; if (v && v.tower) v.tower.userData.bump = 0.2; break; }
+      case 'rearm': { const v = slotViews[ev.slotId]; if (v && v.tower) { v.tower.userData.angle = 1.1; if (!ev.free) ringFx(ev.x, ev.z, P.bagYellow, 1.2, 0.25); } break; }
+      case 'denied': { const v = slotViews[ev.slotId]; if (v && v.tower) v.tower.userData.deny = 0.3; break; }
+      case 'tokenGrab': { ringFx(ev.x, ev.z, P.bagYellow, 1.0, 0.25); burst(ev.x, 0.3, ev.z, mat.bone, 4, 2); break; }
+      case 'lunge': shake = Math.max(shake, 0.15); break;
+      case 'nearMiss': ringFx(ev.x, ev.z, P.towerTeal, 2.0, 0.45); break;
+      case 'recover': ringFx(ev.x, ev.z, P.towerTeal, 1.5, 0.35); burst(ev.x, 0.35, ev.z, mat.bag, 5, 3); shake = Math.max(shake, 0.1); break;
+      case 'placeBag': ringFx(ev.x, ev.z, P.bagYellow, 1.0, 0.22); break;
+      case 'bank': { // hand the pile bags to the truck
+        pileBags.forEach((list, i) => { list.forEach(b => pickup.push({ mesh: b, x: C.PILES[i].x, t: -1 })); list.length = 0; });
+        truck.visible = true; truckT = 0; truck.position.set(-8, 0, C.BOARD.curbZ + 1.1);
+        break; }
+      case 'bossEnter': shake = Math.max(shake, 0.6); ringFx(ev.x, ev.z, P.ratPlumDeep, 3.5, 0.6); break;
+      case 'bossEnrage': { shake = 0.7; const rm = ratViews.get(ev.ratId); if (rm) { rm.userData.enraged = true; } burst(ev.x, 0.6, ev.z, mat.ratDeep, 14, 6); break; }
+      case 'bossDeath': { shake = 0.9; sliceFx = { x: ev.x, z: ev.z, t: 0 }; break; }
+      case 'run': reset(); break;
+    }
+  }
+
+  function startStorm() {
+    for (let i = 0; i < 44; i++) {
+      const m = pools[i % 5 === 0 ? 'fat' : 'scout'].get();
+      m.position.set((Math.random() - 0.5) * 9, 0, -10.5 + Math.random() * 3);
+      m.rotation.y = 0;
+      m.userData.vx = (Math.random() - 0.5) * 2.5; m.userData.vz = 4 + Math.random() * 5; m.userData.delay = Math.random() * 1.2;
+      m.visible = false;
+      stormRats.push(m);
+    }
+  }
+
+  // ---------------------------------------------------------------- sync ---
+  function syncTowers(g, dt) {
+    for (const s of g.slots) {
+      const v = slotViews[s.id];
+      const key = s.tower ? s.tower.type + s.tower.level : null;
+      if (key !== v.key) {
+        if (v.tower) scene.remove(v.tower);
+        v.tower = null; v.key = key;
+        if (s.tower) {
+          v.tower = s.tower.type === 'cat' ? makeCat(s.tower.level) : s.tower.type === 'trap' ? makeTrap(s.tower.level) : makeBin(s.tower.level);
+          v.tower.position.set(s.x, 0, s.z);
+          v.tower.userData.pop = 0.35;
+          scene.add(v.tower);
+        }
+      }
+      // slot ring: pulse in day when something is affordable, hide under towers
+      const affordable = g.phase === 'day' && !s.tower && Sim.slotOptions(g, s).some(o => o.ok);
+      v.ring.visible = !s.tower;
+      v.ring.material.opacity = affordable ? 0.55 + 0.35 * Math.sin(clock * 5) : 0.28;
+      v.ring.scale.setScalar(affordable ? 1 + 0.08 * Math.sin(clock * 5) : 1);
+      if (!v.tower) continue;
+      const u = v.tower.userData, t = s.tower;
+      if (u.kind === 'cat') applyArt(v.tower, (t.level === 2 && art.cat_l2) ? 'cat_l2' : 'cat_l1', [u.shadowRef].filter(Boolean));
+      else if (u.kind === 'trap') applyArt(v.tower, 'trap_armed', []);
+      else if (u.kind === 'bin') applyArt(v.tower, 'bin', u.bags);
+      if (u.pop > 0) { u.pop -= dt; const k = 1 - u.pop / 0.35; v.tower.scale.setScalar((u.baseScale || 1) * (0.6 + 0.4 * Math.sin(Math.min(1, k) * Math.PI * 0.5) + (k < 0.6 ? 0.25 * Math.sin(k * Math.PI / 0.6) : 0))); }
+      if (u.kind === 'cat') {
+        let x = s.x, z = s.z;
+        if (t.lunge) {
+          const L = t.lunge, k = L.t / L.dur;
+          const a = k < 0.4 ? k / 0.4 : k < 0.6 ? 1 : 1 - (k - 0.6) / 0.4;
+          const e = a * a * (3 - 2 * a);
+          x = s.x + (L.x - s.x) * e; z = s.z + (L.z - s.z) * e;
+          v.tower.position.y = Math.sin(Math.min(1, a) * Math.PI) * 0.6;
+        } else v.tower.position.y = 0;
+        v.tower.rotation.y = u.artDone ? 0 : t.face;
+        if (u.artDone) u.artMesh.scale.x = Math.sin(t.face) < -0.05 ? -1 : 1;
+        const base = u.baseScale;
+        if (u.swatT > 0) {
+          u.swatT -= dt; const k = 1 - u.swatT / 0.26, s1 = Math.sin(k * Math.PI);
+          v.tower.scale.set(base * (1 + 0.22 * s1), base * (1 - 0.25 * s1), base * (1 + 0.22 * s1));
+          x += Math.sin(t.face) * 0.3 * s1; z += Math.cos(t.face) * 0.3 * s1;
+        } else if (!(u.pop > 0)) { const idle = 1 + 0.02 * Math.sin(clock * 3 + s.x); v.tower.scale.set(base, base * idle, base); }
+        v.tower.position.x = x; v.tower.position.z = z;
+        u.tail.rotation.z = Math.sin(clock * 2.4 + s.z) * 0.35;
+      } else if (u.kind === 'trap') {
+        const targetAngle = t.armed ? 1.1 : 1.1 * (1 - t.cooldown / t.cd) * 0.85;
+        u.angle += (targetAngle - u.angle) * Math.min(1, dt * (t.armed ? 6 : 2));
+        u.jawA.rotation.x = -u.angle; u.jawB.rotation.x = u.angle;
+        if (u.artDone && art.trap_sprung) { const want = (t.armed ? art.trap_armed : art.trap_sprung).tex; if (u.artMesh.material.map !== want) { u.artMesh.material.map = want; u.artMesh.material.needsUpdate = true; } }
+        if (u.deny > 0) { u.deny -= dt; v.tower.position.x = s.x + Math.sin(u.deny * 60) * 0.06; } else v.tower.position.x = s.x;
+      } else if (u.kind === 'bin') {
+        u.bags.forEach((b, i) => b.visible = i < t.bags);
+        u.lid.rotation.x = -1.25 + (t.bags >= t.cap ? 0.35 : 0);
+        if (u.bump > 0) { u.bump -= dt; const k = Math.sin(u.bump / 0.2 * Math.PI); v.tower.scale.set(1 + 0.1 * k, 1 - 0.12 * k, 1 + 0.1 * k); } else if (!(u.pop > 0)) v.tower.scale.setScalar(1);
+      }
+    }
+  }
+
+  function syncHand(g, dt) {
+    while (handBags.length < g.hand) {
+      const b = pools.bag.get(); const k = handBags.length;
+      b.position.set(C.HAND.x + (k - 1) * 0.42, 0, C.HAND.z); b.rotation.y = k * 0.9; b.userData.land = 0.28; applyArt(b, 'bag', []); handBags.push(b);
+    }
+    while (handBags.length > g.hand) pools.bag.release(handBags.pop());
+    handBags.forEach((b, k) => {
+      const wob = g.phase === 'day' ? Math.sin(clock * 3.2 + k * 1.7) * 0.05 : 0;
+      b.position.set(C.HAND.x + (k - (handBags.length - 1) / 2) * 0.42, Math.abs(wob), C.HAND.z);
+      if (b.userData.land > 0) { b.userData.land -= dt; const t = 1 - b.userData.land / 0.28; const sq = 1 + 0.35 * Math.sin(t * Math.PI); b.scale.set(sq, 2 - sq, sq); } else b.scale.setScalar(1);
+    });
+    // pile rings turn to bait targets while bags wait in hand
+    const active = g.phase === 'day' && g.hand > 0;
+    pileRings.forEach((r, i) => {
+      const full = g.piles[i].bags >= C.PILE_CAP;
+      const hot = active && !full;
+      r.material.color.set(hot ? P.bagYellow : P.ink);
+      r.material.opacity = hot ? 0.75 + 0.25 * Math.sin(clock * 5) : full && active ? 0.3 : 1;
+      r.scale.setScalar(hot ? 1 + 0.06 * Math.sin(clock * 5) : 1);
+    });
+  }
+
+  function syncPiles(g, dt) {
+    const off = [[0, 0], [0.42, 0.1], [-0.4, 0.14], [0.18, -0.36], [-0.2, -0.38], [0.02, 0.42], [0.44, -0.3], [-0.46, -0.34]];
+    g.piles.forEach((p, i) => {
+      const list = pileBags[i];
+      while (list.length < p.bags) {
+        const b = pools.bag.get(); const k = list.length; const o = off[k % off.length]; const layer = Math.floor(k / off.length);
+        b.position.set(p.x + o[0], layer * 0.36, p.z + o[1]); b.rotation.y = k * 1.7; b.userData.land = 0.28; applyArt(b, 'bag', []); list.push(b);
+      }
+      while (list.length > p.bags) pools.bag.release(list.pop());
+      list.forEach(b => { if (b.userData.land > 0) { b.userData.land -= dt; const k = 1 - b.userData.land / 0.28; const sq = 1 + 0.35 * Math.sin(k * Math.PI); b.scale.set(sq, 2 - sq, sq); } else b.scale.setScalar(1); });
+    });
+  }
+
+  function syncFlying(g, dt) {
+    const seen = new Set();
+    for (const f of g.flying) {
+      seen.add(f.id);
+      let m = flyViews.get(f.id);
+      if (!m) { m = pools.bag.get(); applyArt(m, 'bag', []); flyViews.set(f.id, m); }
+      const tgt = f.to === 'hand' ? C.HAND : C.PILES[f.pile];
+      const tx = f.tx !== undefined ? f.tx : tgt.x, tz = f.tz !== undefined ? f.tz : tgt.z;
+      const u = Math.max(0, Math.min(1, f.t / f.dur));
+      m.visible = f.t >= 0;
+      if (f.kind === 'drop') { m.position.set(f.x0 + (tx - f.x0) * u, f.y0 * (1 - u) * (1 - u), f.z0 + (tz - f.z0) * u); m.rotation.y += dt * 4; }
+      else { m.position.set(f.x0 + (tx - f.x0) * u, Math.sin(u * Math.PI) * (f.to === 'hand' ? 0.9 : 1.6), f.z0 + (tz - f.z0) * u); m.rotation.x += dt * 6; }
+      m.scale.setScalar(1);
+    }
+    for (const [id, m] of flyViews) if (!seen.has(id)) { pools.bag.release(m); flyViews.delete(id); }
+  }
+
+  function syncRats(g, dt) {
+    const seen = new Set();
+    for (const r of g.rats) {
+      seen.add(r.id);
+      let m = ratViews.get(r.id);
+      if (!m) { m = pools[r.type].get(); ratViews.set(r.id, m); m.userData.enraged = r.enraged; m.userData.hitT = 0; m.userData.flashT = 0; m.rotation.set(0, 0, 0); }
+      const u = m.userData, R = C.RATS[r.type];
+      applyArt(m, 'rat_' + r.type, [u.shadow].concat(u.bags));
+      u.bags.forEach(b => applyArt(b, 'bag', [], 1));
+      const moving = r.state === 'walk' || r.state === 'drag' || r.state === 'flee' || r.state === 'stalk';
+      const rate = r.state === 'flee' ? 22 : r.state === 'drag' ? 9 : r.state === 'stalk' ? 6 : 15;
+      const bob = moving ? Math.abs(Math.sin(clock * rate + u.phase)) * 0.06 : 0;
+      const wig = moving && r.state !== 'stalk' ? Math.sin(clock * 9 + u.phase) * 0.07 : 0;
+      m.position.set(r.x + Math.cos(r.dir) * wig, bob * R.size, r.z - Math.sin(r.dir) * wig);
+      m.rotation.y = r.dir;
+      m.rotation.x = r.state === 'grab' ? 0.35 + Math.sin(clock * 26) * 0.08 : r.state === 'drag' ? -0.22 : 0;
+      m.rotation.z = r.state === 'drag' ? Math.sin(clock * 9 + u.phase) * 0.08 : 0;
+      let sc = R.size;
+      if (u.hitT > 0) { u.hitT -= dt; const k = u.hitT / 0.14; m.scale.set(sc * (1 + 0.35 * k), sc * (1 - 0.3 * k), sc * (1 + 0.35 * k)); }
+      else if (r.state === 'caught') { m.scale.setScalar(sc * (1 + 0.15 * Math.sin(clock * 40))); }
+      else if (r.state === 'stalk' || (r.type === 'boss' && r.enraged)) { m.scale.setScalar(sc * (1 + 0.05 * Math.sin(clock * (r.enraged ? 14 : 4)))); }
+      else m.scale.setScalar(sc);
+      u.bags.forEach((b, i) => { b.visible = i < r.carry; });
+      if (u.flashT > 0) { u.flashT -= dt; const on = Math.floor(u.flashT * 12) % 2 === 0; u.bags.forEach(b => b.userData.body.material = on ? mat.bagAlert : mat.bag); }
+      else u.bags.forEach(b => { if (b.userData.body.material !== mat.bag) b.userData.body.material = mat.bag; });
+      u.tail.rotation.z = Math.sin(clock * (moving ? 12 : 3) + u.phase) * 0.5;
+      if (r.type === 'boss') { const red = r.enraged; u.eyeL.material = red ? mat.tag : mat.ink; u.eyeR.material = red ? mat.tag : mat.ink; u.eyeL.scale.setScalar(red ? 1.8 : 1); u.eyeR.scale.setScalar(red ? 1.8 : 1); if (u.slice && !u.artDone) u.slice.visible = true; if (u.artDone) u.artMesh.material.color.set(red ? '#ffb0a6' : '#ffffff'); }
+    }
+    for (const [id, m] of ratViews) if (!seen.has(id)) { pools[m.userData.type].release(m); ratViews.delete(id); }
+  }
+
+  function syncTokens(g, dt) {
+    const seen = new Set();
+    for (const k of g.tokens) {
+      seen.add(k.id);
+      let m = tokenViews.get(k.id);
+      if (!m) { m = pools.token.get(); tokenViews.set(k.id, m); m.userData.roll = 0; }
+      const u = m.userData;
+      applyArt(m, 'token', [u.shadow]);
+      m.position.set(k.x, k.y, k.z);
+      u.roll += (Math.abs(k.vz) + Math.abs(k.vx)) * dt / 0.18;
+      u.coin.rotation.x = u.roll;
+      m.rotation.y = u.artDone ? 0 : Math.atan2(k.vx, k.vz || 0.001);
+      if (u.artDone) { const c = Math.cos(u.roll * 2.2); u.artMesh.scale.x = Math.max(0.18, Math.abs(c)) * (c < 0 ? -1 : 1); }
+      const left = C.TOKENS.life - k.age;
+      const glint = 1 + 0.12 * Math.sin(clock * 10 + k.id);
+      m.scale.setScalar(left < 1.2 ? glint * (0.7 + 0.3 * (Math.floor(left * 8) % 2)) : glint);
+      u.shadow.position.y = -k.y + 0.01; u.shadow.scale.setScalar(0.4 * Math.max(0.3, 1 - k.y * 0.3));
+    }
+    for (const [id, m] of tokenViews) if (!seen.has(id)) { pools.token.release(m); tokenViews.delete(id); }
+  }
+
+  function syncTruck(dt) {
+    if (truckT < 0) return;
+    truckT += dt;
+    const k = Math.min(1, truckT / C.TIMING.truckDur);
+    truck.position.x = -8 + 16 * k;
+    truck.position.y = Math.abs(Math.sin(truckT * 18)) * 0.03;
+    for (const p of pickup) {
+      if (p.t < 0 && truck.position.x > p.x - 0.4) { p.t = 0; p.x0 = p.mesh.position.x; p.z0 = p.mesh.position.z; p.y0 = p.mesh.position.y; }
+      if (p.t >= 0) {
+        p.t += dt; const u = Math.min(1, p.t / 0.32);
+        p.mesh.position.set(p.x0 + (truck.position.x - 0.3 - p.x0) * u, p.y0 + Math.sin(u * Math.PI) * 1.8 + u * 1.2, p.z0 + (truck.position.z - p.z0) * u);
+        p.mesh.scale.setScalar(1 - u * 0.6);
+      }
+    }
+    pickup = pickup.filter(p => { if (p.t >= 0.32) { pools.bag.release(p.mesh); return false; } return true; });
+    if (k >= 1) { truck.visible = false; truckT = -1; pickup.forEach(p => pools.bag.release(p.mesh)); pickup = []; }
+  }
+
+  function syncFx(dt) {
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i]; p.userData.age += dt;
+      const v = p.userData.v; v.y -= 12 * dt;
+      p.position.addScaledVector(v, dt);
+      if (p.position.y < 0.06) { p.position.y = 0.06; v.y = Math.abs(v.y) * 0.3; v.x *= 0.6; v.z *= 0.6; }
+      p.rotation.x += dt * 9; p.rotation.z += dt * 7;
+      if (p.userData.age >= p.userData.life) { pools.particle.release(p); particles.splice(i, 1); }
+    }
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const r = rings[i], u = r.userData; u.age += dt; const k = u.age / u.dur;
+      r.scale.setScalar(0.3 + u.size * k); r.material.opacity = 0.9 * (1 - k);
+      if (k >= 1) { pools.ring.release(r); rings.splice(i, 1); }
+    }
+    for (const t of tags) if (t.userData.pop > 0) { t.userData.pop -= dt; const k = 1 - t.userData.pop / 0.3; t.scale.setScalar(0.4 + 0.6 * Math.min(1, k * 1.4) + (k < 0.5 ? 0.5 * Math.sin(k * Math.PI * 2) : 0)); }
+    if (sliceFx) {
+      sliceFx.t += dt; const k = Math.min(1, sliceFx.t / 1.3);
+      if (!sliceFx.mesh) {
+        if (art.pizza_slice) { const a = art.pizza_slice, w = ART_IDS.pizza_slice.w; sliceFx.mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, w * a.aspect), new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.3 })); sliceFx.mesh.rotation.x = -CAM_TILT; }
+        else { sliceFx.mesh = new THREE.Mesh(geo.slice, mat.bag); outline(sliceFx.mesh, 1.1); }
+        scene.add(sliceFx.mesh); sliceFx.mesh.scale.setScalar(2.2);
+      }
+      const tx = -3.0, tz = -9.0;
+      sliceFx.mesh.position.set(sliceFx.x + (tx - sliceFx.x) * k, Math.sin(k * Math.PI) * 4.5 + 0.3, sliceFx.z + (tz - sliceFx.z) * k);
+      sliceFx.mesh.rotation.y += dt * 8; sliceFx.mesh.rotation.x += dt * 5;
+      sliceFx.mesh.scale.setScalar(2.2 * (1 - k * 0.85));
+      if (k >= 1) { scene.remove(sliceFx.mesh); sliceFx = null; }
+    }
+  }
+
+  function syncStorm(dt) {
+    for (const m of stormRats) {
+      const u = m.userData;
+      if (u.delay > 0) { u.delay -= dt; continue; }
+      m.visible = true;
+      m.position.x += u.vx * dt; m.position.z += u.vz * dt;
+      m.position.y = Math.abs(Math.sin(clock * 30 + u.phase)) * 0.08;
+      m.rotation.y = Math.atan2(u.vx, u.vz);
+      if (m.position.z > 8) { m.position.z = -11; m.position.x = (Math.random() - 0.5) * 9; }
+    }
+  }
+
+  const PROP_ART = { stoopRail: 'prop_stoop', hydrant: 'prop_hydrant', lamppost: 'prop_lamppost', scaffolding: 'prop_scaffolding' };
+  function syncArtStatics() {
+    if (!facadeArt && art.facade) {
+      facadeParts.forEach(pm => pm.visible = false);
+      const a = art.facade, w = ART_IDS.facade.w, h = w * a.aspect;
+      const geo2 = new THREE.PlaneGeometry(w, h); geo2.translate(0, h / 2, 0);
+      facadeArt = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.1 }));
+      facadeArt.position.set(-0.3, 0, facadeFront + 0.005);
+      scene.add(facadeArt);
+    }
+    for (const id in slotViews) {
+      const v = slotViews[id];
+      if (v.prop && !v.prop.userData.artDone) {
+        const keeps = id === 'lamppost' && lamp ? [lamp] : [];
+        applyArt(v.prop, PROP_ART[id], keeps);
+      }
+    }
+    applyArt(truck, 'truck', []);
+  }
+
+  function syncManhole(g) {
+    const open = g.night >= 6 && g.phase !== 'title';
+    if (open) { manholeCover.position.set(0.72, 0.05, -8.0); manholeCover.rotation.z = 0.12; return; }
+    manholeCover.rotation.z = 0;
+    const cfg = C.NIGHTS[g.night];
+    if (g.phase === 'night' && cfg && cfg.rattle) {
+      const burst = Math.sin(clock * 1.4) > 0.55;
+      manholeCover.position.set(burst ? (Math.random() - 0.5) * 0.08 : 0, 0.05 + (burst ? Math.random() * 0.05 : 0), -7.9);
+    } else manholeCover.position.set(0, 0.05, -7.9);
+  }
+
+  function sync(g, dt, now) {
+    clock = now;
+    // lighting eases toward the mode target
+    const ease = Math.min(1, dt * (mode === 'storm' ? 1.2 : 2.2));
+    light.amb += (target.amb - light.amb) * ease; light.sun += (target.sun - light.sun) * ease; light.lamp += (target.lamp - light.lamp) * ease; light.tint.lerp(target.tint, ease);
+    applyLight();
+    syncArtStatics(); syncTowers(g, dt); syncPiles(g, dt); syncHand(g, dt); syncFlying(g, dt); syncRats(g, dt); syncTokens(g, dt); syncTruck(dt); syncFx(dt); syncManhole(g);
+    if (g.phase === 'storm' || g.phase === 'over') syncStorm(dt);
+    // camera shake: theft, MARKED, boss beats only (GDD §8)
+    if (shake > 0.002) { camera.position.set(camBase.x + (Math.random() - 0.5) * shake * 0.5, camBase.y + (Math.random() - 0.5) * shake * 0.5, camBase.z); shake *= Math.pow(0.02, dt); }
+    else camera.position.copy(camBase);
+    camera.updateMatrixWorld();
+  }
+
+  function draw() { renderer.render(scene, camera); }
+  function stats() { const r = renderer.info.render; return { calls: r.calls, triangles: r.triangles }; }
+
+  return { init, reset, sync, draw, handleEvent, project, unproject, setMode, stats };
+})();
+</script>
+
+<script>
+/* ======================= src/ui.js ======================= */
+/* ============================================================================
+   RAT CITY — src/ui.js
+   DOM layer: HUD bands, the day panel (wave preview = the greed decision,
+   staring at you), the radial slot menu, alerts, teach lines, cards.
+   Text lives in DOM because text in DOM is crisp, cheap, and accessible.
+   ========================================================================== */
+
+const UI = (() => {
+  const C = CONFIG;
+  const $ = id => document.getElementById(id);
+  let els = {};
+  let alertQueue = [], alertT = 0;
+  let scoreShown = 0, scoreTarget = 0, scoreTick = 0, scoreStep = 0.1;
+  let lastPreview = '', teachTrashShown = false, teachTapShown = false, teachT = 0;
+  let radialSlot = null;
+let bestScore = 0, taughtTrash = false, binNoteShown = false, pileFullShown = false;
+  let onAction = null;   // Main injects: (action, slotId, type) => void
+
+  function init(hooks) {
+    onAction = hooks.onAction;
+    ['hud-top', 'hud-bottom', 'n-night', 'n-truck', 'infest-fill', 'infest-pct', 'infest-label', 'graffiti', 'alert', 'teach',
+     'day-panel', 'unlock', 'preview-rats', 'preview-text', 'btn-nightfall', 'n-bags', 'n-binned', 'n-tokens', 'n-score',
+     'btn-pause', 'radial', 'ripples', 'flash', 'overlay', 'stage'].forEach(id => els[id] = $(id));
+    els['btn-nightfall'].addEventListener('pointerdown', e => { e.preventDefault(); hooks.onNightfall(); });
+    els['btn-pause'].addEventListener('pointerdown', e => { e.preventDefault(); hooks.onPause(); });
+  }
+
+  // ------------------------------------------------------------ overlays ---
+  function showTitle() {
+    els.overlay.className = 'show title';
+    els.overlay.innerHTML = `
+      <div class="card">
+        <div class="eyebrow">made in brooklyn</div>
+        <h1>RAT<br>CITY</h1>
+        <p class="tag">${COPY.title}</p>
+        <p class="cta">tap to start</p>
+      </div>`;
+  }
+  function showPause(muted) {
+    els.overlay.className = 'show pause';
+    els.overlay.innerHTML = `
+      <div class="card">
+        <h2>paused</h2>
+        <button class="big" data-act="resume">resume</button>
+        <button class="big" data-act="mute">sound ${muted ? 'off' : 'on'}</button>
+        <button class="big ghost" data-act="restart">restart</button>
+      </div>`;
+  }
+  function showScore(g) {
+    const win = g.result === 'victory';
+    const newBest = g.score > bestScore;
+    bestScore = Math.max(bestScore, g.score);
+    const leftBin = Sim.binned(g);
+    els.overlay.className = 'show score' + (win ? ' win' : ' loss');
+    els.overlay.innerHTML = `
+      <div class="card">
+        <div class="eyebrow">${win ? 'night 10 survived' : COPY.storm.toLowerCase() + ' · night ' + g.night}</div>
+        <h2>${win ? COPY.victory : COPY.loss}</h2>
+        <div class="score-big"><span class="lbl">banked</span><span class="num">${g.score}</span><span class="lbl">bags</span></div>
+        <div class="score-row"><span>${newBest && bestScore > 0 ? 'new best' : 'best'}</span><span class="mono">${bestScore}</span></div>
+        ${leftBin > 0 ? `<div class="score-row"><span>${COPY.binLeft}</span><span class="mono">${leftBin}</span></div>` : ''}
+        <div class="score-row"><span>tokens</span><span class="mono">${g.tokensGrabbed}/${g.tokensTotal}</span></div>
+        <p class="tokens-line">${COPY.tokens}</p>
+        <div class="score-row small"><span>rats swatted</span><span class="mono">${g.stats.kills}</span></div>
+        <div class="score-row small"><span>bags lost</span><span class="mono">${g.lostTotal}</span></div>
+        <button class="big" data-act="restart">${COPY.restart}</button>
+      </div>`;
+  }
+  function hideOverlay() { els.overlay.className = ''; els.overlay.innerHTML = ''; }
+
+  // --------------------------------------------------------------- radial ---
+  function openRadial(g, slot) {
+    radialSlot = slot;
+    const opts = Sim.slotOptions(g, slot);
+    const p = Render.project(slot.x, 0.3, slot.z);
+    const r = els.radial;
+    r.className = ''; r.innerHTML = '';
+    r.style.left = p.sx + 'px'; r.style.top = p.sy + 'px';
+    const n = opts.length;
+    const angles = n === 1 ? [-90] : n === 2 ? [-135, -45] : [-150, -90, -30];
+    opts.forEach((o, i) => {
+      const a = angles[i] * Math.PI / 180, R = 74;
+      const b = document.createElement('button');
+      b.setAttribute('data-ui', '1');
+      b.className = 'rbtn' + (o.ok ? '' : ' off') + (o.maxed ? ' maxed' : '');
+      if (o.action === 'place') b.innerHTML = `<span class="rname">${o.type}</span><span class="rcost">${o.cost} bag${o.cost > 1 ? 's' : ''}</span>`;
+      else if (o.action === 'upgrade') b.innerHTML = o.maxed ? `<span class="rname">max</span>` : `<span class="rname">upgrade</span><span class="rcost">${o.cost} bags</span>`;
+      else b.innerHTML = `<span class="rname">sell</span><span class="rcost">+${o.refund}</span>`;
+      b.style.left = Math.cos(a) * R + 'px'; b.style.top = Math.sin(a) * R + 'px';
+      b.style.animationDelay = (i * 0.03) + 's';
+      b.addEventListener('pointerdown', e => {
+        e.preventDefault(); e.stopPropagation();
+        if (!o.ok || o.maxed) { b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 300); Audio.sfx.denied(); return; }
+        onAction(o.action, slot.id, o.type);
+        closeRadial();
+      });
+      r.appendChild(b);
+    });
+    // slot label under the ring so the furniture names read
+    const lbl = document.createElement('div'); lbl.className = 'rlabel'; lbl.textContent = slot.tower ? (slot.tower.name || slot.tower.type + (slot.tower.level === 2 ? ' L2' : '')) : slot.label; r.appendChild(lbl);
+  }
+  function closeRadial() { radialSlot = null; els.radial.className = 'hidden'; els.radial.innerHTML = ''; }
+  const isRadialOpen = () => !!radialSlot;
+
+  // --------------------------------------------------------------- alerts ---
+  function alert(text, cls) { alertQueue.push({ text, cls: cls || '' }); }
+  function ripple(sx, sy) {
+    const d = document.createElement('div'); d.className = 'ripple'; d.style.left = sx + 'px'; d.style.top = sy + 'px';
+    els.ripples.appendChild(d); setTimeout(() => d.remove(), 420);
+  }
+  function flash(cls, ms) { els.flash.className = cls; if (ms) setTimeout(() => { if (els.flash.className === cls) els.flash.className = ''; }, ms); }
+  function teach(text, sx, sy) {
+    const t = els.teach; t.textContent = text; t.className = 'show';
+    if (sx !== undefined) { t.style.left = sx + 'px'; t.style.top = (sy - 44) + 'px'; t.classList.add('at'); } else { t.style.left = ''; t.style.top = ''; }
+    teachT = 2.2;
+  }
+
+  function handleEvent(ev, g) {
+    switch (ev.type) {
+      case 'run': hideOverlay(); closeRadial(); scoreShown = 0; scoreTarget = 0; lastPreview = ''; teachTrashShown = false; teachTapShown = false; taughtTrash = false; binNoteShown = false; pileFullShown = false; els.graffiti.className = 'hidden'; els.flash.className = ''; alertQueue = []; break;
+      case 'day': if (ev.night === 1 && !teachTrashShown) { teachTrashShown = true; setTimeout(() => teach(COPY.teachPlace), 1400); } break;
+      case 'unlock': if (ev.night > 1) { els.unlock.textContent = ev.what + ' unlocked'; els.unlock.className = 'pulse'; setTimeout(() => els.unlock.className = '', 4000); } break;
+      case 'nightfall': closeRadial(); if (ev.rattle) alert('something under the street.', 'quiet'); if (ev.boss) alert('PIZZA RAT', 'boss'); if (ev.quiet) alert('too quiet.', 'quiet'); break;
+      case 'grab': flash('theft', 140); break;
+      case 'escape': alert(ev.name ? COPY.theft(ev.name) : COPY.theftNoCat, 'theft'); break;
+      case 'nearMiss': alert(COPY.nearMiss(ev.name), 'good'); break;
+      case 'recover': alert(COPY.recovered, 'good'); break;
+      case 'pileFull': if (!pileFullShown) { pileFullShown = true; teach(COPY.pileFull); } Audio.sfx.denied(); break;
+      case 'stash': if (!binNoteShown) { binNoteShown = true; alert(COPY.binNote, 'quiet'); } break;
+      case 'marked': els.graffiti.textContent = COPY.marked; els.graffiti.className = 'slam'; flash('theft', 260); break;
+      case 'nightClear': alert(ev.lost ? `night ${ev.night} · ${ev.lost} bag${ev.lost > 1 ? 's' : ''} lost` : `night ${ev.night} · nothing lost`, ev.lost ? 'theft' : 'good'); break;
+      case 'bank': scoreTarget = ev.score; scoreStep = Math.max(0.035, C.TIMING.truckDur * 0.55 / Math.max(1, ev.amount)); scoreTick = ev.bonus ? 0.2 : 0.9; alert(ev.bonus ? `+${ev.amount} banked` : `${COPY.truck} · +${ev.amount} banked`, 'bank'); break;
+      case 'tokenSpawn': if (ev.first && !teachTapShown) { teachTapShown = true; const p = Render.project(ev.x, 0.3, ev.z); teach(COPY.teachTap, p.sx, p.sy); } break;
+      case 'bossEnter': if (ev.returning) alert('he came back.', 'boss'); break;
+      case 'bossEnrage': alert('ENRAGED', 'boss'); break;
+      case 'bossDeath': alert('the slice is gone.', 'good'); break;
+      case 'storm': flash('storm'); els['day-panel'].className = 'hidden'; closeRadial(); break;
+      case 'over': setTimeout(() => showScore(g), ev.result === 'victory' ? 900 : 400); break;
+    }
+  }
+
+  // ---------------------------------------------------------------- sync ---
+  function previewHTML(pv) {
+    if (pv.boss) {
+      const n = pv.size;
+      return { rats: `<span class="rat boss"></span>` + (n ? `<span class="plus">+${n}</span>` : ''), text: `PIZZA RAT tonight${n ? ` · +${n} scout${n > 1 ? 's' : ''} for your trash` : ''}${pv.marked ? ' · MARKED' : ''}` };
+    }
+    const n = pv.size, cap = 24, own = pv.extra;
+    let s = '';
+    for (let i = 0; i < Math.min(n, cap); i++) s += `<span class="rat${i >= n - own ? ' own' : ''}"></span>`;
+    if (n > cap) s += `<span class="plus">+${n - cap}</span>`;
+    let text = `${n} rat${n !== 1 ? 's' : ''} tonight`;
+    if (own > 0) text += ` · <b>+${own}</b> for your trash`;
+    if (pv.marked) text += ' · <b class="red">MARKED +25%</b>';
+    if (pv.truckAfterThis) text += ' · <b>truck at dawn</b>';
+    return { rats: s, text };
+  }
+
+  function sync(g, dt) {
+    // HUD numbers
+    els['n-night'].textContent = g.night || 1;
+    const ti = Sim.nextTruckIn(g);
+    els['n-truck'].textContent = g.night === 10 ? 'last night' : ti === 1 ? 'at dawn' : `in ${ti}`;
+    const pct = Math.round(g.infestation);
+    els['infest-fill'].style.width = pct + '%';
+    els['infest-pct'].textContent = pct + '%';
+    els['infest-label'].textContent = g.marked ? 'MARKED' : 'infestation';
+    els['hud-top'].className = g.marked ? 'marked' : '';
+    els['n-bags'].textContent = Sim.liquidBags(g);
+    const bn = Sim.binned(g);
+    els['n-binned'].textContent = bn ? `· ${bn} binned` : '';
+    els['n-tokens'].textContent = `${g.tokensGrabbed}/${g.tokensTotal}`;
+    // score ticks digit by digit during the truck
+    if (scoreShown < scoreTarget) { scoreTick -= dt; if (scoreTick <= 0) { scoreShown++; scoreTick = scoreStep; Audio.sfx.tally(); } }
+    els['n-score'].textContent = scoreShown;
+    // day panel
+    const day = g.phase === 'day';
+    els['day-panel'].className = day ? '' : 'hidden';
+    if (day) {
+      const nfLabel = g.hand > 0 ? `DROP YOUR TRASH · ${g.hand}` : 'NIGHTFALL';
+      if (els['btn-nightfall'].textContent !== nfLabel) els['btn-nightfall'].textContent = nfLabel;
+      const pv = Sim.preview(g);
+      if (!taughtTrash && pv.extra > 0) { taughtTrash = true; teach(COPY.teachTrash); }
+      const html = previewHTML(pv);
+      const key = html.rats + html.text;
+      if (key !== lastPreview) { lastPreview = key; els['preview-rats'].innerHTML = html.rats; els['preview-text'].innerHTML = html.text; els['preview-rats'].classList.remove('grow'); void els['preview-rats'].offsetWidth; els['preview-rats'].classList.add('grow'); }
+    }
+    // alerts
+    if (alertT > 0) { alertT -= dt; if (alertT <= 0) els.alert.className = ''; }
+    else if (alertQueue.length) { const a = alertQueue.shift(); els.alert.textContent = a.text; els.alert.className = 'show ' + a.cls; alertT = 1.7; }
+    if (teachT > 0) { teachT -= dt; if (teachT <= 0) els.teach.className = ''; }
+  }
+
+  return { init, showTitle, showPause, showScore, hideOverlay, openRadial, closeRadial, isRadialOpen, alert, ripple, flash, teach, handleEvent, sync };
+})();
+</script>
+
+<script>
+/* ======================= src/main.js ======================= */
+/* ============================================================================
+   RAT CITY — src/main.js
+   Boot, portrait letterbox, taps-only input, fixed-timestep loop. The sim runs
+   at 60Hz decoupled from render; render draws whatever state exists. Events
+   fan out to Render / Audio / UI after each batch of sim steps.
+   ========================================================================== */
+
+const Main = (() => {
+  const C = CONFIG;
+  const W = C.VIEW.W, H = C.VIEW.H, STEP = 1 / C.SIM_HZ;
+  let g, stage, scale = 1, last = 0, acc = 0, paused = false, freezeFrames = 0, started = false, nudged = false, handNudgeNight = -1;
+
+  function fit() {
+    scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  }
+
+  // ---- diagnostics: errors print on the stage (phones have no console); ?debug adds a readout ----
+  function showErr(msg) {
+    let e = document.getElementById('err');
+    if (!e) { e = document.createElement('div'); e.id = 'err'; (stage || document.body).appendChild(e); }
+    e.textContent = msg;
+  }
+  window.addEventListener('error', e => showErr('ERR: ' + e.message + (e.lineno ? ' @' + e.lineno : '')));
+  window.addEventListener('unhandledrejection', e => showErr('ERR: ' + String(e.reason)));
+  const DEBUG = typeof location !== 'undefined' && /debug/.test(location.search);
+  let dbgEl = null, fpsAcc = 0, fpsN = 0, fps = 0;
+  function debugReadout(dt) {
+    if (!DEBUG) return;
+    if (!dbgEl) { dbgEl = document.createElement('div'); dbgEl.id = 'dbg'; stage.appendChild(dbgEl); }
+    fpsAcc += dt; fpsN++; if (fpsAcc >= 0.5) { fps = Math.round(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; }
+    const st = Render.stats();
+    dbgEl.textContent = `${g.phase} n${g.night} t${(g.t || 0).toFixed(1)} rats${g.rats.length} tok${g.tokens.length} q${g.queue ? g.queue.length : 0} liq${Sim.liquidBags(g)} calls${st.calls} tri${st.triangles} ${fps}fps`;
+  }
+
+  function boot() {
+    stage = document.getElementById('stage');
+    fit(); window.addEventListener('resize', fit);
+    Render.init(document.getElementById('gl'));
+    UI.init({ onAction, onNightfall, onPause });
+    g = Sim.createGame();
+    UI.showTitle();
+    stage.addEventListener('pointerdown', onPointer, { passive: false });
+    stage.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('visibilitychange', () => { if (document.hidden && started && g.phase === 'night' && !paused) setPaused(true); else if (!document.hidden) Audio.resume(); });
+    requestAnimationFrame(loop);
+  }
+
+  function startRun() {
+    Sim.startRun(g);
+    paused = false; freezeFrames = 0; acc = 0; nudged = false; handNudgeNight = -1;
+    UI.hideOverlay();
+    started = true;
+  }
+
+  // ---------------------------------------------------------------- input ---
+  function stageXY(e) {
+    const r = stage.getBoundingClientRect();
+    return { sx: (e.clientX - r.left) / scale, sy: (e.clientY - r.top) / scale };
+  }
+
+  function onPointer(e) {
+    e.preventDefault();
+    Audio.ensure(); Audio.resume();
+    const { sx, sy } = stageXY(e);
+    const ui = e.target.closest && e.target.closest('[data-ui]');
+    // overlay cards
+    if (g.phase === 'title') { UI.ripple(sx, sy); Audio.sfx.tick(); startRun(); return; }
+    if (paused) { const act = e.target.closest && e.target.closest('[data-act]'); if (act) onOverlayAct(act.getAttribute('data-act')); return; }
+    if (g.phase === 'over') { const act = e.target.closest && e.target.closest('[data-act]'); if (act) onOverlayAct(act.getAttribute('data-act')); return; }
+    if (ui) return; // HUD buttons and radial handle themselves
+    UI.ripple(sx, sy); Audio.sfx.tick();
+    const w = Render.unproject(sx, sy);
+    if (!w) return;
+    if (g.phase === 'day') {
+      const r = Sim.tapDay(g, w.x, w.z);
+      if (r && r.kind === 'slot') UI.openRadial(g, r.slot);
+      else UI.closeRadial();
+    } else if (g.phase === 'night') {
+      Sim.tapNight(g, w.x, w.z);
+    }
+    dispatch();
+  }
+
+  function onAction(action, slotId, type) {
+    if (action === 'place') Sim.place(g, slotId, type);
+    else if (action === 'upgrade') Sim.upgrade(g, slotId);
+    else if (action === 'sell') Sim.sell(g, slotId);
+    dispatch();
+  }
+  function onNightfall() {
+    if (g.phase !== 'day') return;
+    UI.closeRadial();
+    // bags still in hand: one nudge per day, then the second press scatters them and starts the night
+    if (g.hand > 0 && handNudgeNight !== g.night) { handNudgeNight = g.night; UI.teach(COPY.teachDropFirst); Audio.sfx.denied(); return; }
+    // night-1 nudge, once: an empty board with a cat in the budget gets one hint, then we respect the player
+    if (g.night === 1 && !nudged && !g.slots.some(s => s.tower) && Sim.canAfford(g, C.TOWERS.cat.cost)) { nudged = true; UI.teach(COPY.teachCat); Audio.sfx.denied(); return; }
+    Sim.nightfall(g); dispatch();
+  }
+  function onPause() { if (!started || g.phase === 'over' || g.phase === 'title') return; setPaused(!paused); }
+  function setPaused(p) { paused = p; if (p) UI.showPause(Audio.isMuted()); else UI.hideOverlay(); }
+  function onOverlayAct(act) {
+    if (act === 'resume') setPaused(false);
+    else if (act === 'mute') { Audio.setMuted(!Audio.isMuted()); UI.showPause(Audio.isMuted()); }
+    else if (act === 'restart') startRun();
+  }
+
+  // ----------------------------------------------------------------- loop ---
+  function dispatch() {
+    if (!g.events.length) return;
+    const evs = g.events.splice(0);
+    for (const ev of evs) {
+      Render.handleEvent(ev, g); Audio.handleEvent(ev, g); UI.handleEvent(ev, g);
+      if (ev.type === 'snap') freezeFrames = 2;                                  // 2-frame freeze on SNAP (GDD §8)
+      if (ev.type === 'grab' && navigator.vibrate) navigator.vibrate(50);       // theft
+      if (ev.type === 'recover' && navigator.vibrate) navigator.vibrate(30);    // snatched it back
+      if (ev.type === 'marked' && navigator.vibrate) navigator.vibrate(100);    // MARKED
+      if (ev.type === 'bossEnter' && navigator.vibrate) navigator.vibrate([60, 40, 60]);
+      if (ev.type === 'over') paused = false;
+    }
+  }
+
+  function loop(now) {
+    requestAnimationFrame(loop);
+    const dt = Math.min(0.1, (now - (last || now)) / 1000); last = now;
+    if (!paused) {
+      if (freezeFrames > 0) { freezeFrames--; acc = 0; }
+      else {
+        acc += dt;
+        let n = 0;
+        while (acc >= STEP && n < 6) { Sim.update(g, STEP); acc -= STEP; n++; }
+        dispatch();
+      }
+      Audio.update(dt, g);
+    }
+    Render.sync(g, paused ? 0 : dt, now / 1000);
+    UI.sync(g, paused ? 0 : dt);
+    Render.draw();
+    debugReadout(dt);
+  }
+
+  return { boot, startRun };
+})();
+
+window.addEventListener('DOMContentLoaded', Main.boot);
+</script>
+</body>
+</html>
