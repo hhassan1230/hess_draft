@@ -1354,7 +1354,7 @@ const Render = (() => {
   const ART_IDS = {
     rat_scout: { mode: 'flat', w: 0.95 },
     rat_fat: { mode: 'flat', w: 0.95 },
-    rat_boss: { mode: 'flat', w: 1.05 },
+    rat_boss: { mode: 'up', w: 0.95 },   // frontal art: stands and looms, never rotates
     cat_l1: { mode: 'up', w: 1.05 },
     cat_l2: { mode: 'up', w: 1.05 },
     bag: { mode: 'up', w: 0.66 },
@@ -1391,14 +1391,14 @@ const Render = (() => {
     const spec = ART_IDS[id];
     const w = spec.w, h = w * a.aspect;
     const geo2 = new THREE.PlaneGeometry(w, h);
-    const m = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.3 }));
+    const m = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.3, depthWrite: false }));
     if (spec.mode === 'flat') { m.rotation.x = -Math.PI / 2; m.rotation.z = Math.PI; m.position.y = 0.045; }
-    else { geo2.translate(0, h / 2, 0); m.rotation.x = -CAM_TILT; m.position.y = 0.02; m.position.z = 0.01; }
+    else { geo2.translate(0, h / 2, 0); m.position.y = 0.02; m.position.z = 0.01; }
     if (scl) m.scale.setScalar(scl);
     const keep = new Set(keeps || []);
     for (const c of group.children) if (!keep.has(c)) c.visible = false;
     group.add(m);
-    u.artDone = true; u.artMesh = m;
+    u.artDone = true; u.artMesh = m; u.artMode = spec.mode;
     return true;
   }
 
@@ -1559,8 +1559,8 @@ const Render = (() => {
       } else if (s.id === 'lamppost') {
         const pole = cyl(0.05, 0.08, 3.4, mat.ink, 6, false); at(pole, 0, 1.7, 0); prop.add(pole);
         lampBulb = sphere(0.18, mat.bulb, 8, 6, false); at(lampBulb, 0, 3.45, 0); prop.add(lampBulb);
-        lamp = new THREE.PointLight(col(P.bagYellow), 0, 7); at(lamp, 0, 3.2, 0.5); prop.add(lamp);
         at(prop, s.x - 0.45, 0, s.z - 0.6);
+        lamp = new THREE.PointLight(col(P.bagYellow), 0, 7); at(lamp, s.x - 0.45, 3.2, s.z - 0.1); scene.add(lamp);
       } else if (s.id === 'scaffolding') {
         for (const x of [-0.55, 0.55]) { const pole = cyl(0.04, 0.04, 2.4, mat.ink, 5, false); at(pole, x, 1.2, 0); prop.add(pole); }
         const bar = box(1.2, 0.05, 0.05, mat.ink, false); at(bar, 0, 2.35, 0); prop.add(bar);
@@ -1706,7 +1706,7 @@ const Render = (() => {
     for (let i = 0; i < count; i++) {
       const w = 0.35 + Math.random() * 0.6, h = 0.12 + Math.random() * 0.22;
       const t = art.tag
-        ? new THREE.Mesh(new THREE.PlaneGeometry(w * 1.6, w * 1.6 * art.tag.aspect), new THREE.MeshBasicMaterial({ map: art.tag.tex, transparent: true, alphaTest: 0.1 }))
+        ? new THREE.Mesh(new THREE.PlaneGeometry(w * 1.6, w * 1.6 * art.tag.aspect), new THREE.MeshBasicMaterial({ map: art.tag.tex, transparent: true, alphaTest: 0.1, depthWrite: false }))
         : new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat.tag);
       at(t, -4.2 + Math.random() * 6.4, 0.35 + Math.random() * 2.1, facadeFront + 0.03);
       t.rotation.z = (Math.random() - 0.5) * 0.8;
@@ -1768,6 +1768,7 @@ const Render = (() => {
       if (key !== v.key) {
         if (v.tower) scene.remove(v.tower);
         v.tower = null; v.key = key;
+        if (v.prop) v.prop.visible = true;
         if (s.tower) {
           v.tower = s.tower.type === 'cat' ? makeCat(s.tower.level) : s.tower.type === 'trap' ? makeTrap(s.tower.level) : makeBin(s.tower.level);
           v.tower.position.set(s.x, 0, s.z);
@@ -1785,6 +1786,7 @@ const Render = (() => {
       if (u.kind === 'cat') applyArt(v.tower, (t.level === 2 && art.cat_l2) ? 'cat_l2' : 'cat_l1', [u.shadowRef].filter(Boolean));
       else if (u.kind === 'trap') applyArt(v.tower, 'trap_armed', []);
       else if (u.kind === 'bin') applyArt(v.tower, 'bin', u.bags);
+      if (v.prop) v.prop.visible = !u.artDone;
       if (u.pop > 0) { u.pop -= dt; const k = 1 - u.pop / 0.35; v.tower.scale.setScalar((u.baseScale || 1) * (0.6 + 0.4 * Math.sin(Math.min(1, k) * Math.PI * 0.5) + (k < 0.6 ? 0.25 * Math.sin(k * Math.PI / 0.6) : 0))); }
       if (u.kind === 'cat') {
         let x = s.x, z = s.z;
@@ -1885,7 +1887,8 @@ const Render = (() => {
       const bob = moving ? Math.abs(Math.sin(clock * rate + u.phase)) * 0.06 : 0;
       const wig = moving && r.state !== 'stalk' ? Math.sin(clock * 9 + u.phase) * 0.07 : 0;
       m.position.set(r.x + Math.cos(r.dir) * wig, bob * R.size, r.z - Math.sin(r.dir) * wig);
-      m.rotation.y = r.dir;
+      m.rotation.y = u.artMode === 'up' ? 0 : r.dir;
+      if (u.artMode === 'up') u.bags.forEach((b, i) => b.position.set((i - 1) * 0.3, 0.5 + (i % 2) * 0.22, 0.32));
       m.rotation.x = r.state === 'grab' ? 0.35 + Math.sin(clock * 26) * 0.08 : r.state === 'drag' ? -0.22 : 0;
       m.rotation.z = r.state === 'drag' ? Math.sin(clock * 9 + u.phase) * 0.08 : 0;
       let sc = R.size;
@@ -1959,7 +1962,7 @@ const Render = (() => {
     if (sliceFx) {
       sliceFx.t += dt; const k = Math.min(1, sliceFx.t / 1.3);
       if (!sliceFx.mesh) {
-        if (art.pizza_slice) { const a = art.pizza_slice, w = ART_IDS.pizza_slice.w; sliceFx.mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, w * a.aspect), new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.3 })); sliceFx.mesh.rotation.x = -CAM_TILT; }
+        if (art.pizza_slice) { const a = art.pizza_slice, w = ART_IDS.pizza_slice.w; sliceFx.mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, w * a.aspect), new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.3, depthWrite: false })); }
         else { sliceFx.mesh = new THREE.Mesh(geo.slice, mat.bag); outline(sliceFx.mesh, 1.1); }
         scene.add(sliceFx.mesh); sliceFx.mesh.scale.setScalar(2.2);
       }
@@ -1989,7 +1992,7 @@ const Render = (() => {
       facadeParts.forEach(pm => pm.visible = false);
       const a = art.facade, w = ART_IDS.facade.w, h = w * a.aspect;
       const geo2 = new THREE.PlaneGeometry(w, h); geo2.translate(0, h / 2, 0);
-      facadeArt = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.1 }));
+      facadeArt = new THREE.Mesh(geo2, new THREE.MeshBasicMaterial({ map: a.tex, transparent: true, alphaTest: 0.1, depthWrite: false }));
       facadeArt.position.set(-0.3, 0, facadeFront + 0.005);
       scene.add(facadeArt);
     }
