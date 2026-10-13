@@ -5,10 +5,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#2B1B33">
+<title>Place of Sands</title>
+<meta name="description" content="One block of Far Rockaway, at the end of the A line. Eight pieces of sea glass, a window to set them in, and the sun on its way down. Ten minutes, give or take.">
+<link rel="canonical" href="https://hessvacio.com/pages/place-of-sands/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Made in Brooklyn Games">
+<meta property="og:title" content="Place of Sands">
+<meta property="og:description" content="One block of Far Rockaway, at the end of the A line. Eight pieces of sea glass, a window to set them in, and the sun on its way down. Ten minutes, give or take.">
+<meta property="og:url" content="https://hessvacio.com/pages/place-of-sands/">
+<meta property="og:image" content="https://hessvacio.com/pages/place-of-sands/share.jpg">
+<meta property="og:image:secure_url" content="https://hessvacio.com/pages/place-of-sands/share.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="JR on the sand in Far Rockaway, a lifeguard chair behind him, beside the plaque for Place of Sands">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Place of Sands">
+<meta name="twitter:description" content="One block of Far Rockaway, at the end of the A line. Eight pieces of sea glass, a window to set them in, and the sun on its way down. Ten minutes, give or take.">
+<meta name="twitter:image" content="https://hessvacio.com/pages/place-of-sands/share.jpg">
+<meta name="twitter:image:alt" content="JR on the sand in Far Rockaway, a lifeguard chair behind him, beside the plaque for Place of Sands">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 </head>
 <body>
-<title>Place of Sands</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..900,0..100,0..1&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap">
 <style>
@@ -739,8 +759,115 @@ body{overscroll-behavior:none;}
    ============================================================ */
 #stage.sharked #pad,#stage.sharked #btns,#stage.sharked #prompt,#stage.sharked #marks{opacity:0;transition:opacity .2s;}
 #stage.sharked .abtn,#stage.sharked .mk{pointer-events:none;}
+/* ---- controller play (v24) ---- */
+/* A controller in hand: the thumb stick and the two round buttons are removed, not dimmed. Nothing of them is
+   drawn and there is nothing there to press. On a console they are never there at all: a controller is the only
+   thing a console has, even while its browser is still steering a pointer with it. */
+#stage.in-pad #pad,#stage.in-pad #btns,#stage.console #pad,#stage.console #btns{visibility:hidden;opacity:0!important;pointer-events:none;}
+#stage.in-pad .abtn,#stage.console .abtn{pointer-events:none;}
+#stage.in-pad #prompt,#stage.console #prompt{bottom:calc(var(--bot) + 64px);}       /* the prompt sat above the buttons; it can come down */
+/* the corner button stays, as the one sign that Totals is there; with a controller it wears the pad's Menu button */
+#btnMenu{position:relative;}
+#menuKey{display:none;position:absolute;left:-9px;bottom:-9px;width:20px;height:20px;border-radius:50%;place-items:center;
+  background:var(--honey);border:1.5px solid var(--ink);color:var(--ink);box-shadow:1.5px 1.5px 0 var(--ink);}
+#menuKey svg{display:block;width:11px;height:11px;}
+#stage.in-pad #menuKey{display:grid;}
+/* the chip in a prompt, for keys (a word, so a lozenge) and for a PlayStation pad (a drawn cross or circle) */
+#prompt .key.w{width:auto;min-width:22px;padding:0 7px;border-radius:5px;font-family:var(--ui);font-weight:700;font-size:13px;}
+#prompt .key.ps svg,.kbd.ps svg{display:block;width:13px;height:13px;}
+.kbd.ps{padding:0;}
+/* the frame: gold between two ink lines, like the frame on the title, round whatever A will pick */
+#navFrame{position:absolute;left:0;top:0;width:0;height:0;z-index:60;pointer-events:none;border-radius:6px;
+  box-shadow:0 0 0 1.5px var(--ink),0 0 0 5px var(--honey),0 0 0 6.5px var(--ink),3px 3px 0 6.5px rgba(43,27,51,.35);
+  transition:transform .09s ease-out,width .09s ease-out,height .09s ease-out;}
+@media (prefers-reduced-motion:reduce){#navFrame{transition:none;}}
+.pf{outline:none!important;}
+.btn.sure{background:var(--crayon);color:var(--ink);border-color:var(--ink);}
+/* Totals: a row that shows a choice or leads somewhere, where its neighbors are switches */
+.tg.pick:after{display:none;}
+.tg.pick b{font-weight:600;font-size:14.5px;color:var(--sea);white-space:nowrap;}
+/* ---- big screen ----
+   For a TV across the room. Each layer of lettering is laid out as a screen 600 pixels high would get it and drawn
+   --tvz times the size (1.8 on a 1080p screen), by zoom on the layer itself, so its own offsets grow with it. The
+   3D picture, the film effects and the letterbox bars are not touched. --tvx and --tvy are the rim a TV may cut
+   off, already divided by --tvz (zoom multiplies them back). The top and bottom rim rides in --top and --bot,
+   which every layer already uses for a phone's notch. */
+#stage.tv{--top:calc(env(safe-area-inset-top,0px) + var(--tvy,0px));--bot:calc(env(safe-area-inset-bottom,0px) + var(--tvy,0px));}
+#stage.tv #hud,#stage.tv #chal,#stage.tv #streak,#stage.tv #toast,#stage.tv #worldcard,#stage.tv #dlg,#stage.tv #prompt,
+#stage.tv .sheet,#stage.tv #stats,#stage.tv #place,#stage.tv #cutCard,#stage.tv #pad,#stage.tv #btns,#stage.tv #fatal,
+#stage.tv #strand,#stage.tv .mk i{zoom:var(--tvz,1);}
+#stage.tv #hud{padding-left:calc(12px + var(--tvx,0px));padding-right:calc(12px + var(--tvx,0px));}
+#stage.tv #sundown{left:calc(12px + var(--tvx,0px));right:calc(12px + var(--tvx,0px));}
+#stage.tv .sheet{padding-left:calc(16px + var(--tvx,0px));padding-right:calc(16px + var(--tvx,0px));}
+#stage.tv #frame{left:calc(14px + var(--tvx,0px));right:calc(14px + var(--tvx,0px));}
+#stage.tv #plaque{left:calc(18px + var(--tvx,0px));right:calc(18px + var(--tvx,0px));}
+#stage.tv #place{left:calc(14px + var(--tvx,0px));}
+#stage.tv #stats{left:calc(12px + var(--tvx,0px));}
+/* the Strand is one layer over the whole glass, so its way out and its bill keep off the rim themselves
+   (the top and bottom already do: it reads --top and --bot) */
+#stage.tv #strand .st-top{padding-left:max(12px,var(--tvx,0px));}
+#stage.tv #strand.st-wide .st-bill{padding-right:var(--tvx,0px);}
+#stage.tv #strand.st-tall .st-top{padding-right:max(12px,var(--tvx,0px));}
+#stage.tv #strand.st-tall .st-bill{left:max(8px,var(--tvx,0px));right:max(8px,var(--tvx,0px));}
+#stage.tv #cutCard{bottom:calc(10.5vh / var(--tvz,1) + 18px);}       /* it sits on the letterbox bar, which is not zoomed */
+/* While JR is in the Strand the game puts everything of the block's away (#stage.st-held>*:not(#strand)); the frame is
+   drawn over the Strand's own controls and has to stay. */
+#stage.st-held>#navFrame:not([hidden]){display:block!important;}
+#stage.tv #navFrame{border-radius:calc(6px*var(--tvz,1));
+  box-shadow:0 0 0 calc(1.5px*var(--tvz,1)) var(--ink),0 0 0 calc(5px*var(--tvz,1)) var(--honey),0 0 0 calc(6.5px*var(--tvz,1)) var(--ink),calc(3px*var(--tvz,1)) calc(3px*var(--tvz,1)) 0 calc(6.5px*var(--tvz,1)) rgba(43,27,51,.35);}
+/* the title's one line for an Xbox whose controller is still steering Edge's pointer */
+/* (#title, so it outranks the sheets' own rule for a paragraph) */
+#title .padhint{font-family:var(--hand);font-size:20px;line-height:1.2;color:var(--ink);margin:14px 190px 0 0;}   /* the right margin is the signature's corner */
+
+/* ---- the Controller check: one sheet, two columns, set to be read in a photograph ---- */
+.panel.checkp{width:min(100%,900px);padding:16px 20px 14px;}
+.pchead{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.pchead h2{margin:0;}
+.pchead .btn{flex:none;padding:8px 16px;font-size:16px;}
+#padcheck .pchint{font-size:15px;line-height:1.3;color:var(--crayon);font-weight:500;margin:2px 0 9px;}
+.pcleave{position:relative;display:inline-block;color:var(--ink);font-weight:600;}
+.pcleave i{position:absolute;left:0;right:0;bottom:-3px;height:3px;border-radius:2px;background:var(--honey);box-shadow:0 0 0 1px var(--ink);transform-origin:0 50%;transform:scaleX(0);}
+#padcheck .pcwarn{font-size:16px;line-height:1.3;font-weight:600;color:var(--paper);background:var(--crayon);border:1.5px solid var(--ink);border-radius:4px;padding:7px 10px;margin:0 0 9px;}
+.pcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:0 26px;border-top:1.5px solid var(--ink);}
+.pccol{min-width:0;}
+.pcr{display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(43,27,51,.18);}
+.pck{font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--crayon);}
+.pcv{min-width:0;font-size:15px;line-height:1.28;color:var(--ink);overflow-wrap:anywhere;font-variant-numeric:tabular-nums;}
+.pcr[data-k="browser"] .pcv,.pcr[data-k="graphics"] .pcv{font-size:12.5px;line-height:1.25;}
+.pcn{display:block;font-size:12.5px;line-height:1.25;color:rgba(43,27,51,.72);}
+.pcr[data-k="sticks"]{align-items:center;}
+.pcsticks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.pcwell{position:relative;flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ink);background:rgba(43,27,51,.08);box-sizing:border-box;}
+.pcwell:before{content:"";position:absolute;left:50%;top:6px;bottom:6px;width:1px;margin-left:-.5px;background:rgba(43,27,51,.25);}
+.pcwell:after{content:"";position:absolute;top:50%;left:6px;right:6px;height:1px;margin-top:-.5px;background:rgba(43,27,51,.25);}
+.pcwell i{position:absolute;z-index:1;left:50%;top:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;box-sizing:border-box;background:var(--crayon);border:1.5px solid var(--ink);}
+.pcnum{font-size:13px;}
+.pcb{display:inline-flex;align-items:baseline;gap:4px;font-weight:600;font-size:14px;line-height:1.2;background:var(--honey);border:1.5px solid var(--ink);border-radius:999px;padding:1px 8px;margin:0 4px 2px 0;}
+.pcb i{font-style:normal;font-weight:500;font-size:11px;opacity:.72;}
 </style>
 
+<style>
+/* ============================================================
+   v27 — the build's name, small, under the studio's tag on the title: the plaque's accession number.
+   It sits level (the tag leans), and the tag and the plaque's foot make room for it: the buttons stand as far above the
+   tag as they did before the line was there (test_polish's title, test_v27's title).
+   ============================================================ */
+#sigBuild{display:block;font-family:var(--ui);font-style:normal;font-weight:600;font-size:9.5px;line-height:1;letter-spacing:.09em;
+  text-align:right;color:var(--ink);opacity:.5;margin-top:1px;transform:rotate(2deg);transform-origin:100% 50%;}
+#sigBuild:empty{display:none;}
+#sig{bottom:5px;}
+@media (max-width:430px){
+  #plaque{padding-bottom:44px;}
+  #sig{bottom:4px;}
+}
+@media (orientation:landscape) and (max-height:520px){
+  #plaque{padding-bottom:39px;}
+  #sig{bottom:3px;}
+}
+@media (orientation:portrait) and (max-height:700px){
+  #plaque{padding-bottom:46px;}
+}
+</style>
 <div id="stage" class="pre">
   <canvas id="gl"></canvas>
   <div class="fx" id="scan"></div>
@@ -774,6 +901,7 @@ body{overscroll-behavior:none;}
       <div style="flex:1"></div>
       <button class="iconbtn" id="btnMenu" aria-label="Totals and the collection">
         <svg viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="2" width="18" height="18" rx="1.5" fill="none" stroke="#C9972F" stroke-width="3"/><rect x="2" y="2" width="18" height="18" rx="1.5" fill="none" stroke="#2B1B33" stroke-width="1.2"/><rect x="6.5" y="6.5" width="9" height="9" fill="none" stroke="#2B1B33" stroke-width="1.2"/><path d="M8 13l2-3 1.6 2 1.2-1.4L14 13z" fill="#57E6C9"/></svg>
+        <span id="menuKey" aria-hidden="true"></span>
       </button>
     </div>
     <div></div>
@@ -813,8 +941,9 @@ body{overscroll-behavior:none;}
           <button class="btn" id="play">Step through</button>
           <button class="btn ghost light" id="titleReset" hidden>Start over</button>
         </div>
+        <p class="padhint" id="padHint" hidden>Controller moving a pointer? Hold the Menu button and Edge hands it to the game.</p>
         <p class="keys" hidden></p>
-        <div id="sig">Made in Brooklyn Games</div>
+        <div id="sig">Made in Brooklyn Games<i id="sigBuild"></i></div>
       </div>
     </div>
   </div>
@@ -884,6 +1013,9 @@ body{overscroll-behavior:none;}
       <button class="tg" id="menuHaptics">Rumble</button>
       <button class="tg" id="menuInk">Outlines</button>
       <button class="tg" id="menuFollow">Camera follows</button>
+      <button class="tg" id="menuBig" hidden>Big screen</button>
+      <button class="tg pick" id="menuPad" hidden>Buttons<b id="menuPadVal">Auto</b></button>
+      <button class="tg pick" id="menuCheck" hidden>Controller check<b aria-hidden="true">&#8599;</b></button>
     </div>
     <div class="btnrow">
       <button class="btn" id="menuClose">Back to the block</button>
@@ -895,7 +1027,7 @@ body{overscroll-behavior:none;}
     <h2>Far Rockaway, one block</h2>
     <p class="kicker" id="mapKicker">You are here</p>
     <div class="framed"><canvas id="mapCanvas" width="16" height="11"></canvas></div>
-    <p class="hand">Tap the map, or a line below, and a light will show the way.</p>
+    <p class="hand" data-pad="Pick a line below and a light will show the way.">Tap the map, or a line below, and a light will show the way.</p>
     <div class="list" id="mapList"></div>
     <div class="btnrow"><button class="btn" id="mapClose">Back to the block</button></div>
   </div></div>
@@ -907,6 +1039,13 @@ body{overscroll-behavior:none;}
     <p>The glass is in the window. The last A train is pulling out of Mott Avenue, the gulls are up over the dunes, and the light is doing the rest.</p>
     <p class="kicker" id="endStats">&nbsp;</p>
     <div class="btnrow"><button class="btn" id="endClose">Keep wandering</button></div>
+  </div></div>
+
+  <div class="sheet" id="padcheck" hidden><div class="panel checkp">
+    <div class="pchead"><h2>Controller check</h2><button class="btn" id="padcheckClose">Done</button></div>
+    <p class="pchint" id="pcHint"></p>
+    <p class="pcwarn" id="pcWarn" hidden></p>
+    <div class="pcgrid" id="padcheckBody"></div>
   </div></div>
 
   <div id="strand" hidden role="dialog" aria-modal="true" aria-label="The Strand" tabindex="-1">
@@ -971,6 +1110,7 @@ body{overscroll-behavior:none;}
   <div id="stats" hidden></div>
   <div id="place" aria-live="polite"><b></b><i></i></div>
 
+  <div id="navFrame" hidden aria-hidden="true"></div>
   <div id="fatal">Couldn't load the 3D library. Check the connection and reload.</div>
 </div>
 
@@ -1050,7 +1190,7 @@ var NPCS = {
 
 /* ---------- 2. state + save ---------- */
 var SAVE_KEY="placeofsands.v1";
-var BUILD="v23";
+var BUILD="v28";
 var state = {
   sand:0, spent:0, glass:0, started:false, done:false,
   got:{},        /* sand dollar + sea glass ids collected */
@@ -1076,6 +1216,8 @@ function loadSave(){
     if(typeof s.done==="boolean") state.done=s.done;
     if(typeof s.gov==="number") state.gov=s.gov;
     if(s.cap===1) state.cap=1;
+    if(s.pad==="xbox"||s.pad==="ps"||s.pad==="nintendo") state.pad=s.pad;
+    if(typeof s.big==="boolean") state.big=s.big;
   }catch(e){}
 }
 var saveTimer=0, RESETTING=false;
@@ -1326,6 +1468,7 @@ var UI = {
   /* v23: a note is queued, and pinned up only when nothing else has the screen. One written behind a
      sheet, a talk or the sea-glass cut waits for it to close instead of spending its 2.45 seconds unseen. */
   say:function(text,cls){
+    text=KEYS.t(text);
     if(typeof ending!=="undefined"&&ending&&cls!=="glass") return;      /* v23: the last twelve seconds have two notes of their own */
     var self=this, kids=this.toast.children;
     for(var i=0;i<kids.length;i++) if(kids[i].textContent===text) return;
@@ -1349,13 +1492,14 @@ var UI = {
     }
   },
   hint:function(html){
+    html=KEYS.hint(html);
     if(html){ this.prompt.innerHTML=html; this.prompt.classList.add("on"); }
     else this.prompt.classList.remove("on");
   }
 };
 function sheet(id,on){ var el=$(id); el.hidden=!on; }
 function anySheetOpen(){
-  return !$("title").hidden || !$("card").hidden || !$("menu").hidden || !$("ending").hidden || !$("map").hidden || !$("howto").hidden || !$("errand").hidden || STRAND.isOpen();
+  return !$("title").hidden || !$("card").hidden || !$("menu").hidden || !$("ending").hidden || !$("map").hidden || !$("howto").hidden || !$("errand").hidden || !$("padcheck").hidden || STRAND.isOpen();
 }
 function showCard(id){
   var c=CARD_BY_ID[id]; if(!c) return;
@@ -1392,6 +1536,7 @@ function buildMenu(){
   $("menuMusic").classList.toggle("on",!!state.music);
   $("menuFollow").classList.toggle("on",state.follow!==false);
   $("menuTime").textContent=completion()+"% of the block, "+fmtTime(state.playT)+" in";
+  PADUI.sync();
 }
 
 /* film grain texture (generated once, applied as a repeating background) */
@@ -2316,7 +2461,7 @@ function updateDress(t){
 
 /* --- Mott Avenue, dressed: a track for the train, a canopy with pendant lights,
    hanging station signs, benches, turnstiles, a MetroCard machine, the bumper at
-   the end of the line; a real bus shelter below, and a Q22 that pulls in. --- */
+   the end of the line; a real bus shelter below, and a Q113 that pulls in (v28). --- */
 var TY=7.4, TRACK_Z=44.6, PEND=[], STN_WIN=null, BUMPER_LAMP=null, BUS=null, BUS_WIN=null, BUS_STOP={x:-13.2,z:21.3};
 var TRAIN_WIN=null;
 function buildStationDress(){
@@ -2412,21 +2557,165 @@ function buildBusStopDress(){
   steel.build(); steel.buildInk(0.02); wood.build(); navy.build(); white.build();
   buildBus();
 }
-/* the Q22: westbound in the north lane, stops at the shelter, honks if JR stands in the road */
+/* the Q113: westbound in the north lane, stops at the shelter, honks if JR stands in the road.
+   v28: Hess's Q113, the bus of his childhood ("the red bus is from childhood"), built after the low-poly city bus he
+   sent: a low floor, a windshield in two panes under the destination sign, a bike rack folded up on the front, mirrors
+   out on arms, windows down both sides, two doors on the curb side, the air conditioner in a pod on the roof. Painted as
+   the one he rode: cream, a red band at the belt with a darker line under it, rust-brown bumpers and skirt.
+   Every part is a box, or an eight-sided wheel, in one of five instanced meshes (the body, its glass, its wheels, and
+   the ink round the body and round the wheels), so the whole bus is a handful of draw calls; its three signs are the
+   game's own LED signs. Built along x with its front at -x (it runs west) and its doors on the +z side, the curb's.
+   At the stop it kneels and opens its doors; it shuts them and stands up again before it pulls out. */
+var Q113={PAINT:{cream:0xF0E6CB,red:0xB3332A,line:0x7E211B,rust:0x7A4126,black:0x1C1D22,well:0x141418,dark:0x2A2B31,tire:0x1D1D21,
+  hub:0xB8B5AC,amber:0xF0A23A,lamp:0xF1EEE2,tail:0xC2322B,blue:0x2F5DA8,step:0x8E8B85,plate:0xE8E4D6}};
 function buildBus(){
-  var g=new THREE.Group(); scene.add(g);
-  function part(sx,sy,sz,px,py,pz,c,noInk){ var m=new THREE.Mesh(UNIT_BOX,mat(c)); m.scale.set(sx,sy,sz); m.position.set(px,py,pz); g.add(m); if(!noInk) ink(m,true,0.02); return m; }
-  part(9.6,2.5,2.5,0,0.55,0,CLR.white);
-  part(9.7,0.5,2.56,0,1.1,0,CLR.navy,true);
-  part(9.4,0.9,2.58,0,1.75,0,0x1C2530,true);
-  part(9.6,0.25,2.4,0,3.05,0,CLR.steel,true);
-  for(var w=-3.2;w<=3.2;w+=6.4){ part(0.9,0.9,2.7,w,0,0,CLR.dark,true); }
-  part(1.2,2.0,0.1,2.6,0.55,1.3,0x1C2530,true); part(1.2,2.0,0.1,-3.6,0.55,1.3,0x1C2530,true);   /* doors on the curb (+z) side */
-  var dest=signPanel(-4.86,2.55,0,2.2,0.45,"Q22  Far Rockaway",{style:"led",size:40,tw:512,th:96,ry:-Math.PI/2,plate:null});
-  scene.remove(dest); g.add(dest);
-  var sideSign=signPanel(0,2.05,1.31,2.6,0.35,"Q22",{style:"led",size:40,tw:512,th:64,plate:null});
-  scene.remove(sideSign); g.add(sideSign);
-  BUS={g:g,x:74,z:BUS_STOP.z,v:0,st:"off",t:12+Math.random()*10,dir:-1,honk:0};
+  var C=Q113.PAINT, g=new THREE.Group(), body=new THREE.Group(); g.add(body); scene.add(g);
+  var BX=[], CY=[], GL=[], parts=[], e=new THREE.Euler(), v=new THREE.Vector3(), X1=new THREE.Vector3(1,0,0);
+  /* a part by its centre and size (the unit shapes stand on their base; that is undone here), turned, or laid from one
+     point to another */
+  function put(list,role,cx,cy,cz,sx,sy,sz,col,o){ o=o||{};
+    var it={role:role,c:[cx,cy,cz],s:[sx,sy,sz],col:col,ink:!!o.ink,q:new THREE.Quaternion(),off:new THREE.Vector3(),roll:null};
+    if(o.q) it.q.copy(o.q); else if(o.r) it.q.setFromEuler(e.set(o.r[0]||0,o.r[1]||0,o.r[2]||0));
+    list.push(it); parts.push({role:role,c:it.c,s:it.s,col:col}); return it; }
+  function box(role,x0,y0,z0,x1,y1,z1,col,o){ return put(BX,role,(x0+x1)/2,(y0+y1)/2,(z0+z1)/2,x1-x0,y1-y0,z1-z0,col,o); }
+  function pane(role,x0,y0,z0,x1,y1,z1){ return put(GL,role,(x0+x1)/2,(y0+y1)/2,(z0+z1)/2,x1-x0,y1-y0,z1-z0,0); }
+  function seg(role,a,b,t,col){ v.set(b[0]-a[0],b[1]-a[1],b[2]-a[2]); var L=v.length(); v.multiplyScalar(1/L);
+    return put(BX,role,(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2,L,t,t,col,{q:new THREE.Quaternion().setFromUnitVectors(X1,v)}); }
+  var FA=-3.55, RA=2.6, WH=0.68, s, i;
+  /* ---- the body: cream over a rust skirt, open over the wheels ---- */
+  box("body",-5.6,1.02,-1.25,5.6,2.95,1.25,C.cream,{ink:true});
+  [[-5.6,FA-WH],[FA+WH,RA-WH],[RA+WH,5.6]].forEach(function(r){
+    box("body",r[0],0.6,-1.25,r[1],1.02,1.25,C.cream,{ink:true}); box("skirt",r[0],0.3,-1.25,r[1],0.6,1.25,C.rust,{ink:true}); });
+  [FA,RA].forEach(function(a){ box("well",a-WH,0.3,-0.95,a+WH,1.02,0.95,C.well); });
+  /* the band at the belt, and the line under it, round all four sides */
+  box("band",-5.615,1.1,-1.265,5.615,1.34,1.265,C.red); box("line",-5.615,1.04,-1.265,5.615,1.09,1.265,C.line);
+  /* ---- the roof: a cap with its edges taken off, and the air conditioner's pod toward the back ---- */
+  box("roof",-5.43,2.95,-1.08,5.43,3.12,1.08,C.cream,{ink:true});
+  for(s=-1;s<=1;s+=2) put(BX,"chamfer",0,3.01,s*1.14,10.86,0.07,0.25,C.cream,{r:[s*Math.PI/4,0,0]});
+  put(BX,"chamfer",-5.49,3.01,0,0.25,0.07,2.16,C.cream,{r:[0,0,Math.PI/4]}); put(BX,"chamfer",5.49,3.01,0,0.25,0.07,2.16,C.cream,{r:[0,0,-Math.PI/4]});
+  box("pod",1.5,3.1,-0.85,4.5,3.42,0.85,C.cream,{ink:true});
+  for(s=-1;s<=1;s+=2) box("grille",1.7,3.2,s*0.85-0.01,4.3,3.3,s*0.85+0.01,C.dark);
+  /* ---- the front: the windshield in two panes, the destination box over it, lamps, the bumper, the rack, mirrors ---- */
+  box("surround",-5.625,1.38,-1.18,-5.6,2.66,1.18,C.black);
+  pane("windshield",-5.64,1.42,-1.12,-5.62,2.62,-0.05); pane("windshield",-5.64,1.42,0.05,-5.62,2.62,1.12);
+  box("pillar",-5.65,1.4,-0.05,-5.62,2.64,0.05,C.black);
+  seg("wiper",[-5.655,1.46,-0.9],[-5.655,2.08,-0.42],0.035,C.black); seg("wiper",[-5.655,1.46,0.18],[-5.655,2.08,0.66],0.035,C.black);
+  box("destbox",-5.72,2.66,-1.08,-5.6,3.04,1.08,C.black);
+  for(s=-1;s<=1;s+=2){
+    box("marker",-5.64,2.9,s>0?1.08:-1.2,-5.6,2.98,s>0?1.2:-1.08,C.amber);
+    box("marker",-5.4,2.86,s>0?1.25:-1.27,-5.26,2.94,s>0?1.27:-1.25,C.amber);
+    box("headlight",-5.64,0.66,s>0?0.66:-0.84,-5.6,0.86,s>0?0.84:-0.66,C.lamp); box("headlight",-5.64,0.66,s>0?0.88:-1.06,-5.6,0.86,s>0?1.06:-0.88,C.lamp);
+    box("signal",-5.64,0.66,s>0?1.09:-1.19,-5.6,0.86,s>0?1.19:-1.09,C.amber);
+  }
+  box("access",-5.63,1.12,-1.02,-5.615,1.32,-0.82,C.blue);
+  box("bumper",-5.86,0.26,-1.24,-5.5,0.6,1.24,C.rust,{ink:true}); box("trim",-5.875,0.4,-1.2,-5.855,0.46,1.2,C.black);
+  box("plate",-5.885,0.31,-0.22,-5.865,0.48,0.22,C.plate);
+  /* the bike rack, folded up against the front: a ladder of black bars stood on two braces from the bumper */
+  for(s=-1;s<=1;s+=2){ seg("rack",[-5.97,0.62,s*0.55],[-5.97,1.47,s*0.55],0.06,C.black); seg("rack",[-5.86,0.5,s*0.45],[-5.97,0.64,s*0.45],0.05,C.black); }
+  seg("rack",[-5.97,1.47,-0.62],[-5.97,1.47,0.62],0.06,C.black); seg("rack",[-5.97,1.05,-0.6],[-5.97,1.05,0.6],0.05,C.black); seg("rack",[-5.97,0.64,-0.66],[-5.97,0.64,0.66],0.06,C.black);
+  /* mirrors out on arms from the front corners of the roof, turned a little back toward the driver, over JR's head */
+  for(s=-1;s<=1;s+=2){
+    seg("arm",[-5.55,2.92,s*1.12],[-6.0,2.82,s*1.45],0.05,C.black); seg("arm",[-6.0,2.84,s*1.45],[-6.0,2.46,s*1.45],0.045,C.black);
+    put(BX,"mirror",-6.01,2.21,s*1.45,0.06,0.5,0.28,C.black,{r:[0,s*0.25,0]});
+  }
+  /* ---- the back: a small window, the engine's grille, tail lights, the bumper, a sign ---- */
+  pane("rearwin",5.6,1.95,-0.8,5.62,2.5,0.8);
+  box("grille",5.6,0.66,-0.85,5.62,0.98,0.85,C.dark);
+  for(s=-1;s<=1;s+=2){ box("taillight",5.6,0.66,s>0?0.95:-1.18,5.63,1.0,s>0?1.18:-0.95,C.tail); box("marker",5.6,2.9,s>0?1.08:-1.2,5.64,2.98,s>0?1.2:-1.08,C.amber); }
+  box("bumper",5.5,0.26,-1.24,5.8,0.6,1.24,C.rust,{ink:true});
+  box("signbox",5.6,2.55,-0.5,5.7,2.9,0.5,C.black);
+  /* ---- the street side: the driver's window, then one run of windows to the back ---- */
+  pane("window",-5.45,1.46,-1.268,-4.45,2.52,-1.255); pane("window",-4.3,1.46,-1.268,5.3,2.52,-1.255);
+  box("frame",-5.47,2.52,-1.275,5.32,2.58,-1.262,C.black); box("frame",-5.47,1.4,-1.275,5.32,1.46,-1.262,C.black);
+  [-5.47,-4.37,-3.1,-1.9,-0.7,0.5,1.7,2.9,4.1,5.3].forEach(function(x){ box("mullion",x-0.045,1.4,-1.28,x+0.045,2.58,-1.262,C.black); });
+  box("marker",-0.3,0.7,-1.27,-0.18,0.78,-1.25,C.amber);
+  /* ---- the curb side: two doors, the windows between and behind them ---- */
+  var DOORS=[[-5.37,-4.29],[0.28,1.42]], leaves=[];
+  DOORS.forEach(function(d){ var m=(d[0]+d[1])/2;
+    box("doorway",d[0],0.34,1.25,d[1],2.6,1.278,C.dark); box("step",d[0],0.3,1.0,d[1],0.36,1.27,C.step);
+    [[d[0]+0.02,m-0.01,-1],[m+0.01,d[1]-0.02,1]].forEach(function(l){
+      var a=box("door",l[0],0.36,1.278,l[1],2.58,1.292,C.black), b=pane("doorglass",l[0]+0.06,0.55,1.292,l[1]-0.06,2.45,1.3);
+      a.dx=b.dx=l[2]; leaves.push(a,b); });
+  });
+  [[-4.15,0.15],[1.55,5.3]].forEach(function(r){
+    pane("window",r[0],1.46,1.255,r[1],2.52,1.268);
+    box("frame",r[0]-0.02,2.52,1.262,r[1]+0.02,2.58,1.275,C.black); box("frame",r[0]-0.02,1.4,1.262,r[1]+0.02,1.46,1.275,C.black);
+    var n=Math.max(2,Math.round((r[1]-r[0])/1.2)); for(i=0;i<=n;i++){ var x=r[0]+(r[1]-r[0])*i/n; box("mullion",x-0.045,1.4,1.262,x+0.045,2.58,1.28,C.black); }
+  });
+  box("marker",-0.3,0.7,1.25,-0.18,0.78,1.27,C.amber);
+  /* ---- the wheels: eight-sided tyres on two axles (duals behind), hubs a little proud of them ---- */
+  for(s=-1;s<=1;s+=2){
+    put(CY,"tire",FA,0.47,s*1.04,0.94,0.38,0.94,C.tire,{r:[Math.PI/2,0,0],ink:true}); put(CY,"hub",FA,0.47,s*1.04,0.5,0.42,0.5,C.hub,{r:[Math.PI/2,0,0]});
+    put(CY,"tire",RA,0.47,s*1.02,0.94,0.42,0.94,C.tire,{r:[Math.PI/2,0,0],ink:true}); put(CY,"hub",RA,0.47,s*1.02,0.5,0.46,0.5,C.hub,{r:[Math.PI/2,0,0]});
+  }
+  /* ---- into meshes ---- */
+  var M=new THREE.Matrix4(), col=new THREE.Color(), P3=new THREE.Vector3(), S3=new THREE.Vector3(), Q=new THREE.Quaternion(), H=new THREE.Vector3();
+  function compose(it,t){
+    Q.copy(it.q); if(it.roll) Q.premultiply(it.roll);
+    S3.set(it.s[0]+t*2,it.s[1]+t*2,it.s[2]+t*2); H.set(0,S3.y*0.5,0).applyQuaternion(Q);
+    P3.set(it.c[0],it.c[1],it.c[2]).add(it.off).sub(H); return M.compose(P3,Q,S3);
+  }
+  function mesh(geom,list,material,parent,t,colored,bound){
+    var m=new THREE.InstancedMesh(geom,material,list.length);
+    m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);   /* it moves (its doors, its wheels): and so throws no shadow into the kept map, which is drawn only when the sun moves */
+    for(var k=0;k<list.length;k++){ m.setMatrixAt(k,compose(list[k],t)); if(colored) m.setColorAt(k,col.setHex(list[k].col)); }
+    m.instanceMatrix.needsUpdate=true; if(colored) m.instanceColor.needsUpdate=true;
+    m.geometry=geom.clone(); m.geometry.boundingSphere=new THREE.Sphere(new THREE.Vector3(bound[0],bound[1],bound[2]),bound[3]);
+    m.frustumCulled=true; parent.add(m); return m;
+  }
+  function hull(geom,list,parent,bound){
+    var inked=list.filter(function(it){ return it.ink; }), k=mesh(geom,inked,INK,parent,0.02,false,bound);
+    k.visible=OUTLINES; INKS.push(k); k.userData.items=inked; return k;
+  }
+  var glassMat=new THREE.MeshBasicMaterial({color:0x1C2530});
+  var bodyM=mesh(UNIT_BOX,BX,airMat({color:0xffffff,gradientMap:RAMP}),body,0,true,[0,1.6,0,6.8]);
+  var bodyK=hull(UNIT_BOX,BX,body,[0,1.6,0,6.8]);
+  var glassM=mesh(UNIT_BOX,GL,glassMat,body,0,false,[0,1.9,0,6.4]);
+  var wheelM=mesh(UNIT_CYL,CY,airMat({color:0xffffff,gradientMap:RAMP}),g,0,true,[-0.5,0.47,0,3.8]);
+  var wheelK=hull(UNIT_CYL,CY,g,[-0.5,0.47,0,3.8]);
+  /* ---- the signs: the game's own LED signs, on the bus ---- */
+  var signs=[signPanel(-5.725,2.85,0,1.98,0.32,"Q113  Far Rockaway",{style:"led",size:40,tw:512,th:84,ry:-Math.PI/2,plate:null}),
+    signPanel(-3.61,2.28,1.276,0.88,0.3,"Q113",{style:"led",size:40,tw:256,th:88,plate:null}),   /* in the first window behind the front door, between its frames */
+    signPanel(5.705,2.72,0,0.86,0.3,"Q113",{style:"led",size:40,tw:256,th:88,ry:Math.PI/2,plate:null})];
+  for(i=0;i<signs.length;i++){ scene.remove(signs[i]); body.add(signs[i]); }
+  /* how far it reaches, at the height of a person: what JR is kept out of */
+  var hx=0, hz=0;
+  BX.concat(CY).forEach(function(it){ var b=new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(0,0,0),new THREE.Vector3(it.s[0],it.s[1],it.s[2]));
+    b.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(it.q)); if(it.c[1]+b.min.y>1.8) return;
+    hx=Math.max(hx,Math.abs(it.c[0]+b.min.x),Math.abs(it.c[0]+b.max.x)); hz=Math.max(hz,Math.abs(it.c[2]+b.min.z),Math.abs(it.c[2]+b.max.z)); });
+  function doors(){
+    var k=BUS.door, j;
+    for(j=0;j<leaves.length;j++){ var it=leaves[j]; it.off.set(it.dx*0.5*k,0,0.1*k); }
+    for(j=0;j<BX.length;j++) if(BX[j].role==="door"){ bodyM.setMatrixAt(j,compose(BX[j],0)); }
+    for(j=0;j<GL.length;j++) if(GL[j].role==="doorglass"){ glassM.setMatrixAt(j,compose(GL[j],0)); }
+    bodyM.instanceMatrix.needsUpdate=true; glassM.instanceMatrix.needsUpdate=true;
+  }
+  var ROLL=new THREE.Quaternion(), ZA=new THREE.Vector3(0,0,1);
+  for(i=0;i<CY.length;i++) CY[i].roll=ROLL;
+  function wheels(){
+    ROLL.setFromAxisAngle(ZA,BUS.roll);
+    for(var j=0;j<CY.length;j++) wheelM.setMatrixAt(j,compose(CY[j],0));
+    var ki=wheelK.userData.items; for(var k2=0;k2<ki.length;k2++) wheelK.setMatrixAt(k2,compose(ki[k2],0.02));
+    wheelM.instanceMatrix.needsUpdate=true; wheelK.instanceMatrix.needsUpdate=true;
+  }
+  BUS={g:g,body:body,x:74,z:BUS_STOP.z,v:0,st:"off",t:12+Math.random()*10,dir:-1,honk:0,
+    hx:+hx.toFixed(2),hz:+hz.toFixed(2),parts:parts,kneel:0,door:0,roll:0,glassMat:glassMat,signs:signs,
+    anim:function(dt){
+      var B=BUS;
+      /* at the stop it kneels, and stands up again as its doors shut */
+      var kn=(B.st==="stop"&&B.t>0.8)?1:0; B.kneel+=(kn-B.kneel)*Math.min(1,dt*3.2); B.body.position.y=-0.09*B.kneel;
+      /* the doors open a moment after it stops, and are shut before it goes */
+      var dw=(B.st==="stop"&&B.t<4.15&&B.t>0.9)?1:0;
+      if(B.door!==dw){ B.door=dw>B.door?Math.min(dw,B.door+dt*2.5):Math.max(dw,B.door-dt*2.5); doors(); }
+      /* the wheels turn with the road */
+      if(B.v>0.001){ B.roll-=B.dir*B.v*dt/0.47; wheels(); }
+      /* lit inside at dusk, like the train */
+      var on=Math.max(0,Math.min(1,(dayT-0.42)/0.2)); B.glassMat.color.setRGB(0.11+on*0.75,0.145+on*0.6,0.19+on*0.3);
+    },
+    /* for the tests: where each door leaf is drawn with the doors at k (0 shut, 1 open); the doors are put back after */
+    leaf:function(k){ var was=BUS.door, out=[], p=new THREE.Vector3(), m4=new THREE.Matrix4(); BUS.door=k; doors();
+      for(var j=0;j<BX.length;j++) if(BX[j].role==="door"){ bodyM.getMatrixAt(j,m4); p.setFromMatrixPosition(m4); out.push([+p.x.toFixed(3),+p.y.toFixed(3),+p.z.toFixed(3)]); }
+      BUS.door=was; doors(); return out; }};
   g.position.set(BUS.x,0,BUS.z); g.visible=false;
 }
 function updateBus(dt,t){
@@ -2436,7 +2725,7 @@ function updateBus(dt,t){
   else {
     var ahead=false;
     /* JR in the lane ahead: slow down, lean on the horn */
-    var dx=P.x-B.x; if(B.dir<0?(dx<0&&dx>-9):(dx>0&&dx<9)){ if(Math.abs(P.z-B.z)<2.2&&P.y<2) ahead=true; }
+    var dx=P.x-B.x, ah=(B.hx||4.8)+4.2; if(B.dir<0?(dx<0&&dx>-ah):(dx>0&&dx<ah)){   /* v28: four strides ahead of its front, however long it is */ if(Math.abs(P.z-B.z)<2.2&&P.y<2) ahead=true; }
     var want=7.5, dStop=B.x-BUS_STOP.x;
     /* roll up to the stop: speed scales with distance, so it eases in and halts on the mark */
     if(B.st==="drive"&&B.dir<0&&dStop<16) want=Math.max(0.5,Math.min(7.5,dStop*0.8));
@@ -2448,8 +2737,9 @@ function updateBus(dt,t){
     if(B.st==="stop"){ B.t-=dt; if(B.t<=0){ B.st="go"; AU.hit(400,0.4,0.05,"lowpass",0.8); } }
     if(B.x<-118){ B.st="off"; B.t=40+Math.random()*30; B.g.visible=false; }
     B.g.position.set(B.x,0,B.z); B.g.rotation.y=0;
+    if(B.anim) B.anim(dt);   /* v28: kneels at the stop, opens its doors, turns its wheels, lit at dusk */
     /* nobody gets run over: JR is shoved out of the body */
-    var hx=4.8+RAD, hz=1.25+RAD, ox=P.x-B.x, oz=P.z-B.z;
+    var hx=(B.hx||4.8)+RAD, hz=(B.hz||1.25)+RAD,   /* v28: its own length and width */ ox=P.x-B.x, oz=P.z-B.z;
     if(Math.abs(ox)<hx&&Math.abs(oz)<hz&&P.y<3.0){
       if(hz-Math.abs(oz)<hx-Math.abs(ox)) P.z=B.z+(oz<0?-hz:hz); else P.x=B.x+(ox<0?-hx:hx);
     }
@@ -2885,7 +3175,7 @@ function openMap(b){
   function row(num,name,where,status,x,z,cls){
     var el=document.createElement("div"); el.className="it"+(cls?" "+cls:"");
     el.innerHTML="<i>"+num+"</i><span>"+name+(where?" <em>"+where+"</em>":"")+"</span>"+(status?"<b>"+status+"</b>":"");
-    if(x!=null) el.addEventListener("click",function(){ beaconTo(x,z,name); sheet("map",false); });
+    if(x!=null){ el.setAttribute("data-nav",""); el.setAttribute("tabindex","-1"); el.addEventListener("click",function(){ beaconTo(x,z,name); sheet("map",false); }); }
     list.appendChild(el); return el;
   }
   var i;
@@ -4018,7 +4308,7 @@ function buildProps(){
   }
   poles.build();
   car(-12.4,4,CLR.red,0); car(-12.4,-2,CLR.white,0);
-  car(36,20.4,CLR.navy,Math.PI/2); car(-5.2,22,CLR.silver,Math.PI/2);
+  car(64,14.6,CLR.navy,0); car(-30,14.6,CLR.silver,0);   /* v28: along the south curb, at its ends; both stood across the bus's lane, and it went through them */
   var cans=new Fam(UNIT_CYL,CLR.steel);
   var cs=[[-5.6,-13.4],[12,12.6],[30,25.0],[-11.5,29],[46,34]];
   for(var c=0;c<cs.length;c++){ cans.add(cs[c][0],0,cs[c][1],1.0,1.1,1.0); solid(cs[c][0],0,cs[c][1],1.0,1.1,1.0,"pave"); }
@@ -4075,6 +4365,7 @@ function initItemGeo(){
     emissive:0x2C6E5C});
   buildPickupProtos();
   bakeProtos();
+  chipsBags();   /* v27: the chip bag after the PSX bags */
 }
 function addItem(kind,id,x,y,z){
   if(kind==="dollar") SAND_TOTAL++;
@@ -4242,6 +4533,7 @@ var FX={
   },
   buzz:function(ms){
     if(!this.haptics) return;
+    if(INPUT.mode==="pad"){ PADS.rumble(ms); return; }
     try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){}
   },
   letterbox:function(on){ $("stage").classList.toggle("boxed",!!on); },
@@ -4597,6 +4889,7 @@ var SEQ={
   fire:function(st,t){
     var bar=Math.floor(st/8), inBar=st%8, root=this.CH[bar];
     this.beat=st;
+    if(MUSIC.live) return;   /* v27: the song is the score; the old one plays nothing, and its clock is not read */
     /* the world reads this queue to pulse its lights on the real beat */
     if(this.vq){ this.vq.push({t:t,st:st}); if(this.vq.length>64) this.vq.shift(); }
     /* bass — bouncy root/fifth */
@@ -4664,6 +4957,7 @@ var DLG={
   open:false, full:"", shown:0, t:0, voice:300, el:null, nameEl:null, textEl:null, done:false,
   init:function(){ this.el=$("dlg"); this.nameEl=$("dlgName"); this.textEl=$("dlgText"); },
   show:function(name,role,text,voice){
+    text=KEYS.t(text);
     this.full=text; this.shown=0; this.t=0; this.done=false; this.voice=voice||300; this.who=name;
     this.nameEl.textContent=name;
     $("dlgRole").textContent=role||"";
@@ -5114,7 +5408,7 @@ function updateBeacons(t){
 var CHAL={el:null,name:null,sub:null,fill:null,on:false};
 function chalShow(name,sub){
   if(!CHAL.el){ CHAL.el=$("chal"); CHAL.name=$("chalName"); CHAL.sub=$("chalSub"); CHAL.fill=$("chalFill"); }
-  CHAL.name.textContent=name; CHAL.sub.textContent=sub;
+  CHAL.name.textContent=name; CHAL.raw=sub; CHAL.sub.textContent=KEYS.t(sub);
   CHAL.el.hidden=false; CHAL.on=true;
   $("stage").classList.add("chal");
 }
@@ -5125,13 +5419,35 @@ function chalHide(){
 }
 
 /* award a piece without spawning a pickup (challenges hand it over) */
+/* ---------- v25: the eighth piece ----------
+   However it came, found or bought off Mr. Teddy, the block says so once, a light stands over the window
+   on Beach 24th, a mark hangs on the window until he gets there, and standing about with all eight in his
+   pocket gets a reminder now and then. In the playthrough he had the eighth off Mr. Teddy and then stood on
+   the sand for two minutes: the bought one never said where to go. */
+var EIGHT={said:false,nag:0,i:0};
+function allEight(){
+  if(EIGHT.said||ending) return; EIGHT.said=true; EIGHT.nag=45;
+  UI.say("All eight. Now the window.","glass");
+  setTimeout(function(){ if(!ending&&state.glass>=8) beaconTo(-51.8,-2.6,"the window on Beach 24th"); },1100);
+}
+function eightTick(raw){
+  if(state.glass<8||ending||state.done||!state.started||intro.on) return;   /* v26: and none once the glass is in */
+  if(!EIGHT.said){ EIGHT.said=true; EIGHT.nag=30; }           /* a saved game that already had them: no fanfare, just the clock */
+  if(EIGHT.nag>0){ EIGHT.nag-=raw; return; }
+  if(P.idleT<16||DLG.open||anySheetOpen()||P.mini||STRWALK.on||CUT.on) return;
+  EIGHT.nag=80;
+  if(Math.hypot(P.x+51.8,P.z+2.6)<12) return;                 /* he is there already */
+  var L=["The window's waiting. Beach 24th, the far end.","Eight pieces in your pocket and a window on Beach 24th.","Mint house, far end of Beach 24th. The big window."];
+  UI.say(L[(EIGHT.i++)%L.length],"glass");
+  if(BEACON.t<=0) beaconTo(-51.8,-2.6,"the window on Beach 24th");
+}
 function awardGlass(id,x,y,z){
   if(state.got[id]) return;
   state.got[id]=1; state.glass++;
   glassJuice(x,y,z,id);
   UI.sync("glass");
   UI.say("Sea glass — "+state.glass+" of 8","glass");
-  if(state.glass>=8) UI.say("All eight. The window's on Beach 24th.","glass");
+  if(state.glass>=8) allEight();
   checkLastTrain();
   save();
 }
@@ -5144,7 +5460,7 @@ function buildRingRun(){
   var pts=[[0,1.5,17],[6.5,1.6,20.6],[13,2.6,17],[19,1.6,20.8],
            [25,3.0,17.4],[31,1.7,20.6],[37,2.5,17],[43,1.6,20.4]];
   for(var i=0;i<pts.length;i++){
-    var m=new THREE.Mesh(RUN.geo,new THREE.MeshBasicMaterial({color:0xF2B441}));
+    var m=new THREE.Mesh(RUN.geo,new THREE.MeshBasicMaterial({color:0xF2B441,transparent:true}));   /* v27: so it can step aside for the lens */
     m.position.set(pts[i][0],pts[i][1],pts[i][2]);
     m.rotation.y=Math.PI/2;
     scene.add(m);
@@ -5158,6 +5474,10 @@ function resetRings(){
   }
   RUN.active=false; RUN.hit=0; RUN.t=0; chalHide();
 }
+/* v27: how far a point is from a hoop's rim, the circle the tube runs round (its plane turned about y; the spin is in
+   the plane): what the lens and the line to JR are kept from */
+function ringRim(r,qx,qy,qz){ var c=r.m.position, nx=Math.sin(r.m.rotation.y), nz=Math.cos(r.m.rotation.y), dx=qx-c.x, dy=qy-c.y, dz=qz-c.z, h=dx*nx+dz*nz,
+  px=dx-h*nx, pz=dz-h*nz, rho=Math.sqrt(px*px+dy*dy+pz*pz)-0.88; return Math.sqrt(rho*rho+h*h); }
 function updateRings(dt,t){
   if(RUN.done||!RUN.rings.length) return;
   if(RUN.cool>0) RUN.cool-=dt;
@@ -5165,6 +5485,13 @@ function updateRings(dt,t){
     var r=RUN.rings[i];
     r.m.rotation.z=t*1.1+r.ph;
     r.m.position.y+=Math.sin(t*2+r.ph)*0.0016;
+    /* v27: a hoop whose rim is at the lens, or crosses the line from the lens to JR in front of him, steps aside the way
+       the trees do: a walk down Central Ave is not looked at through a hoop, nor past a great arc of one. A hoop
+       beside him, or the one he is jumping through, is left as it is: the line is only looked along to five sixths */
+    var cp=cam.position, rw=(ringRim(r,cp.x,cp.y,cp.z)<1.3)?0.15:1;
+    if(rw===1){ var lx=P.x-cp.x, ly=P.y+1.0-cp.y, lz=P.z-cp.z;
+      for(var ls=1;ls<=20;ls++){ var lu=ls/24; if(ringRim(r,cp.x+lx*lu,cp.y+ly*lu,cp.z+lz*lu)<0.6){ rw=0.3; break; } } }
+    r.op=(r.op==null?1:r.op); r.op+=(rw-r.op)*Math.min(1,dt*7); r.m.material.opacity=r.op; r.m.material.depthWrite=r.op>0.99;
     if(r.hit) continue;
     var dx=P.x-r.m.position.x, dy=(P.y+0.9)-r.m.position.y, dz=P.z-r.m.position.z;
     if(dx*dx+dy*dy+dz*dz<1.5){
@@ -5384,7 +5711,7 @@ function updateThief(dt,t){
     }
     if(!THIEF.hint){
       var hx=gp.x-P.x, hz=gp.z-P.z;
-      if(hx*hx+hz*hz<420&&state.started&&!intro.on&&QUIET.play>14){ THIEF.hint=true; UI.say("That gull's got something on a string. Stand still and press B to whistle, then jump for it."); }
+      if(hx*hx+hz*hz<420&&state.started&&!intro.on&&QUIET.play>14){ THIEF.hint=true; UI.say("That gull's got something on a string. Stand still and press {B} to whistle, then jump for it."); }
     }
   }
   /* anything dropped settles to the ground */
@@ -5435,14 +5762,14 @@ var HINT={
   },
   tick:function(dt,sp){
     if(!state.started||intro.on||ending||DLG.open||P.mini) return;
-    if(!P.ground&&P.jumps===1&&P.airT>0.55&&P.vy<0) this.fire("jump2","Tap A again in the air.");
-    if(P.ground&&sp>7.4){ this.runT+=dt; if(this.runT>2.4) this.fire("dive","At a run, B is a dive."); }
+    if(!P.ground&&P.jumps===1&&P.airT>0.55&&P.vy<0) this.fire("jump2","Tap {A} again in the air.");
+    if(P.ground&&sp>7.4){ this.runT+=dt; if(this.runT>2.4) this.fire("dive","At a run, {B} is a dive."); }
     else this.runT=0;
     if(P.surf==="sand"&&!state.seen.slam){
       for(var i=0;i<MOUNDS.length;i++){
         var m=MOUNDS[i]; if(m.dead) continue;
         var dx=P.x-m.x, dz=P.z-m.z;
-        if(dx*dx+dz*dz<40){ this.fire("slam","Something's under that mound. Jump, then B to slam."); break; }
+        if(dx*dx+dz*dz<40){ this.fire("slam","Something's under that mound. Jump, then {B} to slam."); break; }
       }
     }
     if(RUN.rings.length&&!RUN.done&&!state.seen.ring){
@@ -5512,6 +5839,206 @@ SEQ.resume=function(){
   var me=this; this.timer=setInterval(function(){ me.pump(); },26);
 };
 SEQ.setMusic=function(on){ if(this.bus) this.bus.gain.value=on?0.17:0; };
+
+/* ============================================================
+   v27 — Hess's song is the score; the chip bag after the PSX bags he sent; the build's name on the title.
+   ============================================================ */
+
+/* ---------- the song ----------
+   "3.4_Beat" (2021): his file, cut to its 64 bars (192.000 s at 80 to the minute) with the 0.6 s that rings on past the
+   last bar laid over the first, so it loops on the downbeat. It streams from beside the page (music/theme.ogg, and
+   music/theme.mp4, AAC, for a browser that cannot play an Ogg file: Safari before 18.4) through an audio element into the old score's
+   bus, so the Music switch, the Strand's booth and the mute all still apply to it. The old score's notes stop; its
+   stings stay (the pickup fanfare, the glass jingle). The glass moment, the rail and the sundown take the song down and
+   muffle it, as they thinned the old score to its music box. The world's beat (the string lights, the dancers, the
+   rope) is read off the song. If neither file plays, the old score comes back and nothing is said.
+   LEVEL: his file is mastered loud (-16 LUFS); the old score sat far under that. Weighed on the score's bus (EBU R128,
+   test_v27.js), half puts the song where the old score was at its loudest, on the boardwalk: one number to raise. */
+var MUSIC={
+  FILES:["music/theme.ogg","music/theme.mp4"], BPM:80, BEAT0:0.012, LEVEL:0.5,
+  el:null, node:null, lp:null, gain:null, list:null, tried:0, live:false, failed:false, duck:1, lpf:20000, _wg:null,
+  order:function(){
+    var ogg=""; try{ ogg=document.createElement("audio").canPlayType('audio/ogg; codecs="vorbis"'); }catch(e){}
+    return ogg?this.FILES.slice():[this.FILES[1],this.FILES[0]];
+  },
+  start:function(){
+    if(this.el||this.failed||!AU.ready||!SEQ.bus) return;
+    var me=this, el;
+    try{
+      el=new Audio(); el.loop=true; el.preload="auto"; el.setAttribute("playsinline","");
+      this.node=AU.ctx.createMediaElementSource(el);
+      this.lp=AU.ctx.createBiquadFilter(); this.lp.type="lowpass"; this.lp.frequency.value=20000; this.lp.Q.value=0.5;
+      this.gain=AU.ctx.createGain(); this.gain.gain.value=this.LEVEL;
+      this.node.connect(this.lp); this.lp.connect(this.gain); this.gain.connect(SEQ.bus);
+    }catch(e){ this.fail(); return; }
+    this.el=el; this.list=this.order(); this.tried=0; this.live=true;       /* the old score keeps quiet from here: the song is on its way */
+    SEQ.bpm=this.BPM;
+    el.addEventListener("error",function(){ if(me.el===el) me.load(); });
+    this.load();
+  },
+  /* the next file to try, or the old score back if there is none */
+  load:function(){
+    if(this.failed||!this.el) return;
+    if(this.tried>=this.list.length){ this.fail(); return; }
+    this.el.src=this.list[this.tried++]; this.sync();
+  },
+  fail:function(){
+    this.failed=true; this.live=false; SEQ.bpm=104;
+    var el=this.el; this.el=null;
+    if(el){ try{ el.pause(); el.removeAttribute("src"); el.load(); }catch(e){} }
+    if(this.gain){ try{ this.gain.disconnect(); }catch(e){} }
+  },
+  want:function(){ return !!(this.el&&!this.failed&&state.music&&state.sound&&!SEQ.held&&!document.hidden); },
+  /* play or stop, as the switches, the tab and the Strand say */
+  sync:function(){
+    var el=this.el; if(!el||this.failed) return;
+    if(this.want()){
+      if(el.paused){ var p=null; try{ p=el.play(); }catch(e){}
+        if(p&&p.catch) p.catch(function(err){ if(err&&err.name==="NotAllowedError") MUSIC.waitGesture(); }); }
+    } else if(!el.paused){ try{ el.pause(); }catch(e){} }
+  },
+  /* a browser that did not count the press that started the game (a controller's button, in some) is asked again
+     at the next touch, click or key */
+  waitGesture:function(){
+    if(this._wg) return; var me=this, kinds=["pointerdown","keydown","touchend"];
+    this._wg=function(){ kinds.forEach(function(t){ window.removeEventListener(t,me._wg,true); }); me._wg=null; me.sync(); };
+    kinds.forEach(function(t){ window.addEventListener(t,me._wg,true); });
+  },
+  tick:function(dt){
+    if(!this.gain||this.failed) return;
+    var d=1, f=20000;
+    if(CUT.on){ d=0.35; f=900; } else if(ending){ d=0.6; f=1800; } else if(RESTING){ d=0.62; f=2400; }
+    var k=Math.min(1,dt*2.4);
+    this.duck+=(d-this.duck)*k;
+    this.lpf=Math.exp(Math.log(this.lpf)+(Math.log(f)-Math.log(this.lpf))*k);
+    this.gain.gain.value=this.LEVEL*this.duck; this.lp.frequency.value=this.lpf;
+  },
+  /* where the song is, in eighths of its four-bar phrase (0 to 32), or -1 when it is not sounding */
+  phase:function(){
+    var e=this.el; if(!e||this.failed||e.paused||e.readyState<2) return -1;
+    return (((e.currentTime-this.BEAT0)/(30/this.BPM))%32+32)%32;
+  }
+};
+/* the old score's own hold (a hidden tab, a film, a paused reel) holds the song too */
+(function(){
+  var pause=SEQ.pause, resume=SEQ.resume;
+  SEQ.pause=function(){ pause.call(this); MUSIC.sync(); };
+  SEQ.resume=function(){ resume.call(this); MUSIC.sync(); };
+})();
+
+/* ---------- the build's name, small, under the studio's tag on the title ---------- */
+(function(){ var b=document.getElementById("sigBuild"); if(b) b.textContent=BUILD; })();
+
+/* ---------- the chip bag, after the PSX-style bags Hess sent ----------
+   A crinkled pillow with crimped ends, a little twisted, in five loud colorways drawn on a small canvas (48 by 64 a
+   face) and shown unfiltered up close, so its pixels show the way a PSX texture's did; toon-lit, faceted and inked like
+   everything else on the block. Each bag on the block wears a colorway of its own (an attribute per instance). The
+   word on it is just the word. */
+var CHIPS={V:5, CW:48, CH:64, TW:256, TH:128, canvas:null, tex:null, geo:null, hull:null, mat:null,
+  WAYS:[
+    {body:"#F4B53F",b1:"#57E6C9",b2:"#FF85C2",oval:"#FFF1C2",word:"#E8432D",edge:"#2B1B33",tag:"#FF85C2"},    /* honey, mint and pink */
+    {body:"#24348A",b1:"#FF85C2",b2:"#F4B53F",oval:"#3B52C2",word:"#F6EFE2",edge:"#101444",tag:"#F4B53F"},    /* night blue */
+    {body:"#37C3AE",b1:"#FF85C2",b2:"#F4B53F",oval:"#FF85C2",word:"#F6EFE2",edge:"#2B1B33",tag:"#F4B53F"},    /* mint */
+    {body:"#E3402D",b1:"#57E6C9",b2:"#F4B53F",oval:"#F4B53F",word:"#57E6C9",edge:"#2B1B33",tag:"#57E6C9"},    /* crayon red */
+    {body:"#FF6FAE",b1:"#57E6C9",b2:"#F4B53F",oval:"#F4B53F",word:"#E8432D",edge:"#2B1B33",tag:"#57E6C9"}     /* pink */
+  ],
+  face:function(x,c0,r0,w,back){
+    var W=this.CW, H=this.CH, X=c0*W, Y=r0*H, k;
+    x.save(); x.beginPath(); x.rect(X,Y,W,H); x.clip();
+    x.fillStyle=w.body; x.fillRect(X,Y,W,H);
+    /* two waves of colour across the lower third */
+    for(k=0;k<2;k++){ x.fillStyle=k?w.b2:w.b1; x.beginPath(); var y0=Y+H*(0.66+k*0.1);
+      x.moveTo(X,Y+H); x.lineTo(X,y0); for(var i=0;i<=W;i+=4) x.lineTo(X+i,y0+Math.sin(i*0.21+k*1.7)*2.6); x.lineTo(X+W,Y+H); x.closePath(); x.fill(); }
+    if(!back){
+      /* the sun behind the word */
+      x.fillStyle=w.oval; x.beginPath(); x.ellipse(X+W*0.5,Y+H*0.38,W*0.43,H*0.17,-0.12,0,Math.PI*2); x.fill();
+      x.strokeStyle=w.edge; x.lineWidth=1; x.stroke();
+      /* the word, in the hand the block writes its notes in */
+      x.save(); x.translate(X+W*0.5,Y+H*0.43); x.rotate(-0.12); x.textAlign="center"; x.textBaseline="alphabetic";
+      x.font='700 17px "Caveat", "Bradley Hand", cursive'; x.lineJoin="round";
+      x.lineWidth=3; x.strokeStyle=w.edge; x.strokeText("Chips",0,0); x.fillStyle=w.word; x.fillText("Chips",0,0); x.restore();
+      /* a 25-cent burst, top right */
+      x.fillStyle=w.tag; x.beginPath(); for(k=0;k<16;k++){ var a=k*Math.PI/8, r=k%2?4.2:6; x.lineTo(X+W*0.8+Math.cos(a)*r,Y+H*0.16+Math.sin(a)*r); } x.closePath(); x.fill();
+      x.fillStyle=w.edge; x.font='700 6px "Space Grotesk", Arial, sans-serif'; x.textAlign="center"; x.textBaseline="middle"; x.fillText("25¢",X+W*0.8,Y+H*0.165);
+      /* four chips spilling over the waves */
+      var CH=[[0.3,0.78,7,4.5,0.3],[0.52,0.74,8,5,-0.2],[0.7,0.8,7,4.5,0.5],[0.45,0.86,6,4,0.1]];
+      for(k=0;k<CH.length;k++){ var c=CH[k]; x.fillStyle="#F2C14E"; x.strokeStyle="#B07A22"; x.lineWidth=1; x.beginPath(); x.ellipse(X+W*c[0],Y+H*c[1],c[2],c[3],c[4],0,Math.PI*2); x.fill(); x.stroke(); }
+    } else {
+      /* the back: a panel of small print */
+      x.fillStyle="#F6EFE2"; x.fillRect(X+W*0.16,Y+H*0.2,W*0.68,H*0.36); x.strokeStyle=w.edge; x.lineWidth=1; x.strokeRect(X+W*0.16+0.5,Y+H*0.2+0.5,W*0.68-1,H*0.36-1);
+      x.fillStyle=w.edge; for(k=0;k<6;k++) x.fillRect(X+W*0.22,Y+H*0.25+k*3.2,W*(k%3===2?0.36:0.56),1);
+    }
+    /* the crimped ends: lighter, with their teeth */
+    for(var e=0;e<2;e++){ var yy=e?Y+H-5:Y; x.fillStyle="rgba(246,239,226,0.55)"; x.fillRect(X,yy,W,5);
+      x.fillStyle="rgba(43,27,51,0.35)"; for(k=1;k<W;k+=3) x.fillRect(X+k,yy,1,5); }
+    x.restore();
+  },
+  draw:function(){
+    var x=this.canvas.getContext("2d"); x.clearRect(0,0,this.TW,this.TH);
+    for(var v=0;v<this.V;v++){ this.face(x,v,0,this.WAYS[v],false); this.face(x,v,1,this.WAYS[v],true); }
+  },
+  /* the bag: two faces of an 8 by 8 grid, puffed in the middle and pinched in at the sides, with a flat seal at each
+     end whose edge is a row of shallow teeth (a crimp, not a tear), a little twisted and crumpled (the same crumple every
+     time). The rows are closer at the ends, so the seal is a strip and the pillow starts right under it. Faceted: each
+     triangle takes one band of the toon ramp, which is what makes it read as foil. */
+  ROWS:[0,0.075,0.19,0.34,0.5,0.66,0.81,0.925,1],
+  build:function(){
+    var NX=8, R=this.ROWS, NY=R.length-1, W=0.5, H=0.7, T=0.21, seed=7, rnd=function(){ seed=(seed*16807)%2147483647; return seed/2147483647-0.5; };
+    var grid=[];
+    for(var j=0;j<=NY;j++){ var row=[], v=R[j], tw=(v-0.5)*0.16, end=(j===0||j===NY);
+      for(var i=0;i<=NX;i++){ var u=i/NX;
+        var puff=Math.pow(Math.sin(Math.PI*u),0.6)*Math.max(0,Math.min(1,(Math.min(v,1-v)-0.06)/0.2));
+        var y=v*H+(end?((i%2)?-0.012:0.012)*(j===0?-1:1):0)+(end||j===1||j===NY-1?0:rnd()*0.012);
+        var xx=(u-0.5)*W*(1-0.07*Math.sin(Math.PI*v))+(end?0:rnd()*0.006), z=T*0.5*puff+rnd()*0.01*puff;
+        row.push([xx*Math.cos(tw),y,xx*Math.sin(tw),z,u,v,tw]); }
+      grid.push(row); }
+    var pos=[], uv=[], col=[];
+    function vert(p,front){ var c=Math.cos(p[6]), s=Math.sin(p[6]), zz=front?p[3]:-p[3];
+      pos.push(p[0]-zz*s, p[1], p[2]+zz*c); uv.push(front?p[4]:1-p[4], front?0.5+0.5*p[5]:0.5*p[5]); }
+    for(var f=0;f<2;f++){ var front=f===0;
+      for(var j2=0;j2<NY;j2++) for(var i2=0;i2<NX;i2++){
+        var a=grid[j2][i2], b=grid[j2][i2+1], c2=grid[j2+1][i2+1], d=grid[j2+1][i2];
+        if(front){ vert(a,1); vert(b,1); vert(c2,1); vert(a,1); vert(c2,1); vert(d,1); }
+        else { vert(a,0); vert(c2,0); vert(b,0); vert(a,0); vert(d,0); vert(c2,0); } } }
+    var g=new THREE.BufferGeometry();
+    g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3)); g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));
+    g.computeVertexNormals(); g.computeBoundingSphere(); this.geo=g;
+    /* the ink: one shared skin round the whole bag (the two faces meet at the sides and the crimps), pushed out along
+       its smooth normals */
+    var ip=[], idx=[], at={}, key=function(p){ return p[0].toFixed(4)+","+p[1].toFixed(4)+","+p[2].toFixed(4); };
+    function id(p){ var k=key(p); if(at[k]===undefined){ at[k]=ip.length/3; ip.push(p[0],p[1],p[2]); } return at[k]; }
+    for(var q=0;q<pos.length;q+=9){ idx.push(id([pos[q],pos[q+1],pos[q+2]]),id([pos[q+3],pos[q+4],pos[q+5]]),id([pos[q+6],pos[q+7],pos[q+8]])); }
+    var h=new THREE.BufferGeometry(); h.setAttribute("position",new THREE.Float32BufferAttribute(ip,3)); h.setIndex(idx); h.computeVertexNormals();
+    var hp=h.attributes.position, hn=h.attributes.normal;
+    for(var n=0;n<hp.count;n++) hp.setXYZ(n,hp.getX(n)+hn.getX(n)*0.016,hp.getY(n)+hn.getY(n)*0.016,hp.getZ(n)+hn.getZ(n)*0.016);
+    h.computeBoundingSphere(); this.hull=h;
+  }
+};
+/* after bakeProtos: the chip bag's instanced mesh and its ink are swapped for the printed bag */
+function chipsBags(){
+  var K=PKI.chips; if(!K) return;
+  var C=CHIPS; C.canvas=document.createElement("canvas"); C.canvas.width=C.TW; C.canvas.height=C.TH; C.draw();
+  C.tex=new THREE.CanvasTexture(C.canvas); C.tex.magFilter=THREE.NearestFilter; C.tex.minFilter=THREE.LinearMipmapLinearFilter; C.tex.anisotropy=1;
+  C.build();
+  C.mat=airMat({color:0xFFFFFF,map:C.tex,gradientMap:RAMP});
+  var air=C.mat.onBeforeCompile, cw=(C.CW/C.TW).toFixed(6);
+  C.mat.onBeforeCompile=function(sh,r){ if(air) air.call(this,sh,r);
+    sh.vertexShader=sh.vertexShader.replace("#include <uv_pars_vertex>","#include <uv_pars_vertex>\nattribute float aBag;")
+      .replace("#include <uv_vertex>","#include <uv_vertex>\n  vUv.x=(vUv.x+aBag)*"+cw+";   /* v27: this bag's colorway */"); };
+  var cap=K.cap, ab=new THREE.InstancedBufferAttribute(new Float32Array(cap),1);
+  for(var i=0;i<cap;i++) ab.array[i]=(i*2)%C.V;                               /* one after another, so neighbours differ */
+  C.geo.setAttribute("aBag",ab);
+  var m=new THREE.InstancedMesh(C.geo,C.mat,cap); m.count=K.n; m.frustumCulled=false; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); m.receiveShadow=true;
+  scene.remove(K.m); scene.add(m); K.m=m;
+  if(K.ink){ var ink=new THREE.InstancedMesh(C.hull,INK,cap); ink.count=K.n; ink.frustumCulled=false; ink.instanceMatrix.setUsage(THREE.DynamicDrawUsage); ink.visible=K.ink.visible;
+    var ix=INKS.indexOf(K.ink); if(ix>=0) INKS[ix]=ink; else INKS.push(ink); scene.remove(K.ink); scene.add(ink); K.ink=ink; }
+  /* a bag past the cap is a plain copy: the first colorway */
+  var g=new THREE.Group(), one=C.geo.clone(); one.setAttribute("aBag",new THREE.Float32BufferAttribute(new Float32Array(one.attributes.position.count),1)); g.add(new THREE.Mesh(one,C.mat)); PROTO.chips=g;
+  /* the word is written in Caveat: once the face is here, the bags are drawn again */
+  var F=document.fonts;
+  if(F&&F.load&&F.check){ try{ if(!F.check('700 17px "Caveat"')) F.load('700 17px "Caveat"').then(function(){ C.draw(); C.tex.needsUpdate=true; }).catch(function(){}); }catch(e){} }
+}
+
 
 /* ---------- the sundown: twelve seconds you don't control ---------- */
 var ENDSEQ={t:0,toasted:false,carded:false};
@@ -6847,8 +7374,8 @@ function ditherFade(sh){
       "#include <common>\nvarying float vFade;\nfloat bay2(vec2 a){ a=floor(a); return fract(dot(a,vec2(0.5,a.y*0.75))); }")
     .replace("void main() {","void main() {\n  if(vFade<0.995){ vec2 fc=gl_FragCoord.xy; if(bay2(0.5*fc)*0.25+bay2(fc)>=vFade) discard; }");
 }
-function Pool(cap,inkCap,inkT){
-  var g=new THREE.BoxGeometry(1,1,1), g2=new THREE.BoxGeometry(1,1,1);
+function Pool(cap,inkCap,inkT,geo){
+  var g=geo?geo.clone():new THREE.BoxGeometry(1,1,1), g2=geo?geo.clone():new THREE.BoxGeometry(1,1,1);
   this.fa=new THREE.InstancedBufferAttribute(new Float32Array(cap).fill(1),1);
   this.fk=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1,inkCap)).fill(1),1);
   this.fa.setUsage(THREE.DynamicDrawUsage); this.fk.setUsage(THREE.DynamicDrawUsage);
@@ -6870,7 +7397,7 @@ function Pool(cap,inkCap,inkT){
 }
 Pool.prototype.alloc=function(hex,inked){
   if(this.n>=this.cap) return null;
-  var s={i:this.n++,k:-1,hex:hex};
+  var s={i:this.n++,k:-1,hex:hex,pl:this};
   COL.setHex(hex); this.m.setColorAt(s.i,COL);
   this.m.setMatrixAt(s.i,ZERO);
   if(inked&&this.ni<this.inkCap){ s.k=this.ni++; this.ink.setMatrixAt(s.k,ZERO); }
@@ -6950,11 +7477,9 @@ function Person(pool,look,model){
   this.blink=2+Math.random()*4; this.blinkT=0;
   if(model){
     /* a rigged body draws the person; the pool only carries the game's own hats, big hair and shades */
-    if(look.hair==="afro"){ sl.hair=pool.alloc(look.hc||HC.dark,true); sl.hairB=pool.alloc(look.hc||HC.dark,true); }
+    if(look.hair==="afro"){ sl.hair=(DYNT||pool).alloc(look.hc||HC.dark,true); sl.hairB=(DYNR||pool).alloc(look.hc||HC.dark,true); }   /* v25: round */
     if(look.hair==="locs") sl.hairB=pool.alloc(look.hc||HC.dark,true);
-    if(look.hat){ sl.hat=pool.alloc(look.hatc||CL.red,look.hat!=="band"&&look.hat!=="kippah");
-      if(look.hat==="cap"||look.hat==="visor"||look.hat==="sun") sl.brim=pool.alloc(look.hatc||CL.red,false);
-      if(look.hat==="beanie"||look.hat==="wrap") sl.hat2=pool.alloc(look.hatc||CL.red,true); }
+    if(look.hat) hatSlots(pool,look,sl);
     if(look.shades) sl.eyL=pool.alloc(0x14161A,false);
     return;
   }
@@ -6970,8 +7495,18 @@ function Person(pool,look,model){
   if(look.hair&&look.hair!=="bald") sl.hair=pool.alloc(look.hc||HC.dark,true);
   if(look.hair==="long"||look.hair==="bun"||look.hair==="locs"||look.hair==="short"||look.hair==="pony"||look.hair==="fade")
     sl.hairB=pool.alloc(look.hc||HC.dark,look.hair!=="bun"&&look.hair!=="pony");
-  if(look.hat){ sl.hat=pool.alloc(look.hatc||CL.red,look.hat!=="band"&&look.hat!=="kippah");
-    if(look.hat==="cap"||look.hat==="visor"||look.hat==="sun") sl.brim=pool.alloc(look.hatc||CL.red,false); }
+  if(look.hat) hatSlots(pool,look,sl);
+}
+/* v25: the block's hats are round. A crown comes from the tapered pool (an eight-sided dome), a band, a sun
+   hat's brim and a beanie's cuff from the straight one; a cap's peak and a wrap's knot stay boxes. Each slot
+   remembers its pool, so hiding, fading and the box-bodied fallback find it. */
+function hatSlots(pool,look,sl){
+  var hc=look.hatc||CL.red, h=look.hat, T=DYNT||pool, R=DYNR||pool;
+  sl.hat=(h==="band"||h==="kippah")?R.alloc(hc,false):(h==="visor"?R.alloc(hc,true):T.alloc(hc,true));
+  if(h==="cap"||h==="visor") sl.brim=pool.alloc(hc,false);
+  else if(h==="sun") sl.brim=R.alloc(hc,false);
+  if(h==="beanie") sl.hat2=R.alloc(hc,true);
+  else if(h==="wrap") sl.hat2=pool.alloc(hc,true);
 }
 function resetPose(q){
   q.y=0;q.lean=0;q.roll=0;q.bend=0;q.twist=0;q.hl=0;q.hr=0;q.kl=0;q.kr=0;
@@ -6986,7 +7521,7 @@ function drawHair(pool,p,N,W,top,eye){
       pool.put(sl.hairB,offs(M_T,N,0,0.33*hs,-0.2*hs),0.45*hs,0.26,0.08); break;
     case "fade": pool.put(sl.hair,offs(M_T,N,0,0.465*hs,0.01),0.455*hs,0.1,0.455*hs);
       pool.put(sl.hairB,offs(M_T,N,0,0.36*hs,-0.2*hs),0.44*hs,0.2,0.07); break;
-    case "afro": pool.put(sl.hair,offs(M_T,N,0,0.47*hs,-0.03),0.6*hs,0.34*hs,0.58*hs); break;
+    case "afro": (sl.hair.pl||pool).put(sl.hair,offs(M_T,N,0,0.47*hs,-0.03),0.6*hs,0.34*hs,0.58*hs); break;
     case "bun": pool.put(sl.hair,offs(M_T,N,0,0.46*hs,0),0.46*hs,0.12,0.46*hs);
       pool.put(sl.hairB,offs(M_T,N,0,0.6*hs,-0.1*hs),0.2*hs,0.18*hs,0.2*hs); break;
     case "pony": pool.put(sl.hair,offs(M_T,N,0,0.46*hs,0),0.46*hs,0.12,0.46*hs);
@@ -6998,17 +7533,18 @@ function drawHair(pool,p,N,W,top,eye){
     case "gray": pool.put(sl.hair,offs(M_T,N,0,0.45*hs,-0.02),0.45*hs,0.1,0.44*hs); break;
   }
   if(sl.hat){
+    var ph=sl.hat.pl||pool, pb=(sl.brim&&sl.brim.pl)||pool;
     switch(L.hat){
-      case "cap": pool.put(sl.hat,offs(M_T,N,0,0.52*hs,-0.01),0.48*hs,0.14,0.48*hs);
-        pool.put(sl.brim,offs(M_T,N,0,0.46*hs,0.3*hs),0.42*hs,0.04,0.24*hs); break;
-      case "visor": pool.put(sl.hat,offs(M_T,N,0,0.43*hs,0),0.47*hs,0.07,0.47*hs);
-        pool.put(sl.brim,offs(M_T,N,0,0.42*hs,0.31*hs),0.46*hs,0.04,0.26*hs); break;
-      case "sun": pool.put(sl.hat,offs(M_T,N,0,0.55*hs,0),0.42*hs,0.16,0.42*hs);
-        pool.put(sl.brim,offs(M_T,N,0,0.48*hs,0),0.92*hs,0.04,0.92*hs); break;
-      case "beanie": pool.put(sl.hat,offs(M_T,N,0,0.52*hs,-0.01),0.49*hs,0.2,0.49*hs); break;
-      case "wrap": pool.put(sl.hat,offs(M_T,N,0,0.54*hs,-0.03),0.5*hs,0.26,0.5*hs); break;
-      case "band": pool.put(sl.hat,offs(M_T,N,0,0.41*hs,0),0.47*hs,0.07,0.47*hs); break;
-      case "kippah": pool.put(sl.hat,offs(M_T,N,0,0.47*hs,-0.07),0.24,0.04,0.24); break;
+      case "cap": ph.put(sl.hat,offs(M_T,N,0,0.52*hs,-0.01),0.48*hs,0.14,0.48*hs);
+        pb.put(sl.brim,offs(M_T,N,0,0.46*hs,0.3*hs),0.42*hs,0.04,0.24*hs); break;
+      case "visor": ph.put(sl.hat,offs(M_T,N,0,0.43*hs,0),0.47*hs,0.07,0.47*hs);
+        pb.put(sl.brim,offs(M_T,N,0,0.42*hs,0.31*hs),0.46*hs,0.04,0.26*hs); break;
+      case "sun": ph.put(sl.hat,offs(M_T,N,0,0.55*hs,0),0.42*hs,0.16,0.42*hs);
+        pb.put(sl.brim,offs(M_T,N,0,0.48*hs,0),0.92*hs,0.04,0.92*hs); break;
+      case "beanie": ph.put(sl.hat,offs(M_T,N,0,0.52*hs,-0.01),0.49*hs,0.2,0.49*hs); break;
+      case "wrap": ph.put(sl.hat,offs(M_T,N,0,0.54*hs,-0.03),0.5*hs,0.26,0.5*hs); break;
+      case "band": ph.put(sl.hat,offs(M_T,N,0,0.41*hs,0),0.47*hs,0.07,0.47*hs); break;
+      case "kippah": ph.put(sl.hat,offs(M_T,N,0,0.47*hs,-0.07),0.24,0.04,0.24); break;
     }
   }
 }
@@ -7019,22 +7555,25 @@ function drawHairM(pool,p,N,W,top,eye){
   var L=p.look, sl=p.sl, w=W*1.15, zb=W*0.5;
   function slab(slot,y0,y1,sx,sz,z){ pool.put(slot,offs(M_T,N,0,(y0+y1)/2,z||0),sx,y1-y0,sz); }
   if(L.hair==="afro"&&sl.hair){
-    /* two boxes, one turned 45°, so the silhouette rounds off */
-    slab(sl.hair,eye+0.12,top+0.22,W*1.15,W*1.1,-0.04);
-    joint(M_T,N,0,(eye+0.12+top+0.22)/2,-0.04,0,Math.PI/4,0); pool.put(sl.hairB,M_T,W*1.12,top+0.06-eye-0.12,W*1.08);
+    /* v25: a dome over a ring, both eight-sided */
+    var hiT=(sl.hat&&L.hat==="cap")?top+0.06:top+0.27;                      /* pressed down under a cap */
+    (sl.hair.pl||pool).put(sl.hair,offs(M_T,N,0,(eye+0.05+hiT)/2,-0.04),W*1.26,hiT-eye-0.05,W*1.22);
+    (sl.hairB.pl||pool).put(sl.hairB,offs(M_T,N,0,(eye-0.06+eye+0.3)/2,-0.05),W*1.22,0.36,W*1.18);
   }
   if(L.hair==="locs"&&sl.hairB) slab(sl.hairB,eye-0.25,top-0.12,W*1.0,W*0.3,-W*0.56);
   if(!sl.hat) return;
+  /* v25: round crowns and brims; each slot through the pool it came from */
+  var ph=sl.hat.pl||pool, pb=(sl.brim&&sl.brim.pl)||pool, p2=(sl.hat2&&sl.hat2.pl)||pool;
+  function rnd(pl,slot,y0,y1,r,z){ pl.put(slot,offs(M_T,N,0,(y0+y1)/2,z||0),r*2,y1-y0,r*2); }
   switch(L.hat){
-    case "cap": slab(sl.hat,eye+0.17,top+0.03,w,w,-0.02); slab(sl.brim,eye+0.17,eye+0.21,w*0.84,0.42*w,zb+0.17*w); break;
-    case "visor": slab(sl.hat,eye+0.18,eye+0.32,w*0.98,w*0.98); slab(sl.brim,eye+0.2,eye+0.24,w*0.9,0.45*w,zb+0.18*w); break;
-    case "sun": slab(sl.hat,eye+0.2,top+0.06,w*0.86,w*0.86); slab(sl.brim,eye+0.21,eye+0.245,w*1.9,w*1.9); break;
-    case "beanie": slab(sl.hat,eye+0.16,top+0.06,w*0.96,w*0.96,-0.02);
-      joint(M_T,N,0,(eye+0.16+top+0.02)/2,-0.02,0,Math.PI/4,0); pool.put(sl.hat2,M_T,w*0.94,top+0.02-eye-0.16,w*0.94); break;
-    case "wrap": slab(sl.hat,eye+0.16,top+0.1,w*0.98,w*0.98,-0.03);
-      joint(M_T,N,0,(eye+0.16+top+0.06)/2,-0.03,0,Math.PI/4,0); pool.put(sl.hat2,M_T,w*0.96,top+0.06-eye-0.16,w*0.96); break;
-    case "band": slab(sl.hat,eye+0.2,eye+0.3,w*0.98,w*0.98); break;
-    case "kippah": slab(sl.hat,top-0.01,top+0.025,w*0.46,w*0.46,-0.12*w); break;
+    case "cap": if(L.hair==="afro"){ rnd(ph,sl.hat,eye+0.24,top+0.16,w*0.57,-0.03); slab(sl.brim,eye+0.255,eye+0.29,w*0.8,0.42*w,zb+0.26*w); }
+      else { rnd(ph,sl.hat,eye+0.15,top+0.05,w*0.5,-0.03); slab(sl.brim,eye+0.165,eye+0.2,w*0.74,0.4*w,zb+0.16*w); } break;
+    case "visor": rnd(ph,sl.hat,eye+0.18,eye+0.3,w*0.51); slab(sl.brim,eye+0.195,eye+0.23,w*0.8,0.44*w,zb+0.17*w); break;
+    case "sun": rnd(ph,sl.hat,eye+0.2,top+0.08,w*0.43,-0.01); rnd(pb,sl.brim,eye+0.215,eye+0.25,w*0.92,-0.01); break;
+    case "beanie": rnd(ph,sl.hat,eye+0.13,top+0.1,w*0.5,-0.02); rnd(p2,sl.hat2,eye+0.13,eye+0.27,w*0.535,-0.02); break;
+    case "wrap": rnd(ph,sl.hat,eye+0.14,top+0.12,w*0.51,-0.03); p2.put(sl.hat2,offs(M_T,N,0,top+0.06,zb*0.62),w*0.28,0.2,w*0.24); break;
+    case "band": rnd(ph,sl.hat,eye+0.2,eye+0.3,w*0.51); break;
+    case "kippah": rnd(ph,sl.hat,top-0.01,top+0.035,w*0.22,-0.12*w); break;
   }
 }
 /* the full body from pose q; x,y,z root = between the feet */
@@ -7077,8 +7616,8 @@ function drawPerson(pool,p,x,y,z,yaw){
   }
   drawHair(pool,p,M_NECK);
 }
-function hidePerson(pool,p){ for(var k in p.sl) pool.off(p.sl[k]); }
-function fadePerson(pool,p,f){ for(var k in p.sl) pool.fade(p.sl[k],f); }
+function hidePerson(pool,p){ for(var k in p.sl){ var s=p.sl[k]; if(s) (s.pl||pool).off(s); } }
+function fadePerson(pool,p,f){ for(var k in p.sl){ var s=p.sl[k]; if(s) (s.pl||pool).fade(s,f); } }
 
 /* ---- dogs: body, head on a neck, four legs, ears, a tail that never stops ---- */
 function Dog(pool,o){
@@ -7219,7 +7758,7 @@ var CAST=[
   sched:[{at:0.52,go:[[-40,-33],[-24,-32],[-12,-31.5],[-9.5,-26]].concat(UP_FROM_SAND,[[-30,-18.9],[-30,RAIL]]),act:"rail",yaw:PI,pack:true}],
   amb:["Five more minutes.","Mm. Sun's perfect.","You're in my light, baby."],
   talk:["Five more minutes. Then five more after that. That's the whole plan for today.",
-        "I've been coming to this beach since the Q22 cost a token. Same towel, too. Don't tell anybody."]},
+        "I've been coming to this beach since the Q113 cost a token. Same towel, too. Don't tell anybody."]},
 {id:"kiki",n:"Kiki",r:"Castle architect",v:560,
   look:L(SK[1],"pony",HC.brown,CL.yellow,CL.pink,{kid:true,shorts:true}),
   at:[5.3,-35.2],yaw:HP,act:"kneel",
@@ -7260,7 +7799,7 @@ var CAST=[
   path:[[-30,-31],[-38,-31.5],[-43,-36.5],[-36,-39],[-26,-33.5]],pause:[0,2.5,0,2.5,0],
   sched:[{at:0.76,go:[[-24,-31],[-12,-31.5],[-9.5,-26]].concat(UP_FROM_SAND,[[-20,-18.9],[-20,RAIL]]),act:"rail",yaw:PI}],
   amb:["Beep. Beep. ...Bottle cap.","This beach is paying today.","Forty years, one class ring."],
-  talk:["Every lump on this beach is somebody's lost change. Jump, then B. Let gravity do the digging.",
+  talk:["Every lump on this beach is somebody's lost change. Jump, then {B}. Let gravity do the digging.",
         "Forty years with this thing. Found a class ring, two teeth, and my patience."]},
 {id:"nia",n:"Nia",r:"Holding on",v:590,
   look:L(SK[6],"afro",HC.black,CL.purple,CL.denim,{kid:true,shorts:true}),
@@ -7460,15 +7999,15 @@ var CAST=[
   amb:["Don't rush me.","Slam it!","Six-six, baby."],
   talk:["He's gonna say I won twice. It was three times. Once was in the rain. It counts.",
         "You got the slam, kid. I felt it from here."]},
-{id:"tamika",n:"Tamika",r:"Waiting on the Q22",v:390,
+{id:"tamika",n:"Tamika",r:"Waiting on the Q113",v:390,
   look:L(SK[5],"long",HC.black,CL.purple,CL.black,{}),
   at:[-15.6,27.95],y:0.46-0.73,yaw:PI,act:"sitPhone",props:["phone"],
-  amb:["Four minutes, it says.","It said four minutes ten minutes ago.","Come on, Q22..."],
-  talk:["The Q22 said four minutes. It said that ten minutes ago. I've started to take it personally."]},
+  amb:["Four minutes, it says.","It said four minutes ten minutes ago.","Come on, Q113..."],
+  talk:["The Q113 said four minutes. It said that ten minutes ago. I've started to take it personally."]},
 {id:"chen",n:"Mr. Chen",r:"Reads the whole paper",v:200,
   look:L(SK[0],"gray",HC.white,CL.gray,CL.navy,{elder:true,sleeves:"long"}),
   at:[-13.4,27.95],y:0.46-0.73,yaw:PI,act:"sitRead",props:["paper"],
-  amb:["Paper says rain.","Hmph.","The Q22 comes when it comes."],
+  amb:["Paper says rain.","Hmph.","The Q113 comes when it comes."],
   talk:["Paper says rain. Paper's been wrong since the Bicentennial.",
         "I read the whole paper every day. Even the parts about me."]},
 {id:"katz",n:"Mrs. Katz",r:"Shopping for the whole building",v:330,
@@ -7545,7 +8084,7 @@ var SAYS={
 /* ============================================================
    TOWN — the people: poses, props, routes, schedules, reactions.
    ============================================================ */
-var DYN=null, STA=null, SHD=null;       /* dynamic pool, static pool, shadows */
+var DYN=null, STA=null, SHD=null, DYNT=null, DYNR=null;       /* dynamic pool, static pool, shadows; v25: the round pools the hats come from */
 var TOWN=[], BYID={};
 var tNow=0, beatPh=0, beatK=0, lastBeatT=-1, lastBeatSt=0;
 var talkN=null;                         /* who JR is talking to right now */
@@ -8022,7 +8561,7 @@ function bubbleInit(){
     BUBS.push({sp:sp,c:c,tex:tex,n:null,t:0,dur:0,text:""});
   }
 }
-function drawBubble(b,text){
+function drawBubble(b,text,tip){
   var x=b.c.getContext("2d"), W=512, H=200, pad=10, h=150, r=30;
   x.clearRect(0,0,W,H);
   var fs=46; x.font='600 '+fs+'px "Barlow Condensed", Arial, sans-serif';
@@ -8040,11 +8579,14 @@ function drawBubble(b,text){
   }
   var tw=0; for(var j=0;j<lines.length;j++) tw=Math.max(tw,x.measureText(lines[j]).width);
   var bw=Math.min(W-2*pad,tw+64), bx=(W-bw)/2, by=pad;
+  /* v27: the tail's tip where it is asked for (canvas px; the middle by default), up to a little past the body's ends
+     (it leans out toward a speaker at the edge of the screen); its base stays on the straight of the bottom edge */
+  var tp=(tip==null)?W/2-6:Math.max(Math.max(6,bx-20),Math.min(Math.min(W-6,bx+bw+20),tip)), tb=Math.max(bx+r+17,Math.min(bx+bw-r-17,tp+6)); b.bx=bx; b.bw=bw; b.tail=tp;
   x.fillStyle="#F6EFE2"; x.strokeStyle="#121A22"; x.lineWidth=7;
   x.beginPath();
   x.moveTo(bx+r,by); x.lineTo(bx+bw-r,by); x.quadraticCurveTo(bx+bw,by,bx+bw,by+r);
   x.lineTo(bx+bw,by+h-r); x.quadraticCurveTo(bx+bw,by+h,bx+bw-r,by+h);
-  x.lineTo(W/2+18,by+h); x.lineTo(W/2-6,by+h+34); x.lineTo(W/2-16,by+h);
+  x.lineTo(tb+18,by+h); x.lineTo(tp,by+h+34); x.lineTo(tb-16,by+h);
   x.lineTo(bx+r,by+h); x.quadraticCurveTo(bx,by+h,bx,by+h-r);
   x.lineTo(bx,by+r); x.quadraticCurveTo(bx,by,bx+r,by); x.closePath();
   x.fill(); x.stroke();
@@ -8096,14 +8638,20 @@ function updateBubbles(dt){
     V1.copy(b.sp.position).project(cam);
     /* the bubble stands on its tail above the head — never over the face — and only slides down when
        the top of the screen is in the way */
-    var hw=0.5*2.25*s*k*(f/cam.aspect)/depth, hh=0.5*0.88*s*k*f/depth, cx=0.5, cy=0;
+    var hw=0.5*2.25*s*k*(f/cam.aspect)/depth, hh=0.5*0.88*s*k*f/depth, cy=0;
+    /* v27: what stays inside the screen is the bubble's body, not the canvas round it. The bubble hangs from the tip
+       of its tail, over the head: the body slides along over the tip, and the tail is drawn again (in steps) where
+       the head is. A speaker too far past the edge for the tail to reach keeps the body inside and fades out. */
+    var Wd=2*hw, bl=b.bx/512, br=(b.bx+b.bw)/512, cx=250/512, edge=1;
     if(hw>0.001){
-      if(V1.x-hw<-0.97) cx=0.5-(-0.97-(V1.x-hw))/(2*hw);
-      else if(V1.x+hw>0.97) cx=0.5+((V1.x+hw)-0.97)/(2*hw);
+      var left=V1.x+(bl-cx)*Wd, right=V1.x+(br-cx)*Wd;
+      if(left<-0.95) cx-=(-0.95-left)/Wd; else if(right>0.95) cx+=(right-0.95)/Wd;
       if(V1.y+2*hh>0.8) cy=((V1.y+2*hh)-0.8)/(2*hh);
     }
-    b.sp.center.set(clamp(cx,0.12,0.88),clamp(cy,0,0.85));
-    b.sp.material.opacity=Math.min(1,outK*1.4);
+    var cc=clamp(cx,Math.max(6,b.bx-20)/512,Math.min(506,b.bx+b.bw+20)/512); edge=clamp(1-Math.abs(cx-cc)*Wd/0.08,0,1); if(V0.z>-0.3) edge=0;
+    if(b.text&&Math.abs(cc*512-b.tail)>12) drawBubble(b,b.text,Math.round(cc*32)*16);   /* in 16 px steps, and not back and forth */
+    b.sp.center.set(cc===cx?b.tail/512:cx,clamp(cy,0,0.85));   /* hung from the tail's tip; past its reach, the body stays in */
+    b.sp.material.opacity=Math.min(1,outK*1.4)*edge;
     if(b.t>b.dur+0.3||n.gone||s<=0.001&&b.t>0.2){ b.sp.visible=false; b.n=null; }
   }
 }
@@ -8535,7 +9083,7 @@ function npcDraw(n,x,y,z,yaw,dt,t){
   /* the game's own hats and hair boxes ride the head */
   var W=m.B.headW, top=Math.max(m.B.top,m.B.eye+0.34)-1.2, eye=m.B.eye-1.2;
   if(p.sl.hair||(p.sl.hat&&!m.ownHat)) drawHair(DYN,p,p.headM,W,top,eye);
-  else if(p.sl.hat){ DYN.off(p.sl.hat); if(p.sl.brim) DYN.off(p.sl.brim); if(p.sl.hat2) DYN.off(p.sl.hat2); }
+  else if(p.sl.hat){ (p.sl.hat.pl||DYN).off(p.sl.hat); if(p.sl.brim) (p.sl.brim.pl||DYN).off(p.sl.brim); if(p.sl.hat2) (p.sl.hat2.pl||DYN).off(p.sl.hat2); }
   if(look.shades&&p.sl.eyL) DYN.put(p.sl.eyL,offs(M_T,p.headM,0,eye,W*0.46),W*0.9,W*0.2,0.03);
 }
 
@@ -9050,6 +9598,8 @@ function updateCanopies(dt){
     k=clamp(k,0,0.98);                 /* the camera itself tucked under the leaves counts too */
     var cx=ax+dx*k-tr.x, cy=ay+dy*k-tr.y, cz=az+dz*k-tr.z;
     if(cx*cx+cy*cy+cz*cz<tr.r*tr.r*1.1) want=0.24;
+    var ex=ax-tr.x, ey=ay-tr.y, ez=az-tr.z, er=tr.r*1.1+0.9;      /* v25: the lens itself in among the leaves */
+    if(want===1&&ex*ex+ey*ey+ez*ez<er*er) want=0.24;
     if(want===1&&th){
       var ex=th.x-ax, ey=th.y-ay, ez=th.z-az, k2=clamp(((tr.x-ax)*ex+(tr.y-ay)*ey+(tr.z-az)*ez)/(ex*ex+ey*ey+ez*ez||1),0,0.98);
       var qx=ax+ex*k2-tr.x, qy=ay+ey*k2-tr.y, qz=az+ez*k2-tr.z;
@@ -9474,7 +10024,7 @@ var GAMES={
     }
   },
   fish:{
-    name:"Fishing",sub:"B to cast · B on the bite",
+    name:"Fishing",sub:"{B} to cast · {B} on the bite",
     start:function(){
       P.x=FISH.pos.x; P.z=FISH.pos.z; P.face=FISH.face; FISH.st="idle"; FISH.t=0;
       MINI.yaw=0.0+0.35; MINI.pitch=0.22; MINI.dist=6.4;
@@ -9560,7 +10110,7 @@ var GAMES={
     }
   },
   rope:{
-    name:"Double Dutch",sub:"A on the beat",
+    name:"Double Dutch",sub:"{A} on the beat",
     start:function(){
       var G=ROPEG; G.count=0; G.free=2; G.missed=false;
       P.x=G.spot.x; P.z=G.spot.z; P.face=HP; MINI.yaw=HP+0.25; MINI.pitch=0.12; MINI.dist=6.0;
@@ -9599,7 +10149,7 @@ var GAMES={
     }
   },
   paddle:{
-    name:"Paddleball",sub:"B when the ball reaches you",
+    name:"Paddleball",sub:"{B} when the ball reaches you",
     start:function(){
       var D=PADDLE, ta=BYID.tasha; D.count=0; D.swingT=9; D.hang=0; D.miss=0;
       P.x=D.spot.x; P.z=D.spot.z; P.face=-HP; MINI.yaw=HP+0.5; MINI.pitch=0.14; MINI.dist=6.6;
@@ -9773,6 +10323,8 @@ var ROPE=[];
 function init(){
   scratch();
   DYN=new Pool(1500,820,0.016);
+  DYNT=new Pool(140,140,0.016,new THREE.CylinderGeometry(0.43,0.5,1,8));   /* v25: crowns, an eight-sided dome */
+  DYNR=new Pool(110,110,0.016,new THREE.CylinderGeometry(0.5,0.5,1,8));    /* brims, bands and cuffs */
   STA=new Pool(360,300,0.02);
   npcInit();
   SHD=new ShadowPool(200);
@@ -9830,11 +10382,14 @@ function init(){
   for(var cc=0;cc<CATCH.length;cc++) SAND_TOTAL+=CATCH[cc].worth;
   SAND_TOTAL+=10;
   P.mini=null; P.trip=0;
-  STA.commit(); DYN.commit(); SHD.commit();
+  STA.commit(); DYN.commit(); DYNT.commit(); DYNR.commit(); SHD.commit();
 }
 
 /* ---------- the beat, read from the score's own schedule ---------- */
 function readBeat(dt){
+  /* v27: the song's own beat, read off where it is; while it loads or is stopped the beat runs on at its tempo */
+  if(MUSIC.live){ var mph=MUSIC.phase(); if(mph>=0){ var mst=Math.floor(mph); if(mst!==lastBeatSt){ lastBeatSt=mst; if(mst%2===0&&state.music&&state.sound) bulbPulse=1; } beatPh=mph; return; }
+    beatPh=(beatPh+dt/(30/MUSIC.BPM))%32; return; }
   var eighth=30/(SEQ.bpm||104);
   if(SEQ.on&&SEQ.vq&&AU.ctx){
     var now=AU.ctx.currentTime;
@@ -10078,9 +10633,9 @@ function update(dt,t,raw){
   if(nd&&P.z<-41&&nadineT<=0&&state.started&&!ending){ nadineT=14; sfx("tweet",nd.x,nd.y+1.8,nd.z); say(nd,"Stay between the flags!",2.4,true); }
   /* one-time hint: everybody talks */
   if(!state.seen.talk&&state.started&&!intro.on&&!DLG.open){
-    for(var h=0;h<TOWN.length;h++){ var hn=TOWN[h]; if(!hn.gone&&jrDist(hn.x,hn.z)<2.6&&Math.hypot(P.vx,P.vz)<3.5){ HINT.fire("talk","B talks to anyone on the block."); break; } }
+    for(var h=0;h<TOWN.length;h++){ var hn=TOWN[h]; if(!hn.gone&&jrDist(hn.x,hn.z)<2.6&&Math.hypot(P.vx,P.vz)<3.5){ HINT.fire("talk","{B} talks to anyone on the block."); break; } }
   }
-  DYN.commit(); SHD.commit();
+  DYN.commit(); DYNT.commit(); DYNR.commit(); SHD.commit();
 }
 
 /* JR and the neighbors share the sidewalk: nobody walks through anybody */
@@ -10201,8 +10756,29 @@ function talkShot(){
   if(!DLG.open||MINI.cur) return null;
   if(CATSHOT&&DLG.who==="Mango") return CATSHOT;
   if(!talkMine()) return null;
-  if(!talkN.shot) talkN.shot=pickShot(talkN);
+  if(!talkN.shot){ talkN.shot=pickShot(talkN); if(talkN.shot.none) talkN.shot=otsShot(talkN,talkN.shot)||talkN.shot; }
   return talkN.shot;
+}
+/* v25: when no clear spot can be found for a neighbor's picture, the lens goes over JR's shoulder instead
+   of the walking view coming round through whatever stands between (a stall's cart, a rack, a rail). The
+   face is framed; JR's shoulder sits at the edge of a wide picture and off the side of a tall one. */
+function otsShot(n,T){
+  var hx=P.x, hy=P.y+1.62, hz=P.z, dx=T.tx-hx, dz=T.tz-hz, L=Math.sqrt(dx*dx+dz*dz)||1; dx/=L; dz/=L;
+  var cp=cam.position, sg=((cp.x-hx)*(-dz)+(cp.z-hz)*dx)<0?-1:1;
+  var tries=[[1.5,0.72,0.32],[1.5,-0.72,0.32],[1.05,0.62,0.5],[1.05,-0.62,0.5],[0.75,0.48,0.6],[0.75,-0.48,0.6]];
+  visPrep(hx,hz,10);
+  for(var i=0;i<tries.length;i++){
+    var back=tries[i][0], side=tries[i][1]*sg, up=tries[i][2];
+    var lx=hx-dx*back-dz*side, lz=hz-dz*back+dx*side, ly=hy+up;
+    var g=groundAt(lx,lz,ly+0.6); if(g.y>-900&&ly<g.y+0.9) ly=g.y+0.9;
+    if(visNear(lx,ly,lz,0.3)||solidAt(lx,ly,lz)) continue;
+    if(visClear(T.tx,T.ty,T.tz,lx,ly,lz,0.1,null,0.2,0.1)<0.999) continue;
+    if((lx-P.x)*(lx-P.x)+(ly-P.y-1.6)*(ly-P.y-1.6)+(lz-P.z)*(lz-P.z)<2.56) continue;   /* v26: a step and a half back: nearer, his hair fills a tall picture */
+    if(segDist(P.x,P.y+1.6,P.z,T.tx,T.ty,T.tz,lx,ly,lz)<0.30||segDist(P.x,P.y+1.0,P.z,T.tx,T.ty,T.tz,lx,ly,lz)<0.42) continue;   /* v26: his hair at the edge, never across the face */
+    var mv=Math.sqrt((lx-cp.x)*(lx-cp.x)+(ly-cp.y)*(ly-cp.y)+(lz-cp.z)*(lz-cp.z));
+    return {x:lx,y:ly,z:lz,tx:T.tx,ty:T.ty,tz:T.tz,s:0.5,ots:true,cut:mv>7.5||visClear(cp.x,cp.y,cp.z,lx,ly,lz,0.2)<0.999};
+  }
+  return null;
 }
 /* the cat gets a picture too: low, two steps out, from JR's side of her. On a phone held upright JR
    is off the side of that picture; on a wide screen his back would fill a third of it, so there the
@@ -10423,7 +10999,7 @@ function errandTick(dt,t,raw){
   }
   if(ERR.slipDue&&!DLG.open&&!anySheetOpen()&&!CUT.on){ ERR.slipDue=false; if(e===1) errandSlip(); }   /* the slip waits for a clear screen */
   if(e===1&&!(P.mini&&P.mini!=="rest")) mode=1; else if(e===2) mode=2;
-  if(mode===1&&typeof SHARK!=="undefined"&&SHARK.hidden) mode=3;     /* inside the shark with him: not drawn, and back on his arm when he is */
+  if(mode===1&&((typeof SHARK!=="undefined"&&SHARK.hidden)||NEARCAM)) mode=3;     /* inside the shark with him, or left out of the picture with him (v26): not drawn, and back on his arm when he is */
   /* it is set down at his feet while he dances for a piece of glass, rests at the rail or lies back:
      it was riding his arm up to his face, or out at the end of it */
   var down=mode===1&&(CUT.on||P.jig>0||P.afk===2||P.mini==="rest");
@@ -10446,10 +11022,10 @@ return {
   poundCastle:poundCastle, castle:function(){ return CASTLE; },
   miniStart:miniStart, miniStop:miniStop, miniB:miniB, miniA:miniA, mini:function(){ return MINI.cur?MINI:null; },
   catchLog:function(){ return {n:catchLogCount(),total:CATCH.length,list:CATCH}; },
-  __fish:function(){ return FISH; }, __rope:function(){ return ropeAng; }, __ropeG:function(){ return ROPEG; }, __rally:function(){ return RALLY; }, __paddle:function(){ return PADDLE; },
+  __fish:function(){ return FISH; }, __rope:function(){ return ropeAng; }, __beat:function(){ return beatPh; }, __bubs:function(){ return BUBS; }, __say:function(id,t){ var n=BYID[id]; return n?say(n,t,4,true):false; }, __ropeG:function(){ return ROPEG; }, __rally:function(){ return RALLY; }, __paddle:function(){ return PADDLE; },
   lightAll:function(){ while(panesLit<8) lightPane(true); },
   town:function(){ return TOWN; }, byId:function(id){ return BYID[id]; }, pools:function(){ return {dyn:DYN,sta:STA,shd:SHD}; },
-  talkHead:talkHead, talkShot:talkShot, talkWho:function(){ return talkN; },
+  talkHead:talkHead, talkShot:talkShot, otsShot:otsShot, pools25:function(){ return [DYN.n,DYNT.n,DYNR.n]; }, talkWho:function(){ return talkN; },
   errandTalk:errandTalk, errandKnock:errandKnock, errandCue:errandCue, errandInit:errandInit, errandSlipClose:errandSlipClose, seqTick:seqTick, errand:function(){ return ERR; },
   bubbling:function(id){ var n=BYID[id]; if(!n) return false; for(var i=0;i<BUBS.length;i++) if(BUBS[i].n===n) return true; return false; },
   castleHome:function(){ var k=castleKids(); return !!(k.k||k.b); }
@@ -10649,6 +11225,7 @@ function resolve(px,pz,feet){
 /* ---------- 10. input ---------- */
 var IN={x:0,z:0,keys:{}};
 var camYaw=0, camPitch=0.20, camDist=7.5, camY=1.25, camFov=58, camOcc=1, camAutoPitch=0;
+var NEARCAM=false;          /* v26: the lens is at his head, and he is left out of the picture */
 /* the follow camera (v23): rad/s at a full sideways run, seconds it waits after a look drag, seconds to ease
    in, how fast it lets go (1/s), the dead zone on the sideways pull, and how much of the turn a slow walk keeps */
 var CAMF={rate:1.4,wait:0.9,ease:0.3,out:14,dead:0.07,slow:0.35}, camLookT=9, camFollowW=0, camTaken=false;
@@ -10658,12 +11235,12 @@ var CAM_R=0.4;
    the camera can go before it hits something. Thin props (poles, cans, posts)
    don't count — they'd yank the camera around for nothing. A box the target is
    already inside (JR hugging a wall) is skipped, or it would pull to zero. */
-function camOccl(tx,ty,tz,cx,cy,cz){
+function camOccl(tx,ty,tz,cx,cy,cz,over){   /* v27, over: a box whose top is a lens's radius under the lens does not count */
   var dx=cx-tx, dy=cy-ty, dz=cz-tz, best=1;
   for(var i=0;i<SOLIDS.length;i++){
     var s=SOLIDS[i];
     /* low things (dunes, crates, cars, rocks) get climbed over by the ground clamp instead */
-    if(s.h<2.2||Math.min(s.w,s.d)<0.9) continue;
+    if(s.h<2.2||Math.min(s.w,s.d)<0.9||(over&&cy>=s.y+s.h+CAM_R)) continue;
     var x0=s.x-s.w*0.5-CAM_R, x1=s.x+s.w*0.5+CAM_R;
     var y0=s.y-CAM_R, y1=s.y+s.h+CAM_R;
     var z0=s.z-s.d*0.5-CAM_R, z1=s.z+s.d*0.5+CAM_R;
@@ -10678,6 +11255,38 @@ function camOccl(tx,ty,tz,cx,cy,cz){
     if(t0<best) best=t0;
   }
   return best;
+}
+/* v27: the height that takes the lens over everything between it and him, or -1 if anything in the way stands
+   taller than want (where the lens is going) less its radius */
+function camLift(tx,ty,tz,cx,cy,cz,want){
+  var need=-1, dx=cx-tx, dy=cy-ty, dz=cz-tz;
+  for(var i=0;i<SOLIDS.length;i++){
+    var s=SOLIDS[i], top=s.y+s.h+CAM_R;
+    if(s.h<2.2||Math.min(s.w,s.d)<0.9||cy>=top) continue;
+    var lo=[s.x-s.w*0.5-CAM_R,s.y-CAM_R,s.z-s.d*0.5-CAM_R], hi=[s.x+s.w*0.5+CAM_R,top,s.z+s.d*0.5+CAM_R], a=[tx,ty,tz], d=[dx,dy,dz], t0=0, t1=1, hit=true;
+    if(tx>lo[0]&&tx<hi[0]&&ty>lo[1]&&ty<hi[1]&&tz>lo[2]&&tz<hi[2]) continue;
+    for(var k=0;k<3&&hit;k++){
+      if(Math.abs(d[k])<1e-6){ if(a[k]<lo[k]||a[k]>hi[k]) hit=false; continue; }
+      var u=(lo[k]-a[k])/d[k], v=(hi[k]-a[k])/d[k]; if(u>v){ var w=u; u=v; v=w; }
+      if(u>t0) t0=u; if(v<t1) t1=v; if(t0>t1) hit=false;
+    }
+    if(!hit) continue;
+    if(top+0.01>want) return -1;
+    if(top+0.01>need) need=top+0.01;
+  }
+  return need;
+}
+/* v25: a wide slab over his head (the station canopy, a porch roof, the el) is a ceiling for the lens: the lens
+   keeps its distance and ducks under it, instead of being lifted onto the roof by the ground clamp or pulled in to
+   nothing. The lowest such slab over the spot, or none. */
+function camCeil(x,z,ty){
+  var c=1e9;
+  for(var i=0;i<SOLIDS.length;i++){
+    var s=SOLIDS[i];
+    if(s.h>=2.2||Math.min(s.w,s.d)<2.4||s.y<=ty-0.6||s.y>=c) continue;
+    if(x>s.x-s.w*0.5-0.7&&x<s.x+s.w*0.5+0.7&&z>s.z-s.d*0.5-0.7&&z<s.z+s.d*0.5+0.7) c=s.y;   /* a little past its edge too: grazing a roof fills the picture with it */
+  }
+  return c;
 }
 var padId=null, lookId=null, padOX=0, padOY=0, lookLX=0, lookLY=0;
 var padEl=$("pad"), nubEl=$("padNub");
@@ -10753,7 +11362,7 @@ function bindInput(){
   });
 
   $("play").addEventListener("click",function(){
-    AU.start(); AU.humInit(); AU.fallInit(); SEQ.start(); SEQ.setMusic(state.music); DLG.init();
+    AU.start(); AU.humInit(); AU.fallInit(); SEQ.start(); SEQ.setMusic(state.music); MUSIC.start(); DLG.init();
     sheet("title",false); state.started=true;
     intro.exit=0; FX.buzz(12);
     if(openingWant()) OPENING.armed=true;      /* a first run: JR says where he is going, then the card and the HUD */
@@ -10777,7 +11386,7 @@ function bindInput(){
   $("howClose").addEventListener("click",function(){ sheet("howto",false); });
   $("menuClose").addEventListener("click",function(){ sheet("menu",false); });
   $("menuSound").addEventListener("click",function(){
-    AU.start(); AU.mute(!state.sound); save();
+    AU.start(); AU.mute(!state.sound); MUSIC.sync(); save();
     $("menuSound").classList.toggle("on",!!state.sound);
   });
   $("menuInk").addEventListener("click",function(){
@@ -10785,20 +11394,20 @@ function bindInput(){
     $("menuInk").classList.toggle("on",!!state.ink);
   });
   $("menuMusic").addEventListener("click",function(){
-    state.music=!state.music; SEQ.setMusic(state.music); save();
+    state.music=!state.music; SEQ.setMusic(state.music); MUSIC.sync(); save();
     $("menuMusic").classList.toggle("on",!!state.music);
   });
   $("menuFollow").addEventListener("click",function(){
     state.follow=(state.follow===false); save();
     $("menuFollow").classList.toggle("on",state.follow!==false);
   });
-  $("titleReset").addEventListener("click",startOver);
+  PADUI.twice($("titleReset"),startOver);
   $("menuHaptics").addEventListener("click",function(){
     state.haptics=!state.haptics; FX.haptics=state.haptics; save();
     $("menuHaptics").classList.toggle("on",!!state.haptics);
     if(state.haptics) FX.buzz(18);
   });
-  $("menuReset").addEventListener("click",startOver);
+  PADUI.twice($("menuReset"),startOver);
   document.querySelectorAll(".sheet").forEach(function(s){
     s.addEventListener("click",function(e){ if(e.target===s && s.id!=="title") s.hidden=true; });
   });
@@ -10806,14 +11415,7 @@ function bindInput(){
 function openMenu(){ if(STRWALK.on) return; DLG.hide(); buildMenu(); sheet("menu",true); }
 /* the title only lists the controls you actually have */
 function controlsText(){
-  var coarse=false; try{ coarse=window.matchMedia("(pointer:coarse)").matches; }catch(e){}
-  var A=coarse?'<span class="kbd">A</span>':'<span class="kbd w">Space</span>', B=coarse?'<span class="kbd b">B</span>':'<span class="kbd b w">E</span>';
-  var rows=[
-    coarse?"<div><span>Left thumb walks, right thumb looks around.</span></div>":'<div><span><span class="kbd w">WASD</span>walks. Drag to look around.</span></div>',
-    "<div><span>"+A+"jumps. Tap it twice for the second jump, then hold it to flutter down.</span></div>",
-    "<div><span>"+B+"talks to anyone, plays any game, reads the map boards, and gets you into the Strand.</span></div>",
-    "<div><span>"+B+"at a run is a dive. In the air it's a slam: crates, sand mounds and roofs all answer to it. Standing still, it's a whistle.</span></div>"
-  ].join("");
+  var rows=KEYS.rows();
   var h=$("howRows"); if(h) h.innerHTML=rows;
   var m=$("menuHow"); if(m) m.innerHTML=rows;
 }
@@ -10844,13 +11446,14 @@ function startPound(){
   AU.blip(820,0.12,"square",0.055,1.7);
   FX.punch(3.4); FX.buzz(10);
 }
-function closeAll(){ ["card","menu","ending","map","howto","errand"].forEach(function(i){ sheet(i,false); }); }
+function closeAll(){ ["card","menu","ending","map","howto","errand","padcheck"].forEach(function(i){ sheet(i,false); }); }
 function keyAxis(){
   var k=IN.keys, x=0,z=0;
   if(k["a"]||k["arrowleft"]) x-=1;
   if(k["d"]||k["arrowright"]) x+=1;
   if(k["w"]||k["arrowup"]) z-=1;
   if(k["s"]||k["arrowdown"]) z+=1;
+  if(!x&&!z){ x=PADS.mx; z=PADS.mz; }      /* no key down: the stick, if one is in hand */
   return [x,z];
 }
 function launch(v,which){
@@ -10860,7 +11463,7 @@ function launch(v,which){
   FX.punch(which===2?4.4:3.2);
   FX.buzz(which===2?13:7);
   if(which===1) FX.puff(P.x,P.y,P.z,4,0.75,P.surf);
-  else { FX.sparkle(P.x,P.y+0.4,P.z,10,0xF4E2A8,0.75); HINT.fire("flutter","Hold A on the way down to float."); }
+  else { FX.sparkle(P.x,P.y+0.4,P.z,10,0xF4E2A8,0.75); HINT.fire("flutter","Hold {A} on the way down to float."); }
 }
 
 /* ---------- 11. interaction ---------- */
@@ -10881,6 +11484,7 @@ function updateNear(){
   for(var i=0;i<INTER.length;i++){
     var it=INTER[i];
     if(it.crowd&&fast) continue;          /* at a run, B still dives past people */
+    if(it.id==="rest"&&(P.z<it.z-0.45||P.y>it.y-0.2)) continue;   /* v27: the rail from the deck, not from the dunes or its top */
     var dx=P.x-it.x, dy=(P.y+0.8)-it.y, dz=P.z-it.z;
     var d=Math.sqrt(dx*dx+dz*dz+dy*dy*0.35);
     if(d<it.r && d<bd){ bd=d; best=it; }
@@ -10929,6 +11533,7 @@ function doAct(){
         glassJuice(it.x,it.y,it.z,"g8");
         UI.sync("glass");
         UI.say("Sea glass from Mr. Teddy — "+state.glass+" of 8","glass");
+        if(state.glass>=8) allEight();
         if(CUT.on){ CUT.after=function(){ showTalk(npc,npc.lines[1]); }; return; }
         showTalk(npc,npc.lines[1]); return;
       }
@@ -11450,9 +12055,10 @@ function step(dt,t,raw){
   var dEff=Math.max(1.7,camDist*camOcc-0.22);
   var cy=Math.sin(pe)*dEff+0.6;
   var cx=tx-fx*Math.cos(pe)*dEff, cz=tz-fz*Math.cos(pe)*dEff;
-  var gAt=groundAt(cx,cz,ty+cy);
+  var gAt=groundAt(cx,cz,ty-0.2);                        /* v25: the clamp climbs crates and cars, never a roof over his head */
   var minY=(gAt.y>-900?gAt.y:0)+0.9;
-  _v3.set(cx,Math.max(minY,ty+cy),cz);
+  var ceilY=camCeil(cx,cz,ty)-0.4;                        /* v25: and ducks under a canopy or a porch roof */
+  _v3.set(cx,Math.max(minY,Math.min(ty+cy,ceilY)),cz);
   if(TALKC.free&&tkk>0.001){ _v3.x+=(TALKC.lx-_v3.x)*tkk; _v3.y+=(TALKC.ly-_v3.y)*tkk; _v3.z+=(TALKC.lz-_v3.z)*tkk; }
   if(intro.on){
     intro.t+=raw;
@@ -11470,12 +12076,26 @@ function step(dt,t,raw){
     /* a pull-in has to land this frame or you see the wall; letting out can take its time */
     if(TALKC.snap){ TALKC.snap=false; cam.position.copy(_v3); }
     else cam.position.lerp(_v3,Math.min(1,dt*((pulled&&!TALKC.free)?34:(TALKC.free?12:9))));
+    /* v25: the lens on its way somewhere used to pass through the truck, or come to rest inside the
+       canopy; now the line from JR to where it actually is gets the same test as the line to where it wants to be */
+    if(!(TALKC.free&&tkk>0.5)&&!ENDCAM.on){   /* v26: not while the sundown's camera has the view, or hands it back */
+      var f2=camOccl(tx,ty+0.35,tz,cam.position.x,cam.position.y,cam.position.z,true);
+      if(f2<0.999){ var lift=camLift(tx,ty+0.35,tz,cam.position.x,cam.position.y,cam.position.z,_v3.y);   /* v27: over a low thing, not into his head */
+        if(lift>0){ cam.position.y=lift; f2=camOccl(tx,ty+0.35,tz,cam.position.x,cam.position.y,cam.position.z,true); } }
+      if(f2<0.999) cam.position.set(tx+(cam.position.x-tx)*f2,ty+0.35+(cam.position.y-ty-0.35)*f2,tz+(cam.position.z-tz)*f2);
+      var c2=camCeil(cam.position.x,cam.position.z,ty)-0.4;
+      if(cam.position.y>c2&&c2>minY-0.6) cam.position.y=c2;
+    }
   }
   cam.lookAt(_v4);
   if(CUT.on) cutCamera(dt);
   else if(CUT.snap){ CUT.snap=false; cam.position.copy(_v3); cam.lookAt(_v4); }
   if(testCam){ cam.position.set(testCam[0],testCam[1],testCam[2]); cam.lookAt(testCam[3],testCam[4],testCam[5]); }
   else endCamTick(raw);
+  /* v26: kept out of the wall, the lens can end up at his head. He is not drawn from the inside: nearer than
+     0.8 he is left out of the picture, and is back at 0.95. */
+  { var nhx=cam.position.x-P.x, nhy=cam.position.y-(P.y+1.5), nhz=cam.position.z-P.z, nh2=nhx*nhx+nhy*nhy+nhz*nhz;
+    NEARCAM=NEARCAM?nh2<0.9025:nh2<0.64; pBody.visible=!NEARCAM; }
   var wantFov=58+Math.min(4,sp*0.55)+FX.fovP+(ending?4:0)+(CUT.on?-9:0)-6*TALKC.k;
   camFov+=(wantFov-camFov)*Math.min(1,raw*7);
   if(Math.abs(cam.fov-camFov)>0.02){ cam.fov=camFov; cam.updateProjectionMatrix(); }
@@ -11555,7 +12175,7 @@ function step(dt,t,raw){
 
   /* ---- the score follows you around the block ---- */
   SEQ.setZone(zoneAt(P.x,P.z));
-  SEQ.mix(raw);
+  SEQ.mix(raw); MUSIC.tick(raw);
 
   updateItems(dt,t);
   updateStalls(t); updateStation(dt,t); updateBeacon(dt,t); cutUpdate(dt,t); updateBackdrop(dt,t);
@@ -11573,7 +12193,7 @@ function step(dt,t,raw){
   FEEL.update(dt,raw,sp);
   syncButtons();
   LIFE.update(dt,t,raw);
-  marksTick(raw); quietTick(raw); placeTick(raw); wetTick(dt);
+  marksTick(raw); quietTick(raw); placeTick(raw); wetTick(dt); eightTick(raw);
 }
 function zoneAt(x,z){
   if(z<-21) return "beach";
@@ -11590,6 +12210,7 @@ function scareGulls(range,power){
 }
 function loop(){
   requestAnimationFrame(loop);
+  if(!loop.paused) PADS.tick();
   if(loop.hold){ clock=null; fpsAcc=0; fpsN=0; return; }
   var now=performance.now()/1000;
   if(!clock) clock=now;
@@ -11895,7 +12516,7 @@ var STRAND=(function(){
     return S.L;
   }
 
-  /* ---------- sound: the block is hushed, the booth has its own small bus (BOOTH; the game's BUS is the Q22) ---------- */
+  /* ---------- sound: the block is hushed, the booth has its own small bus (BOOTH; the game's BUS is the Q113) ---------- */
   var BOOTH=null, whirG=null;
   function audioInit(){
     if(!AU.ready) return;
@@ -12293,7 +12914,7 @@ var STRAND=(function(){
       S.w.ready=setTimeout(function(){ fail("slow",token); },T.ready);
       try{ p=new window.YT.Player(f,{events:{onReady:ready,onStateChange:changed,onError:function(ev){ fail("yt"+ev.data,token); },
         /* a phone that wants a tap before it will play is not a broken reel: say so and leave the player be */
-        onAutoplayBlocked:function(){ if(token===S.token&&!S.played) note("Tap the screen to start this one."); }}}); }
+        onAutoplayBlocked:function(){ if(token===S.token&&!S.played) note(KEYS.start()); }}}); }
       catch(er2){ fail("api",token); return; }
       if(token!==S.token||S.tiers[S.ti]!=="yt"){ try{ p.destroy(); }catch(er6){} return; }     /* it gave up while it was being made */
       S.yt=p;
@@ -12344,7 +12965,7 @@ var STRAND=(function(){
       if(token!==S.token||ok) return; ok=true; clearTimeout(S.w.ready);
       REEL.stop(); hostEl.style.visibility=""; S.tier="file"; score("film"); buildBill(); label();
       if(e.start){ try{ v.currentTime=e.start; }catch(er){} }
-      var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){ if(token===S.token&&!S.played&&v.paused) note("Tap the screen to start this one."); });
+      var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){ if(token===S.token&&!S.played&&v.paused) note(KEYS.start()); });
     });
     v.addEventListener("playing",function(){ if(token===S.token) S.played=true; });
     v.addEventListener("ended",function(){ if(token===S.token) passed(); });
@@ -12431,7 +13052,7 @@ var STRAND=(function(){
     reelCv.addEventListener("click",function(){ if(S.tier==="reel") toggle(); });
     /* a turned phone, a resized window: the room is rebuilt from the new numbers, the player stays where it is */
     function relay(){ if(S.open&&el.clientWidth&&(!S.L||S.L.W!==el.clientWidth||S.L.H!==el.clientHeight)){ layout(); buildBill(); label(); setShut(S.shut); } }
-    window.addEventListener("resize",relay);
+    window.addEventListener("resize",relay); S.relay=relay;
     if(window.ResizeObserver){ try{ new ResizeObserver(relay).observe(el); }catch(e){} }
   }
   function enter(){
@@ -12483,7 +13104,7 @@ var STRAND=(function(){
     else if(k==="n"){ e.preventDefault(); step(1); }
     else if(k==="p"){ e.preventDefault(); step(-1); }
   }
-  return { enter:enter, leave:leave, key:key, isOpen:function(){ return S.open; }, staying:function(){ return S.open&&!S.leaving; }, play:play, step:step, onLeave:null,
+  return { enter:enter, leave:leave, key:key, isOpen:function(){ return S.open; }, staying:function(){ return S.open&&!S.leaving; }, play:play, step:step, toggle:toggle, relay:function(){ if(S.relay) S.relay(); }, onLeave:null,
     titles:function(){ init(); return bill.map(nameOf); },
     _:{S:S,REEL:REEL,layout:layout,ytParse:ytParse,normBill:normBill,bill:function(){ return bill; },setBill:function(b){ bill=normBill(b); if(S.open){ buildBill(); label(); } },
        embed:function(v){ if(v!=null) EMBED=!!v; return EMBED; },api:API,T:T} };
@@ -12591,6 +13212,7 @@ function worldCard(){ var wc=$("worldcard"); wc.classList.remove("on"); void wc.
 
 /* a key that is down when the window loses focus never sends its keyup: let go of everything */
 function dropInput(){
+  PADS.drop();
   IN.keys={}; IN.x=IN.z=0; P.held=false; P.buf=0; lookId=null;
   if(padId!==null){
     padId=null; nubEl.style.transform=""; padEl.classList.remove("live");
@@ -12811,7 +13433,7 @@ function buildGlassList(){
   w.addEventListener("click",function(){ sheet("menu",false); beaconTo(-51.8,-2.6,"the window on Beach 24th"); });
   box.appendChild(w);
   $("menuGlassHint").hidden=false;
-  $("menuGlassHint").textContent=left?"Tap a line and a light shows the way.":"All eight. Tap the window and a light shows the way.";
+  $("menuGlassHint").textContent=KEYS.t(left?"{Tap} a line and a light shows the way.":"All eight. {Tap} the window and a light shows the way.");
 }
 
 /* ---------- marks ----------
@@ -12840,6 +13462,7 @@ function marksInit(){
   /* the errand: over Gloria until she has handed it over, then over the door it is going to */
   for(i=0;i<INTER.length;i++) if(INTER[i].id==="gloria") add(INTER[i],"errand","gloria",null);
   add(null,"door",null,null);
+  for(i=0;i<INTER.length;i++) if(INTER[i].kind==="window") add(INTER[i],"window",null,null);   /* v25 */
 }
 function markDue(m){
   if(m.kind==="game") return !state.seen[m.key];
@@ -12848,12 +13471,14 @@ function markDue(m){
   if(m.kind==="castle") return !state.got.castle3&&LIFE.castle().st==="built"&&LIFE.castleHome();
   if(m.kind==="errand") return !state.seen.errand;
   if(m.kind==="door") return state.seen.errand===1;
+  if(m.kind==="window") return state.glass>=8&&!state.done;   /* v26: down once the glass is in */
   return false;
 }
 /* where it hangs: over their head, or over the spot if they've gone home */
 function markAt(m,out){
   if(m.kind==="castle"){ var C=LIFE.castle(); out.set(C.x,2.0+C.lvl*0.32,C.z); m.sy=0.6; return true; }
   if(m.kind==="door"){ var E=LIFE.errand(); m.it=E.doorItem; out.set(E.at.x,3.25,E.at.z); m.sy=0; return true; }
+  if(m.kind==="window"){ out.set(m.it.x,m.it.y+0.55,m.it.z+0.35); m.sy=0.4; return true; }   /* under the porch roof, in front of the glass */
   var n=m.who?LIFE.byId(m.who):null;
   if(n&&!n.gone){
     out.set(0,1.0,0).applyMatrix4(n.p.headM); m.sy=0.8*n.p.s;
@@ -12882,7 +13507,7 @@ function markTap(m){
   if(m.it&&nearest===m.it){ pressB(); return; }
   /* out of reach: say what it is */
   var label=m.kind==="castle"?"Kiki and Bean's castle.":(m.kind==="trade"?"Mr. Teddy — 25 sand dollars for sea glass":
-    (m.kind==="errand"?"Gloria has something for Beach 24th.":(m.kind==="door"?"The mint house. Gloria's package goes here.":(m.it?m.it.label:""))));
+    (m.kind==="errand"?"Gloria has something for Beach 24th.":(m.kind==="door"?"The mint house. Gloria's package goes here.":(m.kind==="window"?"The window. All eight go in here.":(m.it?m.it.label:"")))));
   if(label) UI.say(label);
   FX.buzz(5);
 }
@@ -12978,7 +13603,7 @@ function quietTick(raw){
   if(up===Q.tucked){ Q.tucked=!up; st.classList.toggle("tuck",Q.tucked); }
   if(!Q.ringOff){
     if(state.seen.stick){ Q.ringOff=true; st.classList.add("ringoff"); }
-    else if(state.started&&!intro.on&&(IN.x||IN.z||k.w||k.a||k.s||k.d||k.arrowup||k.arrowdown||k.arrowleft||k.arrowright)){
+    else if(state.started&&!intro.on&&(IN.x||IN.z||PADS.mx||PADS.mz||k.w||k.a||k.s||k.d||k.arrowup||k.arrowdown||k.arrowleft||k.arrowright)){
       Q.ring+=raw; if(Q.ring>1.5){ state.seen.stick=1; save(); }
     }
   }
@@ -13266,10 +13891,856 @@ function endCamTick(raw){
   if(E.w<1){ var w=E.w*E.w*(3-2*E.w); cam.position.lerpVectors(EC_PA,EC_P,w); EC_Q.copy(cam.quaternion); cam.quaternion.copy(EC_QA).slerp(EC_Q,w); }
 }
 
+/* ============================================================
+   CONTROLLER PLAY (v24)
+   One page, no console builds: while it runs the page works out what is in the player's hands and
+   follows it. Six small parts, in the order they are needed:
+     INPUT  which of touch, keys or controller was used last
+     KEYS   what jump and act are called on that device, as words and as chips
+     PADS   reading the controller, and turning it into the inputs the game already has
+     NAV    a gold frame in the sheets and the Strand, moved with the D-pad or the stick
+     TV     the console's name, and a layout for a screen across the room
+     PADUI  three rows in Totals, Start over asking twice, and the Controller check sheet
+   ============================================================ */
+
+/* ---------- what the player last touched ----------
+   Touch, keys or a controller: whichever was used last is "in hand", and the stage says so in one class
+   (in-touch, in-keys, in-pad). Prompts, the how-to rows, the frame in the sheets and the on-screen stick
+   all follow that class or are redrawn when it changes. */
+var INPUT={
+  mode:"", home:"keys", seenPad:false,
+  last:"",             /* the very last thing touched, more finely: "touch", "mouse", "key" or "pad" (the Controller check reports it) */
+  CLS:{touch:"in-touch",keys:"in-keys",pad:"in-pad"},
+  init:function(){
+    var coarse=false; try{ coarse=window.matchMedia("(pointer:coarse)").matches; }catch(e){}
+    this.home=coarse?"touch":"keys";      /* the same question the how-to card has always asked; a controller that goes away falls back to it */
+    this.set(this.home);
+    var self=this;
+    /* capture, so these hear a press before the game or a sheet does. A pointer that does not say what
+       it is (a scripted one) changes nothing. */
+    window.addEventListener("pointerdown",function(e){
+      if(e.pointerType==="touch"||e.pointerType==="pen") self.set("touch","touch");
+      else if(e.pointerType==="mouse") self.set("keys","mouse");
+      else return;
+      NAV.keys=false; NAV.sync(); NAV.frame();          /* a finger or a mouse points for itself: the frame goes */
+    },true);
+    window.addEventListener("keydown",function(e){
+      PADUI.check.note(e);                                        /* every key the browser sends is kept for the Controller check's list */
+      PADS.sound(); TV.fs(true);              /* a press every browser counts: the moment to ask for what a controller's button may not be given */
+      if(PADS.key(e,true)){ e.preventDefault(); e.stopImmediatePropagation(); return; }     /* the controller, arriving as a key: nothing else hears it */
+      self.set("keys","key");
+    },true);
+    window.addEventListener("keyup",function(e){ if(PADS.key(e,false)){ e.preventDefault(); e.stopImmediatePropagation(); } },true);
+    /* and a click (a tap ends in one) is the other: not one the page made itself, which no browser counts */
+    window.addEventListener("click",function(e){ if(e.isTrusted){ PADS.sound(); TV.fs(true); } },true);
+  },
+  set:function(m,how){
+    if(how) this.last=how;
+    if(m===this.mode) return;
+    this.mode=m; if(m==="pad") this.seenPad=true;
+    var st=$("stage"); for(var k in this.CLS) st.classList.toggle(this.CLS[k],k===m);
+    KEYS.refresh(); NAV.sync(); PADUI.sync();
+  }
+};
+
+/* ---------- what the buttons are called ----------
+   The game has two buttons, jump and act. What they are called depends on what is in hand: A and B on
+   the screen and on an Xbox or Nintendo pad, Space and E on keys, the cross and the circle on a
+   PlayStation pad. The game's own lines say {A} and {B}; this is where those become a name, and where
+   the chip in a prompt is drawn. Touch reads exactly as it always did. */
+var KEYS={
+  raw:"",                      /* the prompt as the game last wrote it, kept so it can be drawn again for another hand */
+  WORDS:{touch:{jump:"A",act:"B"}, keys:{jump:"Space",act:"E"}, xbox:{jump:"A",act:"B"}, ps:{jump:"Cross",act:"Circle"}, nintendo:{jump:"A",act:"B"}},
+  PS:{jump:'<svg class="ps-x" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg>',
+      act:'<svg class="ps-o" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="4.7" fill="none" stroke="currentColor" stroke-width="2.1"/></svg>'},
+  /* the pad's Menu button, drawn: three bars on Xbox and PlayStation, a plus on Nintendo */
+  MENU:{bars:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3.2h8M2 6h8M2 8.8h8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
+        plus:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2v8M2 6h8" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>'},
+  WEST:{xbox:"X",ps:"Square",nintendo:"Y"},      /* the left-hand face button: a second act in play, play and pause in the Strand */
+  /* a reel that will not start by itself: a finger taps the screen, a controller has a button for it */
+  start:function(){ return INPUT.mode==="pad"?"Press "+this.WEST[PADS.kind()]+" to start this one.":"Tap the screen to start this one."; },
+  fam:function(){ return INPUT.mode==="pad"?PADS.kind():(INPUT.mode==="keys"?"keys":"touch"); },
+  name:function(act){ return this.WORDS[this.fam()][act]; },
+  /* cls "key": the round chip in a prompt. cls "kbd": the chip in the how-to rows (honey for jump, mint for act). */
+  chip:function(act,cls){
+    var f=this.fam(), c=cls+((cls==="kbd"&&act==="act")?" b":"");
+    if(f==="ps") return '<span class="'+c+' ps" role="img" aria-label="'+this.WORDS.ps[act]+'">'+this.PS[act]+'</span>';
+    if(f==="keys") return '<span class="'+c+' w">'+this.WORDS.keys[act]+'</span>';
+    return '<span class="'+c+'">'+this.WORDS[f][act]+'</span>';
+  },
+  /* {A} and {B} are the two buttons. {Tap} is what a finger does to a line in a sheet; a controller picks it. */
+  t:function(text){
+    if(typeof text!=="string"||text.indexOf("{")<0) return text;
+    return text.replace(/\{A\}/g,this.name("jump")).replace(/\{B\}/g,this.name("act")).replace(/\{Tap\}/g,INPUT.mode==="pad"?"Pick":"Tap");
+  },
+  /* the game writes its prompts with a plain A or B chip; that chip is swapped for the one in hand */
+  hint:function(html){
+    this.raw=html||"";
+    if(!html||this.fam()==="touch") return html;
+    return html.replace(/<span class="key">(A|B)<\/span>/g,function(m,k){ return KEYS.chip(k==="A"?"jump":"act","key"); });
+  },
+  rows:function(){
+    var f=this.fam(), A=this.chip("jump","kbd"), B=this.chip("act","kbd");
+    var rows=[
+      f==="touch"?"<div><span>Left thumb walks, right thumb looks around.</span></div>"
+        :(f==="keys"?'<div><span><span class="kbd w">WASD</span>walks. Drag to look around.</span></div>'
+        :"<div><span>Left stick walks, right stick looks around.</span></div>"),
+      "<div><span>"+A+"jumps. Tap it twice for the second jump, then hold it to flutter down.</span></div>",
+      "<div><span>"+B+"talks to anyone, plays any game, reads the map boards, and gets you into the Strand.</span></div>",
+      "<div><span>"+B+"at a run is a dive. In the air it's a slam: crates, sand mounds and roofs all answer to it. Standing still, it's a whistle.</span></div>"
+    ];
+    if(f!=="touch"&&f!=="keys") rows.push("<div><span>Menu opens Totals. In a sheet the D-pad moves, "+A+"picks and "+B+"goes back.</span></div>");
+    return rows.join("");
+  },
+  /* a different hand: the prompt on screen, the how-to rows and a street game's banner are written again */
+  refresh:function(){
+    if(this.raw&&UI.prompt.classList.contains("on")) UI.prompt.innerHTML=this.hint(this.raw);
+    controlsText();
+    if(CHAL.on&&CHAL.sub&&typeof CHAL.raw==="string") CHAL.sub.textContent=this.t(CHAL.raw);
+    /* a line of the page that only makes sense for a finger carries its controller wording beside it */
+    var two=document.querySelectorAll("#stage [data-pad]"), pad=INPUT.mode==="pad";
+    for(var i=0;i<two.length;i++){
+      var el=two[i]; if(!el.hasAttribute("data-not")) el.setAttribute("data-not",el.textContent);
+      var want=el.getAttribute(pad?"data-pad":"data-not"); if(el.textContent!==want) el.textContent=want;
+    }
+    if(!$("menu").hidden) buildMenu();           /* Totals is open: its hint is written again for this hand */
+    var mk=$("menuKey"); if(mk&&pad){ var want2=this.MENU[PADS.kind()==="nintendo"?"plus":"bars"]; if(mk.innerHTML!==want2) mk.innerHTML=want2; }
+  }
+};
+
+/* ---------- reading the controller ----------
+   The browser is asked for its controllers once a frame. The one "in hand" is the one used last: a
+   button going down, or a stick pushed well over (a worn stick resting a little off centre is not
+   someone using it). What it says is turned into the inputs the game already has: the walk axes the
+   keys feed, the same look state a drag sets, the same jump and act the round buttons call.
+   Layout is the standard one (the Xbox shape): buttons 0 to 3 south, east, west, north; 12 to 15 the
+   D-pad; axes 0,1 the left stick and 2,3 the right. A controller that does not claim that layout is
+   read by position all the same. */
+var PADS={
+  DEAD:0.24,          /* XInput's own figure for a left stick; anything inside it is the stick at rest */
+  EDGE:0.95,          /* full tilt is reached a little before the rim */
+  WAKE:0.5,           /* how far a stick must go to take the input over from touch or keys */
+  YAW:2.6, PITCH:1.6, /* radians a second with the right stick hard over */
+  NAV0:0.35, NAV1:0.12, DUP:150,
+  mx:0, mz:0, blocked:false, auto:"xbox",
+  idx:-1,             /* which of the browser's controllers is in hand */
+  k0:"",              /* the family the buttons were read as last frame */
+  was:[],             /* each controller's buttons as they were last frame */
+  clock:0,
+  view:{id:"",mapping:"",axes:[0,0,0,0],held:[],key:""},
+  L:[0,0], R:[0,0],
+  e:{J:false,A:false,W:false,M:false,LB:false,RB:false},      /* jump, act, the left-hand button, Menu and the two shoulders, as they were last frame */
+  XB:{jump:0,act:1}, NX:{jump:1,act:0},
+  none:false,         /* this browser has no way to read a controller at all */
+  off:false, bad:0, why:"",     /* controller play switched off for the visit after throwing three frames running, and what was thrown */
+  init:function(){ this.none=typeof navigator.getGamepads!=="function"; },
+  /* Whose buttons these are, from what the browser calls the controller. Chrome, Firefox and Safari each
+     name the same pad differently; the maker's USB number (045e Microsoft, 054c Sony, 057e Nintendo) is in
+     most of them. Anything unrecognised is read as the Xbox shape, which is what the standard layout is. */
+  family:function(id){
+    id=String(id||"").toLowerCase();
+    if(/057e|nintendo|switch|joy-?con|pro controller/.test(id)) return "nintendo";
+    if(/054c|dualsense|dualshock|playstation|ps[345] controller/.test(id)) return "ps";
+    return "xbox";
+  },
+  /* the family in force: the player's own choice in Totals if they made one, else what the name says */
+  kind:function(){ var k=state.pad; return (k==="xbox"||k==="ps"||k==="nintendo")?k:this.auto; },
+  /* A jumps and B acts, by the letter printed on the pad. On Xbox and PlayStation that is the bottom button
+     and the right-hand one; Nintendo prints them the other way round. */
+  map:function(){ return this.kind()==="nintendo"?this.NX:this.XB; },
+  /* every controller the browser will show the page; null where it shows none, or will not */
+  read:function(){
+    if(this.blocked||typeof navigator.getGamepads!=="function") return null;
+    try{ return navigator.getGamepads(); }
+    catch(e){
+      this.blocked=true;                      /* refused once is refused for good: a frame's policy does not change */
+      try{ PADUI.sync(); }catch(e2){}         /* the title and the on-screen controls should know */
+      return null;
+    }
+  },
+  held:function(p,i){ var b=p.buttons&&p.buttons[i]; return !!b&&(b.pressed===true||b.value>0.5); },
+  /* a radial dead zone: inside it nothing, outside it rescaled so the walk starts from zero */
+  stick:function(x,y,out){
+    x=+x||0; y=+y||0;
+    var m=Math.sqrt(x*x+y*y);
+    if(!(m>this.DEAD)){ out[0]=0; out[1]=0; return 0; }
+    var k=Math.min(1,(m-this.DEAD)/(this.EDGE-this.DEAD))/m;
+    out[0]=x*k; out[1]=y*k; return m;
+  },
+  /* Has this controller been used? 2: something on it has just changed (a button gone down, a stick pushed past
+     half from inside it). 1: something on it is being held. 0: nothing. A change always counts. Something merely
+     held counts only for the controller already in hand: a second controller lying on its stick, a wheel's
+     pedals or a throttle rest off centre for ever, and must not take the game over once a frame. For the same
+     reason an axis already over when the page first sees a device with no standard layout is where that device
+     rests, not a push. (A button already down at first sight is a press, and so is a stick on a controller with
+     the standard layout: a browser only shows a page a controller once something on it has been used.) A
+     controller with no standard layout has no stick to look with here: its third and fourth axes are as likely
+     to be triggers, which rest hard over. */
+  woke:function(p,i){
+    var was=this.was[i], first=!was, n=p.buttons?p.buttons.length:0, edge=false, level=false, b, on;
+    if(first) was=this.was[i]={b:[],l:false,r:false};
+    for(b=0;b<n;b++){ on=this.held(p,b); if(on){ level=true; if(!was.b[b]) edge=true; } was.b[b]=on; }
+    was.b.length=n;
+    var a=p.axes||[], x=+a[0]||0, y=+a[1]||0, l=Math.sqrt(x*x+y*y)>this.WAKE, r=false;
+    if(p.mapping==="standard"){ x=+a[2]||0; y=+a[3]||0; r=Math.sqrt(x*x+y*y)>this.WAKE; }
+    if(l||r) level=true;
+    if((l&&!was.l)||(r&&!was.r)){ if(!first||p.mapping==="standard") edge=true; }      /* at first sight, only a proper controller's stick is a push */
+    was.l=l; was.r=r;
+    return edge?2:(level?1:0);
+  },
+  /* Once a frame: which sheet has the screen, what the controller says, where the frame is.
+     This runs for every player, controller or not, in browsers nobody has tried it in. So nothing
+     thrown in here reaches the game's own frame. One stumble is let pass; three frames running and controller
+     play is switched off for the visit, the game plays as it did before there was any, and the Controller check
+     says what was thrown. */
+  tick:function(dt){
+    if(this.off){ try{ PADUI.check.tick(dt||1/60); }catch(e0){} return; }
+    try{ this.run(dt); this.bad=0; }
+    catch(err){
+      if(++this.bad<3) return;
+      this.off=true; this.why=String((err&&err.message)||err);
+      try{ console.error("Place of Sands: controller play switched itself off after an error",err); }catch(e1){}
+      try{ this.mx=0; this.mz=0; this.vk={}; this.vkN=0; this.kd={}; if(lookId==="pad") lookId=null; P.held=false; }catch(e2){}
+      try{ var f=$("navFrame"); if(f) f.hidden=true; $("stage").classList.remove("console"); }catch(e3){}
+      try{ INPUT.set(INPUT.home); }catch(e4){}
+    }
+  },
+  run:function(dt){
+    if(dt===undefined){                       /* called from the frame loop: its own clock */
+      var now=performance.now()/1000; dt=this.clock?Math.min(0.05,Math.max(0,now-this.clock)):0; this.clock=now;
+    }
+    NAV.sync();
+    this.poll(dt);
+    NAV.frame();
+    PADUI.check.tick(dt);
+  },
+  poll:function(dt){
+    var list=this.read(), n=list?list.length:0, i, p, e=this.e, vk=this.vk;
+    for(i=0;i<n;i++){
+      p=list[i]; if(!p||p.connected===false){ this.was[i]=null; continue; }
+      var w=this.woke(p,i);
+      if(w===2||(w===1&&i===this.idx&&p.mapping==="standard")){
+        var fresh=this.idx!==i||INPUT.mode!=="pad";
+        if(this.idx!==i){ this.idx=i; e.J=e.A=e.W=e.M=e.LB=e.RB=false; }   /* a fresh hand: its first press counts */
+        if(fresh){ this.auto=this.family(p.id); this.k0=this.kind(); }
+        INPUT.set("pad","pad");
+      }
+    }
+    p=(this.idx>=0&&list&&list[this.idx]&&list[this.idx].connected!==false)?list[this.idx]:null;
+    if(this.idx>=0&&!p) this.lost();                         /* in hand a frame ago, and the browser no longer has it */
+    var m=this.map();
+    if(INPUT.mode!=="pad"){
+      /* something else is in hand. The controller's buttons are still followed, so that when it is picked up again
+         a button let go in the meantime is not thought to be still down, and a jump it was holding is let go. */
+      if(this.vkN){ this.vk={}; this.vkN=0; }
+      if(p){
+        var J0=this.held(p,m.jump); if(e.J&&!J0) P.held=false;
+        e.J=J0; e.A=this.held(p,m.act); e.W=this.held(p,2); e.M=this.held(p,9)||this.held(p,8); e.LB=this.held(p,4); e.RB=this.held(p,5);
+      }
+      this.rest(); return;
+    }
+    /* nothing to read: no controller in hand, no button arriving as a key, and nothing still to be let go */
+    if(!p&&!this.vkN&&!(e.J||e.A||e.W||e.M||e.LB||e.RB)){ this.rest(); return; }
+    var a=p?(p.axes||[]):[], V=this.view, now=performance.now(), r=this.r;
+    if(p){ V.id=p.id||""; V.mapping=p.mapping||""; V.axes[0]=+a[0]||0; V.axes[1]=+a[1]||0; V.axes[2]=+a[2]||0; V.axes[3]=+a[3]||0; }
+    this.stick(a[0],a[1],this.L);
+    if(p&&p.mapping==="standard") this.stick(a[2],a[3],this.R); else { this.R[0]=0; this.R[1]=0; }   /* no standard layout: no stick to look with (see woke) */
+    /* directions: the controller's own D-pad, else the keys a console sends for the D-pad and the left stick */
+    var pdx=p?((this.held(p,15)?1:0)-(this.held(p,14)?1:0)):0, pdz=p?((this.held(p,13)?1:0)-(this.held(p,12)?1:0)):0;
+    var dx=pdx||(((vk[206]||vk[213])?1:0)-((vk[205]||vk[214])?1:0)), dz=pdz||(((vk[204]||vk[212])?1:0)-((vk[203]||vk[211])?1:0));
+    if(!this.R[0]&&!this.R[1]&&this.vkN){                    /* and for the right stick: a steady look, a little under full */
+      this.R[0]=((vk[217]?1:0)-(vk[218]?1:0))*0.7; this.R[1]=((vk[216]?1:0)-(vk[215]?1:0))*0.7;
+    }
+    /* the buttons the game has a use for, and whether each went down or came up this frame */
+    var J=!!(p&&this.held(p,m.jump))||!!vk[195], A=!!(p&&this.held(p,m.act))||!!vk[196], W=!!(p&&this.held(p,2))||!!vk[197];
+    var M=!!(p&&(this.held(p,9)||this.held(p,8)))||!!vk[207]||!!vk[208];
+    var LB=!!(p&&this.held(p,4))||!!vk[200], RB=!!(p&&this.held(p,5))||!!vk[199];
+    /* when the controller itself last did something a browser might also send as a plain key (see key(), below) */
+    if(p){
+      var f0=this.held(p,0), f1=this.held(p,1);
+      if(f0!==r.f0||f1!==r.f1){ r.f0=f0; r.f1=f1; this.tPad.pick=this.tPad.back=now; }
+      var dk=pdx+","+pdz+","+(Math.abs(this.L[0])>0.55?(this.L[0]>0?1:-1):0)+","+(Math.abs(this.L[1])>0.55?(this.L[1]>0?1:-1):0);
+      if(dk!==r.dk){ r.dk=dk; this.tPad.dir=now; }
+    }
+    /* told mid-press that these are someone else's buttons (the Buttons row in Totals): the button that is down
+       is not a fresh press of whatever it has just become */
+    var kind=this.kind(); if(kind!==this.k0){ this.k0=kind; e.J=J; e.A=A; }
+    if((J&&!e.J)||(A&&!e.A)||(W&&!e.W)||(M&&!e.M)){ TV.fs(); this.sound(); }   /* a press: the one moment a browser will grant full screen, or let the sound start */
+    var jDown=J&&!e.J, jUp=!J&&e.J, aDown=A&&!e.A, wDown=W&&!e.W, mDown=M&&!e.M, lbDown=LB&&!e.LB, rbDown=RB&&!e.RB;
+    e.J=J; e.A=A; e.W=W; e.M=M; e.LB=LB; e.RB=RB;
+    /* the same press may have reached the page as a plain key a moment ago, and been acted on: not twice */
+    if(jDown&&now-this.tKey.pick<this.DUP) jDown=false;
+    if(aDown&&now-this.tKey.back<this.DUP) aDown=false;
+    if(jUp) P.held=false;                      /* let go is let go, in play or with a sheet over it */
+    var scope=NAV.scope();
+    if(scope){
+      /* ---- a sheet has the screen: the D-pad or the stick moves the frame, A picks, B is the way out ---- */
+      var nx=0, ny=0, lx=this.L[0], ly=this.L[1];
+      if(dx||dz){ if(dz) ny=dz; else nx=dx; }
+      else if(Math.abs(lx)>0.55||Math.abs(ly)>0.55){ if(Math.abs(lx)>Math.abs(ly)) nx=lx>0?1:-1; else ny=ly>0?1:-1; }
+      this.rest();
+      if(scope.id==="padcheck") return;                                 /* the check only shows what is pressed; its own tick holds the way out */
+      if(mDown&&scope.id==="menu"){ sheet("menu",false); return; }      /* Menu shuts Totals as it opened it */
+      if((nx||ny)&&now-this.tKey.dir<this.DUP&&NAV.dir!==(nx+","+ny)){ NAV.dir=nx+","+ny; NAV.t=this.NAV0; }   /* an arrow key has just made this step */
+      NAV.steer(nx,ny,dt);
+      if(jDown) NAV.pick(); else if(aDown) NAV.back();
+      else if(scope.id==="strand"){               /* the projector: the left-hand button plays and pauses, the shoulders change the reel */
+        if(wDown) STRAND.toggle(); else if(rbDown) STRAND.step(1); else if(lbDown) STRAND.step(-1);
+      }
+      return;
+    }
+    /* ---- in play ---- */
+    if(mDown){ openMenu(); return; }
+    if(jDown){ if(DLG.open) DLG.advance(); else { P.buf=BUFFER; P.held=true; } }   /* as the round A button and the space bar do */
+    if(aDown||wDown) pressB();
+    if(this.L[0]||this.L[1]){ this.mx=this.L[0]; this.mz=this.L[1]; } else { this.mx=dx; this.mz=dz; }
+    /* the right stick is a look, held the way a drag is held: the follow camera lets go, waits its beat
+       after, and a talk's own shot is left alone. Squared, so the middle of the stick is the fine end. */
+    var rx=this.R[0], ry=this.R[1];
+    if((rx||ry)&&!DLG.open){
+      var len=Math.sqrt(rx*rx+ry*ry);
+      camYaw-=rx*len*this.YAW*dt;
+      camPitch=Math.max(-0.28,Math.min(0.86,camPitch+ry*len*this.PITCH*dt));
+      lookId="pad"; camLookT=0; camFollowW=0;
+    } else if(lookId==="pad") lookId=null;
+  },
+  /* A browser may hold the sound back until the player has pressed something, and not every browser counts a
+     controller's button as that. So each press asks again, in case this is the one that counts. (The game
+     itself puts the sound to sleep while the page is hidden; that is left alone.) */
+  sound:function(){ try{ if(AU.ctx&&AU.ctx.state==="suspended"&&!document.hidden){ var r=AU.ctx.resume(); if(r&&typeof r.catch==="function") r.catch(function(){}); } }catch(e){} },
+  /* nothing in hand, or a sheet has the screen: no walk, and the look is let go */
+  rest:function(){ this.mx=0; this.mz=0; if(lookId==="pad") lookId=null; },
+  /* The controller that was last used is no longer there: switched off, out of range, unplugged, asleep. If it
+     was in hand, he stops, a jump being held is let go, and a note says so; a phone gets its thumbs back and a
+     desk its keys without being asked, and a console, which has nothing else, waits for it to come back. If
+     something else was in hand (he has been on the keys for ten minutes and the controller has gone to sleep),
+     it is forgotten without a word. */
+  lost:function(){
+    var e=this.e, inHand=INPUT.mode==="pad";
+    this.idx=-1;
+    e.J=e.A=e.W=e.M=e.LB=e.RB=false; this.r.f0=this.r.f1=false; this.r.dk="";
+    if(!inHand) return;
+    this.rest(); P.held=false;
+    UI.say("The controller's gone quiet.");
+    if(!this.vkN&&!TV.console) INPUT.set(INPUT.home);
+  },
+
+  /* ---- a buzz, through the controller's motors ----
+     The game's buzzes are sized for a phone: 5 ms for a pickup, 70 for a slam. A motor needs far longer than
+     that to be felt at all, so each is stretched, and its size becomes how hard the controller shakes as well. */
+  rumble:function(ms){
+    ms=+ms||0; if(!(ms>0)) return;
+    var list=this.read(), p=(this.idx>=0&&list&&list[this.idx]&&list[this.idx].connected!==false)?list[this.idx]:null;
+    if(!p) return;
+    var d=Math.round(Math.max(60,Math.min(200,40+ms*2.3))), s=Math.max(0.25,Math.min(0.7,0.2+ms*0.0075)), r;
+    try{
+      var va=p.vibrationActuator, old=p.hapticActuators&&p.hapticActuators[0];
+      if(va&&typeof va.playEffect==="function") r=va.playEffect("dual-rumble",{startDelay:0,duration:d,weakMagnitude:+(s*0.6).toFixed(3),strongMagnitude:+s.toFixed(3)});
+      else if(old&&typeof old.pulse==="function") r=old.pulse(+s.toFixed(3),d);       /* the older shape, still what some browsers have */
+      if(r&&typeof r.catch==="function") r.catch(function(){});                        /* a motor that says no is nobody's problem */
+    }catch(e){}
+  },
+
+  /* ---- a console that sends keys ----
+     Some console browsers send key presses for the controller, instead of the controller's own data or as well
+     as it. Two things are done about that, neither of them seen on a console yet:
+     1. The old Xbox key codes (195 to 218: GamepadA, GamepadB, the D-pad, the sticks as directions...) are the
+        buttons they stand for. They are folded into the same reading as the controller's own data, so a press
+        that arrives both ways is still one press.
+     2. A plain key that arrives with a press of the controller (Enter or Space with a face button, Escape or
+        Backspace with one, an arrow with the D-pad or the stick) is that press over again and is dropped. It may
+        arrive just after the page has seen the press, or just before: both are covered, to 150 ms. */
+  vk:{}, vkN:0, vkSeen:false,
+  VKNAME:{195:"the pad's A",196:"the pad's B",197:"the pad's X",198:"the pad's Y",199:"the pad's RB",200:"the pad's LB",201:"the pad's LT",202:"the pad's RT",
+          203:"D-pad up",204:"D-pad down",205:"D-pad left",206:"D-pad right",207:"Menu",208:"View",209:"left stick pressed",210:"right stick pressed",
+          211:"left stick up",212:"left stick down",213:"left stick right",214:"left stick left",215:"right stick up",216:"right stick down",217:"right stick right",218:"right stick left"},
+  ECHO:{"Enter":"pick"," ":"pick","Escape":"back","Backspace":"back","ArrowUp":"dir","ArrowDown":"dir","ArrowLeft":"dir","ArrowRight":"dir"},
+  kd:{},                                     /* plain keys now down: 1 the keyboard's own (the game has it), 2 taken for the controller's own press */
+  tPad:{pick:-1e9,back:-1e9,dir:-1e9},       /* when the controller last pressed or let go of something a key might double */
+  tKey:{pick:-1e9,back:-1e9,dir:-1e9},       /* when a plain key of each kind last acted for itself */
+  r:{f0:false,f1:false,dk:""},
+  /* the same keys by the names an older Edge gave them, for a browser that sends the name and no number */
+  VKKEY:{GamepadA:195,GamepadB:196,GamepadX:197,GamepadY:198,GamepadRightShoulder:199,GamepadLeftShoulder:200,GamepadLeftTrigger:201,GamepadRightTrigger:202,
+         GamepadDPadUp:203,GamepadDPadDown:204,GamepadDPadLeft:205,GamepadDPadRight:206,GamepadMenu:207,GamepadView:208,GamepadLeftThumbstick:209,GamepadRightThumbstick:210,
+         GamepadLeftThumbstickUp:211,GamepadLeftThumbstickDown:212,GamepadLeftThumbstickRight:213,GamepadLeftThumbstickLeft:214,
+         GamepadRightThumbstickUp:215,GamepadRightThumbstickDown:216,GamepadRightThumbstickRight:217,GamepadRightThumbstickLeft:218},
+  code:function(e){ var c=e.keyCode||0; if(c>=195&&c<=218) return c; return this.VKKEY[e.key]||0; },
+  isPadKey:function(e){ return this.code(e)>0; },
+  /* the page has lost the keyboard (another window, another tab): a key that was down may never be seen coming up */
+  drop:function(){ this.vk={}; this.vkN=0; this.kd={}; this.rest(); },
+  /* is the controller in hand doing, or has it just done, what a key of this kind would double? */
+  pressed:function(cls){
+    if(performance.now()-this.tPad[cls]<this.DUP) return true;
+    var list=this.read(), p=(this.idx>=0&&list&&list[this.idx]&&list[this.idx].connected!==false)?list[this.idx]:null;
+    if(!p) return false;
+    if(cls!=="dir") return this.held(p,0)||this.held(p,1);
+    if(this.held(p,12)||this.held(p,13)||this.held(p,14)||this.held(p,15)) return true;
+    var a=p.axes||[], x=+a[0]||0, y=+a[1]||0; return Math.sqrt(x*x+y*y)>this.WAKE;
+  },
+  /* A key going down or coming up. True when it is the controller's (and has been dealt with here): whoever
+     asked then keeps it from the game and from the sheets. Whose a plain key is, is settled once, when it goes
+     down: its repeats and its key-up go the same way. (Settled afresh on each repeat, a key the game was already
+     holding could be taken for the controller's half way through, its key-up kept from the game, and JR left
+     walking.) */
+  key:function(e,down){
+    if(this.off) return false;
+    var c=this.code(e), k=e.key;
+    if(c){
+      if(down){
+        if(!this.vk[c]){ this.vk[c]=true; this.vkN++; }
+        this.vkSeen=true; if(this.idx<0) this.auto="xbox";             /* these are an Xbox's codes */
+        if(INPUT.mode!=="pad") this.k0=this.kind();                    /* a fresh hand: its first press counts (as a controller's own does) */
+        INPUT.set("pad","pad");
+      } else if(this.vk[c]){ this.vk[c]=false; this.vkN--; }
+      return true;
+    }
+    var cls=this.ECHO[k]; if(!cls) return false;
+    var was=this.kd[k];
+    if(!down){ this.kd[k]=0; return was===2; }
+    if(was) return was===2;                                            /* still down: a repeat goes where the press went */
+    if(INPUT.mode==="pad"&&this.pressed(cls)){ this.kd[k]=2; return true; }
+    this.kd[k]=1; this.tKey[cls]=performance.now();                    /* a key acting for itself: a controller press right behind it is that key over again */
+    return false;
+  }
+};
+
+/* ---------- the gold frame ----------
+   With a controller (or the arrow keys) there is no finger to point with, so the sheets get a frame:
+   one gold box round the control that A will pick. The D-pad or the left stick moves it to the nearest
+   control in that direction, by where the controls actually are on the screen, so no sheet needs a
+   list of its neighbors. It is one element drawn over the page, not a style on the controls: it sits
+   round whatever holds it and does not disturb how that thing is drawn. Touch and mouse never see it. */
+var NAV={
+  cur:null,            /* the control that holds the frame */
+  keys:false,          /* the arrow keys have been used in a sheet since the last mouse click */
+  sc:null, dir:null, t:0,
+  wait:false,          /* a direction held since before this sheet opened: it must be let go first */
+  box:null, fk:"",
+  LAYERS:["card","errand","howto","map","menu","ending","title"],
+  /* whichever sheet has the screen: the check sheet over everything, then the Strand, then the rest */
+  scope:function(){
+    var c=$("padcheck"); if(c&&!c.hidden) return c;
+    if(STRAND.isOpen()) return $("strand");
+    for(var i=0;i<this.LAYERS.length;i++){ var el=$(this.LAYERS[i]); if(el&&!el.hidden) return el; }
+    return null;
+  },
+  on:function(){ return INPUT.mode==="pad"||(INPUT.mode==="keys"&&this.keys); },
+  /* every control in it that could be pressed right now, in the order the page has them */
+  items:function(sc){
+    var out=[]; if(!sc) return out;
+    if(sc.id==="padcheck") return out;                                  /* in the check every button is only shown: there is nothing for A to pick */
+    var strand=sc.id==="strand";
+    if(strand&&!sc.classList.contains("st-seated")) return out;       /* the room is still swinging round: nothing to pick yet */
+    var all=sc.querySelectorAll("button,a[href],[data-nav]");
+    for(var i=0;i<all.length;i++){
+      var el=all[i];
+      if(el.disabled||el.closest("[hidden],[inert]")) continue;
+      if(strand&&el.id==="stBillHead"&&sc.classList.contains("st-wide")) continue;   /* the bill's heading only opens a drawer, and a wide screen has no drawer */
+      if(!el.getClientRects().length) continue;
+      var cs=getComputedStyle(el); if(cs.visibility==="hidden"||cs.pointerEvents==="none") continue;
+      out.push(el);
+    }
+    return out;
+  },
+  /* where the frame starts: a sheet's first control; in the Strand, the reel that is playing */
+  first:function(sc,items){
+    if(sc.id==="strand"){
+      var now=sc.querySelector(".st-tk.st-now"); if(now&&items.indexOf(now)>=0) return now;
+      var tk=sc.querySelector(".st-tk"); if(tk&&items.indexOf(tk)>=0) return tk;
+    }
+    return items[0]||null;
+  },
+  put:function(el){
+    el=el||null;
+    if(this.cur===el) return;
+    if(this.cur) this.cur.classList.remove("pf");
+    this.cur=el;
+    if(el){ el.classList.add("pf"); try{ el.focus({preventScroll:true}); }catch(e){} this.see(el); }
+  },
+  /* a long sheet scrolls so the control is whole inside it, with a little room */
+  see:function(el){
+    for(var p=el.parentElement;p&&p.id!=="stage";p=p.parentElement){
+      if(p.scrollHeight<=p.clientHeight+1) continue;
+      var o=getComputedStyle(p).overflowY; if(o!=="auto"&&o!=="scroll") continue;
+      var pr=p.getBoundingClientRect(), r=el.getBoundingClientRect(), k=(p.offsetHeight?pr.height/p.offsetHeight:1)||1, m=14*k;   /* k: how much bigger the sheet is drawn than laid out (big screen) */
+      if(r.top<pr.top+m) p.scrollTop-=(pr.top+m-r.top)/k;
+      else if(r.bottom>pr.bottom-m) p.scrollTop+=(r.bottom-(pr.bottom-m))/k;
+      return;
+    }
+  },
+  /* once a frame: which sheet, and is the frame still on something that can be pressed */
+  sync:function(){
+    var sc=this.scope();
+    if(sc!==this.sc){ this.sc=sc; this.put(null); this.dir=null; this.t=0; this.wait=true; }
+    /* (the Strand keeps its own keys: there the frame is for a controller only, and the keyboard's focus stays on the room) */
+    if(!sc||!this.on()||(sc.id==="strand"&&INPUT.mode!=="pad")){ if(this.cur) this.put(null); return; }
+    var items=this.items(sc);
+    if(!this.cur||items.indexOf(this.cur)<0) this.put(this.first(sc,items));
+  },
+  /* to the nearest control that way. "That way" means it lies beyond this one's edge on that side (a
+     quarter of an overlap is let pass, for controls that only nearly clear each other): being a little
+     to the left further down the sheet is not being to the left. Nearest is by the gap between facing
+     edges; a control that overlaps this one across the direction of travel is in line with it and wins
+     over one that is not. */
+  move:function(dx,dy){
+    var sc=this.scope(); if(!sc) return false;
+    var items=this.items(sc); if(!items.length) return false;
+    if(!this.cur||items.indexOf(this.cur)<0){ this.put(this.first(sc,items)); return !!this.cur; }
+    var a=this.cur.getBoundingClientRect(), ax=(a.left+a.right)/2, ay=(a.top+a.bottom)/2, best=null, bs=1e9;
+    for(var i=0;i<items.length;i++){
+      var el=items[i]; if(el===this.cur) continue;
+      var b=el.getBoundingClientRect(), bx=(b.left+b.right)/2, by=(b.top+b.bottom)/2;
+      if((bx-ax)*dx+(by-ay)*dy<=4) continue;                       /* not that way */
+      var gap, across;
+      if(dx){ gap=dx>0?b.left-a.right:a.left-b.right; if(gap<-0.25*Math.min(a.width,b.width)) continue; across=(b.bottom<=a.top||b.top>=a.bottom)?Math.abs(by-ay):0; }
+      else  { gap=dy>0?b.top-a.bottom:a.top-b.bottom; if(gap<-0.25*Math.min(a.height,b.height)) continue; across=(b.right<=a.left||b.left>=a.right)?Math.abs(bx-ax):0; }
+      var s=Math.max(0,gap)+across*2.5;
+      if(s<bs){ bs=s; best=el; }
+    }
+    if(!best) return false;
+    this.put(best); return true;
+  },
+  /* a direction held: one step, a wait, then a steady walk */
+  steer:function(nx,ny,dt){
+    var d=(nx||ny)?(nx+","+ny):null;
+    if(this.wait){ if(d) return; this.wait=false; }
+    if(!d){ this.dir=null; return; }
+    if(d!==this.dir){ this.dir=d; this.t=PADS.NAV0; this.move(nx,ny); return; }
+    this.t-=dt; if(this.t<=0){ this.t+=PADS.NAV1; this.move(nx,ny); }
+  },
+  pick:function(){ if(!this.cur||!this.on()) return false; this.cur.click(); return true; },
+  /* B: out of the sheet. The ending's only way out is its button; the title has none. */
+  back:function(){
+    var sc=this.scope(); if(!sc) return false;
+    if(sc.id==="title") return false;
+    if(sc.id==="ending"){ $("endClose").click(); return true; }
+    if(sc.id==="strand"){ STRAND.leave(); return true; }
+    P.buf=0; P.held=false; sheet(sc.id,false); return true;
+  },
+  /* the frame itself, laid round whatever holds it */
+  frame:function(){
+    var f=this.box||(this.box=$("navFrame")); if(!f) return;
+    var el=this.cur;
+    if(!el||!this.on()){ if(!f.hidden){ f.hidden=true; this.fk=""; } return; }
+    var st=$("stage").getBoundingClientRect(), r=el.getBoundingClientRect(), g=Math.round(3*TV.z);
+    var x=Math.round(r.left-st.left)-g, y=Math.round(r.top-st.top)-g, w=Math.round(r.width)+g*2, h=Math.round(r.height)+g*2;
+    var key=x+","+y+","+w+","+h; if(key===this.fk) return;
+    var fresh=f.hidden; this.fk=key;
+    if(fresh) f.style.transition="none";                 /* it appears where it is; it does not fly in from where it last was */
+    f.style.transform="translate("+x+"px,"+y+"px)"; f.style.width=w+"px"; f.style.height=h+"px";
+    if(fresh){ f.hidden=false; void f.offsetWidth; f.style.transition=""; }
+  },
+  init:function(){
+    /* keys: the arrows move the frame while a sheet is open, Enter picks. The Strand keeps its own keys. */
+    window.addEventListener("keydown",function(e){
+      var sc=NAV.scope(); if(!sc||sc.id==="strand"||sc.id==="padcheck") return;
+      var k=e.key, d=k==="ArrowUp"?[0,-1]:k==="ArrowDown"?[0,1]:k==="ArrowLeft"?[-1,0]:k==="ArrowRight"?[1,0]:null;
+      if(d){
+        e.preventDefault();
+        if(!NAV.keys){ NAV.keys=true; NAV.sync(); }      /* the first arrow shows where the frame is */
+        else NAV.move(d[0],d[1]);
+        NAV.frame(); return;
+      }
+      /* Enter picks, once for each press. A held key repeats, and the frame has put the keyboard's focus on the
+         control, so a repeat left alone would be the browser pressing the button again by itself. */
+      if(k==="Enter"&&NAV.keys&&NAV.cur){
+        e.preventDefault(); e.stopImmediatePropagation();
+        if(!e.repeat){ NAV.pick(); NAV.sync(); NAV.frame(); }
+      }
+    },true);
+  }
+};
+
+/* ---------- a screen across the room ---------- */
+var TV={
+  console:null,        /* "xbox", "ps" or "nintendo" when the browser says it is one; null anywhere else */
+  on:false, z:1,
+  DESIGN:600,          /* big screen lays the lettering out as a screen this many pixels high would get it */
+  SIDE:0.025, EDGE:0.03,   /* kept clear at the sides, and at the top and bottom: a TV may cut the picture's rim off */
+  NAMES:{xbox:"Xbox",ps:"PlayStation",nintendo:"Nintendo console"},
+  sniffed:false,
+  granted:false,       /* full screen has been given once: a player who then leaves it is not put back */
+  padNo:false, no:0,   /* refused on a controller press (not every browser counts one); how many refusals in all */
+  asking:false,        /* a request is out and not yet answered */
+  /* The browser's own name for itself is asked once, and decides three things only: big screen starts on,
+     the on-screen touch controls never appear, and the wording of two messages. */
+  sniff:function(){
+    if(this.sniffed) return; this.sniffed=true;
+    var ua=""; try{ ua=String(navigator.userAgent||""); }catch(e){}
+    this.console=/Xbox/i.test(ua)?"xbox":(/PlayStation/i.test(ua)?"ps":(/Nintendo/i.test(ua)?"nintendo":null));
+  },
+  init:function(){
+    this.sniff();
+    if(this.console) $("stage").classList.add("console");
+    this.apply();
+    var self=this;
+    window.addEventListener("resize",function(){ self.apply(); });
+  },
+  /* big screen: the player's own choice if they made one, else on for a console and off anywhere else */
+  want:function(){ return state.big===true||(state.big!==false&&!!this.console); },
+  /* The HUD and every sheet are drawn z times the size; z is how many times a 600-high screen goes into this
+     one, so a 1080p TV gets 1.8 and a 720p one 1.2. The clear rim is handed to the styles already divided by z,
+     because they multiply it back up. The 3D picture is left alone. */
+  apply:function(){
+    var st=$("stage"), W=window.innerWidth||1280, H=window.innerHeight||720, was=this.on;
+    this.on=this.want();
+    this.z=this.on?Math.max(1,Math.min(3,Math.round(H/this.DESIGN*100)/100)):1;
+    st.classList.toggle("tv",this.on);
+    if(this.on){
+      st.style.setProperty("--tvz",String(this.z));
+      st.style.setProperty("--tvx",(W*this.SIDE/this.z).toFixed(2)+"px");
+      st.style.setProperty("--tvy",(H*this.EDGE/this.z).toFixed(2)+"px");
+    } else {
+      st.style.removeProperty("--tvz"); st.style.removeProperty("--tvx"); st.style.removeProperty("--tvy");
+      if(was){
+        this.granted=false; this.padNo=false; this.no=0; this.asking=false;
+        try{
+          var x=document.exitFullscreen||document.webkitExitFullscreen;
+          if(x&&(document.fullscreenElement||document.webkitFullscreenElement)){ var q=x.call(document); if(q&&q.catch) q.catch(function(){}); }
+        }catch(e){}
+      }
+    }
+    /* the Strand lays its room out from its own size, and on a resize it is asked before this has run: with the
+       scale now right it is asked again (it does nothing unless it is open and its size is not what it built for) */
+    if(typeof STRAND!=="undefined"&&STRAND.relay) STRAND.relay();
+  },
+  /* Full screen is asked for on a press (a browser only grants it then), and a refusal is nobody's problem.
+     real: a key or a click (a tap is a click), which every browser counts as a press; a controller's button is not
+     counted by all of them. So after one refusal on a controller press it is only asked for again on a real one, and
+     after three refusals in all it is left alone. Given once, it is never asked for again while big screen stays
+     on: a player who leaves full screen has chosen to. */
+  fs:function(real){
+    if(!this.on||this.granted||this.asking||this.no>=3||(!real&&this.padNo)) return;
+    try{
+      if(document.fullscreenElement||document.webkitFullscreenElement){ this.granted=true; return; }
+      var el=document.documentElement, f=el.requestFullscreen||el.webkitRequestFullscreen, self=this;
+      if(!f) return;
+      var p=f.call(el);
+      if(p&&p.then){ this.asking=true; p.then(function(){ self.asking=false; self.granted=true; },function(){ self.asking=false; self.no++; if(!real) self.padNo=true; }); }
+    }catch(e){ this.asking=false; this.no++; if(!real) this.padNo=true; }
+  },
+  /* a browser with no WebGL cannot draw any of this: say so, by name where the name is known, instead of a blank page */
+  noGL:function(){
+    this.sniff();
+    var f=$("fatal");
+    f.textContent=this.console?("This "+this.NAMES[this.console]+"'s browser cannot draw the game: it has no WebGL."):"This browser cannot draw the game: WebGL is off or missing.";
+    f.style.display="grid"; $("title").hidden=true;
+  }
+};
+
+/* ---------- Totals' three rows, Start over, and the Controller check ---------- */
+var PADUI={
+  NAMES:{xbox:"Xbox",ps:"PlayStation",nintendo:"Nintendo"},
+  ORDER:["auto","xbox","ps","nintendo"],
+  chosen:function(){ return (state.pad==="xbox"||state.pad==="ps"||state.pad==="nintendo")?state.pad:"auto"; },
+  init:function(){
+    var self=this;
+    /* Buttons: whose letters to show. Auto reads the controller's name; the other three are the player's word for it. */
+    $("menuPad").addEventListener("click",function(){
+      var next=self.ORDER[(self.ORDER.indexOf(self.chosen())+1)%self.ORDER.length];
+      if(next==="auto") delete state.pad; else state.pad=next;
+      save(); KEYS.refresh(); self.sync();
+    });
+    /* Big screen: once pressed it is the player's choice, on a console as anywhere else */
+    $("menuBig").addEventListener("click",function(){ state.big=!TV.on; save(); TV.apply(); TV.fs(INPUT.mode!=="pad"); self.sync(); });
+    $("menuCheck").addEventListener("click",function(){ sheet("menu",false); self.check.open(); });
+    $("padcheckClose").addEventListener("click",function(){ self.check.close(); });
+    window.addEventListener("keydown",function(e){ self.check.keydown(e); },true);
+    window.addEventListener("keyup",function(e){ self.check.keyup(e); },true);
+    this.sync();
+    /* #check on the end of the address opens the check straight away, over the title: on a console it may be
+       easier to type that than to reach Totals with a pointer */
+    var hash=""; try{ hash=String(location.hash||""); }catch(e){}
+    if(/^#check$/i.test(hash)) this.check.open();
+  },
+  HINT:"Controller moving a pointer? Hold the Menu button and Edge hands it to the game.",
+  /* why no controller can reach the game, in plain words; "" when one can. short: one sentence, for the title */
+  refusal:function(short){
+    var framed=false; try{ framed=window.top!==window.self; }catch(e){ framed=true; }
+    if(PADS.off) return "Controller play has switched itself off after an error in this browser"+(short?".":": "+PADS.why);
+    if(PADS.blocked) return "This browser will not give the page a controller."+(framed&&!short?" The page is inside a frame that does not allow one.":"");
+    if(PADS.none) return "This browser has no way to read a controller."+(window.isSecureContext===false&&!short?" The page is not on https, and some browsers only give a controller to an https page.":"");
+    return "";
+  },
+  /* The three rows show only where they mean something: a phone with no controller sees none of them. */
+  sync:function(){
+    var pad=$("menuPad"); if(!pad) return;
+    var touch=INPUT.mode==="touch", c=this.chosen();
+    pad.hidden=!INPUT.seenPad;
+    $("menuPadVal").textContent=c==="auto"?"Auto ("+this.NAMES[PADS.auto]+")":this.NAMES[c];
+    var big=$("menuBig"); big.hidden=touch&&!TV.on; big.classList.toggle("on",TV.on);
+    $("menuCheck").hidden=touch&&!INPUT.seenPad&&!TV.console;
+    /* On an Xbox, Edge starts out steering a pointer with the controller. Until the controller reaches the game
+       the title says how to hand it over. (The wording is from players' reports; it has not been seen on a console.)
+       A console whose browser will not give the page a controller at all, or has no way to read one, is told that
+       instead, and keeps the on-screen stick and buttons: something has to be able to play it. */
+    var hint=$("padHint"), no=PADS.blocked||PADS.none||PADS.off;
+    if(TV.console) $("stage").classList.toggle("console",!no);
+    if(hint){
+      var line=no&&TV.console?this.refusal(true):this.HINT;
+      if(hint.textContent!==line) hint.textContent=line;
+      hint.hidden=!(no?!!TV.console:(TV.console==="xbox"&&!INPUT.seenPad));
+    }
+  },
+  /* Start over wipes the evening, and with a frame that moves it is one stray press away. So it asks:
+     the first press changes what the button says for three seconds, and only a second press in that
+     time does it. The second has to be a press of its own, a third of a second on at the least. The same
+     for a finger or a mouse. */
+  twice:function(btn,fn){
+    var label=btn.textContent, armed=false, t=0, at=0;
+    function back(){ armed=false; btn.textContent=label; btn.classList.remove("sure"); }
+    btn.addEventListener("click",function(){
+      var now=Date.now();
+      if(armed){
+        if(now-at<350) return;               /* too soon to be a second press: a key repeating, a bounce, a double fire */
+        clearTimeout(t); back(); fn(); return;
+      }
+      armed=true; at=now; btn.textContent="Press again to start over"; btn.classList.add("sure");
+      t=setTimeout(back,3000);
+    });
+  },
+  /* ---- the Controller check ----
+     One sheet that says what the browser is giving the page: what it calls itself, the screen, the controller
+     and everything on it as it is pressed, and the keys it sends. It is there to be photographed on a machine
+     nobody could try the game on beforehand. In it a press is only shown: A picks nothing and a tap of B
+     leaves nothing, because A and B are two of the things being checked. B held (or Escape held) is the way out. */
+  check:{
+    HOLD:0.7,            /* seconds B or Escape is held to leave */
+    hold:0, armed:false, esc:false, eat:false, on:false,
+    keys:[],             /* the last few keys the browser sent, newest first */
+    built:false, c:{}, v:{}, f0:0, fn:0, fps:0, gl:"",
+    LEFT:["build","browser","console","screen","graphics","fps","sound"],
+    RIGHT:["hand","pad","layout","family","sticks","held","keys","rumble"],
+    LABEL:{build:"Build",browser:"Browser",console:"Console",screen:"Screen",graphics:"Graphics",fps:"Frame rate",sound:"Sound",
+           hand:"Last used",pad:"Controller",layout:"Layout",family:"Read as",sticks:"Sticks",held:"Held",keys:"Keys sent",rumble:"Rumble"},
+    LAST:{pad:"the controller",key:"a key",mouse:"a mouse or a pointer",touch:"the screen"},
+    /* the standard layout's buttons by number, as each maker prints them */
+    BTN:{
+      xbox:["A","B","X","Y","LB","RB","LT","RT","View","Menu","Left stick","Right stick","D-pad up","D-pad down","D-pad left","D-pad right","Xbox"],
+      ps:["Cross","Circle","Square","Triangle","L1","R1","L2","R2","Create","Options","L3","R3","D-pad up","D-pad down","D-pad left","D-pad right","PS","Touch pad"],
+      nintendo:["B","A","Y","X","L","R","ZL","ZR","Minus","Plus","Left stick","Right stick","D-pad up","D-pad down","D-pad left","D-pad right","Home","Capture"]
+    },
+    esc_:function(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); },
+    isOpen:function(){ var el=$("padcheck"); return !!el&&!el.hidden; },
+    build:function(){
+      if(this.built) return; this.built=true;
+      var N=this.LABEL;
+      function col(a){ var h='<div class="pccol">'; for(var i=0;i<a.length;i++) h+='<div class="pcr" data-k="'+a[i]+'"><span class="pck">'+N[a[i]]+'</span><span class="pcv"></span></div>'; return h+"</div>"; }
+      $("padcheckBody").innerHTML=col(this.LEFT)+col(this.RIGHT);
+      this.cell("sticks").innerHTML='<span class="pcsticks"><span class="pcwell" id="pcL"><i></i></span><span class="pcwell" id="pcR"><i></i></span><span class="pcnum" id="pcNum"></span></span>';
+    },
+    cell:function(k){ return this.c[k]||(this.c[k]=$("padcheckBody").querySelector('.pcr[data-k="'+k+'"] .pcv')); },
+    /* a line is only written when what it says has changed */
+    put:function(k,html){ if(this.v[k]!==html){ this.v[k]=html; this.cell(k).innerHTML=html; } },
+    open:function(){
+      this.build();
+      this.hold=0; this.armed=false; this.esc=false; this.f0=0; this.fn=0; this.fps=0;
+      $("padcheck").hidden=false; this.on=true;
+      this.tick(0);
+    },
+    close:function(){ $("padcheck").hidden=true; this.on=false; this.hold=0; this.esc=false; },
+    /* the graphics chip, as the browser will name it (asked once) */
+    chip:function(){
+      if(this.gl) return this.gl;
+      var s="";
+      try{ var g=renderer.getContext(), x=g.getExtension("WEBGL_debug_renderer_info"); s=String((x&&g.getParameter(x.UNMASKED_RENDERER_WEBGL))||g.getParameter(g.RENDERER)||""); }catch(e){}
+      return (this.gl=s||"not told");
+    },
+    /* every key the browser sends is kept for the list (INPUT hands each one here first, the controller's own
+       keys among them); while the check is open a key does nothing else */
+    note:function(e){
+      if(e.repeat) return;
+      var key=String(e.key===undefined?"?":e.key), c=e.keyCode||0, what=PADS.VKNAME[PADS.code(e)];
+      this.keys.unshift((key===" "?"Space":key)+" "+c+(what?" ("+what+")":"")); if(this.keys.length>5) this.keys.length=5;
+    },
+    keydown:function(e){
+      var key=String(e.key===undefined?"?":e.key), esc=key==="Escape";
+      if(this.eat&&esc){ e.preventDefault(); e.stopImmediatePropagation(); return; }     /* still down from leaving: it must not open Totals behind the check */
+      if(!this.isOpen()) return;
+      e.stopImmediatePropagation();
+      if(e.target&&e.target.id==="padcheckClose"&&(key==="Enter"||key===" ")) return;     /* its own button, with the keyboard's focus on it, is still a button */
+      if(esc||key===" "||key==="Enter"||key.indexOf("Arrow")===0) e.preventDefault();
+      if(esc) this.esc=true;
+    },
+    keyup:function(e){ if(e.key==="Escape"){ this.esc=false; this.eat=false; } },
+    sig:function(n){ n=+n||0; return (n<0?"−":"+")+Math.abs(n).toFixed(2); },
+    tick:function(dt){
+      if(!this.on) return;
+      if(!this.isOpen()){ this.on=false; this.hold=0; this.esc=false; return; }           /* shut by something else: a click on the dark round it */
+      var E=this.esc_, self=this, i;
+      /* ---- the controllers the browser shows: the one in hand, else the first it lists ---- */
+      var list=PADS.read(), n=0, p=null, inHand=false;
+      if(list){
+        for(i=0;i<list.length;i++){ var q=list[i]; if(!q||q.connected===false) continue; n++; if(i===PADS.idx&&INPUT.seenPad){ p=q; inHand=true; } }
+        if(!p) for(i=0;i<list.length;i++){ if(list[i]&&list[i].connected!==false){ p=list[i]; break; } }
+      }
+      var chosen=PADUI.chosen(), fam=chosen==="auto"?(p?PADS.family(p.id):PADS.auto):chosen;
+      /* ---- the way out: B held, or Escape held. A button already down when the sheet opened must be let go first. ---- */
+      var b=this.esc||(INPUT.mode==="pad"&&PADS.e.A);                  /* PADS.e.A: B as the game reads it, from the controller or from a console's key for it */
+      if(!b){ this.armed=true; this.hold=0; }
+      else if(this.armed){
+        this.hold+=dt;
+        if(this.hold>=this.HOLD){ if(this.esc) this.eat=true; this.close(); return; }
+      }
+      /* ---- the line under the heading ---- */
+      var mode=INPUT.mode, way=mode==="pad"?KEYS.WORDS[PADS.kind()].act:(mode==="keys"?"Esc":"");
+      var hint=(mode==="pad"?"Press each button once.":"Press each button on the controller once.")+(way?' <span class="pcleave">Hold '+way+' to go back<i id="pcFill"></i></span>.':"");
+      if(this.v.hint!==hint){ this.v.hint=hint; $("pcHint").innerHTML=hint; }
+      var fill=$("pcFill"); if(fill) fill.style.transform="scaleX("+Math.min(1,this.hold/this.HOLD).toFixed(3)+")";
+      /* ---- the plain line: a browser that will not, or cannot ---- */
+      var warn=PADUI.refusal(false);
+      if(this.v.warn!==warn){ this.v.warn=warn; var w=$("pcWarn"); w.textContent=warn; w.hidden=!warn; }
+      /* ---- this machine ---- */
+      this.put("build",E(BUILD));
+      var ua=""; try{ ua=String(navigator.userAgent||""); }catch(e3){}
+      this.put("browser",E(ua||"not told"));
+      this.put("console",TV.console?TV.NAMES[TV.console]:"none named: by its own account this is not a console");
+      var full=false; try{ full=!!(document.fullscreenElement||document.webkitFullscreenElement); }catch(e4){}
+      this.put("screen",(window.innerWidth||0)+" x "+(window.innerHeight||0)+" · pixel ratio "+(Math.round((window.devicePixelRatio||1)*100)/100)+" · "+(TV.on?"big screen "+TV.z+" times":"big screen off")+" · "+(full?"full screen":"not full screen"));
+      var cv=null; try{ cv=renderer.domElement; }catch(e5){}
+      this.put("graphics",E(this.chip())+(cv?" · drawn at "+cv.width+" x "+cv.height:""));
+      var now=performance.now(); if(!this.f0){ this.f0=now; this.fn=0; } else this.fn++;
+      if(now-this.f0>=500&&this.fn>0){ this.fps=Math.round(this.fn*1000/(now-this.f0)); this.f0=now; this.fn=0; }
+      this.put("fps",this.fps?this.fps+" a second":"counting");
+      var snd="", cs=""; try{ cs=AU.ctx?String(AU.ctx.state):""; }catch(e6){}
+      snd=!AU.ctx?"not started: it starts with the first press":(cs==="running"?"running":"held by the browser ("+E(cs)+"): a press should start it");
+      this.put("sound",snd+(state.sound?"":" · switched off in Totals"));
+      /* ---- in your hands ---- */
+      this.put("hand",this.LAST[INPUT.last]||"nothing yet");
+      var note=n>1?n+" controllers; this is the one "+(inHand?"used last":"listed first"):(p&&!inHand?"The browser lists it; nothing pressed on it yet.":"");
+      if(!p&&PADS.vkSeen) note="The browser gives no controller data; its buttons are arriving as keys.";
+      this.put("pad",(p?E(p.id||"it gives no name"):(PADS.vkSeen?"None as a controller.":"None yet. Press a button on it."))+(note?'<span class="pcn">'+note+"</span>":""));
+      var nb=p&&p.buttons?p.buttons.length:0, na=p&&p.axes?p.axes.length:0;
+      this.put("layout",p?((p.mapping==="standard"?"standard":"not the standard layout: read by position")+" · "+nb+" buttons, "+na+" axes"):"no controller to ask");
+      this.put("family",chosen!=="auto"?PADUI.NAMES[fam]+" (your choice in Totals)":(p?PADUI.NAMES[fam]+" (worked out from its name)":"no controller to ask"));
+      var a=p&&p.axes?p.axes:[], L=$("pcL"), R=$("pcR");
+      if(L) L.firstChild.style.transform="translate("+(Math.max(-1,Math.min(1,+a[0]||0))*15).toFixed(1)+"px,"+(Math.max(-1,Math.min(1,+a[1]||0))*15).toFixed(1)+"px)";
+      if(R) R.firstChild.style.transform="translate("+(Math.max(-1,Math.min(1,+a[2]||0))*15).toFixed(1)+"px,"+(Math.max(-1,Math.min(1,+a[3]||0))*15).toFixed(1)+"px)";
+      var num=p?("L "+this.sig(a[0])+" "+this.sig(a[1])+" · R "+this.sig(a[2])+" "+this.sig(a[3])):"no controller to read";
+      if(na>4){ num+=" · and "+(na-4)+" more:"; for(i=4;i<na&&i<10;i++) num+=" "+this.sig(a[i]); }
+      if(this.v.num!==num){ this.v.num=num; $("pcNum").textContent=num; }
+      var held="", names=this.BTN[fam]||this.BTN.xbox;
+      for(i=0;i<nb;i++) if(PADS.held(p,i)) held+='<span class="pcb">'+(names[i]||("Button "+i))+"<i>"+i+"</i></span>";
+      this.put("held",held||(p?"Nothing":"no controller to read"));
+      this.put("keys",this.keys.length?E(this.keys.join(" · ")):"None yet");
+      var rum="no controller to ask";
+      if(p){
+        var va=null; try{ va=p.vibrationActuator; }catch(e7){}
+        if(va) rum="this controller can"+(va.type?" ("+E(va.type)+")":"");
+        else if(p.hapticActuators&&p.hapticActuators.length) rum="this controller can (the older kind)";
+        else rum="this controller says it cannot";
+      }
+      this.put("rumble",rum+(state.haptics===false?" · switched off in Totals":""));
+    }
+  }
+};
+
 /* ---------- 15. boot ---------- */
 withThree(function(){
-  loadSave(); makeGrain(); initThree(); buildWorld(); FX.init(); FEEL.init();
-  placeEverything(); buildPlayer(); bindInput();
+  loadSave(); makeGrain();
+  try{ initThree(); }catch(e){ TV.noGL(); return; }      /* no WebGL: three.js throws, and the page says why it is blank */
+  buildWorld(); FX.init(); FEEL.init();
+  placeEverything(); buildPlayer(); bindInput(); INPUT.init(); PADS.init(); NAV.init(); TV.init(); PADUI.init();
   LIFE.init();
   LIFE.errandInit(); LIFE.errandCue();
   marksInit(); statsBind();
@@ -13324,11 +14795,16 @@ withThree(function(){
     map:{open:openMap,beacon:BEACON,to:beaconTo,draw:drawBlockMap,tap:mapTap,boards:MAP_BOARDS,tallies:mapTallies},
     cut:function(){ return CUT; }, glass:function(id,x,y,z){ awardGlass(id,x,y,z); }, thief:function(){ return THIEF; }, whistle:function(){ whistle(); },
     castle:function(){ return LIFE.castle(); }, pound:function(){ return LIFE.poundCastle(P.x,P.z); }, train:function(){ return trainGroup; },
-    AU:AU, SEQ:SEQ, shark:function(){ return SHARK; }, sharkOpen:sharkOpen, strand:STRAND, hold:function(){ return !!loop.hold; }, walk:function(){ return STRWALK; }, dress:function(){ return [DRESS.n,DRESS.cap,DRESS.ni,DRESS.inkCap]; },
+    AU:AU, SEQ:SEQ, shark:function(){ return SHARK; }, sharkOpen:sharkOpen, strand:STRAND, pad:{INPUT:INPUT,PADS:PADS,KEYS:KEYS,NAV:NAV,TV:TV,UI:PADUI}, FX:FX,
+    psim:function(n,dt){ dt=dt||1/60; for(var i=0;i<n;i++){ PADS.tick(dt); TIME.update(dt); var d=dt*TIME.scale; tAcc+=d; step(d,tAcc,dt); FX.update(d,dt,tAcc); }
+      return [+P.x.toFixed(2),+P.y.toFixed(2),+P.z.toFixed(2),+Math.hypot(P.vx,P.vz).toFixed(2)]; }, hold:function(){ return !!loop.hold; }, walk:function(){ return STRWALK; }, dress:function(){ return [DRESS.n,DRESS.cap,DRESS.ni,DRESS.inkCap]; },
     camInfo:function(){ return {yaw:camYaw,pitch:camPitch,dist:camDist,fov:camFov,lookT:camLookT,w:camFollowW,taken:camTaken,follow:state.follow!==false,cfg:CAMF,talk:TALKC.k}; },
     b2:{quiet:QUIET,hudShow:hudShow,place:PLACE,places:PLACES,placeAt:placeAt,placeOff:placeOff,afk:AFK,wet:WET,wetSplash:wetSplash,jr:JR},
     b3:{gov:GOV,govTick:govTick,govApply:govApply,govBoot:govBoot,govLabel:govLabel,merge:MERGE,feel:FEEL,lamps:lamps,motes:function(){ return !!(FX.motes&&FX.motes.visible); },outlines:function(){ return OUTLINES; },pix:function(){ return PIX; }},
     polish:{signs:SIGN_TEX,again:SIGN_AGAIN,signRedraw:signRedraw,signFonts:signFonts,endcam:ENDCAM},
+    v25:{eight:EIGHT,allEight:allEight,ots:function(){ return LIFE.otsShot; },pools:function(){ return LIFE.pools25(); }},
+    v27:{music:MUSIC,chips:CHIPS,pki:PKI,beat:function(){ return LIFE.__beat(); },run:function(){ return RUN; }},
+    v28:{bus:function(){ return BUS; }},
     v23:{opening:OPENING,talkc:TALKC,stats:STATS,statsSet:statsSet,ui:UI,marks:MARKS,markDue:markDue,markTap:markTap,build:BUILD,
       degraded:function(){ return degraded; }, nearest:function(){ return nearest; }, IN:IN, camOccl:camOccl, glassFound:glassFound, dropInput:dropInput, segDist:segDist, solidAt:solidAt, VIS:VIS, VISO:VISO, visPrep:visPrep, visClear:visClear, visNear:visNear},
     info:function(){ return {calls:renderer.info.render.calls, tris:renderer.info.render.triangles,
