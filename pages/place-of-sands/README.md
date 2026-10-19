@@ -1,9 +1,9 @@
-# Place of Sands, for your own host (v28)
+# Place of Sands, for your own host (v35.5)
 
 Static files. Put the folder on any web host and open `index.html`.
 
     place-of-sands/
-      index.html        the game, one file (2.6 MB; about 1.1 MB once the host compresses it)
+      index.html        the game, one file (3.2 MB; about 1.3 MB once the host compresses it)
       three.min.js      three.js r128, served from here; the CDN copy is the fallback
       strand-bill.js    what plays at the Strand
       music/            the song: theme.ogg, and theme.mp4 (AAC) for a browser that cannot play Ogg
@@ -42,7 +42,8 @@ Static files. Put the folder on any web host and open `index.html`.
   a Mac). The page asks the browser which it can play and fetches that one, and the other only if that
   one fails.
 - It goes quiet with the Music switch and with the Sound switch, when the tab is hidden, and while
-  a film plays at the Strand. It dips while the glass goes in, at the rail and at the sundown.
+  a film plays at the Strand. It dips while the glass goes in, at the rail and at the sundown, and a little while JR takes a snack;
+  it swells with a long paddleball rally, and closes in under its slow motion.
 - If neither file can be had, the old score plays instead, so a missing `music/` folder is never silence.
 - Safari asks for media in pieces (byte ranges). Ordinary static hosts answer that. If the song never
   starts on an iPhone but does on a computer, that is the first thing to ask the host about.
@@ -56,7 +57,93 @@ Static files. Put the folder on any web host and open `index.html`.
   (developers.facebook.com/tools/debug, "Scrape Again") and LinkedIn's Post Inspector refresh theirs
   by hand; the others refresh in their own time.
 
-## What is new in v28
+## What is new in v35.5
+
+- **You can walk into the Bodega on Central.** The bell over the door, the fans and the fridges humming, Doña Alta at
+  the register and Tito on the grill, and Lotto, the store cat, on the newspaper stack.
+
+## What came in v34
+
+- **Paddleball is a big deal now** (after Ping Pong the Animation, and Rockstar's Table Tennis). Every return lands:
+  the game stops for a beat, the screen flashes, a hand-lettered TOK! pops off the ball and the speed lines come in,
+  harder the longer it goes. Every five returns the ball comes faster and flatter and the window for B gets tighter;
+  a press dead on the ball is a Perfect. Perfects and good returns fill a focus meter (the bar under the game's name);
+  a full one makes the next return a focus smash. On the fifth return the screen breaks into manga panels, one by one
+  (Mike winding up, the ball, JR's eyes) in slow motion, and they're smashed away before the ball gets to him. On the
+  tenth and twentieth the camera rides behind the ball to Mike and watches it come back from behind JR, and a title
+  card says so: JR, ten in a row (the five-find prize, the first time). People on the beach come over to watch as it
+  heats up, cheer, and go back to what they were doing when he puts the paddle down. The song swells with it.
+- **Things you could walk or jump through, fixed** (from Hess's own screenshots): the platform canopy's columns stop
+  JR; its roof stops his hair when he jumps, holds him up when he stands on it, and stops him at its end from the
+  train's roof; the hanging signs, the lamps and the payphone up there too. The bus shelter on Central has glass sides
+  and a back you can't walk through and a roof you can stand on; its route sign hangs beside its pole. Lorraine lies
+  on her towel, not half under it. His footprints are the size of his shoes, under the foot that came down.
+
+## What came in v33
+
+- **A snack is a moment now.** The first time each of the four food vendors gives JR something (Mr. Lou's
+  cone, Ms. Rosa's cherry ice, Marisol's knish, Sonny's twist cone), the camera comes round low in front of
+  him once their line is closed, with the vendor behind him: they toss it, he catches it (+1), turns to you
+  grinning and holds it up, takes a bite (cheeks full, chewing), and it's gone. About two and a half seconds;
+  their name and line on the card while he holds it. Each snack is its own little model in the game's toon
+  shading and ink. Later talks are plain, and a talk left by opening Totals keeps the snack for the next one.
+
+## What came in v32
+
+- **His face moves.** JR's face has its expressions now: happy with a piece of sea glass in his hands, terror in
+  the shark's mouth, a grin at the sundown, listening (and a glance their way) when someone talks to him, his mouth
+  working when he talks; sad when he trips or is put back down by the shark, a face when he bumps into someone at a
+  run, a smile at a streak.
+- **Photo mode.** Totals has "Take a picture": the controls go, the camera walks round JR on a drag (a pinch brings
+  it in and out; a controller's sticks or the arrow keys do the same), he turns to it and poses (a wave, hands on
+  hips, both arms up), and the shutter takes the picture with a plaque along its foot. It goes to the phone's share
+  sheet, or downloads where there is none. The ending card's Share takes the sundown the same way.
+- **Comfort.** A left-handed layout (the stick on the right, the buttons on the left), how fast a drag or the right
+  stick turns the camera, and the drag's up and down the other way round. Kept apart from the save, so Start over
+  leaves them be.
+- **The shallows.** Off the sand a shelf runs out under the water, knee deep: JR can wade it, slower, splashing, wet
+  to the thigh. Past it is the sea, and the shark, as before.
+- **Lamp posts** are their own pool now, and one that comes between the camera and JR ghosts the way a neighbor does
+  (one used to stand across his face).
+- **Chip bags** carry their flavour on a band.
+
+## What came in v31
+
+- **Mr. Lou's truck is the ice cream truck you sent** (the one in your Brooklyn walk): pink, with its
+  striped awning and the big cone on the roof, in its own texture and the game's toon shading and ink.
+  It is parked where the old truck was on Beach 20th, cab to the south, as tall as the old one (and so
+  a little longer, 5.5 where the old one was 4.6), and Mr. Lou serves from its window, under the awning,
+  a step north of where the old window was; you buy from the curb in front of it. The tune still plays
+  every twenty-two seconds. JR can stand on its hood, its cab and its roof, the way it is drawn.
+
+## What came in v30
+
+- **The camera in tight spots.** Pushing JR against a wall no longer takes the camera through it into the
+  room behind. Pushed in close, the camera rises and looks down over him and steps over a shoulder, so the
+  way ahead stays in the picture; where it has nowhere to go and sits square on his back, he fades to a
+  see-through dither instead of filling the screen.
+- **Mr. Teddy's window.** The token booth has a real window now, and he can be seen in it; talking to him
+  shows his face through it.
+- **Speech bubbles stack.** Two at once (the counting at the bungalow court) no longer lie across each other.
+- **Small things.** A jump pressed while a card was open no longer fires when it closes; Escape, or a tap on
+  the dark round the ending card, works like Keep wandering; a pinch no longer zooms the page on an iPhone;
+  and the screen stays awake while you play.
+
+## What came in v29
+
+- **The cars are the car pack you sent.** The six parked on the block are its round little car, one in
+  each of its six paints (yellow and red on Beach 20th, blue and green on the south curb of Central
+  Avenue, pink and purple on the corner streets), toned to the block's light and drawn in its toon
+  shading and ink. JR can stand on a hood or a roof, and a car stops him at its side, the way it is drawn.
+  The lots past the boardwalk's ends, the lot at the burger corner and the six cars on the far boulevard
+  are the same car, simplified for the distance (the burger corner's cars are on its lot now: they had
+  stood inside the shops next to it). The pack's bus is not used: the Q113 stays.
+- **The shark is the PS1 great white you sent.** Dennis is Jellypack's low-poly shark now: 141
+  triangles and its own 128-pixel texture, nearest-filtered so its pixels show. It swims with its own
+  tail swing, and its jaw drops for the bite. The fin's run, the leap, the CHOMP and the way back out to
+  sea are as they were; the tip of its tail now rides out of the water behind the fin, as a shark's does.
+
+## What came in v28
 
 - **The Q113.** The bus on Central Avenue is your Q113 now: built after the low-poly city bus you sent
   (a low floor, the windshield in two panes under its destination sign, the bike rack folded on the
@@ -136,6 +223,24 @@ and it all goes back.
 is tried as YouTube first, then its house copy (the `file` on that line), then the Rockaway
 Newsreel, which the game draws itself and which is always reel 1. An empty list is the newsreel
 alone. A house copy is a file on your host, so it suits footage you own or have leave to host.
+
+## Credits
+
+- Cars: "Low Poly Pack Colorful Car and Bus Pack" by MHKstudio
+  (https://sketchfab.com/3d-models/low-poly-pack-colorful-car-and-bus-pack-e8cf5eee9e204f38b09b8c5c6338792c),
+  licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Changed for the game: recoloured,
+  re-shaded in the game's toon light with an ink outline, and simplified for the distant cars.
+- Ice cream truck: "Low Poly Ice Cream Truck." by its_sagar_bro
+  (https://sketchfab.com/3d-models/low-poly-ice-cream-truck-37ed6bca176049a0bfb5f88e15b612c4),
+  licensed CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Changed for the game: scaled to
+  stand as tall as the old truck, drawn in the game's toon light with an ink outline; the empty space
+  between its texture's pieces filled in, so it does not show at their edges from far off.
+- Shark: "PS1/Low Poly Great White Shark" by Jellypack
+  (https://sketchfab.com/3d-models/ps1low-poly-great-white-shark-54b11fd3f157410faa7ab146d7fc5da5),
+  licensed CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/), which does not allow
+  commercial use. Changed for the game: turned and scaled to the game's shark, its jaw opened further for
+  the bite, drawn in the game's toon light with an ink outline.
+The game names all three at the foot of Totals.
 
 ## Notes
 
