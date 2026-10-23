@@ -1,9 +1,9 @@
-# Place of Sands, for your own host (v35.9)
+# Place of Sands, for your own host (v41.1)
 
 Static files. Put the folder on any web host and open `index.html`.
 
     place-of-sands/
-      index.html        the game, one file (3.4 MB; about 1.4 MB once the host compresses it)
+      index.html        the game, one file (4.1 MB; about 1.6 MB once the host compresses it)
       three.min.js      three.js r128, served from here; the CDN copy is the fallback
       strand-bill.js    what plays at the Strand
       music/            the song: theme.ogg, and theme.mp4 (AAC) for a browser that cannot play Ogg
@@ -57,7 +57,7 @@ Static files. Put the folder on any web host and open `index.html`.
   (developers.facebook.com/tools/debug, "Scrape Again") and LinkedIn's Post Inspector refresh theirs
   by hand; the others refresh in their own time.
 
-## What is new in v35.9
+## What is new in v41.1
 
 - **You can walk into the Bodega on Central.** The bell over the door, the fans and the fridges humming, Doña Alta at
   the register and Tito on the grill, and Lotto, the store cat, on the newspaper stack.
