@@ -1,44 +1,81 @@
-Place of Sands — web build (v32)
-Made in Brooklyn Games
+PLACE OF SANDS  v47
+for https://hessvacio.com/pages/place-of-sands/
+Made in Brooklyn Games. Built 2026-10-26.
 
-What's here
-  index.html        the whole game (one file, ~2.7 MB)
-  three.min.js      Three.js r128, served locally; the page falls back to cdnjs/jsdelivr if it's missing
-  strand-bill.js    what plays in the Strand (the movie house): a list of YouTube links or video files; empty = the newsreel
-  music/theme.ogg   the score (Hess's "3.4_Beat", 64 bars at 80 bpm, Ogg Vorbis)
-  music/theme.mp4   the same audio as AAC, for Safari before 18.4 (iPhone, iPad, Mac); the page picks the one the browser can play
-  share.jpg         the picture a link to the game shows on X, iMessage, Slack and the like (1200 x 630)
-  icon.png          JR, for the tab and a phone's home screen (180 x 180)
 
-Hosting
-  - Static files only: upload the whole folder (keep music/ with it) and link to index.html.
-  - The link preview (the picture in iMessage, X, Slack) only shows once share.jpg is on the host beside
-    index.html: the tags point at https://hessvacio.com/pages/place-of-sands/share.jpg. Uploading index.html alone gives a text-only preview, and
-    the old score. Messaging apps cache a preview: after uploading, share the link with ?v=32 on the end once.
-  - The share tags and the canonical link in index.html point at https://hessvacio.com/pages/place-of-sands/ — if the game lives at another
-    address, change those lines in the <head>.
-  - Serve over https. Phones need it for Web Audio, vibration and the wake lock; a controller needs it too.
-  - If the host serves the page from inside another page (a site builder, an iframe), give the frame
-    allow="gamepad; fullscreen; autoplay".
-  - Saves live in the browser's localStorage, per address: a new address starts fresh.
-  - Without music/ beside the page the old built-in score plays and nothing is said.
+WHAT'S IN THE FOLDER
 
-Notes
-  - Touch: left thumb walks, right thumb looks; A jumps (twice for the second jump, hold to float), B acts.
-  - Keys: WASD/arrows, Space, E. A controller works on a desktop browser (and on an Xbox's Edge): left stick
-    walks, right stick looks, A jumps, B acts, Menu opens Totals. #check on the end of the address opens the
-    Controller check; #stats shows the frame readout.
-  - Fonts load from Google Fonts (Fraunces, Space Grotesk, Caveat, Barlow Condensed); offline, the game falls
-    back to system fonts.
-  - Totals has Take a picture (photo mode: drag to walk round JR, pinch to come in, Pose, the shutter; the
-    picture goes to the phone's share sheet, or downloads), and the comfort rows: Left-handed, Look speed,
-    Invert look. The ending card has Share the evening.
+  index.html        the game: one page (v47)
+  three.min.js      three.js r128, loaded from beside the page (cdnjs is the fallback)
+  strand-bill.js    what plays at the Strand on Central Avenue (your three reels, see below)
+  music/theme.ogg   the song, "3.4_Beat", for most browsers
+  music/theme.mp4   the same song (AAC) for Safari before 18.4
+  share.jpg         the link picture, 1200 x 630: JR on the sand at dusk, a lifeguard chair behind
+  icon.png          the tab and home-screen icon, 180 x 180: his face
+  README.txt        this
 
-Credits (also in Totals)
-  - Cars: "Low Poly Pack Colorful Car and Bus Pack" by MHKstudio, CC BY 4.0, recoloured and cut to lighter
-    versions for distance.
-  - Shark: "PS1/Low Poly Great White Shark" by Jellypack, CC BY-NC 4.0 (attribution, no commercial use):
-    sketchfab.com/3d-models/ps1low-poly-great-white-shark-54b11fd3f157410faa7ab146d7fc5da5
-  - Ice cream truck: "Low Poly Ice Cream Truck." by its_sagar_bro, CC BY 4.0, in the game's toon light with an ink
-    outline: sketchfab.com/3d-models/low-poly-ice-cream-truck-37ed6bca176049a0bfb5f88e15b612c4
-  - Three.js r128, MIT.
+
+TO SWAP IT IN
+
+  1. Replace everything in pages/place-of-sands/ with this folder's contents. Keep music/ as a
+     folder; the page looks for music/theme.ogg and music/theme.mp4 beside it.
+  2. Commit and push. The host has to serve the files as they are (GitHub Pages does).
+  3. Open https://hessvacio.com/pages/place-of-sands/ and check the build number under the
+     Made in Brooklyn Games tag on the title: it should say v47. If it still shows the old one,
+     reload; GitHub Pages lets a browser keep a page for up to ten minutes.
+  4. Link previews (iMessage, Slack, X, Discord) keep the old picture for a while. Share the
+     address once with ?v=47 on the end to make them fetch the new one:
+     https://hessvacio.com/pages/place-of-sands/?v=47
+     (Facebook: its Sharing Debugger, "Scrape Again".)
+
+  share.jpg and icon.png are new pictures, drawn from this build. To keep the ones you have up
+  now, leave those two files out of the copy; nothing else depends on them.
+
+
+THE STRAND'S BILL (strand-bill.js)
+
+  The picture house plays, in order and round again: the Rockaway Newsreel (the game draws it),
+  your two previews, "Subway Stop in VR" and "Potion Panic", then the feature, "Museum
+  Multiverse" (the trailer). All three are your YouTube uploads. To change the bill, edit
+  strand-bill.js (the notes at its top say how); the page itself does not need rebuilding.
+
+
+WHAT'S NEW SINCE v41.1 (the last web folder)
+
+  Dominoes at Hector's table under the Bodega's window: a real game with the neighbors, a
+    lesson the first time, the table, tiles, cup and crate as models, the hands on the table
+    from the deal (v45 to v45.2). v47: when the fourth at the table changes, the one leaving
+    says his own goodbye, and the tiles are skipped when the table is out of view.
+  Dancing with Marcus on the boards: a dance game to the song, three levels (v46, v46.1).
+  The Barbershop Debate on Sonny's bench, Fresh Design, and Lil Dre's afternoons (v44 to v44.2).
+  The title screen: the view over the block and the beach, the neighbors going about their
+    day, nobody talking (v45.3).
+  Pigeons: the low-poly pigeon from the Brooklyn and Koreatown walks up close, the voxel birds
+    far off (v45.4).
+  Your eight from the 24th: the camera and the windows; the firehouse, the bank and the post
+    office; double dutch, the coins, the title's B-roll and the arcade (v42 to v42.2).
+  Hats that fit, hands on what they hold, Marcus dancing with his arms (v42.3, v43); the sand
+    fences fold under JR (v42.4).
+  Lights down at the Strand on a TV and on a phone held on its side, and your three reels on
+    its bill (v43.2, v43.3).
+  Two polish passes, 74 fixes (v43.1, v43.4).
+
+
+CREDITS
+
+  Game: Made in Brooklyn Games (Hess Vacio).
+  Song: "3.4_Beat" (2021) by Hess Vacio.
+  Cars: "Low Poly Pack Colorful Car and Bus Pack" by MHKstudio (Sketchfab), CC BY 4.0;
+    recoloured to the block's light.
+  Shark: "PS1/Low Poly Great White Shark" by Jellypack, CC BY-NC 4.0 (no commercial use).
+    https://sketchfab.com/3d-models/ps1low-poly-great-white-shark-54b11fd3f157410faa7ab146d7fc5da5
+  Ice cream truck: "Low Poly Ice Cream Truck." by its_sagar_bro, CC BY 4.0.
+    https://sketchfab.com/3d-models/low-poly-ice-cream-truck-37ed6bca176049a0bfb5f88e15b612c4
+  Pigeons: "Low-poly pigeon" by TenderMeatPopsicle, CC BY 4.0.
+  three.js r128: MIT licence, the three.js authors.
+
+  The same credits are in the game, at the foot of Totals.
+  CC BY 4.0:    https://creativecommons.org/licenses/by/4.0/
+  CC BY-NC 4.0: https://creativecommons.org/licenses/by-nc/4.0/
+  The shark's licence rules out commercial use: if the game is ever sold or monetized, that
+  model has to go (the old shark is one build flag away).
