@@ -1,11 +1,11 @@
-PLACE OF SANDS  v47
+PLACE OF SANDS  v60.1
 for https://hessvacio.com/pages/place-of-sands/
-Made in Brooklyn Games. Built 2026-10-26.
+Made in Brooklyn Games. Built 2026-11-04.
 
 
 WHAT'S IN THE FOLDER
 
-  index.html        the game: one page (v47)
+  index.html        the game: one page (v60.1)
   three.min.js      three.js r128, loaded from beside the page (cdnjs is the fallback)
   strand-bill.js    what plays at the Strand on Central Avenue (your three reels, see below)
   music/theme.ogg   the song, "3.4_Beat", for most browsers
@@ -14,22 +14,20 @@ WHAT'S IN THE FOLDER
   icon.png          the tab and home-screen icon, 180 x 180: his face
   README.txt        this
 
+  Only index.html and this README are new since the v51.2 folder. three.min.js, strand-bill.js,
+  the song, share.jpg and icon.png are the same files, byte for byte.
+
 
 TO SWAP IT IN
 
   1. Replace everything in pages/place-of-sands/ with this folder's contents. Keep music/ as a
-     folder; the page looks for music/theme.ogg and music/theme.mp4 beside it.
+     folder; the page looks for music/theme.ogg and music/theme.mp4 beside it. (If v51.2 is up
+     now, copying index.html and README.txt over it does the same.)
   2. Commit and push. The host has to serve the files as they are (GitHub Pages does).
   3. Open https://hessvacio.com/pages/place-of-sands/ and check the build number under the
-     Made in Brooklyn Games tag on the title: it should say v47. If it still shows the old one,
+     Made in Brooklyn Games tag on the title: it should say v60.1. If it still shows the old one,
      reload; GitHub Pages lets a browser keep a page for up to ten minutes.
-  4. Link previews (iMessage, Slack, X, Discord) keep the old picture for a while. Share the
-     address once with ?v=47 on the end to make them fetch the new one:
-     https://hessvacio.com/pages/place-of-sands/?v=47
-     (Facebook: its Sharing Debugger, "Scrape Again".)
-
-  share.jpg and icon.png are new pictures, drawn from this build. To keep the ones you have up
-  now, leave those two files out of the copy; nothing else depends on them.
+  4. The link picture has not changed, so link previews need nothing this time.
 
 
 THE STRAND'S BILL (strand-bill.js)
@@ -40,25 +38,37 @@ THE STRAND'S BILL (strand-bill.js)
   strand-bill.js (the notes at its top say how); the page itself does not need rebuilding.
 
 
-WHAT'S NEW SINCE v41.1 (the last web folder)
+WHAT'S NEW SINCE v51.2 (the last web folder)
 
-  Dominoes at Hector's table under the Bodega's window: a real game with the neighbors, a
-    lesson the first time, the table, tiles, cup and crate as models, the hands on the table
-    from the deal (v45 to v45.2). v47: when the fourth at the table changes, the one leaving
-    says his own goodbye, and the tiles are skipped when the table is out of view.
-  Dancing with Marcus on the boards: a dance game to the song, three levels (v46, v46.1).
-  The Barbershop Debate on Sonny's bench, Fresh Design, and Lil Dre's afternoons (v44 to v44.2).
-  The title screen: the view over the block and the beach, the neighbors going about their
-    day, nobody talking (v45.3).
-  Pigeons: the low-poly pigeon from the Brooklyn and Koreatown walks up close, the voxel birds
-    far off (v45.4).
-  Your eight from the 24th: the camera and the windows; the firehouse, the bank and the post
-    office; double dutch, the coins, the title's B-roll and the arcade (v42 to v42.2).
-  Hats that fit, hands on what they hold, Marcus dancing with his arms (v42.3, v43); the sand
-    fences fold under JR (v42.4).
-  Lights down at the Strand on a TV and on a phone held on its side, and your three reels on
-    its bill (v43.2, v43.3).
-  Two polish passes, 74 fixes (v43.1, v43.4).
+  The Mott Av station as PSX models: the el in cool grey concrete on chamfered piers, the
+    platform's slabs with a yellow edge, the canopy with green columns, purlins and enamel
+    lamps, benches, turnstiles, the MetroCard machine, a payphone, Mr. Teddy's booth, the
+    station house and its stair. The train, and everything JR stands on or bumps into, is
+    where it was (v60).
+  The title: the Q113 no longer drives through the dominoes shot, and the slow view over the
+    block keeps clear of the station's roof (v59).
+  Hector's table, second pass: a bigger table and bigger tiles, every line captioned, the
+    slam as the skill (lift, then SLAM on the ring: PERFECT, GOOD or SOFT), the lesson three
+    rounds on rails then free with Hector's gold tile, the fourth player seated on time, hold
+    B to stand up, first to 50, and the big plays cut like Edgar Wright (v58); on the
+    smallest phones held sideways the table's cards clear of the rule strip (v60.1).
+  The neighbors' dialog pass: 139 new lines they say to JR's face when something is true of
+    his evening (sundown, the shark, a slam, the window lit, the games, the glass), once
+    each; 44 neighbors' everyday lines rewritten from the dialog bible (v57).
+  A playtest of v56: the lens never inside the bus; windows on the walk-ups' blank backs at
+    the block's ends; a line at the block's invisible ends (v56.1).
+  The block notices the kid: news of what JR did travels from neighbor to neighbor, the
+    block calls him over, and WORD ON THE BLOCK on the finale's plaque (v56).
+  Another polish pass, thirty fixes (v55): the finale on a TV and on every phone, the
+    paddleball game's beats, the Debate on small phones and inside a TV's rim, Fresh Design
+    from the whole bench, and more.
+  Three bugs from your phone (v54.1): a neighbor's bubble no longer shows through a wall
+    he is behind; the Bodega's and Sonny's insides seen from across the avenue; the bank's
+    east side one building with its temple front.
+  The start says when it is ready and keeps an early tap (v52); the finale: the window's
+    panes set one by one, the light through them, "Reckowacky" written on and the evening
+    framed as a painting (v53); the sea-glass moment's lens and the Debate's meter on a TV
+    (v54).
 
 
 CREDITS
