@@ -698,6 +698,9 @@ footer {
     .nav-bar nav .c-hamburger--rot.is-active span {
       transform: rotate(90deg); } }
 @media screen and (min-width: 750px) {
+  .mobile-img-blur {
+    display: none;
+  }
   h1 {
     font-size: 4.20873em;
     margin-bottom: 0px; }
