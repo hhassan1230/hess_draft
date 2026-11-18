@@ -39,6 +39,8 @@ export function warm() {
   ribbon(); nutcracker(); mouseKing(); wallHole(7); wallBlot(); sparkle(); snowflake(); smokePuff(); snowman();
   for (let i = 0; i < 6; i++) debrisChunk(() => (i + 0.5) / 6);
   for (let i = 0; i < 10; i++) splinter(() => (i + 0.5) / 10);
+  for (let d = 1; d <= 3; d++) { ncHead(d); ncPupils(d); } // his face as it gives way (game feel)
+  for (let i = 0; i < 8; i++) faceShard(() => (i + 0.5) / 8);
 }
 const rx = (a) => q.fromAxisAngle([1, 0, 0], a);
 const ry = (a) => q.fromYaw(a);
@@ -137,45 +139,21 @@ export function nutcracker(scale = 0.9) {
   rig.children.find((n) => n.name === 'armL').add(sword);
 
   // Head: turned wood, white hair, a long pointed nose, angry brows, rosy cheeks,
-  // a handlebar moustache over a row of teeth, a tall shako with a plume.
-  const head = new Node('head', cached('nc.head2', () => {
-    const moustache = (sx) => at(G.tube(
-      [[0, 0.072, 0.086], [0.03, 0.069, 0.087], [0.056, 0.075, 0.083], [0.068, 0.092, 0.075]],
-      [0.012, 0.011, 0.008, 0.004], 5, C.white), [0, 0, 0], q.identity(), [sx, 1, 1]);
-    const parts = [
-      G.lathe([[0, 0.02], [0.08, 0.02], [0.08, 0.17], [0, 0.17]], 8, C.skin, { phase: F8 }),
-      at(G.box(0.17, 0.13, 0.05, C.white), [0, 0.085, -0.062]),
-      at(G.box(0.022, 0.12, 0.1, C.white), [0.084, 0.08, -0.012]),
-      at(G.box(0.022, 0.12, 0.1, C.white), [-0.084, 0.08, -0.012]),
-      at(G.box(0.04, 0.03, 0.01, C.white), [0.036, 0.12, 0.078]),
-      at(G.box(0.04, 0.03, 0.01, C.white), [-0.036, 0.12, 0.078]),
-      at(G.box(0.054, 0.016, 0.016, C.black), [0.038, 0.147, 0.08], rz(0.4)),
-      at(G.box(0.054, 0.016, 0.016, C.black), [-0.038, 0.147, 0.08], rz(-0.4)),
-      at(G.cyl(0.019, 0.019, 0.004, 8, C.cheek), [0.052, 0.088, 0.074], rx(Math.PI / 2)),
-      at(G.cyl(0.019, 0.019, 0.004, 8, C.cheek), [-0.052, 0.088, 0.074], rx(Math.PI / 2)),
-      at(G.cone(0.02, 0.055, 4, C.skin), [0, 0.096, 0.072], rx(Math.PI / 2)),
-      moustache(1), moustache(-1),
-      at(G.box(0.1, 0.034, 0.01, [0.12, 0.02, 0.03]), [0, 0.048, 0.074]),
-      ...[-0.036, -0.018, 0, 0.018, 0.036].map((x) => at(G.box(0.015, 0.016, 0.008, C.white), [x, 0.058, 0.078])),
-      G.lathe([[0, 0.165, C.black], [0.086, 0.165, C.gold], [0.087, 0.19, C.black], [0.091, 0.31, C.gold], [0.092, 0.33, C.black], [0, 0.33]], 8, C.black, { phase: F8 }),
-      at(G.box(0.12, 0.01, 0.055, C.black), [0, 0.17, 0.088], rx(0.22)),
-      at(G.star(0.026, 0.011, 0.007, 5, C.gold), [0, 0.252, 0.088]),
-      at(G.box(0.008, 0.11, 0.01, C.gold), [0.083, 0.115, 0.035], rz(0.06)),
-      at(G.box(0.008, 0.11, 0.01, C.gold), [-0.083, 0.115, 0.035], rz(-0.06)),
-      at(G.lathe([[0, 0.33], [0.024, 0.35], [0.033, 0.39], [0.024, 0.43], [0, 0.465]], 7, C.red), [0, 0, 0.01], rx(-0.12)),
-      at(G.cyl(0.022, 0.026, 0.012, 7, C.gold), [0, 0.327, 0.005]),
-    ];
-    return G.merge(parts);
-  }));
+  // a handlebar moustache over a row of teeth, a tall shako with a plume (ncHeadParts, below).
+  const head = new Node('head', ncHead(0));
   head.pos = [0, 0.5, 0];
   rig.add(head);
 
   // Pupils are a very dark red: black in normal light, glowing red when emissive.
-  const pupils = new Node('pupils', cached('nc.pupils', () => G.merge([
-    at(G.box(0.016, 0.022, 0.01, [0.22, 0.02, 0.02]), [0.034, 0.118, 0.083]),
-    at(G.box(0.016, 0.022, 0.01, [0.22, 0.02, 0.02]), [-0.034, 0.118, 0.083]),
-  ])));
+  const pupils = new Node('pupils', ncPupils(0));
   head.add(pupils);
+
+  // The red bulb behind his left eye, shown once his face has broken away there (setFace): its own node, so the
+  // game can light it and make it flicker.
+  const bulb = new Node('bulb', cached('nc.bulb', () => G.sphere(0.0125, 8, 6, [0.25, 0.03, 0.02])));
+  bulb.pos = [0.036, 0.12, 0.08];
+  bulb.visible = false;
+  head.add(bulb);
 
   // The jaw: lower teeth, a pointed white beard, and the lever at the back that works it.
   const jaw = new Node('jaw', cached('nc.jaw2', () => G.merge([
@@ -190,8 +168,99 @@ export function nutcracker(scale = 0.9) {
 
   root.add(blobShadow(0.13));
   const part = (name) => rig.children.find((n) => n.name === name);
-  root.parts = { rig, body, head, jaw, pupils, sword, legL: part('legL'), legR: part('legR'), armL: part('armL'), armR: part('armR') };
+  root.parts = { rig, body, head, jaw, pupils, bulb, sword, legL: part('legL'), legR: part('legR'), armL: part('armL'), armR: part('armR') };
   return withRim(root, 0.9);
+}
+
+// His painted face, whole (0) or given way under a stare (game feel, after BioShock Infinite's Motorized
+// Patriot, whose face mask fell away to the machine under it): 1 the paint cracks; 2 his left cheek, eye and
+// brow break away to a dark socket with a brass gear in it and a bulb for an eye (the bulb is the node `bulb`,
+// so it can glow); 3 his nose and that side's moustache go too, and the brass rod his nose was on shows.
+const NC_DARK = [0.045, 0.03, 0.026], NC_BRASS = [0.6, 0.42, 0.13], NC_CRACK = [0.1, 0.05, 0.03];
+const crack = (x0, y0, x1, y1, z) => at(G.box(Math.hypot(x1 - x0, y1 - y0) + 0.002, 0.0035, 0.002, NC_CRACK), [(x0 + x1) / 2, (y0 + y1) / 2, z], rz(Math.atan2(y1 - y0, x1 - x0)));
+function ncHeadParts(dmg) {
+  const F8 = Math.PI / 8;
+  const moustache = (sx) => at(G.tube(
+    [[0, 0.072, 0.086], [0.03, 0.069, 0.087], [0.056, 0.075, 0.083], [0.068, 0.092, 0.075]],
+    [0.012, 0.011, 0.008, 0.004], 5, C.white), [0, 0, 0], q.identity(), [sx, 1, 1]);
+  const keepL = dmg < 2, keepNose = dmg < 3; // his left (x > 0) eye, brow and cheek; his nose and left moustache
+  const parts = [
+    G.lathe([[0, 0.02], [0.08, 0.02], [0.08, 0.17], [0, 0.17]], 8, C.skin, { phase: F8 }),
+    at(G.box(0.17, 0.13, 0.05, C.white), [0, 0.085, -0.062]),
+    at(G.box(0.022, 0.12, 0.1, C.white), [0.084, 0.08, -0.012]),
+    at(G.box(0.022, 0.12, 0.1, C.white), [-0.084, 0.08, -0.012]),
+    ...(keepL ? [at(G.box(0.04, 0.03, 0.01, C.white), [0.036, 0.12, 0.078])] : []),
+    at(G.box(0.04, 0.03, 0.01, C.white), [-0.036, 0.12, 0.078]),
+    ...(keepL ? [at(G.box(0.054, 0.016, 0.016, C.black), [0.038, 0.147, 0.08], rz(0.4))] : []),
+    at(G.box(0.054, 0.016, 0.016, C.black), [-0.038, 0.147, 0.08], rz(-0.4)),
+    ...(keepL ? [at(G.cyl(0.019, 0.019, 0.004, 8, C.cheek), [0.052, 0.088, 0.074], rx(Math.PI / 2))] : []),
+    at(G.cyl(0.019, 0.019, 0.004, 8, C.cheek), [-0.052, 0.088, 0.074], rx(Math.PI / 2)),
+    ...(keepNose ? [at(G.cone(0.02, 0.055, 4, C.skin), [0, 0.096, 0.072], rx(Math.PI / 2)), moustache(1)] : []),
+    moustache(-1),
+    at(G.box(0.1, 0.034, 0.01, [0.12, 0.02, 0.03]), [0, 0.048, 0.074]),
+    ...[-0.036, -0.018, 0, 0.018, 0.036].map((x) => at(G.box(0.015, 0.016, 0.008, C.white), [x, 0.058, 0.078])),
+    G.lathe([[0, 0.165, C.black], [0.086, 0.165, C.gold], [0.087, 0.19, C.black], [0.091, 0.31, C.gold], [0.092, 0.33, C.black], [0, 0.33]], 8, C.black, { phase: F8 }),
+    at(G.box(0.12, 0.01, 0.055, C.black), [0, 0.17, 0.088], rx(0.22)),
+    at(G.star(0.026, 0.011, 0.007, 5, C.gold), [0, 0.252, 0.088]),
+    at(G.box(0.008, 0.11, 0.01, C.gold), [0.083, 0.115, 0.035], rz(0.06)),
+    at(G.box(0.008, 0.11, 0.01, C.gold), [-0.083, 0.115, 0.035], rz(-0.06)),
+    at(G.lathe([[0, 0.33], [0.024, 0.35], [0.033, 0.39], [0.024, 0.43], [0, 0.465]], 7, C.red), [0, 0, 0.01], rx(-0.12)),
+    at(G.cyl(0.022, 0.026, 0.012, 7, C.gold), [0, 0.327, 0.005]),
+  ];
+  if (dmg >= 1) {
+    // Cracks in the paint: down from his hairline past his left eye and across his cheek, a branch over his nose.
+    parts.push(crack(0.022, 0.163, 0.012, 0.136, 0.0755), crack(0.012, 0.136, 0.026, 0.104, 0.0755), crack(0.026, 0.104, 0.02, 0.066, 0.0755),
+      crack(0.012, 0.136, -0.016, 0.118, 0.0755), crack(-0.016, 0.118, -0.024, 0.098, 0.0755));
+    if (keepL) parts.push(crack(0.022, 0.132, 0.05, 0.11, 0.0838), crack(0.036, 0.104, 0.068, 0.076, 0.0765));
+  }
+  if (dmg >= 2) {
+    // The socket: dark inside, a brass gear low in it, a dark brass ring the bulb sits in, splinters of
+    // painted wood round its edge.
+    parts.push(
+      at(G.box(0.062, 0.092, 0.006, NC_DARK), [0.043, 0.113, 0.0745]),
+      at(G.star(0.02, 0.0155, 0.004, 11, NC_BRASS), [0.05, 0.086, 0.0785]),
+      at(G.cyl(0.006, 0.006, 0.006, 6, NC_DARK), [0.05, 0.086, 0.081], rx(Math.PI / 2)),
+      at(G.cyl(0.017, 0.017, 0.004, 10, [0.3, 0.2, 0.07]), [0.036, 0.12, 0.0775], rx(Math.PI / 2)),
+      ...[[0.012, 0.15, 0.5], [0.07, 0.15, -0.6], [0.074, 0.098, 1.2], [0.016, 0.074, -0.3], [0.05, 0.068, 0.9], [0.04, 0.159, 0.1]]
+        .map(([x, y, a]) => at(G.box(0.014, 0.007, 0.006, C.skin), [x, y, 0.078], rz(a))),
+    );
+  }
+  if (dmg >= 3) {
+    // Where his nose was, the brass rod it turned on; under the moustache, more of the dark and a little gear.
+    parts.push(
+      at(G.box(0.03, 0.026, 0.006, NC_DARK), [0.004, 0.094, 0.0745]),
+      at(G.cyl(0.0045, 0.0045, 0.028, 6, NC_BRASS), [0.004, 0.094, 0.088], rx(Math.PI / 2)),
+      at(G.box(0.046, 0.022, 0.006, NC_DARK), [0.044, 0.073, 0.0765]),
+      at(G.star(0.011, 0.008, 0.004, 8, NC_BRASS), [0.03, 0.075, 0.0805]),
+      at(G.box(0.012, 0.007, 0.006, C.white), [0.064, 0.082, 0.08], rz(0.7)),
+    );
+  }
+  return parts;
+}
+export const ncHead = (dmg) => cached(dmg ? `nc.head2.d${dmg}` : 'nc.head2', () => G.merge(ncHeadParts(dmg)));
+// His left pupil goes with his left eye (dmg >= 2).
+const ncPupils = (dmg) => cached(dmg >= 2 ? 'nc.pupils.half' : 'nc.pupils', () => G.merge([
+  ...(dmg >= 2 ? [] : [at(G.box(0.016, 0.022, 0.01, [0.22, 0.02, 0.02]), [0.034, 0.118, 0.083])]),
+  at(G.box(0.016, 0.022, 0.01, [0.22, 0.02, 0.02]), [-0.034, 0.118, 0.083]),
+]));
+
+// Shows a nutcracker's face broken to `dmg` (see ncHeadParts): the game's own nutcrackers, and the face that
+// snaps in front of yours when one strikes.
+export function setFace(node, dmg) {
+  const P = node.parts;
+  P.head.geo = ncHead(dmg);
+  P.pupils.geo = ncPupils(dmg);
+  P.bulb.visible = dmg >= 2;
+}
+
+// A flake of his painted face: wood with skin paint, white from his hair and moustache, his rosy cheek.
+export function faceShard(rng) {
+  const i = Math.floor(rng() * 8);
+  return new Node('faceShard', cached(`faceShard${i}`, () => {
+    const r = makeRng(300 + i);
+    const cols = [C.skin, C.skin, C.white, C.cheek, C.skin, C.white, C.skin, C.black];
+    return G.box(0.012 + r() * 0.024, 0.009 + r() * 0.018, 0.004 + r() * 0.006, cols[i]);
+  }));
 }
 
 // Rim light on every lit part (not shadows, glows or self-lit parts): see the rim in renderer.js.

@@ -1338,7 +1338,9 @@ export class Game {
       case 'emerged': this.audio.play('creak', { pos: at }); break;
       case 'lunge': this.audio.play('lunge', { pos: at }); if (this.feel) c.lungeT = 0; break;
       case 'attack':
+        this.striker = c; // game feel: the face you see is his (feelHit)
         this.damage();
+        this.striker = null;
         this.burst(at, 14, 'splinter');
         c.node.visible = false;
         if (c.carry) { c.carry.state = 'stolen'; c.carry.carrier = null; c.carry.node.visible = false; c.carry = null; }
@@ -1638,6 +1640,7 @@ export class Game {
       else if (kind === 'chip') { node = M.splinter(rnd); vel = [r() * 0.7, 0.4 + rnd() * 0.8, r() * 0.7]; life = 0.9; grav = 4.5; size = 0.45; } // a stare chipping him
       else if (kind === 'debris') { node = M.debrisChunk(rnd); const d = dir || [0, 0, 1]; vel = v3.add(v3.scale(d, 0.8 + rnd() * 1.2), [r() * 0.6, rnd() * 0.9, r() * 0.6]); life = 2.4; grav = 4.5; }
       else if (kind === 'plaster') { node = M.debrisChunk(rnd); const d = dir || [0, 0, 1]; vel = v3.add(v3.scale(d, 0.15 + rnd() * 0.45), [r() * 0.25, rnd() * 0.35, r() * 0.25]); life = 1.8; grav = 4.5; size = 0.5; } // off a nutcracker's hole (game feel)
+      else if (kind === 'face') { node = M.faceShard(rnd); const d = dir || [0, 0, 1]; vel = v3.add(v3.scale(d, 0.25 + rnd() * 0.45), [r() * 0.3, 0.15 + rnd() * 0.45, r() * 0.3]); life = 1.8; grav = 4.5; size = 0.7; } // his face giving way (game feel)
       else if (kind === 'smoke') { node = M.smokePuff(); vel = [r() * 0.012, 0.06 + rnd() * 0.04, r() * 0.012]; life = 1.4 + rnd() * 0.5; grav = -0.03; }
       else { node = M.sparkle(); vel = [r() * 0.35, 0.1 + rnd() * 0.4, r() * 0.35]; life = 0.9 + rnd() * 0.5; grav = -0.05; }
       node.pos = v3.copy(pos);
@@ -1727,6 +1730,8 @@ export class Game {
     if (this.candlesLit > 0) {
       if (this.hitFace) this.hitFace.node.parent?.remove(this.hitFace.node);
       this.hitFace = { node: this.faceInFront(0.48), t: 0 };
+      const dmg = (this.striker && this.striker.faceDmg) || 0;
+      if (dmg) { M.setFace(this.hitFace.node, dmg); this.hitFace.node.parts.bulb.emissive = 1; this.hitFace.node.parts.bulb.tint = [4.5, 0.45, 0.4]; }
       this.flash = [0.5, 0, 0.02, FEEL.hitFlash];
     }
   }
@@ -1865,6 +1870,39 @@ export class Game {
       if (p > 0.3) { P.pupils.emissive = 1; P.pupils.tint = [4.5, 0.5, 0.5]; }
       c.lurchT += dt;
       if (c.lurchT >= FEEL.lurchTime) c.lurchT = undefined;
+    }
+  }
+
+  // His painted face gives way under a stare (after BioShock Infinite's Motorized Patriot, whose face fell away
+  // to the machine under it): the paint cracks, then his left cheek and eye break off to a dark socket with a
+  // brass gear and a red bulb for an eye, then his nose and moustache. Looks only: the stare takes as long as
+  // ever. A face that broke stays broken, so one you nearly beat comes back with the bulb glowing.
+  feelFace(c, a, stare, dt) {
+    const P = c.node.parts;
+    const staring = c.focused && (a.state === 'active' || a.state === 'emerging') && a.seenT > 0;
+    const want = FEEL.face.filter((f) => stare >= f).length;
+    if (staring && want > (c.faceDmg || 0)) this.breakFace(c, a, want);
+    if ((c.faceDmg || 0) >= 2 && a.state === 'banished') { P.bulb.baseEmissive = 0; P.bulb.tint = [1, 1, 1]; } // it dies as he breaks
+    else if ((c.faceDmg || 0) >= 2) {
+      c.bulbT = (c.bulbT || 0) + dt;
+      const k = 0.62 + 0.38 * Math.max(0, Math.sin(c.bulbT * 23) * Math.sin(c.bulbT * 6.1 + 1)) + (this.fxRng() < 0.08 ? -0.25 : 0);
+      P.bulb.emissive = 1;
+      P.bulb.tint = [4.5 * k, 0.45 * k, 0.4 * k];
+    }
+  }
+
+  breakFace(c, a, level) {
+    const from = c.faceDmg || 0;
+    c.faceDmg = level;
+    M.setFace(c.node, level);
+    const toYou = v3.norm(v3.flat(v3.sub(this.head, a.pos)));
+    const at = v3.addScaled(v3.add(a.pos, [0, 0.56, 0]), toYou, 0.07);
+    for (let l = from + 1; l <= level; l++) {
+      if (l === 1) { this.burst(at, 2, 'face', toYou, true); this.audio.play('snap', { pos: at, gain: 0.3 }); continue; }
+      this.burst(at, 5, 'face', toYou, true);
+      this.burst(at, 3, 'sparkle');
+      this.audio.play('snap', { pos: at, gain: 0.55 });
+      this.rumble('strain');
     }
   }
 
@@ -2269,8 +2307,9 @@ export class Game {
     P.pupils.tint = glow ? [4.5, 0.5, 0.5] : [1, 1, 1];
     if (this.feel) this.feelFight(c, a, stare, dt);
     if (this.feel) this.feelBreach(c, a, dt);
+    if (this.feel) this.feelFace(c, a, stare, dt);
     const tint = a.state === 'emerging' || a.fromWall ? 0.25 + 0.75 * a.e : 1;
-    n.traverse((x) => { if (x !== P.pupils && x.name !== 'shadow') x.tint = [tint, tint, tint]; });
+    n.traverse((x) => { if (x !== P.pupils && x !== P.bulb && x.name !== 'shadow') x.tint = [tint, tint, tint]; });
     // Game feel: as he breaks he holds still for a beat, lit up (FEEL.freeze), then sinks squashed. A retreat
     // (he gave up at the edge of your view) is not your win: it sinks at once, as it always did.
     const broke = a.state === 'banished' && c.breakT !== undefined;

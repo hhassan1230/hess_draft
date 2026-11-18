@@ -76,6 +76,11 @@ export const FEEL = {
   // pushes out (only while you do not look straight at him), left lying under the hole with the splinters
   breach: [3, 6], // pieces as he breaks through, pieces a second while he pushes out
 
+  // His face gives way under a stare (after BioShock Infinite's Motorized Patriot), at these fractions of the
+  // stare it takes to break him: the paint cracks; his left cheek and eye go (a red bulb in the socket); his nose
+  // and moustache go
+  face: [0.3, 0.55, 0.8],
+
   // Your heart in the dark: in the lights-out scare it beats as if one were closing in, from this closeness when the
   // lights die to this when they come back on its face (see heart above), then stops dead
   joltHeart: [0.55, 1],
