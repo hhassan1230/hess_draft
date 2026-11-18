@@ -52,6 +52,33 @@ export const FEEL = {
   chase: 3.5, // s the string lights run a chase
   starTime: 3, // s the star throws sparkles...
   starEvery: 0.05, // ...one every this many seconds
+  relight: [0.9, 0.45], // s: the candles that went out light again, the first this long after the win, then one every
+
+  // The moments a player remembers
+  hitFace: 0.4, // s his face stays right in front of yours after a strike, before it shatters
+  hitFlash: 0.5, // the strike's red flash, lighter, so the face reads through it
+  heart: [0.35, 0.9, 2.2], // a heartbeat from this closeness (0-1), this many beats a second there, this many at the closest
+  brighten: true, // in the finale the room brightens with every chime the Mouse King is held
+
+  // The stare is a fight: he strains against it (all in place: he never gains ground while watched)
+  fightLean: 0.16, // rad he strains toward you by the end of a stare
+  fightArm: 0.9, // rad his sword arm creeps up over a stare
+  lurch: [0.5, 2.6], // lurches at you a second, from the first moment of a stare to the last
+  lurchReach: 0.045, // m he lurches at you, and snaps back
+  lurchTime: 0.18, // s there and back
+  kingLurch: [0.4, 1.3], // the Mouse King's lunges at you a second while you hold his gaze, first chime to last
+  kingReach: 0.12, // m he lunges, and snaps back
+  kingLean: [0.04, 0.12], // rad he strains toward you, first chime to last
+  lures: true, // the Mouse King tries to make you look away...
+  lureChimes: [3, 6, 9], // ...at these chimes: his heads turn past your shoulder, then bells ring right there
+
+  // Through your wall: plaster knocked off round the hole as a nutcracker breaks through, and more while he
+  // pushes out (only while you do not look straight at him), left lying under the hole with the splinters
+  breach: [3, 6], // pieces as he breaks through, pieces a second while he pushes out
+
+  // Your heart in the dark: in the lights-out scare it beats as if one were closing in, from this closeness when the
+  // lights die to this when they come back on its face (see heart above), then stops dead
+  joltHeart: [0.55, 1],
 
   // Rumble, controllers only (hands have no motors): [intensity 0-1, ms]
   rumble: {

@@ -18,6 +18,7 @@ export function nightConfig(n) {
     spawnEvery: Math.max(b.spawnEvery - extra * 0.4, 4.5),
     firstSpawnDelay: 2.5, // seconds after the first ornament is hung
     firstLoom: n === 1 ? 5 : 0, // night 1: seconds the first nutcracker waits beside you before it can strike
+    blackoutAfter: n === 1 ? 3 : 0, // night 1: its one lights-out scare comes once this many ornaments are up (later nights: the first lights-out; see JOLT in game.js)
     speed: b.speed + extra * 0.04,
     attackDist: 0.75,
     maxSpawnAngle: [110, 130, 150][Math.min(n, 3) - 1], // degrees from where you face: front and sides first, behind you later
@@ -27,5 +28,13 @@ export function nightConfig(n) {
     kingAttackDist: 1.0,
     chimes: 12,
     chimeEvery: 1.15,
+    // The snowman at the window (js/snowman.js). Night 1 he comes once, only while it is quiet (the first nutcracker
+    // has come and gone, none is on its way), and holds still while one is. From night 2 he comes more often, from a
+    // little after the first nutcracker sets off, and taps on the glass whatever else is in the room: a lure.
+    snowmanVisits: Math.min(n, 3),
+    snowmanCalmOnly: n === 1,
+    snowmanQuiet: 2.5, // night 1: seconds of quiet before he comes
+    snowmanFirst: 8, // from night 2: seconds after the first nutcracker sets off
+    snowmanGap: 16, // seconds after he goes before he may come again
   };
 }

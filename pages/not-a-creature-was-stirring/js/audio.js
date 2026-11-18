@@ -51,7 +51,7 @@ export class Audio {
     this.master = ctx.createGain(); this.master.gain.value = 0.9;
     this.master.connect(comp).connect(ceiling).connect(ctx.destination);
     this.sfx = ctx.createGain(); this.sfx.connect(this.master);
-    this.musicBus = ctx.createGain(); this.musicBus.gain.value = 0.32; this.musicBus.connect(this.master);
+    this.musicBus = ctx.createGain(); this.musicBus.gain.value = 0.32; this.musicBus.target = 0.32; this.musicBus.connect(this.master);
     this.ambBus = ctx.createGain(); this.ambBus.gain.value = 0; this.ambBus.connect(this.master);
     const len = ctx.sampleRate * 2;
     this.noise = ctx.createBuffer(1, len, ctx.sampleRate);
@@ -128,14 +128,14 @@ export class Audio {
     s.start(t, Math.random()); s.stop(t + attack + dur + 0.05);
   }
 
-  play(name, { pos = null, gain = 1, rate = 1 } = {}) {
+  play(name, { pos = null, gain = 1, rate = 1, once = false } = {}) {
     if (!this.ctx || this.ctx.state === 'closed') return;
     const t = this.ctx.currentTime + 0.005;
     const r = Math.random;
     switch (name) {
-      case 'clack': { // wooden jaw: two hard knocks
+      case 'clack': { // wooden jaw: two hard knocks (once: one, half the audio nodes, for the stare's lurches)
         const o = this.out(0.9 * gain, pos);
-        for (const k of [0, 0.07]) {
+        for (const k of once ? [0] : [0, 0.07]) {
           this.osc('sine', 820 + r() * 80, t + k, 0.05, o, 0.8);
           this.osc('triangle', 1340 + r() * 120, t + k, 0.035, o, 0.4);
           this.noiseBurst(t + k, 0.02, o, { freq: 2600, q: 3, peak: 0.6 });
@@ -177,6 +177,17 @@ export class Audio {
         this.noiseBurst(t, 0.3, o, { type: 'highpass', freq: 300, peak: 0.9 });
         for (const f of [233, 247, 311, 330, 466]) this.osc('sawtooth', f, t, 1.1, o, 0.28, 0.004, f * 0.94);
         this.osc('sine', 62, t, 0.7, o, 1, 0.005, 32);
+        break;
+      }
+      case 'stab': { // caught one close: a short shriek of strings over a thump, the music ducking under it
+        const o = this.out(0.85 * gain, pos);
+        for (const f of [1397, 1440, 1480, 1976, 2030]) this.osc('sawtooth', f, t, 0.4, o, 0.2, 0.004, f * 0.96);
+        this.noiseBurst(t, 0.1, o, { type: 'highpass', freq: 2500, peak: 0.3 });
+        this.osc('sine', 98, t, 0.22, o, 0.4, 0.004, 55);
+        // Back to the level the music was headed for, not one caught mid-fade.
+        const m = this.musicBus.gain, to = this.musicBus.target ?? m.value;
+        m.cancelScheduledValues(t); m.setValueAtTime(m.value, t);
+        m.linearRampToValueAtTime(to * 0.4, t + 0.02); m.linearRampToValueAtTime(to * 0.4, t + 0.3); m.linearRampToValueAtTime(to, t + 0.8);
         break;
       }
       case 'banish': {
@@ -280,6 +291,42 @@ export class Audio {
         [96, 100, 103, 108].forEach((n, i) => this.osc('sine', midi(n), t + 0.04 + i * 0.05, 1.2, o, 0.18));
         break;
       }
+      case 'heart': { // a heartbeat, in your chest: lub-dub, under the steps and creaks. An octave over the thump, so a headset's small speakers carry it
+        const o = this.out(0.28 * gain, null);
+        this.osc('sine', 62, t, 0.11, o, 1, 0.006, 38);
+        this.osc('triangle', 124, t, 0.08, o, 0.5, 0.006, 80); // only on the lub: fewer audio nodes, same carry
+        this.osc('sine', 55, t + 0.17, 0.12, o, 0.7, 0.006, 34);
+        break;
+      }
+      case 'tock': { // caught mid-step: a hollow wooden block, freezing
+        const o = this.out(1.4 * gain, pos);
+        this.osc('sine', 980, t, 0.05, o, 0.8, 0.001, 620);
+        this.osc('triangle', 1960, t, 0.025, o, 0.25, 0.001, 1200);
+        this.noiseBurst(t, 0.012, o, { freq: 3200, q: 2, peak: 0.5 });
+        break;
+      }
+      case 'tap': { // the snowman's nose on the glass: three taps, a glassy ring with a click on top
+        const o = this.out(1.6 * gain, pos);
+        for (const k of [0, 0.19, 0.36]) {
+          const f = 2700 + r() * 300;
+          this.osc('sine', f, t + k, 0.14, o, 0.55);
+          this.osc('sine', f * 1.71, t + k, 0.07, o, 0.25);
+          this.noiseBurst(t + k, 0.014, o, { type: 'highpass', freq: 3200, peak: 0.8 });
+        }
+        break;
+      }
+      case 'crunch': { // a heavy step in the snow outside
+        const o = this.out(0.6 * gain, pos);
+        for (const k of [0, 0.05, 0.11]) this.noiseBurst(t + k, 0.05 + r() * 0.03, o, { freq: 1100 + r() * 700, q: 0.9, peak: 0.55 });
+        this.noiseBurst(t, 0.16, o, { type: 'lowpass', freq: 520, peak: 0.5 });
+        break;
+      }
+      case 'gust': { // wind against the glass
+        const o = this.out(0.5 * gain, pos);
+        this.noiseBurst(t, 1.1, o, { freq: 380, q: 1.4, peak: 0.6, attack: 0.5, sweepTo: 950 });
+        this.noiseBurst(t + 0.9, 1.2, o, { freq: 900, q: 1.4, peak: 0.45, attack: 0.2, sweepTo: 330 });
+        break;
+      }
       case 'win': {
         const o = this.out(0.3 * gain, null);
         [60, 64, 67, 72, 76].forEach((n, i) => this.osc('sine', midi(n), t + i * 0.12, 3, o, 0.4, 0.15));
@@ -314,6 +361,7 @@ export class Audio {
 
   fadeBus(bus, to, sec) {
     const t = this.ctx.currentTime;
+    bus.target = to; // where it is headed (the stab's duck comes back to it)
     bus.gain.cancelScheduledValues(t);
     bus.gain.setValueAtTime(bus.gain.value, t);
     bus.gain.linearRampToValueAtTime(to, t + sec);
@@ -365,12 +413,15 @@ export class Audio {
       a.connect(ga); b.connect(ga); ga.connect(lp).connect(this.ambBus);
       a.start(t); b.start(t);
       this.ambNodes = [a, b];
-      this.crackle = setInterval(() => {
-        if (this.ctx.state !== 'running') return;
-        const tt = this.ctx.currentTime;
-        if (Math.random() < 0.5) this.noiseBurst(tt, 0.012 + Math.random() * 0.02, this.ambBus, { type: 'highpass', freq: 1800, peak: 0.25 + Math.random() * 0.35 });
-      }, 120);
+      this.crackle = setInterval(() => this.crackleTick(), 120);
     }
     this.fadeBus(this.ambBus, on ? 0.22 : 0, 1.5);
+  }
+
+  // The fire: a pop half the time, every 120 ms (its own method so an offline render can drive it).
+  crackleTick() {
+    if (!this.ctx || this.ctx.state !== 'running') return;
+    const tt = this.ctx.currentTime;
+    if (Math.random() < 0.5) this.noiseBurst(tt, 0.012 + Math.random() * 0.02, this.ambBus, { type: 'highpass', freq: 1800, peak: 0.25 + Math.random() * 0.35 });
   }
 }

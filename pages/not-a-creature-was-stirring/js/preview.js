@@ -1,11 +1,13 @@
 // Phone / desktop preview: a virtual living room stands in for your real one.
 // Drag to look around. Press on an ornament and drag it onto the tree.
 // Also drives the headless tests through window.__nac hooks.
-import { v3, q, m4, clamp } from './math.js';
+import { v3, q, m4, clamp, smooth } from './math.js';
 import { buildLayout, makePlane } from './room.js';
 import * as M from './models.js';
 
-export const PREVIEW_ROOM = { w: 4.4, d: 4.4, h: 2.5, seatZ: 0.6, table: { center: [0, 0.45, 0], w: 0.9, d: 0.5 } };
+// window: on the right wall, its middle at world z and y: the glass the snowman looks in through, an opening in the
+// wall with the night outside (the game's yard, js/game.js buildYard). At z = seatZ it is straight out to the right.
+export const PREVIEW_ROOM = { w: 4.4, d: 4.4, h: 2.5, seatZ: 0.6, table: { center: [0, 0.45, 0], w: 0.9, d: 0.5 }, window: { z: 0.6, y: 1.45, w: 1.1, h: 1.0 } };
 
 export function previewPlanes(spec = PREVIEW_ROOM) {
   const { w, d, h, table } = spec;
@@ -17,19 +19,74 @@ export function previewPlanes(spec = PREVIEW_ROOM) {
     makePlane({ center: [0, h / 2, d / 2], normal: [0, 0, -1], w, h, label: 'wall' }),
     makePlane({ center: [-w / 2, h / 2, 0], normal: [1, 0, 0], w: d, h, label: 'wall' }),
     makePlane({ center: [w / 2, h / 2, 0], normal: [-1, 0, 0], w: d, h, label: 'wall' }),
+    // Quest's room scan marks windows as their own planes, labelled like this, in the plane of the wall.
+    ...(spec.window ? [makePlane({ center: [w / 2, spec.window.y, spec.window.z], normal: [-1, 0, 0], w: spec.window.w, h: spec.window.h, label: 'window frame' })] : []),
   ];
 }
 
-export function startPreview({ canvas, gl, renderer, game, test = false, psx = true }) {
+// fly: { from: { pos, yaw, pitch, fov }, duration, roots, onDone } glides the camera from the menu's station
+// (js/menu.js) into the seat as the night begins, with no cut; the menu's nodes (roots) are drawn with the room,
+// its tags taken down as it goes (fly.tagsAlpha). A press during the glide hurries it; looking around waits for it.
+export function startPreview({ canvas, gl, renderer, game, test = false, psx = true, fly = null }) {
   const spec = PREVIEW_ROOM;
-  const cam = { pos: [0, 1.15, spec.seatZ], yaw: 0, pitch: -0.62, fov: 70 * Math.PI / 180 };
+  const seat = { pos: [0, 1.15, spec.seatZ], yaw: 0, pitch: -0.62, fov: 70 * Math.PI / 180 };
+  const cam = { ...seat, pos: [...seat.pos] };
   const room = M.previewRoom(spec);
   room.updateWorld();
-  game.setLayout(buildLayout(previewPlanes(spec), { pos: cam.pos, forward: [0, -0.55, -1] }));
-  renderer.prepare([game.scene, room, room.fx], game.geometries());
+  game.setLayout(buildLayout(previewPlanes(spec), { pos: seat.pos, forward: [0, -0.55, -1] }));
+  const extra = fly ? fly.roots || [] : [];
+  renderer.prepare([game.scene, room, room.fx, ...extra], game.geometries());
+  // It opens on the title in bulbs on the front wall, with the tree's table under it, and once the tutorial starts
+  // it settles on the table. Any drag, arrow key or scripted look takes the view and ends the move. From the
+  // written menu, the glide into the seat lands on this opening view, and the settle follows from there.
+  const TABLE_PITCH = -0.62;
+  const pitchTo = (p) => Math.atan2(p[1] - seat.pos[1], Math.hypot(p[0] - seat.pos[0], p[2] - seat.pos[2]));
+  let settle = null;
+  if (game.wall) {
+    const top = v3.add(game.wall.title.node.pos, [0, 9.5 * game.wall.title.pitch, 0]); // the top row of bulbs, and a little over
+    seat.pitch = cam.pitch = (pitchTo(top) + pitchTo(game.tablePos())) / 2;
+    settle = { from: seat.pitch, t: null };
+  }
+  const SETTLE_TIME = 1.5;
+  let flight = null;
+  if (fly && fly.from) {
+    flight = { t: 0, d: fly.duration || 2.2, from: fly.from };
+    Object.assign(cam, { pos: [...fly.from.pos], yaw: fly.from.yaw, pitch: fly.from.pitch, fov: fly.from.fov });
+    game.panels.title.hide(); // the night's title card waits for the seat: it would fly up in front of the glide
+    // The title in bulbs on the wall waits too: dark, it would show behind the menu's sampler as the glide starts.
+    // It lights word by word once you are in the seat.
+    if (game.wall) { game.wall.title.node.visible = false; game.wall.title.lightUp(Infinity, 0); }
+  }
+  const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+  const turn = (a, b, k) => a + Math.atan2(Math.sin(b - a), Math.cos(b - a)) * k;
+  function flyStep(dt) {
+    if (!flight) return;
+    flight.t += dt;
+    const k = ease(Math.min(1, flight.t / flight.d)), f = flight.from;
+    flight.k = k;
+    cam.pos = v3.lerp(f.pos, seat.pos, k);
+    cam.yaw = turn(f.yaw, seat.yaw, k);
+    cam.pitch = f.pitch + (seat.pitch - f.pitch) * k;
+    if (fly.tagsAlpha) fly.tagsAlpha(1 - Math.min(1, flight.t / (flight.d * 0.6)));
+    if (flight.t >= flight.d) land();
+  }
+  function land() {
+    if (!flight) return;
+    flight = null;
+    Object.assign(cam, { pos: [...seat.pos], yaw: seat.yaw, pitch: seat.pitch, fov: seat.fov });
+    if (fly.tagsAlpha) fly.tagsAlpha(0);
+    if (fly.update) fly.update(viewProj, 1);
+    if (game.state === 'intro' || game.state === 'tutorial') {
+      game.showTitle();
+      if (game.wall) { game.wall.title.node.visible = true; game.wall.title.lightUp(game.t + 0.25, 0.25); }
+    }
+    if (fly.onDone) fly.onDone();
+  }
+
 
   let viewProj = m4.identity();
   let viewport = [0, 0, 1, 1];
+  let lastLens = cam.fov; // the field of view last drawn with (tests: the glide widens smoothly)
   const quat = () => q.fromYPR(cam.yaw, cam.pitch, 0);
   const headInfo = () => ({ pos: cam.pos, quat: quat(), forward: q.rotate(quat(), [0, 0, -1]) });
 
@@ -40,12 +97,16 @@ export function startPreview({ canvas, gl, renderer, game, test = false, psx = t
     viewport = [0, 0, w, h];
     // Keep at least ~57 degrees across in portrait so the box and the tree both fit on a phone.
     const aspect = w / h;
-    const fov = Math.min(100 * Math.PI / 180, Math.max(cam.fov, 2 * Math.atan(Math.tan(32 * Math.PI / 180) / aspect)));
+    const lens = (f) => Math.min(100 * Math.PI / 180, Math.max(f, 2 * Math.atan(Math.tan(32 * Math.PI / 180) / aspect)));
+    let fov = lens(cam.fov);
+    if (flight) fov = flight.from.fov + (lens(seat.fov) - flight.from.fov) * (flight.k || 0); // the menu's lens, widening to the seat's
+    lastLens = fov;
     const world = m4.compose(cam.pos, quat(), [1, 1, 1]);
     viewProj = m4.mul(m4.perspective(fov, aspect, 0.03, 40), m4.invert(world));
   }
 
   function lookAt(p) {
+    land();
     const f = v3.norm(v3.sub(p, cam.pos));
     cam.yaw = Math.atan2(-f[0], -f[2]);
     cam.pitch = Math.asin(clamp(f[1], -1, 1));
@@ -109,10 +170,11 @@ export function startPreview({ canvas, gl, renderer, game, test = false, psx = t
     try { canvas.setPointerCapture(e.pointerId); } catch { /* synthetic events */ }
     ptr.x = e.clientX; ptr.y = e.clientY; ptr.over = true;
     carriedAt = null; lifted = false;
+    if (flight) { flight.t = Math.max(flight.t, flight.d * 0.8); return; } // a press hurries the glide into the seat
     updateCamera();
     const hit = pick(ray(ptr.x, ptr.y));
-    if (hit) { drag = { mode: 'carry', depth: hit.depth }; pinching = true; }
-    else drag = { mode: 'look', x: e.clientX, y: e.clientY, yaw: cam.yaw, pitch: cam.pitch };
+    if (hit) { drag = { mode: 'carry', depth: hit.depth }; pinching = true; } // play: the camera may go on settling
+    else { settle = null; drag = { mode: 'look', x: e.clientX, y: e.clientY, yaw: cam.yaw, pitch: cam.pitch }; } // the player takes the view
   });
   canvas.addEventListener('pointermove', (e) => {
     ptr.x = e.clientX; ptr.y = e.clientY; ptr.over = true;
@@ -127,14 +189,25 @@ export function startPreview({ canvas, gl, renderer, game, test = false, psx = t
   canvas.addEventListener('pointerleave', () => { if (!drag) ptr.over = false; });
   addEventListener('keydown', (e) => {
     const k = { ArrowLeft: [0.08, 0], ArrowRight: [-0.08, 0], ArrowUp: [0, 0.06], ArrowDown: [0, -0.06] }[e.key];
-    if (k) { cam.yaw += k[0]; cam.pitch = clamp(cam.pitch + k[1], -1.35, 1.2); }
+    if (k && !flight) { settle = null; cam.yaw += k[0]; cam.pitch = clamp(cam.pitch + k[1], -1.35, 1.2); }
   });
   addEventListener('blur', () => game.setPaused(true));
   addEventListener('focus', () => game.setPaused(false));
   document.addEventListener('visibilitychange', () => game.setPaused(document.hidden));
 
   function step(dt, override = {}) {
+    flyStep(dt);
+    if (settle && !flight) { // after the glide (if any) has landed
+      if (settle.t == null && game.state !== 'intro') settle.t = 0;
+      if (settle.t != null) {
+        settle.t += dt;
+        const k = smooth(Math.min(1, settle.t / SETTLE_TIME));
+        cam.pitch = settle.from + (TABLE_PITCH - settle.from) * k;
+        if (k >= 1) settle = null;
+      }
+    }
     updateCamera();
+    if (flight && fly.update) fly.update(viewProj, flight.k || 0);
     const hand = override.hand || handNow();
     game.update(dt, { head: headInfo(), viewProjs: [viewProj], hands: [hand] });
   }
@@ -156,7 +229,7 @@ export function startPreview({ canvas, gl, renderer, game, test = false, psx = t
     updateCamera();
     // A new round (Play again, the judges' next night) is a new scene: its panels go up with the button press.
     if (game.scene !== prepared) { renderer.prepare([game.scene]); prepared = game.scene; }
-    renderer.render([game.scene, room.fx], [{ viewProj, viewport, camPos: cam.pos }], roomParams(), {
+    renderer.render([game.scene, room.fx, ...extra], [{ viewProj, viewport, camPos: cam.pos }], roomParams(), {
       clearColor: [0.02, 0.02, 0.03, 1], backdrop: room, snap: psx ? 220 : 0,
     });
   }
@@ -174,12 +247,15 @@ export function startPreview({ canvas, gl, renderer, game, test = false, psx = t
   // Test hooks: deterministic stepping and helpers for scripted play.
   const hooks = {
     game, cam, renderer,
-    lookAt, draw,
-    setLook(yaw, pitch) { cam.yaw = yaw; cam.pitch = pitch; },
+    lookAt(p) { settle = null; lookAt(p); }, draw,
+    setLook(yaw, pitch) { land(); settle = null; cam.yaw = yaw; cam.pitch = pitch; },
+    get flying() { return !!flight; },
+    get lens() { return lastLens; },
     tick(dt, hand = null) { step(dt, { hand }); },
     vp: () => viewProj,
     advance(sec, { dt = 1 / 60, look = null, hand = null } = {}) {
       for (let t = 0; t < sec; t += dt) {
+        if (look) settle = null;
         if (typeof look === 'function') lookAt(look());
         else if (look) lookAt(look);
         step(dt, { hand: typeof hand === 'function' ? hand() : hand });

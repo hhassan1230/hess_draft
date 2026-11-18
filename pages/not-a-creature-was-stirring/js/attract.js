@@ -32,7 +32,10 @@ function rng(seed) {
 }
 const angleTo = (a, b) => Math.atan2(Math.sin(b - a), Math.cos(b - a)); // the short way round, from a to b
 
-export function startAttract({ canvas, renderer, makeCanvas, storage = null, seed = 1, manual = false, still = false, feel = true }) {
+// menu (js/menu.js, through js/main.js): the menu written on the room. Then the room is dressed and lit but no
+// night begins (the game is held in its tutorial: nothing creeps, nothing can block a tag or jump at the menu),
+// there is no fade to begin again, and the view is the menu's camera: { camera, roots, onDraw, flicker }.
+export function startAttract({ canvas, renderer, makeCanvas, storage = null, seed = 1, manual = false, still = false, feel = true, menu = null }) {
   // The player's own tree (the ornaments kept from nights they won), read but never written.
   const peek = storage && { getItem: (k) => storage.getItem(k), setItem() {}, removeItem() {} };
   const spec = PREVIEW_ROOM;
@@ -47,14 +50,14 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
   // right of the menu's words.
   const BACK = 1.0, UP = 0.3, WIDE_TURN = 0.42;
   const view = { pos: [...seat], yaw: 0, pitch: 0 };
-  let viewProj = m4.identity(), headProj = m4.identity(), viewport = [0, 0, 1, 1];
+  let viewProj = m4.identity(), headProj = m4.identity(), viewport = [0, 0, 1, 1], viewFov = cam.fov;
   let game = null, prepared = null, t = 0, fade = 1, ending = false, loops = 0, frames = 0, stopped = false, held = false, raf = 0, last = null;
   let aim = { kind: 'tree', until: 0 };
   const watched = new Set(); // nutcrackers it has turned to (for tests: it stares them down, never lets one strike)
 
   function newNight() {
     if (game) renderer.release([game.scene]);
-    game = new Game({ audio: SILENT, storage: peek, today: '2026-12-24', makeCanvas, seed: (rand() * 1e9) | 0, night: 1, mode: 'preview', feel });
+    game = new Game({ audio: SILENT, storage: peek, today: '2026-12-24', makeCanvas, seed: (rand() * 1e9) | 0, night: 1, mode: 'preview', feel, wallTitle: false, scares: false }); // the page has its own title
     game.setLayout(buildLayout(previewPlanes(spec), { pos: seat, forward: [0, -0.55, -1] }));
     t = 0; ending = false; fade = 1;
     cam.yaw = 0; cam.pitch = -0.5;
@@ -70,6 +73,13 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
     const fov = Math.min(100 * Math.PI / 180, Math.max(cam.fov, 2 * Math.atan(Math.tan(32 * Math.PI / 180) / aspect)));
     const proj = m4.perspective(fov, aspect, 0.03, 40);
     headProj = m4.mul(proj, m4.invert(m4.compose(cam.pos, q.fromYPR(cam.yaw, cam.pitch, 0), [1, 1, 1])));
+    if (menu) {
+      const p = menu.camera.pose(aspect);
+      view.pos = p.pos; view.yaw = p.yaw; view.pitch = p.pitch; viewFov = p.fov;
+      viewProj = m4.mul(m4.perspective(p.fov, aspect, 0.03, 40), m4.invert(m4.compose(view.pos, q.fromYPR(view.yaw, view.pitch, 0), [1, 1, 1])));
+      return;
+    }
+    viewFov = fov;
     const back = [Math.sin(cam.yaw), 0, Math.cos(cam.yaw)]; // behind the head, across the floor
     view.pos = [seat[0] + back[0] * BACK, seat[1] + UP, seat[2] + back[2] * BACK];
     view.yaw = cam.yaw + (aspect > 1.2 ? WIDE_TURN : 0);
@@ -123,10 +133,16 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
   function step(dt) {
     t += dt;
     steer(dt);
+    if (menu) menu.camera.advance(dt);
     updateCamera();
     const quat = q.fromYPR(cam.yaw, cam.pitch, 0);
     game.update(dt, { head: { pos: cam.pos, quat, forward: q.rotate(quat, [0, 0, -1]) }, viewProjs: [headProj], hands: [NO_HAND] });
     hideUI();
+    if (menu) { // held in the tutorial: the room stays dressed and lit, and no night begins
+      if (game.state === 'tutorial') game.stateT = 0;
+      fade = Math.max(0, fade - dt / ATTRACT.fade);
+      return;
+    }
     // Never a strike, never the scare: if one came, fade at once. Otherwise fade after a while, and begin again.
     if (!ending && (t >= ATTRACT.loop || game.candlesLit < 3 || game.state === 'scare' || game.state === 'lose')) ending = true;
     if (ending) {
@@ -144,6 +160,7 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
     glow.alpha = 0.6 + 0.25 * flick;
     room.fx.updateWorld();
     const L = room.fireLight;
+    if (menu && menu.flicker) menu.flicker(flick);
     return { ...rp, lights: [...(rp.lights || []), { ...L, intensity: L.intensity * flick }].slice(0, 4), flash: [0, 0, 0, fade] };
   }
 
@@ -151,22 +168,24 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
     const gl = renderer.gl;
     if (gl) gl.bindFramebuffer(gl.FRAMEBUFFER, null); // the page, not a headset session's framebuffer left bound
     updateCamera();
-    if (game.scene !== prepared) { renderer.prepare([game.scene, room, room.fx], game.geometries()); prepared = game.scene; }
-    renderer.render([game.scene, room.fx], [{ viewProj, viewport, camPos: view.pos }], params(), {
+    if (game.scene !== prepared) { renderer.prepare([game.scene, room, room.fx, ...(menu ? menu.roots : [])], game.geometries()); prepared = game.scene; }
+    renderer.render([game.scene, room.fx, ...(menu ? menu.roots : [])], [{ viewProj, viewport, camPos: view.pos }], params(), {
       clearColor: [0.02, 0.02, 0.03, 1], backdrop: room, snap: 220,
     });
     frames++;
+    if (menu && menu.onDraw) menu.onDraw(viewProj, viewport[2], viewport[3]);
   }
 
   // A backdrop must never make the menu sluggish. It draws at about 30 frames a second at most, and on a device
   // that cannot keep up even with that (its first 40 frames a median of more than 70 ms apart: software
-  // WebGL, an old phone) it holds still on the frame it has.
+  // WebGL, an old phone) it holds still on the frame it has. Driven by hand (manual: the tests and tools step
+  // every frame themselves), the gaps are theirs, not the device's, so it never judges.
   const gaps = [];
   function loop(now) {
     if (stopped || held) return;
     raf = requestAnimationFrame(loop);
     if (last != null && now - last < ATTRACT.minGap) return;
-    if (last != null && gaps.length < ATTRACT.judgeFrames) {
+    if (!manual && last != null && gaps.length < ATTRACT.judgeFrames) {
       gaps.push(now - last);
       if (gaps.length === ATTRACT.judgeFrames && [...gaps].sort((x, y) => x - y)[gaps.length >> 1] > ATTRACT.slowGap) {
         held = true;
@@ -184,6 +203,7 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
   // A still frame: the room dressed and lit as the night begins, the camera on the tree, nothing creeping.
   function holdStill() {
     aim = { kind: 'tree', until: Infinity };
+    if (menu) menu.camera.settle();
     while (t < 4) step(1 / 60);
     [cam.yaw, cam.pitch] = treeAim();
     fade = 0;
@@ -204,6 +224,12 @@ export function startAttract({ canvas, renderer, makeCanvas, storage = null, see
     get t() { return t; },
     cam, view, watched,
     advance(sec, dt = 1 / 60, each = null) { for (let s = 0; s < sec; s += dt) { step(dt); if (each) each(game); } draw(); },
+    // Draws again without moving on: a still menu after its tags change, or after the screen changes shape.
+    redraw() { if (!stopped) draw(); },
+    get viewProj() { return viewProj; },
+    // Where the view is now (the preview glides on from here).
+    viewPose() { return { pos: [...view.pos], yaw: view.yaw, pitch: view.pitch, fov: viewFov }; },
+    room,
     stop() {
       if (stopped) return;
       stopped = true;

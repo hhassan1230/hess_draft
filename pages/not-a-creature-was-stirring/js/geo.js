@@ -35,13 +35,15 @@ class Builder {
 }
 
 // Axis-aligned box centered on the origin.
-export function box(w, h, d, col) {
+// open: faces to leave out, by letter: f (+z, front), b (-z), r (+x), l (-x), t (+y, top), u (-y). A face that
+// something else covers exactly (the bricks on a fireplace pillar) is left out, or the two trade places on screen.
+export function box(w, h, d, col, { open = '' } = {}) {
   const b = new Builder();
   const x = w / 2, y = h / 2, z = d / 2;
   const P = [[-x, -y, -z], [x, -y, -z], [x, y, -z], [-x, y, -z], [-x, -y, z], [x, -y, z], [x, y, z], [-x, y, z]];
   const C = [0, 0, 0];
   const faces = [[4, 5, 6, 7], [1, 0, 3, 2], [5, 1, 2, 6], [0, 4, 7, 3], [7, 6, 2, 3], [0, 1, 5, 4]];
-  for (const f of faces) b.quad(P[f[0]], P[f[1]], P[f[2]], P[f[3]], col, C);
+  faces.forEach((f, i) => { if (!open.includes('fbrltu'[i])) b.quad(P[f[0]], P[f[1]], P[f[2]], P[f[3]], col, C); });
   return b.build();
 }
 
@@ -206,6 +208,22 @@ export function disc(r, segs, col) {
   for (let i = 0; i < segs; i++) {
     const a0 = (i / segs) * Math.PI * 2, a1 = ((i + 1) / segs) * Math.PI * 2;
     b.tri([0, 0, 0], [Math.cos(a1) * r, 0, Math.sin(a1) * r], [Math.cos(a0) * r, 0, Math.sin(a0) * r], col, [0, -1, 0]);
+  }
+  return b.build();
+}
+
+// A convex outline of [x, z] points stood up as a slab: top at y = 0, underside at y = -height.
+export function prism(outline, height, col) {
+  const b = new Builder();
+  let cx = 0, cz = 0;
+  for (const p of outline) { cx += p[0]; cz += p[1]; }
+  cx /= outline.length; cz /= outline.length;
+  const mid = [cx, -height / 2, cz];
+  for (let i = 0; i < outline.length; i++) {
+    const a = outline[i], c = outline[(i + 1) % outline.length];
+    b.tri([cx, 0, cz], [a[0], 0, a[1]], [c[0], 0, c[1]], col, [cx, -1, cz]);
+    b.tri([cx, -height, cz], [a[0], -height, a[1]], [c[0], -height, c[1]], col, [cx, 1, cz]);
+    b.quad([a[0], 0, a[1]], [c[0], 0, c[1]], [c[0], -height, c[1]], [a[0], -height, a[1]], col, mid);
   }
   return b.build();
 }

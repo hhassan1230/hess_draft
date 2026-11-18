@@ -1,6 +1,8 @@
 // The Christmas Megapack props (BRAiNBOX, bought for this game: Unity Asset Store standard EULA, for use inside
 // the game only), turned into the game's flat-shaded format by tools/import-fbx.py and kept in js/props-data.js.
-// Each is stored standing on y = 0, centred, a metre tall: place it with a node's position and scale.
+// Each is stored standing on y = 0, centred, a metre tall: place it with a node's position and scale. Those marked
+// frame (the snowman's body and head) keep the space of the pack's own prefab instead, in metres, so the parts of
+// one figure fit together: the body stands on y = 0, the head turns about its neck at its origin.
 import { PROPS } from './props-data.js';
 
 const bytes = (b64) => {

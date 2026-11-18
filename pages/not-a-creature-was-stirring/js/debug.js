@@ -13,7 +13,8 @@ export function planeSummary(planes = [], { granted, live = null } = {}) {
   if (!planes.length) return `planes ${count}: ${granted === false ? 'plane detection off' : 'no room scan'}`;
   const counts = new Map();
   for (const p of planes) {
-    const label = String((p && p.label) || '').trim().toLowerCase().replace(/\s+/g, '-');
+    // Quest's 'window frame' and 'door frame' read as window and door, so a room with one still fits the line.
+    const label = String((p && p.label) || '').trim().toLowerCase().replace(/\s+/g, '-').replace(/[-_]frame$/, '');
     const key = label || `${(p && p.orientation) || 'plane'}?`;
     counts.set(key, (counts.get(key) || 0) + 1);
   }
@@ -40,13 +41,16 @@ export function handReadout(hands = [], { granted } = {}) {
 // depth: the room-occlusion check's state (js/depth.js), when depth sensing was granted.
 // pin: the spatial anchor's state (js/pin.js), on the pinned link (?pin).
 export function debugLines({ fps = 0, draws = 0, state = '', planes = [], live = null, layout = null, hands = [], features = {}, build = '', depth = '', pin = '' } = {}) {
-  const room = (layout
-    ? `table ${layout.table && layout.table.virtual ? 'virtual' : 'real'} · walls ${layout.walls ? layout.walls.length : 0} ${layout.realWalls ? 'real' : 'virtual'}`
-    : 'table – · walls –') + (depth ? ` · depth ${depth}` : '') + (pin ? ` · pin ${pin}` : '');
+  // The snowman's window: the room scan's own, one the game put up on a wall, or none.
+  const win = !layout || layout.window === undefined ? '' : ` · window ${layout.window ? (layout.window.real ? 'scan' : 'game') : 'none'}`;
+  const room = layout
+    ? `table ${layout.table && layout.table.virtual ? 'virtual' : 'real'} · walls ${layout.walls ? layout.walls.length : 0} ${layout.realWalls ? 'real' : 'virtual'}${win}`
+    : 'table – · walls –';
+  // Depth and the pin go after the hands: the room's line is full with the window on it.
   return [
     fit(`${(fps || 0).toFixed(0)} fps · ${draws} draws · ${state}${build ? ` · ${build}` : ''}`),
     planeSummary(planes, { granted: features.planes, live }),
     fit(room),
-    fit(handReadout(hands, { granted: features.hands })),
+    fit(handReadout(hands, { granted: features.hands }) + (depth ? ` · depth ${depth}` : '') + (pin ? ` · pin ${pin}` : '')),
   ];
 }

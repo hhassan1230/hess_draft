@@ -13,6 +13,18 @@ import { isObserved } from './gaze.js';
 import { faceYaw } from './room.js';
 import { Batch } from './batch.js';
 import { FEEL, hangRate, wobble } from './feel.js';
+import { WallTitle } from './walltitle.js';
+import { Snowman, STAGES } from './snowman.js';
+
+// The title is spelled in bulbs on the wall you face, and the night's ends are gift tags on the tree.
+// false brings back the floating title card and result card.
+export const WALL_TITLE = true;
+const TITLE_LINES = ['NOT A CREATURE', 'WAS STIRRING'];
+const WIN_LINES = ['MERRY', 'CHRISTMAS'];
+const TITLE_AT = 1.3; // s into the intro: the first word lights, as the lights run along the walls
+const TITLE_GAP = 0.3; // s between words
+const PRESS_DELAY = 0.3; // s: a poked tag swings away before the next night starts
+const swingAngle = (t) => 0.5 * Math.exp(-t / 0.55) * Math.sin((2 * Math.PI * t) / 0.65); // rad, away from you first
 
 const VIEW_MARGIN = 0.85; // anywhere in view freezes them
 const FOCUS_MARGIN = 0.42; // looking straight at them stares them down
@@ -42,6 +54,44 @@ const TUTORIAL_PATIENCE = 10; // s: the night starts on its own if no ornament i
 const DUSK = 0.25; // the room dims as the lights come on, and stays so; below 0.3, where their eyes glow
 const RIM = [0.32, 0.42, 0.72]; // moonlight on the edges of the nutcrackers, the Mouse King and the tree (renderer.js rim)
 const SNOW = 160; // flakes falling in the room, until the first nutcracker sets off (see updateSnow)
+// The lights-out scare (see updateJolt). Every player gets it, however well they play, and it costs nothing:
+// the lights die, two red eyes open in the dark in front of you, and when the lights come back its face is
+// right there. Then it sinks into the floor, as one stared down does. Night 1 has one, once enough ornaments
+// are up and its first nutcracker has come and gone (nights.js blackoutAfter). On later nights the first
+// lights-out does it, with a false relight first, so a judge playing nights 1 to 3 in one sitting does not
+// see the same trick twice. While it plays nothing else moves and nothing new arrives.
+const JOLT = {
+  clear: 1.8, // m: none nearer than this, none waiting beside you or lunging, or it waits
+  settle: 1.2, // s it must have been clear (night 1): your eyes are back on the tree
+  dark: 0.92, // how dark the room goes
+  fade: 14, // how fast the lights die and come back (the rate the darkness eases at; normally 2.5)
+  eyes: 0.9, // s into the dark: two eyes open...
+  near: 0.6, // ...at most this far from yours (inside the near field, so real furniture never hides them; see eyesRoom)...
+  creep: 0.07, // ...and creep this much closer
+  treeRadius: 0.165, // the tree's branches reach this far out from its trunk
+  tableClear: 0.12, // m the eyes keep above the table top
+  steps: [1.3, 1.7], // s: wooden steps under them
+  wink: [0.75, 0.1], // s after they open, the eyes blink once, for this long
+  blink: 1.9, // s: later nights: the eyes go out...
+  lit: 2.4, // s: ...and the lights come back (night 1: on its face)
+  falseLit: 0.9, // s of light with nothing there (later nights), then...
+  flicker: 0.16, // ...the lights cut out for a moment, and its face is there when they come back
+  face: 0.5, // m from your eyes at most...
+  closest: 0.42, // ...and no nearer than the last-candle face
+  pop: [0.12, 0.12], // it comes at you this much from where it was last seen, over this many seconds
+  hold: 0.75, // s its face stays
+  sink: 0.45, // s to sink into the floor
+};
+// Caught mid-step this close (m from you, across the floor), a nutcracker stings and its jaw drops (see stingIfClose).
+const STING_NEAR = 1.2;
+const STING_GAP = 6; // s: never two stings closer together than this
+// The finale: the wall goes still for a beat, then the Mouse King bursts through it (see updateFinale).
+const KING_BURST = {
+  quiet: 1.3, // s after the first crack: no more debris or cracking...
+  at: 4.6, // s into the finale: ...until he breaks through (the cracks start at 2.6)
+  emerge: 0.4, // s to come out of the wall (was 2.5: he eased out)
+  open: 0.15, // s for the hole to open as he breaks it
+};
 // The first hint names the input in the player's hands: tracked hands or Touch controllers,
 // or a mouse or finger in the preview (the same words as the help line under it).
 const GRAB_HINT = {
@@ -50,6 +100,15 @@ const GRAB_HINT = {
   pointer: 'Drag an ornament onto the tree',
 };
 const ORN_COLORS = [M.C.red, M.C.gold, M.C.blue, M.C.silver, [0.12, 0.62, 0.3], M.C.purple];
+// The snowman outside the window (js/snowman.js, updateSnowman): where he stands at each of his three spots, on
+// the line of sight from the player through the window, a little off its middle; metres behind the glass. At the
+// glass he stands just far enough back for his carrot nose to clear it. His head is cocked further each time.
+const SNOW_DEPTH = { far: 3.4, mid: 1.8 };
+const SNOW_OFF = { far: 0.22, mid: 0.1, near: 0 }; // across the glass, as a share of its width, toward one side
+const SNOW_TILT = { far: 0, mid: 0.12, near: 0.4 }; // radians
+const SNOW_LEAN = { far: 0, mid: 0, near: 0.13 }; // radians: at the glass he leans in
+const SNOW_NOSE = 0.54; // m from his neck to the tip of his nose (snowman's own size)
+const YARD_FLAKES = 60; // snow falling outside, seen through the glass
 const DEG = Math.PI / 180;
 const rx = (a) => q.fromAxisAngle([1, 0, 0], a);
 const rz = (a) => q.fromAxisAngle([0, 0, 1], a);
@@ -84,15 +143,28 @@ function fitOnScreen(panel, vp, quat) {
   if (k < 1 || dx || dy) node.over = true;
 }
 
+// Lays a one-metre node (along +Y, centred) from a to b.
+function stretch(node, a, b) {
+  const d = v3.sub(b, a), len = Math.max(1e-6, v3.len(d)), u = v3.scale(d, 1 / len);
+  const axis = v3.cross([0, 1, 0], u), sl = v3.len(axis);
+  node.rot = sl < 1e-6 ? (u[1] > 0 ? q.identity() : q.fromAxisAngle([1, 0, 0], Math.PI)) : q.fromAxisAngle(v3.scale(axis, 1 / sl), Math.acos(clamp(u[1], -1, 1)));
+  node.pos = v3.lerp(a, b, 0.5);
+  node.scl = [1, len, 1];
+}
+
 export class Game {
-  constructor({ audio, storage = null, today = '1970-01-01', makeCanvas, seed = 1, night = null, mode = 'xr', judge = false, feel = FEEL.on }) {
+  constructor({ audio, storage = null, today = '1970-01-01', makeCanvas, seed = 1, night = null, mode = 'xr', judge = false, feel = FEEL.on, wallTitle = true, scares = true }) {
     this.audio = audio || nullAudio();
+    this.cards = !WALL_TITLE; // the old floating cards
+    this.bulbs = WALL_TITLE && wallTitle !== false; // the menu's backdrop has a title of its own
+    this.wall = null;
     this.storage = storage;
     this.today = today;
     this.mode = mode;
     this.judge = !!judge; // the judges' link (?judge): a winner may go straight on to the next night
     this.feel = !!feel; // game feel (js/feel.js); off with ?nojuice
     this.haptics = []; // this frame's controller pulses, { side ('left' | 'right' | null for both), intensity, ms }: js/xr.js sends them
+    this.scares = scares !== false; // the lights-out scare and the too-close sting (off for the menu's silent backdrop)
     this.rng = makeRng(seed);
     this.inputKind = mode === 'preview' ? 'pointer' : 'hand'; // what the player last used: 'hand' or 'controller' (kept across nights); the preview's mouse or finger is 'pointer'
     this.fxRng = makeRng((seed ^ 0x9e3779b9) >>> 0); // looks only (particles, flicker): never moves gameplay
@@ -105,9 +177,11 @@ export class Game {
     this.stateT = 0;
     this.renderParams = { darkness: 0, flash: [0, 0, 0, 0], ambient: 0.62, sun: 0.7, lights: [], rim: RIM };
     this.panels = {
-      title: new Panel(makeCanvas, { w: 0.44, h: 0.16, name: 'title' }),
+      // The night's gift tag by the ornament box (the title itself is on the wall), or the old title card.
+      title: this.cards ? new Panel(makeCanvas, { w: 0.44, h: 0.16, name: 'title' }) : new Panel(makeCanvas, { w: 0.2, h: 0.09, px: 720, name: 'title', shape: 'tag' }),
       hint: new Panel(makeCanvas, { w: 0.36, h: 0.085, px: 600, name: 'hint' }),
-      result: new Panel(makeCanvas, { w: 0.44, h: 0.24, name: 'result' }),
+      // The night's end: tags hung from the tree, or the old result card.
+      result: this.cards ? new Panel(makeCanvas, { w: 0.44, h: 0.24, name: 'result' }) : new Panel(makeCanvas, { w: 0.36, h: 0.26, px: 900, name: 'result', shape: 'tags' }),
     };
     this.creatures = [];
     this.nutcrackers = [];
@@ -122,6 +196,10 @@ export class Game {
     this.fxBatches = { lit: new Batch('fxLit'), glow: new Batch('fxGlow', { layer: 'add', emissive: 1 }) };
     // Splinters left lying on the floor (game feel): one more mesh, rebuilt only when a piece comes to rest.
     this.restBatch = new Batch('fxRest');
+    // The snow falling in the yard outside the window: one mesh, its flakes made once.
+    this.yardSnow = new Batch('yardSnow', { layer: 'add', emissive: 1 });
+    this.yardFlakes = Array.from({ length: YARD_FLAKES }, () => ({ node: M.snowflake(), born: -1 }));
+    this.snowRng = makeRng((seed ^ 0x5a17e5) >>> 0); // the snowman's own dice: the night's are untouched
   }
 
   setLayout(layout) {
@@ -147,7 +225,7 @@ export class Game {
     const root = new Node('root');
     this.scene = root;
     this.state = 'intro'; this.stateT = 0;
-    this.hung = 0; this.attacks = 0; this.candlesLit = 3; this.graceUntil = 0;
+    this.hung = 0; this.attacks = 0; this.candlesLit = 3; this.candlesBurning = 3; this.graceUntil = 0;
     this.creatures = []; this.nutcrackers = []; this.king = null; this.kingNode = null; this.hole = null;
     this.items = []; this.fx = []; this.hands = {};
     this.darkness = 0; this.darkTarget = 0; this.flash = [0, 0, 0, 0];
@@ -156,12 +234,15 @@ export class Game {
     this.shownLookHint = false; this.shownStareHint = false; this.hintUntil = Infinity; this.hintFor = null; this.hintOver = false;
     this.hintIsGrab = false;
     this.stungOnce = false;
+    this.lastStingAt = -99;
+    this.jolt = null; this.joltDone = false; this.joltArmed = false; this.joltClearT = 0; this.darkRate = 2.5;
     this.chimes = 0; this.nextChimeAt = Infinity; this.finale = null; this.nextGrowl = 0;
-    this.lastPress = -9;
+    this.lastPress = -9; this.pending = null; this.swing = null;
     // Game feel, per round (js/feel.js).
     this.rest = []; this.restDirty = false; this.restBatch.update([]);
     this.treeFlare = 0; this.chimeFlare = 0; this.gutterT = Infinity; this.kingKnockT = undefined;
     this.kingFrozenUntil = 0; this.kingBurstAt = 0; this.winT = -1; this.starAcc = 0;
+    this.hitFace = null; this.heartPhase = 0; this.lure = null; this.lureSide = 1; this.kingLurchT = undefined;
 
     // The table group: +X is the player's right, +Z points at the player.
     const T = L.table;
@@ -204,6 +285,15 @@ export class Game {
     sl.runs.forEach((r, i) => { r.on = false; r.phase = i * 1.7; });
     root.add(sl.node);
     this.lights = sl;
+    // The title in bulbs on the wall you face, and MERRY CHRISTMAS for a win, built now with the room (both
+    // dark): nothing is built at the win.
+    this.wall = null;
+    if (this.bulbs && L.title) {
+      this.wall = { title: new WallTitle(TITLE_LINES, L.title, 'title'), win: new WallTitle(WIN_LINES, L.title, 'win') };
+      root.add(this.wall.title.node, this.wall.win.node);
+      this.wall.win.node.visible = false; // its dark red and green bulbs would show among the title's
+      this.wall.title.lightUp(this.t + TITLE_AT, TITLE_GAP);
+    }
 
     for (const p of Object.values(this.panels)) { p.hide(); root.add(p.node); }
     // The win's panel is painted now, while the room is read (and uploaded with the meshes), and only shown at
@@ -217,8 +307,10 @@ export class Game {
     this.cursor.visible = false;
     this.fxRoot = new Node('fx');
     this.fxRoot.add(this.fxBatches.lit.node, this.fxBatches.glow.node);
+    this.ribbon = M.ribbon();
+    this.ribbon.visible = false;
     this.fxRoot.add(this.restBatch.node);
-    root.add(this.pinchHint, this.snapMarker, this.cursor, this.fxRoot);
+    root.add(this.pinchHint, this.snapMarker, this.cursor, this.fxRoot, this.ribbon);
 
     // World positions with the table at full size (it pops in during the intro).
     root.updateWorld();
@@ -229,6 +321,17 @@ export class Game {
     this.lookTarget = m4.point(tr.node.world, [0, 0.18, 0]);
     this.candleLightPos = m4.point(tw, [0.18, 0.14, -0.02]);
     this.titlePos = m4.point(tw, [0, 0.6, -0.12]);
+    // The gift tags: the night's tag stands beside the ornament box; the result tags hang from a ribbon tied to
+    // the tree's left side, over the box (empty by the end of a won night).
+    const boxW = Math.max(0.14, Math.ceil(this.cfg.ornaments / 2) * 0.06 + 0.02);
+    // In line with the box's front. On the table the game brings (no room scan) it stands back by the box's middle:
+    // turned to face you, its near end swings toward you, and from the front line it stood past that table's front
+    // edge (test/table-fit.test.mjs). That table is always just under your head, so the hint over the box stays
+    // above the tag; from the seat at a real table, further off, the hint would cover it there (and a phone's view
+    // of the preview's table would lose a corner of it: test/panel-layout.mjs).
+    this.tagPos = m4.point(tw, [-0.2 - boxW / 2 - 0.11, 0.045, T.virtual ? 0.05 : 0.115]);
+    this.hangFrom = m4.point(tw, [-0.06, 0.3, -0.03]);
+    this.hangAt = m4.point(tw, [-0.3, 0.34, 0.07]);
     this.hintPos = m4.point(tw, [-0.29, 0.22, 0.07]);
 
     // Ornaments hung on earlier nights stay on the tree (back side first).
@@ -257,6 +360,13 @@ export class Game {
     this.starItem = { node: star, halo: starHalo, home: m4.point(box.node.world, [0, 0.075, 0]), state: 'hidden', isStar: true };
     this.items.push(this.starItem);
 
+    // The window and the yard outside it, where the snowman comes (updateSnowman).
+    this.snowman = new Snowman();
+    this.snowNextAt = Infinity; this.snowQuietT = 0; this.snowSpots = null; this.snowView = { seen: false, inView: false };
+    this.window = L.window || null;
+    this.yard = null; this.snowmanNode = null; this.windowGlass = null; this.smudgeT = Infinity;
+    if (this.window) this.buildYard(root);
+
     table.scl = [0.01, 0.01, 0.01];
     root.updateWorld();
     this.showTitle();
@@ -264,7 +374,223 @@ export class Game {
     this.audio.ambience(true);
   }
 
+  // ------------------------------------------------------------ the window and the yard
+  // In the window's own space (x along it, y up, z into the room, its middle at 0). The yard and everything in it
+  // carry the window as a portal: the renderer draws them only where they are seen through the glass.
+  buildYard(root) {
+    const W = this.window;
+    const place = (n) => { n.pos = v3.copy(W.center); n.rot = q.fromYaw(faceYaw(W.normal)); return n; };
+    const yard = place(new Node('yard'));
+    const geo = M.yardGeo(W.w, W.h);
+    this.yardGround = geo.ground;
+    const sky = new Node('yardSky', geo.sky, { emissive: 1 });
+    const land = new Node('yardLand', geo.land, { emissive: 0.5, rim: 0.25 });
+    const moon = M.moon();
+    // The moon, far out, where the player sees it through the top of the glass from where they sit.
+    moon.pos = this.yardSight([W.w * 0.24, W.h * 0.3], 17.2);
+    moon.rot = q.fromYaw(faceYaw(v3.sub(this.toYard(this.head), moon.pos)));
+    const man = M.snowman();
+    man.visible = false;
+    man.pos = [0, geo.ground, -8]; // out in the yard until he comes (never on the room's side of the glass)
+    yard.add(sky, land, moon, this.yardSnow.node, man);
+    const portal = { p: v3.copy(W.center), n: v3.copy(W.normal), r: v3.copy(W.right), u: v3.copy(W.up), hw: W.w / 2, hh: W.h / 2 };
+    yard.traverse((n) => { n.portal = portal; });
+    root.add(yard);
+    // On the room's side of the glass: frost, and a frame if the window is one the game put up.
+    const gg = M.windowGlass(W.w, W.h, !W.real);
+    const glass = place(new Node('windowGlass'));
+    glass.add(new Node('frost', gg.frost, { layer: 'blend', alpha: 0.35, emissive: 0.6 }));
+    if (gg.frame) glass.add(new Node('windowFrame', gg.frame));
+    this.smudge = new Node('smudge', M.cached('smudge', () => M.smudgeGeo()), { layer: 'blend', alpha: 0, emissive: 0.7 });
+    this.smudge.visible = false;
+    glass.add(this.smudge);
+    root.add(glass);
+    this.yard = yard; this.snowmanNode = man; this.windowGlass = glass; this.moonNode = moon;
+    for (const f of this.yardFlakes) f.born = -1;
+  }
+
+  // World to the window's space, and a point on the line of sight from the player's eye through the glass at
+  // (x, y) (window space), `depth` metres behind the glass.
+  toYard(p) {
+    const W = this.window, d = v3.sub(p, W.center);
+    return [v3.dot(d, W.right), d[1], v3.dot(d, W.normal)];
+  }
+  yardSight(glassAt, depth, eye = this.head) {
+    const H = this.toYard(eye), Hz = Math.max(0.2, H[2]);
+    const s = (Hz + depth) / Hz;
+    return [H[0] + (glassAt[0] - H[0]) * s, H[1] + (glassAt[1] - H[1]) * s, -depth];
+  }
+
+  // Is a world point on screen (within margin) and seen through the glass from the eye?
+  throughGlass(p, vps, margin) {
+    if (!isObserved(p, vps, margin)) return false;
+    const W = this.window, eye = this.head, d = v3.sub(p, eye), den = v3.dot(d, W.normal);
+    if (Math.abs(den) < 1e-9) return false;
+    const t = v3.dot(v3.sub(W.center, eye), W.normal) / den;
+    if (t <= 0 || t >= 1) return false;
+    const rel = v3.sub(v3.addScaled(eye, d, t), W.center);
+    return Math.abs(v3.dot(rel, W.right)) <= W.w / 2 + 0.03 && Math.abs(v3.dot(rel, W.up)) <= W.h / 2 + 0.03;
+  }
+
+  // His spot for a stage (window space), turned to face the player's head now, head cocked.
+  snowPose(stage) {
+    const W = this.window, sp = this.snowSpots[stage];
+    const H = this.toYard(this.head);
+    const pos = [...sp];
+    const yaw = faceYaw(v3.flat(v3.sub(H, pos)));
+    return { pos, yaw, tilt: SNOW_TILT[stage] * this.snowTilt, lean: SNOW_LEAN[stage] };
+  }
+  // World points to test whether he can be seen, for a pose (models.js SNOWMAN_PROBES).
+  snowPosePoints(pose) {
+    const S = M.SNOWMAN_SCALE;
+    const root = m4.mul(this.yard.world, m4.compose(pose.pos, q.mul(q.fromYaw(pose.yaw), rx(pose.lean)), [S, S, S]));
+    const head = m4.mul(root, m4.compose([0, M.SNOWMAN_NECK, 0], rz(pose.tilt), [1, 1, 1]));
+    return [...M.SNOWMAN_PROBES.body.map((p) => m4.point(root, p)), ...M.SNOWMAN_PROBES.head.map((p) => m4.point(head, p))];
+  }
+  snowmanPoints() {
+    const n = this.snowmanNode;
+    return [...M.SNOWMAN_PROBES.body.map((p) => m4.point(n.world, p)), ...M.SNOWMAN_PROBES.head.map((p) => m4.point(n.parts.head.world, p))];
+  }
+  snowmanHeadPos() { return m4.point(this.snowmanNode.parts.head.world, [0, 0.23, 0]); }
+
+  // This visit's three spots, on the line of sight from where the player is now, to one side of the glass.
+  planVisit() {
+    const W = this.window, side = this.snowRng() < 0.5 ? -1 : 1, ground = this.yardGround;
+    this.snowTilt = this.snowRng() < 0.5 ? -1 : 1;
+    const spot = (stage, depth) => {
+      const p = this.yardSight([side * SNOW_OFF[stage] * W.w, 0], depth);
+      p[1] = ground + M.yardDrift(p[0], p[2]) - 0.02;
+      return p;
+    };
+    this.snowSpots = { far: spot('far', SNOW_DEPTH.far), mid: spot('mid', SNOW_DEPTH.mid) };
+    // At the glass: back just far enough for his nose (turned toward the player, his head cocked, leaning in) to
+    // clear it by 4 cm. Found by trying a spot and moving back by what the nose still lacks.
+    this.yard.updateWorld(this.yard.parent ? this.yard.parent.world : null);
+    let depth = SNOW_NOSE * M.SNOWMAN_SCALE + 0.05;
+    for (let i = 0; i < 4; i++) {
+      this.snowSpots.near = spot('near', depth);
+      const tip = this.snowPosePoints(this.snowPose('near'))[M.SNOWMAN_PROBES.body.length + 2];
+      depth += 0.04 - v3.dot(v3.sub(this.window.center, tip), this.window.normal);
+    }
+    this.snowSpots.near = spot('near', depth);
+  }
+
+  // The snowman's visit, each frame (js/snowman.js): what the player can see of him, and what he does about it.
+  updateSnowman(dt) {
+    const S = this.snowman;
+    if (!this.window || !this.frame) return;
+    const vps = this.frame.viewProjs || [];
+    const playing = this.state === 'play' || this.state === 'star';
+    // The finale, a scare or the end of the night: he goes (the first moment no one can see him), and stays gone.
+    if (!playing && this.state !== 'intro' && this.state !== 'tutorial' && !S.away) S.sendAway();
+    const live = this.creatures.some((c) => c.agent.state !== 'dead');
+    this.snowQuietT = playing && !live ? this.snowQuietT + dt : 0;
+    const cfg = this.cfg;
+    let may = playing && this.spawned > 0 && S.visits < cfg.snowmanVisits && this.t >= this.snowNextAt;
+    if (cfg.snowmanCalmOnly) may = may && this.snowQuietT >= cfg.snowmanQuiet;
+    if (this.jolt) may = false; // the lights-out scare is its own: he holds still through it
+    if (may && S.stage === 'away' && !this.snowSpots) this.planVisit();
+    const here = S.stage !== 'away';
+    const next = S.stage === 'away' ? 'far' : S.stage === 'near' ? null : STAGES[STAGES.indexOf(S.stage) + 1];
+    const pts = here ? this.snowmanPoints() : null;
+    const seen = here && pts.some((p) => this.throughGlass(p, vps, VIEW_MARGIN));
+    const inView = here && pts.some((p) => this.throughGlass(p, vps, 1.0));
+    const nextInView = !!next && !!this.snowSpots && this.snowPosePoints(this.snowPose(next)).some((p) => this.throughGlass(p, vps, 1.0));
+    this.snowView = { seen, inView };
+    // He tempts you while they are on their way, not as one strikes: with one close (as the lights-out scare
+    // judges it) he holds still, and so does everything he does.
+    const close = this.creatures.some((c) => {
+      const st = c.agent.state;
+      return st === 'looming' || st === 'lunging' || (st !== 'banished' && st !== 'dead' && v3.distXZ(c.agent.pos, this.head) < JOLT.clear);
+    });
+    const calm = (!cfg.snowmanCalmOnly || !live) && !this.jolt && !close;
+    for (const e of S.update(dt, { seen, inView, nextInView, calm, mayArrive: may })) this.onSnowman(e);
+  }
+
+  applySnowPose(stage) {
+    const n = this.snowmanNode, pose = this.snowPose(stage);
+    n.pos = pose.pos;
+    n.rot = q.mul(q.fromYaw(pose.yaw), rx(pose.lean));
+    n.parts.head.rot = rz(pose.tilt);
+    n.parts.eyes.visible = stage === 'near'; // embers in his eyes, at the glass
+    n.visible = true;
+    n.updateWorld(this.yard.world);
+  }
+
+  onSnowman(e) {
+    const S = this.snowman, W = this.window;
+    switch (e) {
+      case 'arrive':
+      case 'move':
+        this.applySnowPose(S.stage);
+        // Snow crunching under him, out there; and as he first comes, a gust against the glass.
+        this.audio.play('crunch', { pos: W.center, gain: S.stage === 'near' ? 0.7 : 0.45 });
+        if (e === 'arrive') this.audio.play('gust', { pos: W.center, gain: 0.6 });
+        break;
+      case 'seen': // a music-box note gone sour, lower each time he is closer
+        this.audio.play('chime', { pos: W.center, rate: [0.89, 0.84, 0.75][STAGES.indexOf(S.stage)] || 0.8, gain: 0.5 });
+        break;
+      case 'tap': {
+        // His nose on the glass.
+        const tip = m4.point(this.snowmanNode.parts.head.world, M.SNOWMAN_PROBES.head[2]);
+        const onGlass = v3.addScaled(tip, W.normal, v3.dot(v3.sub(W.center, tip), W.normal));
+        this.audio.play('tap', { pos: onGlass });
+        break;
+      }
+      case 'leave': {
+        const n = this.snowmanNode;
+        if (n.visible && this.snowSpots && v3.dist(n.pos, this.snowSpots.near) < 1e-6) {
+          // He was at the glass: a fogged patch where his nose was, fading.
+          const tip = this.toYard(m4.point(n.parts.head.world, M.SNOWMAN_PROBES.head[2]));
+          this.smudge.pos = [tip[0], tip[1], 0.006];
+          this.smudge.visible = true;
+          this.smudgeT = 0;
+        }
+        n.visible = false;
+        this.snowSpots = null;
+        this.snowNextAt = this.t + this.cfg.snowmanGap;
+        break;
+      }
+      default: break;
+    }
+  }
+
+  // The snow outside: flakes born on the line of sight through the glass, falling past it.
+  updateYardSnow(dt) {
+    if (!this.window || !this.yard) return [];
+    const W = this.window, ground = this.yardGround, out = [];
+    for (const f of this.yardFlakes) {
+      if (f.born < 0 || f.node.pos[1] < ground || this.t - f.born > f.life) {
+        const depth = 0.25 + 5.5 * this.fxRng() ** 1.5;
+        const p = this.yardSight([(this.fxRng() - 0.5) * W.w * 1.2, (this.fxRng() - 0.2) * W.h], depth);
+        p[1] += f.born < 0 ? 0 : 0.6 + 0.6 * this.fxRng();
+        f.node.pos = p; f.x = p[0]; f.z = p[2];
+        f.speed = 0.18 + 0.14 * this.fxRng(); f.phase = this.fxRng() * 6.3; f.life = 7 + 4 * this.fxRng();
+        const k = 1.3 + 0.45 * depth;
+        f.node.scl = [k, k, k];
+        f.born = this.t;
+      }
+      const y = f.node.pos[1] - f.speed * dt;
+      f.node.pos = [f.x + 0.05 * Math.sin(this.t * 0.8 + f.phase), y, f.z + 0.04 * Math.cos(this.t * 0.6 + f.phase)];
+      f.node.rot = q.fromYaw(this.t * 0.5 + f.phase);
+      out.push(f.node);
+    }
+    return out;
+  }
+
   showTitle() {
+    if (!this.cards) {
+      // The gift tag on the ornament box: the title itself is on the wall.
+      // The goal in two lines, a third larger than it fits on one: it is what the night asks of you.
+      const lines = [
+        { t: `Night ${this.night}`, size: 54 },
+        { t: 'hang every ornament', size: 40, weight: 'normal', color: '#8a1a22' },
+        { t: 'before midnight', size: 40, weight: 'normal', color: '#8a1a22' },
+      ];
+      if (!this.layout.realWalls) lines.push({ t: 'No room scan · playing around your seat', size: 22, weight: 'normal', color: '#6b5a44' });
+      this.panels.title.show(lines, [], { corner: BUILD.label });
+      return;
+    }
     const lines = [
       { t: 'Not a Creature', size: 58 },
       { t: 'Was Stirring', size: 58 },
@@ -304,6 +630,7 @@ export class Game {
       state: this.state, night: this.night, hung: this.hung, of: this.cfg?.ornaments, candles: this.candlesLit,
       creatures: this.creatures.length, darkness: +this.darkness.toFixed(2), table: this.layout?.table.virtual ? 'virtual' : 'real',
       walls: this.layout?.walls.length, realWalls: this.layout?.realWalls,
+      window: this.window ? (this.window.real ? 'real' : 'put up') : 'none', snowman: this.snowman?.stage,
     };
   }
 
@@ -312,8 +639,11 @@ export class Game {
     this.haptics.length = 0; // only this frame's pulses
     if (!this.layout || this.paused) return;
     dt = Math.min(Math.max(dt, 0), 0.05);
+    this.frameDt = dt;
     this.t += dt;
     this.stateT += dt;
+    // A poked tag has swung away: now the press happens (Play again, Try again, the next night).
+    if (this.pending && this.t >= this.pending.at) { const { id } = this.pending; this.pending = null; this.press(id, { quiet: true }); }
     this.frame = frame;
     if (frame.head) {
       this.head = frame.head.pos;
@@ -332,7 +662,9 @@ export class Game {
       case 'finale': this.updateFinale(dt); break;
       default: break;
     }
+    if (this.jolt) this.updateJolt(dt);
     if (this.state === 'play' || this.state === 'star' || this.state === 'finale') this.updateCreatures(dt);
+    this.updateSnowman(dt);
     this.updateItems(dt);
     this.updateFx(dt);
     this.animate(dt);
@@ -348,6 +680,19 @@ export class Game {
     this.fxBatches.lit.update(lit);
     this.fxBatches.glow.update(glow);
     if (this.restDirty) { this.restDirty = false; this.restBatch.update(this.rest); }
+    // The snow outside falls only while some of the window could be on screen: unseen, it would be rebuilt and
+    // uploaded every frame for nothing.
+    if (this.window && this.windowInView()) this.yardSnow.update(this.updateYardSnow(this.frameDt || 0));
+  }
+
+  // Could any of the window be on screen? (its middle, corners and edges, with a margin for the eye's other side)
+  windowInView() {
+    const W = this.window, vps = (this.frame && this.frame.viewProjs) || [];
+    for (const [a, b] of [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [0, 1], [-1, 0], [1, 0]]) {
+      const p = v3.add(v3.add(W.center, v3.scale(W.right, (a * W.w) / 2)), v3.scale(W.up, (b * W.h) / 2));
+      if (isObserved(p, vps, 1.15)) return true;
+    }
+    return false;
   }
 
   enterTutorial() {
@@ -411,7 +756,7 @@ export class Game {
         this.audio.play('pickup', { pos: h.pos });
         this.feelGrab(it, h.side);
         if (this.panels.title.node.visible) this.panels.title.hide();
-      }
+      } else if (this.feel) this.burst(h.pos, 2, 'sparkle'); // a pinch in empty air still answers: the headset saw it
     }
   }
 
@@ -637,7 +982,7 @@ export class Game {
       const pinch = start && Math.abs(hit.depth) < 0.07;
       if ((poke || pinch) && this.t - this.lastPress > 0.6) {
         this.lastPress = this.t;
-        this.press(hit.id);
+        this.pressSoon(hit.id);
         return;
       }
     }
@@ -650,20 +995,29 @@ export class Game {
       this.cursor.pos = hit.point;
       if (start && this.t - this.lastPress > 0.6) {
         this.lastPress = this.t;
-        this.press(hit.id);
+        this.pressSoon(hit.id);
       }
       return;
     }
   }
 
-  press(id) {
+  // A hand on a tag: it clicks and swings away at once, and the press follows when the swing has carried it off.
+  pressSoon(id) {
+    if (this.cards) { this.press(id); return; }
+    if (this.pending) return;
     this.audio.play('click');
+    this.pending = { id, at: this.t + PRESS_DELAY };
+    this.swing = { t0: this.t };
+  }
+
+  press(id, { quiet = false } = {}) {
+    if (!quiet) this.audio.play('click');
     if (id === 'again') this.reset(this.night); // the night you were on, not a recomputed one
     else if (id === 'next') this.reset(this.night + 1);
   }
 
   // ------------------------------------------------------------ threats
-  updateThreats() {
+  updateThreats(dt) {
     const live = this.creatures.filter((c) => c.agent.state !== 'dead').length;
     const stuck = live === 0 && !this.items.some((it) => it.state === 'box' || it.state === 'returning' || it.state === 'flying' || it.state === 'held');
     if (stuck && this.items.some((it) => it.state === 'stolen')) this.nextSpawnAt = Math.min(this.nextSpawnAt, this.t + 1.5);
@@ -673,11 +1027,194 @@ export class Game {
       this.nextSpawnAt = this.t + this.cfg.spawnEvery * (0.8 + 0.4 * this.rng());
     }
     if (this.cfg.lightsOut && this.t >= this.nextLightsOut) {
-      this.lightsOutUntil = this.t + 4.5;
       this.nextLightsOut = this.t + 20 + this.rng() * 10;
-      this.audio.play('powerdown');
+      // The night's first lights-out, with nothing near: the scare (see JOLT). Otherwise a plain one, and
+      // the scare comes on its own once nothing is near (below), not at the next lights-out 20-30 s later.
+      if (this.scares && !this.joltDone && this.joltClear()) this.startJolt('double');
+      else { this.lightsOutUntil = this.t + 4.5; this.audio.play('powerdown'); this.joltArmed = true; }
+    }
+    // Night 1's one lights-out (once enough ornaments are up), or a later night's that the first lights-out
+    // could not be: as soon as nothing has been near for a moment.
+    const due = this.cfg.blackoutAfter ? this.hung >= this.cfg.blackoutAfter : this.joltArmed;
+    if (this.scares && !this.joltDone && due) {
+      this.joltClearT = this.joltClear() ? this.joltClearT + dt : 0;
+      if (this.joltClearT >= JOLT.settle) this.startJolt(this.cfg.blackoutAfter ? 'classic' : 'double');
     }
     this.darkTarget = this.t < this.lightsOutUntil ? 0.85 : DUSK;
+  }
+
+  // ------------------------------------------------------------ the lights-out scare
+  // Nothing near: the night's first nutcracker has come and gone, none is within JOLT.clear, waiting
+  // beside you or lunging, and the moment of grace after a hit is over.
+  joltClear() {
+    if (this.state !== 'play' || this.t < this.graceUntil || this.jolt) return false;
+    if (this.t < this.lightsOutUntil + 3) return false; // not during a plain lights-out, nor straight after one
+    if (this.spawned === 0 || this.creatures.some((c) => c.first)) return false;
+    return !this.creatures.some((c) => {
+      const s = c.agent.state;
+      return s === 'looming' || s === 'lunging' || (s !== 'banished' && s !== 'dead' && v3.distXZ(c.agent.pos, this.head) < JOLT.clear);
+    });
+  }
+
+  // 'classic' (night 1): eyes in the dark, then the lights come back on its face. 'double' (later nights):
+  // the eyes go out, the lights come back on nothing, then cut out for a moment, and its face is there.
+  startJolt(variant) {
+    if (this.jolt) return;
+    const node = M.nutcracker();
+    node.traverse((x) => { if (x.name === 'shadow') x.visible = false; x.baseRim = x.rim; x.baseSpec = x.spec; });
+    node.updateWorld();
+    const eyeLocal = m4.point(node.parts.head.world, [0, 0.118, 0.085]);
+    node.visible = false;
+    node.parts.pupils.emissive = 1;
+    node.parts.pupils.tint = [4.5, 0.5, 0.5];
+    this.scene.add(node);
+    const face = variant === 'classic' ? JOLT.lit : JOLT.lit + JOLT.falseLit + JOLT.flicker;
+    const T = { face, sink: face + JOLT.hold, end: face + JOLT.hold + JOLT.sink };
+    this.jolt = { variant, phase: 'dark', dark: true, t: 0, node, eyeLocal, T, g: null, at: null };
+    this.joltDone = true;
+    // Nothing else moves while it plays, and nothing new arrives: it costs no candle.
+    this.graceUntil = Math.max(this.graceUntil, this.t + T.end + 0.1);
+    this.nextSpawnAt = Math.max(this.nextSpawnAt, this.t + T.end + 1.5);
+    this.darkRate = JOLT.fade;
+    this.audio.play('powerdown');
+    this.audio.music('stop');
+    if (this.feel) this.gutterT = 0; // the candle flames bow, as in a draft
+  }
+
+  joltPhase(t) {
+    const J = this.jolt, classic = J.variant === 'classic';
+    if (t < JOLT.eyes) return 'dark';
+    if (t < (classic ? JOLT.lit : JOLT.blink)) return 'eyes';
+    if (t < JOLT.lit) return 'gone';
+    if (!classic && t < JOLT.lit + JOLT.falseLit) return 'lit';
+    if (t < J.T.face) return 'flicker';
+    if (t < J.T.sink) return 'face';
+    if (t < J.T.end) return 'sink';
+    return 'end';
+  }
+
+  updateJolt(dt) {
+    const J = this.jolt;
+    if (this.state !== 'play' && this.state !== 'star') { this.endJolt(); return; }
+    const was = J.t;
+    J.t += dt;
+    const t = J.t, n = J.node, P = n.parts;
+    const phase = this.joltPhase(t);
+    if (phase === 'end') { this.endJolt(); return; }
+    const entered = phase !== J.phase;
+    J.phase = phase;
+    J.dark = phase === 'dark' || phase === 'eyes' || phase === 'gone' || phase === 'flicker';
+    this.darkTarget = J.dark ? JOLT.dark : DUSK;
+    // The lights snap back on, or cut out for a moment: no easing.
+    if (entered && (phase === 'lit' || phase === 'face')) this.darkness = DUSK;
+    if (entered && phase === 'flicker') this.darkness = JOLT.dark;
+    const shade = (k) => n.traverse((x) => {
+      if (x === P.pupils || x.name === 'shadow') return;
+      x.tint = [k, k, k];
+      x.rim = (x.baseRim || 0) * (k > 0.5 ? 1 : 0); // no moonlit edges or glints in the dark: only the eyes show
+      x.spec = (x.baseSpec || 0) * (k > 0.5 ? 1 : 0);
+    });
+    const crossed = (k) => was < k && t >= k;
+    if (phase === 'eyes') {
+      if (entered) {
+        J.g = this.gazeDir();
+        J.room = this.eyesRoom(J.g);
+        n.visible = true;
+        shade(0.03);
+        P.jaw.rot = q.identity();
+      }
+      const k = smooth((t - JOLT.eyes) / ((J.variant === 'classic' ? JOLT.lit : JOLT.blink) - JOLT.eyes));
+      n.scl = [1, 1, 1];
+      J.near = J.room - JOLT.creep * k;
+      this.faceOn(n, J.eyeLocal, J.g, J.near);
+      const w = t - JOLT.eyes - JOLT.wink[0];
+      P.pupils.visible = !(w >= 0 && w < JOLT.wink[1]); // it blinks
+      P.head.rot = rz(0.25 * k); // its head tilts as it comes
+      const eyes = v3.addScaled(this.head, J.g.dir, J.room);
+      if (entered) this.audio.play('creak', { pos: eyes, gain: 0.8 });
+      for (const s of JOLT.steps) if (crossed(s)) this.audio.play('step', { pos: [eyes[0], this.layout.floorY, eyes[2]], gain: 1.2 });
+    } else if (phase === 'gone') {
+      n.visible = false; // the eyes go out
+    } else if (phase === 'lit') {
+      n.visible = false;
+      if (entered) this.audio.play('pop', { gain: 0.8 });
+    } else if (phase === 'flicker') {
+      if (entered) { J.g = this.gazeDir(); J.room = this.eyesRoom(J.g); n.visible = true; shade(0.03); P.head.rot = q.identity(); P.pupils.visible = true; }
+      n.scl = [1, 1, 1];
+      J.near = Math.min(JOLT.face + JOLT.pop[0], J.room);
+      this.faceOn(n, J.eyeLocal, J.g, J.near);
+    } else if (phase === 'face') {
+      const tf = t - J.T.face;
+      if (entered) {
+        if (J.variant === 'classic' || !J.g) { J.g = this.gazeDir(); J.room = this.eyesRoom(J.g); }
+        // From where it was last seen (its eyes in the dark on night 1, its face in the flicker later), nearer.
+        J.from = J.variant === 'classic' ? J.room - JOLT.creep : Math.min(JOLT.face + JOLT.pop[0], J.room);
+        J.faceAt = clamp(J.from - JOLT.pop[0], JOLT.closest, JOLT.face);
+        n.visible = true;
+        shade(1);
+        const at = v3.addScaled(this.head, J.g.dir, J.faceAt);
+        this.audio.play('stinger', { gain: 0.9 });
+        this.audio.play('clack', { pos: at });
+        this.audio.play('pop', { gain: 0.8 });
+        this.rumble('hit'); // controllers jolt in your hands (game feel; tracked hands have no motors)
+        if (this.feel) for (const o of this.items) if (o.state === 'hung' && !o.isStar && o.swingAxis) this.kick(o, FEEL.jolt); // the tree shudders
+        P.pupils.visible = true;
+      }
+      n.scl = [1, 1, 1];
+      J.near = J.faceAt + Math.max(0, J.from - J.faceAt) * (1 - smooth(Math.min(1, tf / JOLT.pop[1])));
+      this.faceOn(n, J.eyeLocal, J.g, J.near);
+      P.jaw.rot = rx(0.35 + 0.35 * Math.abs(Math.sin(tf * 24)));
+      P.head.rot = rz(0.05 * Math.sin(tf * 37));
+      J.at = v3.copy(n.pos);
+    } else if (phase === 'sink') {
+      const k = smooth((t - J.T.sink) / JOLT.sink);
+      if (entered) this.audio.play('banish', { pos: v3.addScaled(this.head, J.g.dir, J.faceAt) });
+      const s = Math.max(0.01, 1 - 0.7 * k);
+      n.scl = [s, s, s];
+      n.pos = [J.at[0] + Math.sin(this.t * 60) * 0.01, J.at[1] - 0.6 * k, J.at[2]];
+    }
+  }
+
+  endJolt() {
+    const J = this.jolt;
+    if (!J) return;
+    J.node.parent?.remove(J.node);
+    this.jolt = null;
+    this.darkRate = 2.5;
+    if (this.state === 'play' || this.state === 'star') this.audio.music('start');
+  }
+
+  // How far along `g` the lights-out figure can stand and still be seen: no further than JOLT.near (real-world
+  // occlusion never hides anything that close), in front of the tree when the gaze passes it, and above the
+  // table top when the gaze comes down to it. Its eyes opened 1 m along your gaze once: behind the tree.
+  eyesRoom(g) {
+    let d = JOLT.near;
+    const toTree = v3.sub(this.lookTarget, this.head);
+    const along = v3.dot(toTree, g.dir), miss = Math.sqrt(Math.max(0, v3.dot(toTree, toTree) - along * along));
+    if (along > 0 && miss < JOLT.treeRadius + 0.1) d = Math.min(d, along - JOLT.treeRadius - 0.06);
+    const top = this.tableNode.pos[1] + JOLT.tableClear;
+    if (g.dir[1] < -1e-3 && this.head[1] > top) {
+      const s = (top - this.head[1]) / g.dir[1];
+      if (v3.distXZ(v3.addScaled(this.head, g.dir, s), this.tableNode.pos) < 0.6) d = Math.min(d, s);
+    }
+    return Math.max(0.38, d);
+  }
+
+  // Where the player is looking, with the pitch held between -50° and +45° so that a player looking at the
+  // floor or the ceiling still gets in view what is put there.
+  gazeDir() {
+    const f = v3.norm(this.frame && this.frame.head ? this.frame.head.forward : [0, 0, -1]);
+    const fl = v3.len(v3.flat(f)) > 1e-3 ? v3.norm(v3.flat(f)) : [0, 0, -1];
+    const pitch = clamp(Math.asin(clamp(f[1], -1, 1)), -50 * DEG, 45 * DEG);
+    return { fl, pitch, dir: [fl[0] * Math.cos(pitch), Math.sin(pitch), fl[2] * Math.cos(pitch)] };
+  }
+
+  // Puts a nutcracker's eyes `dist` from the player's along `g` (a gazeDir), turned to them. eyeLocal: the
+  // point between its eyes in its own frame, at rest.
+  faceOn(node, eyeLocal, g, dist) {
+    const eyes = v3.addScaled(this.head, g.dir, dist);
+    node.rot = q.mul(q.fromYaw(faceYaw(v3.neg(g.fl))), rx(g.pitch));
+    node.pos = v3.sub(eyes, q.rotate(node.rot, v3.scale(eyeLocal, node.scl[0])));
   }
 
   spawnNutcracker(emerged) {
@@ -723,7 +1260,8 @@ export class Game {
     this.scene.add(node);
     const c = { agent, node, jawT: 0, legA: 0, blot: null, carry: null };
     // The night's first: as he sets off the music box runs down (and the snow stops); once he is gone it plays again.
-    if (agent.id === 1) { c.first = true; this.audio.music('winddown'); }
+    if (agent.id === 1) { c.first = true; this.audio.music('winddown'); this.wall?.title.dieOut(this.t + 0.3, 0.22); }
+    if (agent.id === 1) this.snowNextAt = this.t + (this.cfg.snowmanCalmOnly ? 0 : this.cfg.snowmanFirst); // the snowman may come after this
     const loot = this.items.find((it) => it.state === 'stolen');
     if (loot) { loot.state = 'carried'; loot.carrier = agent; loot.node.visible = true; loot.node.scl = [1.7, 1.7, 1.7]; c.carry = loot; }
     if (!emerged) {
@@ -732,6 +1270,7 @@ export class Game {
       blot.rot = q.fromYaw(faceYaw(normal));
       this.scene.add(blot);
       c.blot = blot;
+      if (this.feel) for (let i = 0; i < FEEL.breach[0]; i++) this.burst(this.breachPoint(agent), 1, 'plaster', normal, true); // the wall gives
     }
     this.creatures.push(c);
     this.nutcrackers = this.creatures.map((x) => x.agent);
@@ -783,10 +1322,10 @@ export class Game {
     switch (e) {
       case 'step': this.audio.play('step', { pos: a.pos }); break;
       case 'unfreeze': this.audio.play('creak', { pos: at, gain: 0.7 }); break;
-      case 'caught': c.caughtT = 1; break;
+      case 'caught': c.caughtT = 1; if (this.feel) this.audio.play('tock', { pos: at }); this.stingIfClose(c); break;
       case 'loomCaught':
         c.caughtT = 1;
-        if (!this.stungOnce) { this.stungOnce = true; this.audio.play('stinger', { gain: 0.7 }); } // the first meeting
+        if (!this.stungOnce) { this.stungOnce = true; this.lastStingAt = this.t; this.audio.play('stinger', { gain: 0.7 }); } // the first meeting
         this.shownLookHint = true;
         this.showHint("Don't look away · stare it down", 5);
         this.hintFor = c; // drawn where the player is looking: see the hint placement in animate()
@@ -819,6 +1358,20 @@ export class Game {
     }
   }
 
+  // Caught mid-step within STING_NEAR of you: a sting, and its jaw drops. Once a nutcracker, never two within
+  // STING_GAP, none while night 1's first is still to meet you (its own sting comes then), and none while
+  // everything is frozen after a hit (c.seen is false then: nobody really looked).
+  stingIfClose(c) {
+    const a = c.agent;
+    if (!this.scares || !c.seen || c.stung || this.t - this.lastStingAt < STING_GAP) return;
+    if (v3.distXZ(a.pos, this.head) >= STING_NEAR) return;
+    if (this.creatures.some((x) => x.agent.cfg.loomTime > 0 && !x.agent.loomSeen && x.agent.state !== 'banished' && x.agent.state !== 'dead')) return;
+    c.stung = true;
+    c.gapeT = 1;
+    this.lastStingAt = this.t;
+    this.audio.play('stab');
+  }
+
   damage() {
     this.attacks++;
     const lit = this.candles.filter((c) => c.lit);
@@ -844,21 +1397,8 @@ export class Game {
     this.state = 'scare'; this.stateT = 0;
     this.darkTarget = 0.96;
     this.panels.hint.hide();
-    // Right where the player is looking, 0.42 m from their eyes and turned to them. The pitch is held
-    // between -50° and +45° so a player looking at the floor or the ceiling still gets it in view.
-    const f = v3.norm(this.frame && this.frame.head ? this.frame.head.forward : [0, 0, -1]);
-    const fl = v3.len(v3.flat(f)) > 1e-3 ? v3.norm(v3.flat(f)) : [0, 0, -1];
-    const pitch = clamp(Math.asin(clamp(f[1], -1, 1)), -50 * DEG, 45 * DEG);
-    const eyes = v3.addScaled(this.head, [fl[0] * Math.cos(pitch), Math.sin(pitch), fl[2] * Math.cos(pitch)], 0.42);
-    const face = M.nutcracker();
-    face.updateWorld();
-    const eyeLocal = m4.point(face.parts.head.world, [0, 0.118, 0.085]);
-    face.rot = q.mul(q.fromYaw(faceYaw(v3.neg(fl))), rx(pitch));
-    face.pos = v3.sub(eyes, q.rotate(face.rot, eyeLocal));
-    face.parts.pupils.emissive = 1;
-    face.parts.pupils.tint = [4.5, 0.5, 0.5];
-    face.traverse((x) => { if (x.name === 'shadow') x.visible = false; });
-    this.scene.add(face);
+    this.endJolt();
+    const face = this.faceInFront(0.42);
     this.scareNode = face;
     this.flash = [0.55, 0, 0.02, 0.95];
     this.audio.music('stop');
@@ -866,9 +1406,25 @@ export class Game {
     this.audio.play('roar', { pos: v3.add(face.pos, [0, 0.6, 0]), rate: 0.7 });
   }
 
+  // A nutcracker's face right where the player is looking, `dist` from their eyes and turned to them (see
+  // gazeDir: a player looking at the floor or the ceiling still gets it in view), eyes glowing. Used by the
+  // last-candle scare and (game feel) every strike.
+  faceInFront(dist) {
+    const face = M.nutcracker();
+    face.updateWorld();
+    const eyeLocal = m4.point(face.parts.head.world, [0, 0.118, 0.085]);
+    this.faceOn(face, eyeLocal, this.gazeDir(), dist);
+    face.parts.pupils.emissive = 1;
+    face.parts.pupils.tint = [4.5, 0.5, 0.5];
+    face.traverse((x) => { if (x.name === 'shadow') x.visible = false; });
+    this.scene.add(face);
+    return face;
+  }
+
   // ------------------------------------------------------------ finale
   startFinale() {
     this.state = 'finale'; this.stateT = 0;
+    this.endJolt();
     for (const c of this.creatures) {
       this.burst(v3.add(c.agent.pos, [0, 0.5, 0]), 12, 'splinter', null, true); // kept on the floor (game feel)
       c.node.parent?.remove(c.node);
@@ -880,6 +1436,15 @@ export class Game {
     this.flash = [0.9, 0.75, 0.45, 0.5];
     this.finale = { phase: 0, crackT: 0, nextDebris: 0 };
     this.panels.hint.hide();
+    if (this.wall) {
+      // The wall cracks: the dead bulbs burst and come down, rather than hang in front of the hole.
+      this.wall.title.node.visible = false;
+      for (const w of this.wall.title.words) {
+        const a = w.center, half = w.text.length * 3 * this.wall.title.pitch; // about half the word's width
+        for (const k of [-1, 0, 1]) this.burst(v3.addScaled(a, this.layout.title.right, k * half * 0.66), 3, 'sparkle');
+      }
+      this.audio.play('pop', { pos: this.wall.title.node.pos, gain: 0.6 });
+    }
     const h = this.pickHole();
     this.holePos = h.p;
     this.holeNormal = h.n;
@@ -931,34 +1496,46 @@ export class Game {
     }
     if (F.phase >= 2 && this.hole) {
       F.crackT += dt;
-      const k = smooth(F.crackT / 1.6), kh = smooth((F.crackT - 0.9) / 0.9);
+      // The cracks spread; the hole only opens when he breaks through it.
+      const k = smooth(F.crackT / 1.6), kh = F.burstT === undefined ? 0 : smooth(F.burstT / KING_BURST.open);
+      if (F.burstT !== undefined) F.burstT += dt;
       this.hole.parts.cracks.scl = [Math.max(0.01, k), Math.max(0.01, k), 1];
       for (const part of [this.hole.parts.hole, this.hole.parts.inner, this.hole.parts.shade]) part.scl = [Math.max(0.01, kh), Math.max(0.01, kh), 1];
-      if (F.crackT < 2.2 && this.t > F.nextDebris) {
+      if (F.crackT < KING_BURST.quiet && this.t > F.nextDebris) { // then the wall goes still for a beat
         F.nextDebris = this.t + 0.15;
         this.burst(v3.addScaled(this.holePos, this.holeNormal, 0.05), 3, 'debris', this.holeNormal);
         if (this.fxRng() < 0.4) this.audio.play('crack', { pos: this.holePos, gain: 0.6 });
       }
     }
-    if (F.phase === 2 && T > 4.4) {
+    if (F.phase === 2 && T > KING_BURST.at) {
       F.phase = 3;
+      F.burstT = 0;
       // A wall close in front (a desk against it): he leans out of the hole instead of stepping into your table.
       const homeOffset = clamp((this.holeDist || 2) - 1.0, 0.08, 0.3);
-      this.king = new MouseKing({ pos: this.holePos, normal: this.holeNormal, cfg: { speed: this.cfg.kingSpeed, attackDist: this.cfg.kingAttackDist, homeOffset } });
+      this.king = new MouseKing({ pos: this.holePos, normal: this.holeNormal, cfg: { speed: this.cfg.kingSpeed, attackDist: this.cfg.kingAttackDist, homeOffset, emergeTime: KING_BURST.emerge } });
       this.kingNode = M.mouseKing();
       this.kingNode.pos = v3.copy(this.king.pos);
       this.scene.add(this.kingNode);
       this.audio.play('roar', { pos: this.holePos });
-      this.burst(v3.addScaled(this.holePos, this.holeNormal, 0.08), 16, 'debris', this.holeNormal);
+      this.audio.play('stinger', { gain: 0.85 });
+      this.rumble('hit');
+      this.flash = [0.95, 0.7, 0.45, 0.45]; // plaster dust
+      this.burst(v3.addScaled(this.holePos, this.holeNormal, 0.08), 28, 'debris', this.holeNormal);
     }
     if (F.phase === 3 && this.king.state !== 'emerging' && this.nextChimeAt === Infinity) {
       this.nextChimeAt = this.t + 0.8;
       this.showHint('Hold his gaze until midnight', 5);
     }
+    if (this.lure) this.updateLure(dt);
     if (F.phase === 3 && this.t >= this.nextChimeAt) {
       this.chimes++;
       this.audio.play('clock', { gain: 0.6 + this.chimes * 0.03 });
-      if (this.feel) { this.chimeFlare = 1; this.kingKnockT = 0; this.rumble('chime'); }
+      if (this.feel) {
+        this.chimeFlare = 1; this.kingKnockT = 0; this.rumble('chime');
+        this.kingLurchT = undefined; this.kingLurchAfter = this.t + 0.4; // the chime knocks him back: no lunge through it
+        if (FEEL.brighten) this.darkTarget = 0.78 * (1 - this.chimes / this.cfg.chimes); // each chime wins back some light
+        if (FEEL.lures && FEEL.lureChimes.includes(this.chimes)) this.startLure();
+      }
       this.nextChimeAt = this.t + this.cfg.chimeEvery;
       if (this.chimes >= this.cfg.chimes) {
         F.phase = 4;
@@ -987,6 +1564,11 @@ export class Game {
     writeSave(this.storage, this.save);
     this.panels.hint.hide();
     this.panels.result.show(...this.winPanel()); // painted when the room was dressed: only shown now
+    if (this.wall) {
+      this.wall.title.node.visible = false; // the dead title makes way
+      this.wall.win.node.visible = true;
+      this.wall.win.lightUp(this.t + 0.35, 0.35);
+    }
     this.audio.play('win');
     this.audio.music('calm');
     if (this.feel) { this.winT = 0; this.starAcc = 0; }
@@ -997,20 +1579,21 @@ export class Game {
     const buttons = [{ id: 'again', label: 'Play again' }];
     if (this.judge) buttons.push({ id: 'next', label: `Night ${next}` });
     return [[
-      { t: 'Merry Christmas', size: 56 },
-      { t: `You survived night ${this.night}`, size: 30, weight: 'normal' },
-      { t: this.judge ? `Judges' link: night ${next} is open now` : `Night ${next} opens tomorrow`, size: 24, weight: 'normal', color: '#e8c27a' },
+      { t: 'Merry Christmas', size: this.cards ? 56 : 72, color: this.cards ? undefined : '#8a1a22' },
+      { t: `You survived night ${this.night}`, size: this.cards ? 30 : 40, weight: 'normal' },
+      { t: this.judge ? `Judges' link: night ${next} is open now` : `Night ${next} opens tomorrow`, size: this.cards ? 24 : 32, weight: 'normal', color: this.cards ? '#e8c27a' : '#6b5a44' },
     ], buttons, { corner: BUILD.label }];
   }
 
   lose() {
     this.state = 'lose'; this.stateT = 0;
     this.darkTarget = 0.55;
+    this.wall?.title.dieOut(this.t, 0.08); // out already, in any night that got this far
     if (this.scareNode) { this.scareNode.parent?.remove(this.scareNode); this.scareNode = null; }
     this.panels.hint.hide();
     this.panels.result.show([
-      { t: 'The candles went out', size: 48 },
-      { t: `Night ${this.night} · ${this.hung} of ${this.cfg.ornaments} ornaments hung`, size: 26, weight: 'normal', color: '#e8c27a' },
+      { t: 'The candles went out', size: this.cards ? 48 : 64, color: this.cards ? undefined : '#8a1a22' },
+      { t: `Night ${this.night} · ${this.hung} of ${this.cfg.ornaments} ornaments hung`, size: this.cards ? 26 : 36, weight: 'normal', color: this.cards ? '#e8c27a' : '#6b5a44' },
     ], [{ id: 'again', label: 'Try again' }], { corner: BUILD.label });
     this.audio.music('stop');
     this.audio.play('lose');
@@ -1054,6 +1637,7 @@ export class Game {
       if (kind === 'splinter') { node = M.splinter(rnd); vel = [r() * 1.2, 0.8 + rnd() * 1.4, r() * 1.2]; life = 2.2; grav = 4.5; }
       else if (kind === 'chip') { node = M.splinter(rnd); vel = [r() * 0.7, 0.4 + rnd() * 0.8, r() * 0.7]; life = 0.9; grav = 4.5; size = 0.45; } // a stare chipping him
       else if (kind === 'debris') { node = M.debrisChunk(rnd); const d = dir || [0, 0, 1]; vel = v3.add(v3.scale(d, 0.8 + rnd() * 1.2), [r() * 0.6, rnd() * 0.9, r() * 0.6]); life = 2.4; grav = 4.5; }
+      else if (kind === 'plaster') { node = M.debrisChunk(rnd); const d = dir || [0, 0, 1]; vel = v3.add(v3.scale(d, 0.15 + rnd() * 0.45), [r() * 0.25, rnd() * 0.35, r() * 0.25]); life = 1.8; grav = 4.5; size = 0.5; } // off a nutcracker's hole (game feel)
       else if (kind === 'smoke') { node = M.smokePuff(); vel = [r() * 0.012, 0.06 + rnd() * 0.04, r() * 0.012]; life = 1.4 + rnd() * 0.5; grav = -0.03; }
       else { node = M.sparkle(); vel = [r() * 0.35, 0.1 + rnd() * 0.4, r() * 0.35]; life = 0.9 + rnd() * 0.5; grav = -0.05; }
       node.pos = v3.copy(pos);
@@ -1138,6 +1722,13 @@ export class Game {
     const out = this.candles.find((c) => !c.lit && c.smoke > 1.2);
     if (out) this.burst(out.node.flame.worldPos(), 5, 'sparkle');
     this.rumble('hit');
+    // You were not looking, so you never saw it come: its face snaps into view, jaw going, then shatters
+    // (feelTick). Not on the last candle: that is the scare's own, bigger moment.
+    if (this.candlesLit > 0) {
+      if (this.hitFace) this.hitFace.node.parent?.remove(this.hitFace.node);
+      this.hitFace = { node: this.faceInFront(0.48), t: 0 };
+      this.flash = [0.5, 0, 0.02, FEEL.hitFlash];
+    }
   }
 
   // Stared down: a crack, splinters that stay where they fall, and a beat where he holds still, lit up
@@ -1147,6 +1738,20 @@ export class Game {
     this.audio.play('snap', { pos: at });
     this.burst(at, 12, 'splinter', null, true);
     this.rumble('banish');
+  }
+
+  // A point on the rim of the hole a nutcracker comes through (the shape of M.wallBlot), just off the wall.
+  breachPoint(a) {
+    const n = a.normal, th = this.fxRng() * 2 * Math.PI;
+    return v3.add(v3.addScaled(a.wallPos, n, 0.03), [n[2] * 0.2 * Math.cos(th), 0.48 + 0.5 * Math.sin(th), -n[0] * 0.2 * Math.cos(th)]);
+  }
+
+  // Pushing out of the wall, which he only does while you do not look straight at him: plaster falls from round
+  // the hole, and stays on the floor under it.
+  feelBreach(c, a, dt) {
+    if (a.state !== 'emerging' || c.focused) return;
+    c.plasterAcc = (c.plasterAcc ?? 0) + dt * FEEL.breach[1];
+    for (; c.plasterAcc >= 1; c.plasterAcc -= 1) this.burst(this.breachPoint(a), 1, 'plaster', a.normal, true);
   }
 
   // While you stare one down: wood chips fly off him and the wood strains, faster and higher as he gives.
@@ -1198,6 +1803,22 @@ export class Game {
   }
 
   feelTick(dt) {
+    const hf = this.hitFace;
+    if (hf) {
+      const P = hf.node.parts;
+      P.jaw.rot = rx(0.55 * Math.abs(Math.sin(hf.t * 26)));
+      P.head.rot = rz(0.06 * Math.sin(hf.t * 41));
+      const s = 0.88 + 0.12 * Math.min(1, hf.t / 0.06); // snaps in
+      hf.node.scl = [s, s, s];
+      hf.t += dt;
+      if (hf.t >= FEEL.hitFace) {
+        const at = m4.point(hf.node.parts.head.world, [0, 0.1, 0.05]);
+        this.burst(at, 12, 'splinter');
+        this.audio.play('snap', { pos: at, gain: 0.7 });
+        hf.node.parent?.remove(hf.node);
+        this.hitFace = null;
+      }
+    }
     this.treeFlare = Math.max(0, this.treeFlare - dt / FEEL.treeFlareTime);
     this.chimeFlare *= Math.exp(-6 * dt);
     if (this.winT < 0) return;
@@ -1205,6 +1826,125 @@ export class Game {
     if (this.winT < FEEL.starTime && this.starItem.state === 'hung') {
       for (this.starAcc += dt; this.starAcc >= FEEL.starEvery; this.starAcc -= FEEL.starEvery) this.burst(v3.add(this.topWorld, [0, 0.03, 0]), 1, 'sparkle');
     }
+    // The candles that went out light again, one after another: looks only (the night keeps its count).
+    let k = 0;
+    for (const c of this.candles) {
+      if (c.lit) continue;
+      if (!c.relit && this.winT >= FEEL.relight[0] + k * FEEL.relight[1]) {
+        c.relit = true; c.smoke = 0;
+        c.node.flame.visible = true; c.node.glow.visible = true;
+        const at = c.node.flame.worldPos();
+        this.burst(at, 4, 'sparkle');
+        this.audio.play('pop', { pos: at, gain: 0.5 });
+      }
+      k++;
+    }
+  }
+
+  // While you stare one down he fights it: strains toward you, his sword arm creeps up, and he lurches at you
+  // and snaps back, more often as the stare builds, eyes flaring and jaw snapping; at the very end he shakes
+  // hard. All of it in place: he never gains ground while watched.
+  feelFight(c, a, stare, dt) {
+    const P = c.node.parts;
+    const staring = c.focused && (a.state === 'active' || a.state === 'emerging') && a.seenT > 0;
+    c.fight = clamp((c.fight || 0) + (staring ? dt * 4 : -dt * 3), 0, 1); // eases in, and lets go as you look away
+    if (!c.fight && c.lurchT === undefined) return;
+    const k = clamp(stare, 0, 1) * smooth(c.fight);
+    P.rig.rot = q.mul(P.rig.rot, rx(FEEL.fightLean * k));
+    P.armL.rot = q.mul(P.armL.rot, rx(-FEEL.fightArm * k));
+    if (k > 0.85) P.head.rot = q.mul(P.head.rot, rz(0.18 * Math.sin(this.t * 63)));
+    if (c.lurchT === undefined && staring && this.fxRng() < dt * (FEEL.lurch[0] + (FEEL.lurch[1] - FEEL.lurch[0]) * k)) {
+      c.lurchT = 0;
+      this.audio.play('clack', { pos: v3.add(a.pos, [0, 0.6, 0]), gain: 0.8, once: true });
+      this.rumble('strain');
+    }
+    if (c.lurchT !== undefined) {
+      const p = Math.sin((Math.PI * c.lurchT) / FEEL.lurchTime);
+      c.node.pos = v3.addScaled(c.node.pos, v3.norm(v3.flat(v3.sub(this.head, a.pos))), FEEL.lurchReach * Math.max(0, p));
+      P.jaw.rot = rx(0.6 * Math.max(0, p));
+      if (p > 0.3) { P.pupils.emissive = 1; P.pupils.tint = [4.5, 0.5, 0.5]; }
+      c.lurchT += dt;
+      if (c.lurchT >= FEEL.lurchTime) c.lurchT = undefined;
+    }
+  }
+
+  // Held by your gaze, the Mouse King fights it as they all do: he strains toward you and lunges and snaps back,
+  // growling, more as the chimes go on. Not while he tries a trick (his heads must read), never as he dies, and
+  // all of it in place: he never gains ground while held.
+  kingFight(dt) {
+    const k = this.king, n = this.kingNode;
+    const held = k.state === 'stalking' && k.tremble > 0;
+    const c = clamp(this.chimes / this.cfg.chimes, 0, 1), mix = ([lo, hi]) => lo + (hi - lo) * c;
+    if (held) n.rot = q.mul(n.rot, rx(mix(FEEL.kingLean)));
+    if (this.kingLurchT === undefined && held && !this.lure && this.t >= (this.kingLurchAfter || 0) && this.fxRng() < dt * mix(FEEL.kingLurch)) {
+      this.kingLurchT = 0;
+      this.audio.play('growl', { pos: k.pos, gain: 0.9 });
+      this.rumble('strain');
+    }
+    if (this.kingLurchT !== undefined) {
+      const p = Math.max(0, Math.sin((Math.PI * this.kingLurchT) / 0.22));
+      n.pos = v3.addScaled(n.pos, v3.norm(v3.flat(v3.sub(this.head, k.pos))), FEEL.kingReach * p);
+      this.kingLurchT += dt;
+      if (this.kingLurchT >= 0.22 || k.state !== 'stalking') this.kingLurchT = undefined;
+    }
+  }
+
+  // The Mouse King tries to make you look away: his heads turn to look past your shoulder, then sleigh bells (the
+  // night's sign of a nutcracker coming) ring right there behind you. Look and he advances, as ever.
+  startLure() {
+    const toKing = v3.norm(v3.flat(v3.sub(this.king.pos, this.head)));
+    this.lureSide = -this.lureSide; // the other shoulder each time
+    const ang = this.lureSide * 130 * DEG, cs = Math.cos(ang), sn = Math.sin(ang);
+    const dir = [toKing[0] * cs - toKing[2] * sn, 0, toKing[0] * sn + toKing[2] * cs];
+    this.lure = { t: 0, pos: v3.add(this.head, [dir[0] * 1.6, -0.45, dir[2] * 1.6]), n: this.chimes, rang: false };
+  }
+
+  updateLure(dt) {
+    const L = this.lure;
+    L.t += dt;
+    if (!L.rang && L.t >= 0.45) {
+      L.rang = true;
+      this.audio.play('jingle', { pos: L.pos, gain: 0.85 });
+      if (L.n >= 6) this.audio.play('step', { pos: L.pos });
+      if (L.n >= 9) this.audio.play('clack', { pos: v3.add(L.pos, [0, 0.4, 0]) });
+    }
+    if (L.t >= 1.6 || this.state !== 'finale') this.lure = null;
+  }
+
+  lureHeads(heads) {
+    const L = this.lure, k = this.king;
+    let yaw = 0;
+    if (L && k && L.t < 1.4) {
+      const fwd = v3.flat(v3.sub(this.head, k.pos)), to = v3.flat(v3.sub(L.pos, k.pos));
+      let d = Math.atan2(to[0], to[2]) - Math.atan2(fwd[0], fwd[2]);
+      d = Math.atan2(Math.sin(d), Math.cos(d));
+      const ramp = Math.min(1, L.t / 0.15) * Math.min(1, (1.4 - L.t) / 0.25);
+      yaw = clamp(1.6 * d, -0.8, 0.8) * ramp;
+    }
+    for (const h of heads) {
+      if (!h.baseRot) h.baseRot = [...h.rot];
+      h.rot = yaw ? q.mul(q.fromYaw(yaw), h.baseRot) : h.baseRot;
+      h.lureYaw = Math.abs(yaw);
+    }
+  }
+
+  // Your heart, as one closes in: from FEEL.heart[0] closeness, faster the closer it gets. In your chest, not in the room.
+  heartbeat(threat, dt) {
+    const [from, slow, fast] = FEEL.heart;
+    const live = this.state === 'play' || this.state === 'star';
+    if (!live || threat < from) { this.heartPhase = 0.6; return; } // the first beat comes soon after it starts
+    const k = (threat - from) / (1 - from);
+    this.heartPhase += dt * (slow + (fast - slow) * k);
+    if (this.heartPhase >= 1) { this.heartPhase -= 1; this.audio.play('heart', { gain: 0.55 + 0.45 * k }); }
+  }
+
+  // The lights-out scare (startJolt): in the dark your heart races as its eyes come closer, as if one were at arm's
+  // length by the time the lights come back, and stops dead when its face is there.
+  joltThreat() {
+    const J = this.jolt;
+    if (!J || !(J.dark || J.phase === 'lit')) return 0;
+    const [from, to] = FEEL.joltHeart;
+    return Math.min(to, from + ((to - from) * J.t) / JOLT.lit);
   }
 
   // Lights a whole figure up (the beat it freezes as it breaks); 0 puts each part back as it was.
@@ -1306,9 +2046,15 @@ export class Game {
       for (const r of this.lights.runs) r.on = true;
     }
 
+    if (this.wall) {
+      for (const title of [this.wall.title, this.wall.win]) {
+        for (const e of title.update(T)) this.audio.play('pop', { pos: e.at, gain: e.type === 'on' ? 0.45 : 0.25 });
+      }
+    }
     const dark = this.darkness;
+    const dead = this.jolt && this.jolt.dark; // the lights-out scare: every bulb is out, no flicker
     this.lights.runs.forEach((r, i) => {
-      if (!r.on) { r.emissive = 0.03; r.glow.alpha = 0; return; }
+      if (!r.on || dead) { r.emissive = 0.03; r.glow.alpha = 0; return; }
       r.emissive = dark > 0.45 ? (this.fxRng() < 0.04 ? 0.8 : 0.04) : 0.8 + 0.2 * Math.sin(T * 2.6 + r.phase);
       if (this.feel) r.emissive = this.feelLight(i, r.emissive);
       r.glow.alpha = clamp((r.emissive - 0.05) * 0.75, 0, 1);
@@ -1316,6 +2062,7 @@ export class Game {
     const full = this.state === 'finale' || this.state === 'win';
     this.tree.lights.emissive = full ? 1 : 0.25 + 0.65 * (this.hung / this.cfg.ornaments) + 0.08 * Math.sin(T * 5);
     if (this.feel) this.tree.lights.emissive += FEEL.treeFlare * this.treeFlare + 0.6 * this.chimeFlare;
+    if (dead) this.tree.lights.emissive = 0.03;
 
     this.tree.glows.alpha = clamp((this.tree.lights.emissive - 0.15) * 0.85, 0, 1);
 
@@ -1323,19 +2070,22 @@ export class Game {
     // A strike makes the flames that are left gutter and come back (game feel).
     const gut = this.gutterT < FEEL.gutterTime ? FEEL.gutter * (1 - this.gutterT / FEEL.gutterTime) ** 2 : 0;
     this.gutterT += dt;
+    let burning = 0;
     this.candles.forEach((c, i) => {
-      if (c.lit) {
+      if (c.lit || c.relit) { // relit: lit again after a win (game feel); the night still counts it as out
         const f = 1 + 0.16 * Math.sin(T * 19 + i * 2.1) + 0.08 * Math.sin(T * 33 + i);
         c.node.flame.scl = [1 - (f - 1) * 0.4, f * (1 - gut), 1 - (f - 1) * 0.4];
         c.node.glow.alpha = (0.62 + 0.9 * (f - 1)) * (1 - gut);
         flick += f * (1 - gut);
+        burning++;
       } else if (c.smoke > 0) {
         c.smoke -= dt;
         c.puffT -= dt;
         if (c.puffT <= 0) { c.puffT = 0.07; this.burst(c.node.flame.worldPos(), 1, 'smoke'); }
       }
     });
-    const lit = this.candlesLit;
+    const lit = burning;
+    this.candlesBurning = burning;
     this.candlePool.visible = lit > 0;
     this.candlePool.alpha = lit > 0 ? (0.07 + 0.075 * lit) * (flick / lit) : 0;
 
@@ -1407,8 +2157,22 @@ export class Game {
       const d = v3.norm(v3.sub(head, pos));
       node.rot = q.mul(q.fromYaw(Math.atan2(d[0], d[2])), q.fromAxisAngle([1, 0, 0], -Math.asin(clamp(d[1], -1, 1))));
     };
-    face(this.panels.title, this.titlePos);
-    face(this.panels.result, this.titlePos);
+    face(this.panels.title, this.cards ? this.titlePos : this.tagPos);
+    if (this.cards) face(this.panels.result, this.titlePos);
+    else {
+      // The result tags hang from their ribbon, their top edge at hangAt; a poke swings them away and back.
+      const R = this.panels.result, node = R.node;
+      face(R, v3.add(this.hangAt, [0, -R.h / 2, 0]));
+      const sw = this.swing ? swingAngle(this.t - this.swing.t0) : 0;
+      const half = (R.h * node.scl[1]) / 2;
+      if (sw) {
+        const top = v3.add(node.pos, q.rotate(node.rot, [0, half, 0]));
+        node.rot = q.mul(node.rot, rx(sw));
+        node.pos = v3.add(top, q.rotate(node.rot, [0, -half, 0]));
+      }
+      this.ribbon.visible = node.visible;
+      if (node.visible) stretch(this.ribbon, this.hangFrom, v3.add(node.pos, q.rotate(node.rot, [0, half, 0])));
+    }
     // A hint about one nutcracker goes where the player is looking. Looked at directly: over its head, or
     // reading it would mean looking away. Only glimpsed at the edge of view: by the tree, where the eyes are.
     // Once over its head it stays there for as long as the nutcracker is in view at all.
@@ -1446,8 +2210,15 @@ export class Game {
     if (this.king && this.kingNode) this.animateKing(dt);
     if (this.feel) this.feelTick(dt);
 
+    // The patch his nose fogged on the glass fades.
+    if (this.smudge && this.smudge.visible) {
+      this.smudgeT += dt;
+      this.smudge.alpha = 0.5 * clamp(1 - this.smudgeT / 9, 0, 1);
+      if (this.smudgeT >= 9) this.smudge.visible = false;
+    }
+
     // Render parameters.
-    this.darkness += (this.darkTarget - this.darkness) * Math.min(1, dt * 2.5);
+    this.darkness += (this.darkTarget - this.darkness) * Math.min(1, dt * this.darkRate);
     this.flash[3] = Math.max(0, this.flash[3] - dt * 1.5);
     const rp = this.renderParams;
     rp.darkness = this.darkness;
@@ -1456,7 +2227,7 @@ export class Game {
     rp.ambient = 0.62 * (1 - 0.6 * this.darkness);
     rp.sun = 0.7 * (1 - 0.85 * this.darkness);
     const lights = [];
-    if (this.candlesLit > 0) lights.push({ pos: this.candleLightPos, color: [1, 0.62, 0.3], intensity: 0.35 + 0.25 * (this.candlesLit / 3) + 0.05 * Math.sin(T * 17), range: 1.2 });
+    if (this.candlesBurning > 0) lights.push({ pos: this.candleLightPos, color: [1, 0.62, 0.3], intensity: 0.35 + 0.25 * (this.candlesBurning / 3) + 0.05 * Math.sin(T * 17), range: 1.2 });
     if (st.state === 'hung') lights.push({ pos: this.topWorld, color: [1, 0.85, 0.5], intensity: 0.9, range: 1.5 });
     if (this.king && this.king.state !== 'gone') lights.push({ pos: v3.addScaled(this.king.pos, this.holeNormal, 0.3), color: [1, 0.12, 0.06], intensity: 0.9, range: 2.0 });
     rp.lights = lights.slice(0, 4);
@@ -1464,6 +2235,7 @@ export class Game {
     let threat = 0;
     for (const c of this.creatures) threat = Math.max(threat, clamp(1 - (v3.distXZ(c.agent.pos, head) - 0.6) / 2, 0, 1));
     this.audio.music('intensity', threat);
+    if (this.feel) this.heartbeat(Math.max(threat, this.joltThreat()), dt);
   }
 
   animateNutcracker(c, dt) {
@@ -1478,7 +2250,8 @@ export class Game {
     P.legL.rot = rx(c.legA); P.legR.rot = rx(-c.legA);
     P.armL.rot = rx(-c.legA * 0.7); P.armR.rot = rx(c.legA * 0.7);
     c.jawT = Math.max(0, c.jawT - dt * 5);
-    P.jaw.rot = rx(0.6 * Math.sin(c.jawT * Math.PI));
+    c.gapeT = Math.max(0, (c.gapeT || 0) - dt * 1.1); // caught too close: its jaw drops and hangs open (stingIfClose)
+    P.jaw.rot = rx(Math.max(0.6 * Math.sin(c.jawT * Math.PI), 0.7 * smooth(Math.min(1, c.gapeT * 1.6))));
     if (c.lungeT !== undefined) { // game feel: he throws up his arms and his jaw drops as he lunges
       const e = Math.min(1, c.lungeT / 0.12);
       c.lungeT += dt;
@@ -1494,6 +2267,8 @@ export class Game {
     const glow = this.darkness > 0.3 || this.state === 'lose';
     P.pupils.emissive = glow ? 1 : 0;
     P.pupils.tint = glow ? [4.5, 0.5, 0.5] : [1, 1, 1];
+    if (this.feel) this.feelFight(c, a, stare, dt);
+    if (this.feel) this.feelBreach(c, a, dt);
     const tint = a.state === 'emerging' || a.fromWall ? 0.25 + 0.75 * a.e : 1;
     n.traverse((x) => { if (x !== P.pupils && x.name !== 'shadow') x.tint = [tint, tint, tint]; });
     // Game feel: as he breaks he holds still for a beat, lit up (FEEL.freeze), then sinks squashed. A retreat
@@ -1535,6 +2310,7 @@ export class Game {
       this.kingKnockT += dt;
     }
     P.heads.forEach((h, i) => { h.pos[1] = [0, -0.06, -0.06][i] + 0.015 * Math.sin(this.t * 3 + i * 2); });
+    if (this.feel) { this.lureHeads(P.heads); this.kingFight(dt); }
     for (const e of P.eyes) e.tint = [1 + 0.5 * Math.sin(this.t * 8), 1, 1];
     if (k.state === 'dying') {
       const t = this.feel ? (Math.max(0, k.t - FEEL.kingFreeze) * 1.6) / (1.6 - FEEL.kingFreeze) : k.t;

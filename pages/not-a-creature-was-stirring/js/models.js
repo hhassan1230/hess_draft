@@ -1,6 +1,6 @@
 // Procedural low-poly models, all built from code (no asset files).
 // Every model faces +Z and stands on its origin unless noted.
-import { q, makeRng } from './math.js';
+import { v3, q, makeRng } from './math.js';
 import * as G from './geo.js';
 import { Node } from './scene.js';
 import { decodeProp } from './props.js';
@@ -36,7 +36,7 @@ export const cachedGeos = () => [...memo.values()].flatMap((v) => (v && v.pos &&
 // nothing when they appear: each takes tens of milliseconds the first time, a hitch in the headset
 // at exactly the moments that matter. The game calls this when it is created, before the session opens.
 export function warm() {
-  nutcracker(); mouseKing(); wallHole(7); wallBlot(); sparkle(); snowflake(); smokePuff();
+  ribbon(); nutcracker(); mouseKing(); wallHole(7); wallBlot(); sparkle(); snowflake(); smokePuff(); snowman();
   for (let i = 0; i < 6; i++) debrisChunk(() => (i + 0.5) / 6);
   for (let i = 0; i < 10; i++) splinter(() => (i + 0.5) / 10);
 }
@@ -49,6 +49,24 @@ const lightOf = (c) => { const m = Math.max(...c, 1e-3); return c.map((x) => 0.7
 
 export function blobShadow(r) {
   return new Node('shadow', cached(`shadow${r}`, () => G.disc(r, 12, [0, 0, 0])), { layer: 'blend', alpha: 0.45, emissive: 1, tint: [0, 0, 0], pos: [0, 0.003, 0] });
+}
+
+// A rounded rectangle's outline, [x, z] points around (cx, cz): the side table's top, the box's shadow.
+export function roundedRect(cx, cz, hw, hd, r, segs = 4) {
+  const pts = [];
+  for (const [sx, sz, a0] of [[1, 1, 0], [-1, 1, Math.PI / 2], [-1, -1, Math.PI], [1, -1, Math.PI * 1.5]]) {
+    const ox = cx + sx * (hw - r), oz = cz + sz * (hd - r);
+    for (let i = 0; i <= segs; i++) { const a = a0 + (i / segs) * (Math.PI / 2); pts.push([ox + Math.cos(a) * r, oz + Math.sin(a) * r]); }
+  }
+  return pts;
+}
+
+// The shadow under the ornament box: its own footprint and 18 mm more. A round blob as wide as the box reached up
+// to 18 cm past its front, past a real table's edge, where in passthrough it hung in the air (test/table-fit).
+function boxShadow(w, d) {
+  const pts = roundedRect(0, 0, w / 2 + 0.018, d / 2 + 0.018, 0.03).map(([x, z]) => [x, -z]);
+  return new Node('shadow', cached(`boxShadow${w}x${d}`, () => at(G.poly(pts, [0, 0, 0]), [0, 0, 0], q.fromAxisAngle([1, 0, 0], -Math.PI / 2))),
+    { layer: 'blend', alpha: 0.45, emissive: 1, tint: [0, 0, 0], pos: [0, 0.003, 0] });
 }
 
 // ---------------------------------------------------------------- nutcracker
@@ -287,6 +305,11 @@ export function ornament(col, style = ornamentStyle(col)) {
   }), { spec: 1 });
 }
 
+// The red ribbon the result tags hang from: one metre long, stretched between two points by its user.
+export function ribbon() {
+  return new Node('ribbon', cached('ribbon', () => G.box(0.006, 1, 0.0025, [0.7, 0.05, 0.08])));
+}
+
 export function star() {
   return new Node('star', cached('star', () => G.star(0.042, 0.018, 0.014, 5, C.gold)), { emissive: 0.5, spec: 0.8 });
 }
@@ -304,7 +327,7 @@ export function ornamentBox(count) {
     at(G.box(w, 0.006, 0.004, C.gold), [0, h + 0.002, d / 2]),
     at(G.box(0.004, h * 0.8, d - 2 * t, C.darkRed), [0, h * 0.4, 0]),
   ])));
-  node.add(blobShadow(Math.max(w, d) * 0.62));
+  node.add(boxShadow(w, d));
   const slots = [];
   for (let i = 0; i < count; i++) {
     const row = i % 2, col = Math.floor(i / 2);
@@ -366,14 +389,21 @@ export function smokePuff() {
 }
 
 
-// Small round table the game uses when no real table is in reach. Origin at the top surface.
+// The table the game brings when no real table is in reach. Origin at the top surface. Its top holds everything
+// the game sets on it on any night (test/table-fit.test.mjs): the ornament box, at its widest from night 7, reaches
+// 0.44 m to the left, the candles 0.28 m to the right, the presents 0.24 m back and the toy 0.15 m forward;
+// the night's tag, beside the box and turned to face you, 0.61 m to the left.
+// (It was 0.46 m round, and half the box hung in the air off its edge; then 0.75 m long, and the tag stood in the
+// air past its left end.)
+const SIDE_TOP = { cx: -0.1625, cz: -0.0475, hw: 0.4525, hd: 0.2125, r: 0.07 };
 export function sideTable(height) {
   height = Math.round(height * 100) / 100;
+  const { cx, cz, hw, hd, r } = SIDE_TOP;
   return new Node('sideTable', cached(`side${height}`, () => G.merge([
-    at(G.cyl(0.23, 0.23, 0.03, 12, C.darkWood), [0, -0.03, 0]),
-    at(G.cyl(0.235, 0.235, 0.006, 12, C.gold), [0, -0.033, 0]),
-    at(G.cyl(0.025, 0.035, Math.max(0.05, height - 0.05), 6, C.darkWood), [0, -height, 0]),
-    at(G.cyl(0.13, 0.15, 0.025, 8, C.darkWood), [0, -height, 0]),
+    G.prism(roundedRect(cx, cz, hw, hd, r), 0.03, C.darkWood),
+    at(G.prism(roundedRect(cx, cz, hw + 0.005, hd + 0.005, r + 0.005), 0.006, C.gold), [0, -0.027, 0]),
+    at(G.cyl(0.03, 0.04, Math.max(0.05, height - 0.05), 6, C.darkWood), [cx, -height, cz]),
+    at(G.cyl(0.16, 0.19, 0.025, 8, C.darkWood), [cx, -height, cz]),
   ])));
 }
 
@@ -534,6 +564,177 @@ export function mouseKing() {
   return withRim(root, 1.1);
 }
 
+// ---------------------------------------------------------------- the snowman outside the window
+// From the Christmas Megapack (js/props.js): a body that stands on y = 0 and a head that turns and tilts about its
+// neck (parts.head, a pivot). The pack's own face has small coal eyes and a faint mouth; a wider coal grin is added,
+// so the face reads through a window across the room. Moonlit: a cool tint, a little self-light, a rim of moonlight.
+export const SNOWMAN_NECK = 0.65; // m above the snow: the head's pivot (the spec's head frame, 0.62, less the body's, -0.03)
+export const SNOWMAN_SCALE = 1.15; // about 1.7 m tall, hat and all
+// Points to test whether he can be seen: on the body (root space) and on the head (head space, about the neck).
+export const SNOWMAN_PROBES = { body: [[0, 0.05, 0], [0, 0.4, 0]], head: [[0, 0.23, 0], [0, 0.8, 0], [0, 0.2, 0.54], [0.28, 0.25, 0], [-0.28, 0.25, 0]] };
+const SNOW_MAT = { tint: [0.8, 0.86, 1.0], emissive: 0.22, rim: 0.7 };
+export function snowman() {
+  const root = new Node('snowman');
+  const body = new Node('snowmanBody', prop('snowmanBody'), SNOW_MAT);
+  // The grin: coal along an upturned arc under the nose, on the head's ball (centre 0.23 above the neck, 0.3 round),
+  // in the head's mesh (one draw).
+  const head = new Node('snowmanHead', cached('snowmanHeadGrin', () => G.merge([prop('snowmanHead'), ...Array.from({ length: 9 }, (_, i) => {
+    const a = (i / 8 - 0.5) * 1.75, e = -0.38 + 0.2 * (2 * i / 8 - 1) ** 2; // across, and up at the corners
+    const r = 0.298, c = [Math.sin(a) * Math.cos(e) * r, 0.23 + Math.sin(e) * r, Math.cos(a) * Math.cos(e) * r];
+    return at(G.box(0.034, 0.034, 0.03, [0.05, 0.045, 0.05]), c, q.mul(ry(a), rx(-e)));
+  })])), SNOW_MAT);
+  head.pos = [0, SNOWMAN_NECK, 0];
+  // Embers in his coal eyes (lit at the glass): small discs on the head's ball, facing out, where the pack's
+  // own eyes are painted (about 0.14 either side, 0.31 above the neck).
+  const eyes = new Node('snowmanEyes', cached('snowmanEyes', () => G.merge([-1, 1].map((side) => {
+    const c = [side * 0.14, 0.315, 0.27], n = [c[0], c[1] - 0.23, c[2]], l = Math.hypot(...n);
+    const yaw = Math.atan2(n[0], n[2]), pitch = Math.asin(n[1] / l);
+    return at(G.poly(Array.from({ length: 6 }, (_, i) => [Math.cos(i / 6 * Math.PI * 2) * 0.017, Math.sin(i / 6 * Math.PI * 2) * 0.017]), [1, 1, 1]),
+      [c[0] + (n[0] / l) * 0.008, c[1] + (n[1] / l) * 0.008, c[2] + (n[2] / l) * 0.008], q.mul(ry(yaw), rx(-pitch)));
+  }))), { emissive: 1, tint: [1.0, 0.4, 0.26] });
+  eyes.visible = false;
+  head.add(eyes);
+  root.add(body, head);
+  root.parts = { body, head, eyes };
+  root.scl = [SNOWMAN_SCALE, SNOWMAN_SCALE, SNOWMAN_SCALE];
+  return root;
+}
+
+// ---------------------------------------------------------------- the yard outside the window
+// A snowy night seen through the window: the snow on the ground, a fence, firs, houses with lit windows, stars.
+// Built in the window's own space (x along it, y up, z out of the wall into the room, its middle at 0): everything
+// is outside (z < 0), and the renderer draws it only where it is seen through the glass (node.portal), so it can be
+// as big as it likes. The ground lies YARD_DROP below the bottom of the window. Two meshes: the sky's (self-lit)
+// and the land's (lit, a little self-lit so the moonlit snow reads at night). Cached by the window's size.
+export const YARD_DROP = 0.65;
+// The snow's height over the yard's ground at (x, z): flat by the wall, drifts further out.
+export const yardDrift = (x, z) => (z > -0.4 ? 0 : (0.07 * Math.sin(x * 1.3 + z * 0.7) + 0.05 * Math.sin(x * 0.45 - z * 1.1)) * Math.min(1, -z / 2));
+export function yardGeo(w, h) {
+  return cached(`yard${w.toFixed(2)}x${h.toFixed(2)}`, () => {
+    const rng = makeRng(31);
+    const g0 = -h / 2 - YARD_DROP, X = 24, Z = -18, TOP = g0 + 16;
+    const sky = [], land = [];
+    const drift = yardDrift;
+    // The ground: a grid finer near the window, its corners lifted into drifts.
+    const xs = [-X, -12, -6, -3.5, -2.2, -1.2, -0.5, 0.2, 1, 1.9, 3, 4.5, 7, 12, X];
+    const zs = [0, -0.6, -1.3, -2.1, -3.1, -4.3, -5.8, -7.8, -10.5, -14, Z];
+    const B = { p: [], n: [], c: [] };
+    const tri = (a, b, c, col) => {
+      const n = v3.norm(v3.cross(v3.sub(b, a), v3.sub(c, a)));
+      const up = n[1] < 0 ? -1 : 1;
+      for (const v of up > 0 ? [a, b, c] : [a, c, b]) { B.p.push(...v); B.n.push(n[0] * up, n[1] * up, n[2] * up); B.c.push(...col); }
+    };
+    for (let i = 0; i < xs.length - 1; i++) for (let j = 0; j < zs.length - 1; j++) {
+      const P = (x, z) => [x, g0 + drift(x, z), z];
+      const a = P(xs[i], zs[j]), b = P(xs[i + 1], zs[j]), c = P(xs[i + 1], zs[j + 1]), d = P(xs[i], zs[j + 1]);
+      const k = 0.88 + 0.2 * rng();
+      tri(a, b, c, [0.36 * k, 0.43 * k, 0.6 * k]);
+      tri(a, c, d, [0.34 * k, 0.41 * k, 0.58 * k]);
+    }
+    land.push({ pos: new Float32Array(B.p), nrm: new Float32Array(B.n), col: new Float32Array(B.c), uv: null, count: B.p.length / 3 });
+    // The window's reveal: the wall's thickness round the glass, seen from inside.
+    const R = 0.14, rv = [0.13, 0.12, 0.14];
+    land.push(at(G.box(w + 0.02, 0.02, R, rv), [0, -h / 2 - 0.01, -R / 2]), at(G.box(w + 0.02, 0.02, R, rv), [0, h / 2 + 0.01, -R / 2]));
+    land.push(at(G.box(0.02, h, R, rv), [-w / 2 - 0.01, 0, -R / 2]), at(G.box(0.02, h, R, rv), [w / 2 + 0.01, 0, -R / 2]));
+    // A fence across the yard, posts capped with snow.
+    const wood = [0.13, 0.095, 0.075], cap = [0.5, 0.57, 0.74];
+    for (let x = -7; x <= 7.01; x += 0.85) {
+      const y = g0 + drift(x, -4.6);
+      land.push(at(G.box(0.07, 0.75, 0.07, wood), [x, y + 0.36, -4.6]), at(G.box(0.1, 0.06, 0.1, cap), [x, y + 0.76, -4.6]));
+    }
+    for (const yy of [0.25, 0.55]) land.push(at(G.box(14.2, 0.05, 0.03, wood), [0, g0 + yy, -4.62]));
+    // Firs, snow on their tiers.
+    const firs = [[-4.6, -7.4, 3.2], [-2.4, -9.6, 4.1], [3.4, -8.1, 3.6], [5.8, -10.6, 4.6], [-7.2, -11.2, 4.4], [1.1, -12.6, 5], [8.4, -7.2, 3.4], [-1.2, -6.4, 2.6], [11, -12, 5.5], [-11, -9, 4.8]];
+    for (const [x, z, ht] of firs) {
+      const y = g0 + drift(x, z);
+      land.push(at(G.cyl(0.08, 0.1, ht * 0.25, 5, [0.1, 0.07, 0.05]), [x, y, z]));
+      for (let t = 0; t < 3; t++) {
+        const r = ht * (0.36 - t * 0.09), yb = y + ht * (0.18 + t * 0.24), hh = ht * (0.42 - t * 0.06), turn = ry(rng() * 3);
+        land.push(at(G.cone(r, hh, 7, [0.03, 0.1, 0.07]), [x, yb, z], turn));
+        land.push(at(G.cone(r * 0.62, hh * 0.5, 7, [0.46, 0.53, 0.7]), [x, yb + hh * 0.5, z], turn));
+      }
+    }
+    // Houses across the road, roofs deep in snow, windows lit.
+    const houses = [[-9.5, -14.2, 4, 2.6], [-3.6, -15.4, 3.4, 3], [2.6, -14.6, 3.8, 2.7], [8.8, -15, 4.2, 3.1], [15, -14.5, 4, 2.6], [-15.5, -15, 4, 2.9]];
+    for (const [x, z, ww, hh] of houses) {
+      const y = g0 + drift(x, z), d = 3;
+      land.push(at(G.box(ww, hh, d, [0.05, 0.045, 0.06]), [x, y + hh / 2, z]));
+      const rh = ww * 0.42, ridge = y + hh + rh;
+      const Rb = { p: [], n: [], c: [] };
+      const roofTri = (a, b, c, col) => { const n = v3.norm(v3.cross(v3.sub(b, a), v3.sub(c, a))); for (const v of [a, b, c]) { Rb.p.push(...v); Rb.n.push(...n); Rb.c.push(...col); } };
+      const L = [x - ww / 2 - 0.15, y + hh, z], Rr = [x + ww / 2 + 0.15, y + hh, z], T0 = [x, ridge, z - d / 2 - 0.15], T1 = [x, ridge, z + d / 2 + 0.15];
+      const L0 = [L[0], L[1], z - d / 2 - 0.15], L1 = [L[0], L[1], z + d / 2 + 0.15], R0 = [Rr[0], Rr[1], z - d / 2 - 0.15], R1 = [Rr[0], Rr[1], z + d / 2 + 0.15];
+      const snowRoof = [0.52, 0.59, 0.78];
+      roofTri(L1, T1, T0, snowRoof); roofTri(L1, T0, L0, snowRoof); roofTri(R1, R0, T0, snowRoof); roofTri(R1, T0, T1, snowRoof);
+      roofTri([L[0] + 0.15, L[1], z + d / 2], [Rr[0] - 0.15, Rr[1], z + d / 2], [x, ridge - 0.1, z + d / 2], [0.06, 0.05, 0.07]);
+      land.push({ pos: new Float32Array(Rb.p), nrm: new Float32Array(Rb.n), col: new Float32Array(Rb.c), uv: null, count: Rb.p.length / 3 });
+      land.push(at(G.box(0.4, 0.9, 0.4, [0.08, 0.06, 0.06]), [x + ww * 0.25, ridge - 0.25, z - 0.4]));
+      for (const sx of [-0.27, 0.27]) if (rng() < 0.8) sky.push(at(G.quad(0.55, 0.6, rng() < 0.7 ? [1, 0.7, 0.32] : [0.95, 0.55, 0.2]), [x + sx * ww, y + hh * 0.55, z + d / 2 + 0.01]));
+    }
+    // The sky: a box round the yard, deep blue overhead to a lighter band at the horizon, and stars.
+    const skyCol = (t) => [0.012 + 0.06 * (1 - t) ** 2, 0.016 + 0.075 * (1 - t) ** 2, 0.05 + 0.15 * (1 - t) ** 2];
+    const band = (W2, H2, ny, place) => { for (let iy = 0; iy < ny; iy++) { const t0 = iy / ny, t1 = (iy + 1) / ny; sky.push(place(at(G.grid(W2, H2 / ny, 1, 1, () => skyCol((t0 + t1) / 2)), [0, -H2 / 2 + (H2 / ny) * (iy + 0.5), 0]))); } };
+    const H = TOP - (g0 - 1);
+    band(2 * X, H, 8, (g) => at(g, [0, g0 - 1 + H / 2, Z]));
+    band(-Z, H, 8, (g) => at(g, [-X, g0 - 1 + H / 2, Z / 2], ry(Math.PI / 2)));
+    band(-Z, H, 8, (g) => at(g, [X, g0 - 1 + H / 2, Z / 2], ry(-Math.PI / 2)));
+    sky.push(at(G.grid(2 * X, -Z, 1, 1, () => skyCol(1)), [0, TOP, Z / 2], rx(Math.PI / 2)));
+    for (let i = 0; i < 90; i++) {
+      const sx = (rng() * 2 - 1) * (X - 0.5), sy = g0 + 3 + rng() * 12.5, s = 0.03 + 0.05 * rng();
+      sky.push(at(G.quad(s, s, [0.62, 0.66, 0.82].map((c) => c * (0.6 + 0.4 * rng()))), [sx, sy, Z + 0.05]));
+    }
+    return { sky: G.merge(sky), land: G.merge(land), ground: g0 };
+  });
+}
+
+// The moon, with rings of glow round it: placed by the game where the player sees it through the window.
+export function moon() {
+  const root = new Node('moon');
+  const disc = new Node('moonDisc', cached('moonDisc', () => G.poly(Array.from({ length: 16 }, (_, i) => [Math.cos(i / 16 * Math.PI * 2) * 0.75, Math.sin(i / 16 * Math.PI * 2) * 0.75]), [0.95, 0.93, 0.82])), { emissive: 1 });
+  const halo = new Node('moonHalo', cached('moonHalo', () => G.merge([[1.3, 0.07], [1.9, 0.045], [2.8, 0.028]].map(([r, k], i) => at(G.poly(Array.from({ length: 20 }, (_, j) => [Math.cos(j / 20 * Math.PI * 2) * r, Math.sin(j / 20 * Math.PI * 2) * r]), [k * 0.9, k, k * 1.4]), [0, 0, -0.02 * (i + 1)])))), { layer: 'add', emissive: 1 });
+  root.add(halo, disc);
+  return root;
+}
+
+// On the room's side of the glass. Frost in the corners (every window), and, for a window the game puts up, a
+// frame and a sill. In the window's own space, like the yard.
+export function windowGlass(w, h, framed) {
+  return cached(`glass${w.toFixed(2)}x${h.toFixed(2)}${framed ? 'f' : ''}`, () => {
+    const rng = makeRng(77);
+    const frost = [];
+    const corner = (sx, sy, size) => {
+      const pts = [[0, 0]];
+      for (let i = 0; i <= 8; i++) {
+        const a = (i / 8) * Math.PI / 2, r = size * (0.55 + 0.45 * rng());
+        pts.push([Math.cos(a) * r, Math.sin(a) * r]);
+      }
+      return at(G.poly(pts.map(([x, y]) => [sx * (w / 2 - x), sy * (h / 2 - y)]), [0.78, 0.84, 0.95]), [0, 0, 0.004]);
+    };
+    for (const [sx, sy] of [[1, 1], [-1, 1], [1, -1], [-1, -1]]) frost.push(corner(sx, sy, Math.min(w, h) * (sy < 0 ? 0.3 : 0.2)));
+    const out = { frost: G.merge(frost) };
+    if (framed) {
+      const c = C.cream, f = 0.06;
+      out.frame = G.merge([
+        at(G.box(w + 2 * f, f, 0.05, c), [0, h / 2 + f / 2, 0.025]),
+        at(G.box(f, h + 2 * f, 0.05, c), [-w / 2 - f / 2, 0, 0.025]),
+        at(G.box(f, h + 2 * f, 0.05, c), [w / 2 + f / 2, 0, 0.025]),
+        at(G.box(w + 0.24, 0.05, 0.12, c), [0, -h / 2 - 0.025, 0.06]),
+        at(G.box(0.03, h, 0.03, c), [0, 0, 0.015]),
+        at(G.box(w, 0.03, 0.03, c), [0, 0, 0.015]),
+      ]);
+    }
+    return out;
+  });
+}
+
+// A patch of fog on the glass where his nose was: a soft-edged blob, facing into the room.
+export function smudgeGeo() {
+  return G.merge([[0.09, 0.8], [0.06, 1]].map(([r, k], i) => at(G.poly(Array.from({ length: 12 }, (_, j) => {
+    const a = (j / 12) * Math.PI * 2;
+    return [Math.cos(a) * r * (1 + 0.15 * Math.sin(a * 3)), Math.sin(a) * r * 0.8];
+  }), [0.85 * k, 0.88 * k, 0.95 * k]), [0, 0, 0.001 * i])));
+}
+
 // ---------------------------------------------------------------- wall crack
 // Jagged hole in a wall, facing +Z (the wall normal). parts.cracks scale in as it breaks.
 export function wallHole(seed = 7) {
@@ -637,31 +838,66 @@ export function snapMarker() {
 // coffee table, couch, door, window, rug. spec: { w, d, h, table: {center, w, d} }.
 // The preview's stand-in for your living room: striped wallpaper over wood panelling, a plank floor and a
 // rug, a fireplace with stockings on the front wall (left of the middle, where the Mouse King breaks
-// through), a wreath, a moonlit window with curtains, a door and a couch. Built once, drawn as the backdrop.
+// through), a wreath, a window with curtains (an opening: the night outside is the game's yard), a door and a couch. Built once, drawn as the backdrop.
 // room.fx holds the fire and its glow (drawn with the game, so the fire burns through the dark), and
 // room.fireLight the warm light it throws.
 export function previewRoom(spec) {
   const { w, d, h } = spec;
   const hash = (a, b = 0) => { const x = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return x - Math.floor(x); };
   const parts = [];
-  const RAIL = 0.95;
+  // Trim: thin things laid on another surface (raised panels, rails, the window's frame and sill, the runner on
+  // the table, the stockings' cuffs). The vertex snap moves each surface's depth on
+  // screen by more than the few millimetres between them, so by depth alone they traded places as the camera
+  // moved, as the rug did. Trim is drawn with a depth offset (Node.trim, TRIM_OFFSET in js/renderer.js), and
+  // nothing is laid where something else stands against the wall (test/rug-flicker.mjs checks the whole room).
+  const trim = [];
+  const RAIL = 0.95, FX0 = -1.35, WIN_X = 0.6; // the fireplace on the front wall, the window on the right
   // Each wall as a frame: x along the wall as seen from inside, y up, z out of the wall into the room.
+  // gaps: where the panels, rail and skirting stop (wall x ranges): the fireplace, the door. The rail and the
+  // skirting run on up to the fireplace's brick pillars (rail): only the panels keep clear of its mantel shelf.
   const walls = [
-    { len: w, pos: [0, 0, -d / 2], rot: [0, 0, 0, 1] },
+    { len: w, pos: [0, 0, -d / 2], rot: [0, 0, 0, 1], gaps: [[FX0 - 0.78, FX0 + 0.78]], rail: [[FX0 - 0.625, FX0 + 0.625]] },
     { len: w, pos: [0, 0, d / 2], rot: ry(Math.PI) },
-    { len: d, pos: [-w / 2, 0, 0], rot: ry(Math.PI / 2) },
+    { len: d, pos: [-w / 2, 0, 0], rot: ry(Math.PI / 2), gaps: [[0.39, 1.41]] },
     { len: d, pos: [w / 2, 0, 0], rot: ry(-Math.PI / 2) },
   ];
   const onWall = (W, g, x, y, z = 0, rot = [0, 0, 0, 1]) => at(at(g, [x, y, z], rot), W.pos, W.rot);
+  const clear = (W, a, b) => !(W.gaps || []).some(([g0, g1]) => b > g0 && a < g1);
+  // The stretches of a wall between its gaps, and the ends of each that stop against something (a pillar, a door
+  // post): those ends are left open, as no face is ever seen there and one would lie on the other's face.
+  const spans = (W, gaps = W.gaps || []) => {
+    const out = [];
+    let x0 = -W.len / 2, open = '';
+    for (const [a, b] of gaps) { if (a > x0) out.push([x0, a, `${open}r`]); x0 = Math.max(x0, b); open = 'l'; }
+    if (x0 < W.len / 2) out.push([x0, W.len / 2, open]);
+    return out;
+  };
   const paper = (ix) => (ix % 9 === 0 ? [0.36, 0.33, 0.2] : Math.floor((ix % 9 - 1) / 4) ? [0.17, 0.3, 0.22] : [0.13, 0.25, 0.18]);
-  for (const W of walls) {
+  // The window (spec.window) is a real opening in the right wall: the wallpaper goes round it, and through it the
+  // game's yard is seen (js/game.js, drawn only through the glass), where the snowman comes.
+  const win = spec.window, wx = win ? win.z : WIN_X; // along the right wall its own x runs with the world's z
+  for (const [wi, W] of walls.entries()) {
     const hp = h - RAIL;
-    parts.push(onWall(W, G.grid(W.len, hp, Math.round(W.len / 0.037), 4, (ix) => paper(ix)), 0, RAIL + hp / 2, 0.001));
+    const cols = Math.round(W.len / 0.037), colW = W.len / cols;
+    if (win && wi === 3) {
+      const x0 = wx - win.w / 2, x1 = wx + win.w / 2, yb = win.y - win.h / 2, yt = win.y + win.h / 2;
+      const piece = (a, b, ya, yb2, rows) => {
+        if (b - a < 1e-6 || yb2 - ya < 1e-6) return;
+        const n = Math.max(1, Math.round((b - a) / colW)), off = Math.round((a + W.len / 2) / colW);
+        parts.push(onWall(W, G.grid(b - a, yb2 - ya, n, rows, (ix) => paper(ix + off)), (a + b) / 2, (ya + yb2) / 2, 0.001));
+      };
+      piece(-W.len / 2, x0, RAIL, h, 4);
+      piece(x1, W.len / 2, RAIL, h, 4);
+      piece(x0, x1, yt, h, 2);
+      piece(x0, x1, RAIL, yb, 1);
+    } else parts.push(onWall(W, G.grid(W.len, hp, cols, 4, (ix) => paper(ix)), 0, RAIL + hp / 2, 0.001));
     parts.push(onWall(W, G.grid(W.len, RAIL, Math.round(W.len / 0.5), 3, (ix, iy) => (iy === 0 ? [0.17, 0.1, 0.05] : (ix % 2 ? [0.25, 0.14, 0.07] : [0.23, 0.13, 0.065]))), 0, RAIL / 2, 0.001));
-    for (let x = -W.len / 2 + 0.3; x < W.len / 2 - 0.2; x += 0.55) parts.push(onWall(W, G.box(0.42, 0.48, 0.014, [0.29, 0.17, 0.09]), x, 0.5, 0.007));
-    parts.push(onWall(W, G.box(W.len, 0.045, 0.025, [0.86, 0.8, 0.66]), 0, RAIL, 0.0125));
-    parts.push(onWall(W, G.box(W.len, 0.09, 0.04, [0.86, 0.8, 0.66]), 0, h - 0.045, 0.02));
-    parts.push(onWall(W, G.box(W.len, 0.1, 0.022, [0.16, 0.09, 0.045]), 0, 0.05, 0.011));
+    for (let x = -W.len / 2 + 0.3; x < W.len / 2 - 0.2; x += 0.55) if (clear(W, x - 0.21, x + 0.21)) trim.push(onWall(W, G.box(0.42, 0.48, 0.014, [0.29, 0.17, 0.09]), x, 0.5, 0.007));
+    for (const [a, b, open] of spans(W, W.rail || W.gaps)) {
+      trim.push(onWall(W, G.box(b - a, 0.045, 0.025, [0.86, 0.8, 0.66], { open }), (a + b) / 2, RAIL, 0.0125));
+      trim.push(onWall(W, G.box(b - a, 0.1, 0.022, [0.16, 0.09, 0.045], { open }), (a + b) / 2, 0.05, 0.011));
+    }
+    trim.push(onWall(W, G.box(W.len, 0.09, 0.04, [0.86, 0.8, 0.66]), 0, h - 0.045, 0.02));
   }
   // Floor of planks (its own mesh, drawn first, so the rug can be painted over it), and a ceiling.
   const plank = [[0.36, 0.22, 0.12], [0.33, 0.2, 0.11], [0.39, 0.24, 0.13], [0.31, 0.19, 0.1]];
@@ -681,15 +917,17 @@ export function previewRoom(spec) {
   ];
 
   // Fireplace on the front wall.
-  const F = walls[0], fx0 = -1.35;
+  const F = walls[0], fx0 = FX0;
   const brick = (ix, iy) => [[0.45, 0.17, 0.12], [0.4, 0.15, 0.1], [0.5, 0.2, 0.14]][Math.floor(hash(ix + (iy % 2) * 0.5, iy) * 3)];
-  // Brick pillars and a lintel round an open firebox (so the fire inside can be seen).
+  // Brick pillars and a lintel round an open firebox (so the fire inside can be seen). The bricks are their front
+  // faces: a box face under them, half a millimetre back, showed through in patches as the camera moved.
   for (const [x, ww, y, hh, nx, ny] of [[-0.4725, 0.305, 0.55, 1.1, 2, 11], [0.4725, 0.305, 0.55, 1.1, 2, 11], [0, 0.64, 0.85, 0.5, 4, 5]]) {
-    parts.push(onWall(F, G.box(ww, hh, 0.24, [0.42, 0.16, 0.11]), fx0 + x, y, 0.12));
-    parts.push(onWall(F, G.grid(ww, hh, nx, ny, (ix, iy) => brick(ix + Math.round((x + 1) * 7), iy)), fx0 + x, y, 0.2405));
+    parts.push(onWall(F, G.box(ww, hh, 0.24, [0.42, 0.16, 0.11], { open: 'f' }), fx0 + x, y, 0.12));
+    parts.push(onWall(F, G.grid(ww, hh, nx, ny, (ix, iy) => brick(ix + Math.round((x + 1) * 7), iy)), fx0 + x, y, 0.24));
   }
   parts.push(onWall(F, G.box(0.64, 0.6, 0.02, [0.05, 0.035, 0.03]), fx0, 0.3, 0.01)); // soot-black back
-  for (const sx of [-1, 1]) parts.push(onWall(F, G.box(0.02, 0.6, 0.22, [0.16, 0.07, 0.05]), fx0 + sx * 0.31, 0.3, 0.12));
+  // Its sooty sides, thick enough that the pillars' inner faces behind them never show through.
+  for (const sx of [-1, 1]) parts.push(onWall(F, G.box(0.06, 0.6, 0.22, [0.16, 0.07, 0.05]), fx0 + sx * 0.29, 0.3, 0.12));
   parts.push(onWall(F, G.box(1.5, 0.06, 0.46, [0.42, 0.4, 0.38]), fx0, 0.03, 0.23));
   parts.push(onWall(F, G.box(1.55, 0.08, 0.34, [0.84, 0.78, 0.64]), fx0, 1.14, 0.17));
   // Christmas Megapack props (js/props.js): presents on the hearth and one on the floor, a teddy by the fire,
@@ -709,44 +947,42 @@ export function previewRoom(spec) {
   const swag = Array.from({ length: 31 }, (_, i) => { const t = i / 30; return [fx0 - 0.74 + t * 1.48, 1.11 - 0.07 * Math.abs(Math.sin(t * Math.PI * 3)), 0.355]; });
   parts.push(onWall(F, G.tube(swag, 0.028, 5, [0.09, 0.3, 0.14]), 0, 0, 0));
   swag.forEach((p, i) => { if (i % 3 === 1) parts.push(onWall(F, G.sphere(0.012, 4, 3, [0.75, 0.06, 0.08]), p[0], p[1] + 0.02 * (hash(i) - 0.5), p[2] + 0.02)); });
-  // Three stockings.
+  // Three stockings, hung just clear of the garland. The leg stops where its white cuff starts (it ran on behind
+  // the cuff, 5 mm back, and the two traded places on screen).
   for (const [x, col] of [[-0.45, [0.72, 0.08, 0.1]], [0, [0.1, 0.36, 0.17]], [0.45, [0.72, 0.08, 0.1]]]) {
-    parts.push(onWall(F, G.box(0.11, 0.26, 0.04, col), fx0 + x, 0.92, 0.36));
-    parts.push(onWall(F, G.box(0.16, 0.08, 0.04, col), fx0 + x + 0.03, 0.8, 0.36));
-    parts.push(onWall(F, G.box(0.13, 0.06, 0.05, [0.95, 0.93, 0.88]), fx0 + x, 1.05, 0.36));
+    parts.push(onWall(F, G.box(0.11, 0.23, 0.04, col), fx0 + x, 0.905, 0.375));
+    parts.push(onWall(F, G.box(0.16, 0.08, 0.04, col), fx0 + x + 0.03, 0.8, 0.375));
+    parts.push(onWall(F, G.box(0.13, 0.06, 0.05, [0.95, 0.93, 0.88]), fx0 + x, 1.05, 0.375));
   }
-  // A wreath on the right of the front wall, with a red bow and berries.
-  const ring = Array.from({ length: 14 }, (_, i) => { const a = (i / 14) * Math.PI * 2; return [1.35 + Math.cos(a) * 0.2, 1.5 + Math.sin(a) * 0.2, 0.06]; });
+  // A wreath on the right of the front wall, with a red bow and berries: clear of the title in bulbs.
+  const WX = 1.75;
+  const ring = Array.from({ length: 14 }, (_, i) => { const a = (i / 14) * Math.PI * 2; return [WX + Math.cos(a) * 0.2, 1.5 + Math.sin(a) * 0.2, 0.06]; });
   parts.push(onWall(F, G.tube(ring, 0.06, 5, [0.08, 0.3, 0.13], { closed: true }), 0, 0, 0));
   ring.forEach((p, i) => { if (i % 2) parts.push(onWall(F, G.sphere(0.014, 4, 3, [0.78, 0.07, 0.09]), p[0] + 0.03 * (hash(i, 2) - 0.5), p[1], 0.12)); });
-  parts.push(onWall(F, G.box(0.07, 0.07, 0.04, [0.8, 0.06, 0.08]), 1.35, 1.3, 0.12));
-  for (const s of [-1, 1]) parts.push(onWall(F, G.box(0.13, 0.06, 0.03, [0.8, 0.06, 0.08]), 1.35 + s * 0.08, 1.31, 0.11, rz(s * 0.45)));
-  for (const s of [-1, 1]) parts.push(onWall(F, G.box(0.04, 0.13, 0.02, [0.8, 0.06, 0.08]), 1.35 + s * 0.04, 1.22, 0.11, rz(s * 0.3)));
+  parts.push(onWall(F, G.box(0.07, 0.07, 0.04, [0.8, 0.06, 0.08]), WX, 1.3, 0.12));
+  for (const s of [-1, 1]) parts.push(onWall(F, G.box(0.13, 0.06, 0.03, [0.8, 0.06, 0.08]), WX + s * 0.08, 1.31, 0.11, rz(s * 0.45)));
+  for (const s of [-1, 1]) parts.push(onWall(F, G.box(0.04, 0.13, 0.02, [0.8, 0.06, 0.08]), WX + s * 0.04, 1.22, 0.11, rz(s * 0.3)));
 
-  // Window on the right wall: night sky, a moon, snow on rooftops and the sill, curtains.
-  const R = walls[3], wx = 0.6; // along the right wall, x = 0.6 is z = -0.6
-  parts.push(onWall(R, G.grid(1.1, 1.0, 1, 6, (ix, iy) => [0.02 + 0.012 * (5 - iy), 0.03 + 0.016 * (5 - iy), 0.09 + 0.03 * (5 - iy)]), wx, 1.45, 0.004));
-  for (let i = 0; i < 5; i++) {
-    const x = wx - 0.48 + i * 0.24, hh = 0.14 + 0.1 * hash(i, 7);
-    parts.push(onWall(R, G.box(0.2, hh, 0.004, [0.03, 0.035, 0.06]), x, 0.95 + hh / 2, 0.008));
-    parts.push(onWall(R, G.box(0.22, 0.025, 0.005, [0.82, 0.86, 0.95]), x, 0.95 + hh, 0.009));
-  }
-  parts.push(onWall(R, G.box(1.16, 0.04, 0.06, [0.92, 0.94, 0.98]), wx, 0.97, 0.03));
-  parts.push(onWall(R, G.box(0.03, 1.08, 0.05, C.cream), wx - 0.55, 1.45, 0.02));
-  parts.push(onWall(R, G.box(0.03, 1.08, 0.05, C.cream), wx + 0.55, 1.45, 0.02));
-  parts.push(onWall(R, G.box(1.12, 0.05, 0.05, C.cream), wx, 1.95, 0.02));
-  parts.push(onWall(R, G.box(1.12, 0.05, 0.05, C.cream), wx, 0.95, 0.02));
-  parts.push(onWall(R, G.box(0.03, 1.0, 0.04, C.cream), wx, 1.45, 0.02));
-  parts.push(onWall(R, G.box(1.1, 0.03, 0.04, C.cream), wx, 1.45, 0.02));
+  // The window on the right wall: an opening (the night outside is the game's yard, js/game.js, where the snowman
+  // comes), a frame with a cross in it, a white sill and curtains. The sill, frame and glazing bars are trim.
+  const R = walls[3];
+  trim.push(onWall(R, G.box(1.16, 0.04, 0.06, [0.92, 0.94, 0.98]), wx, 0.97, 0.03));
+  trim.push(onWall(R, G.box(0.03, 1.08, 0.05, C.cream), wx - 0.55, 1.45, 0.02));
+  trim.push(onWall(R, G.box(0.03, 1.08, 0.05, C.cream), wx + 0.55, 1.45, 0.02));
+  trim.push(onWall(R, G.box(1.12, 0.05, 0.05, C.cream), wx, 1.95, 0.02));
+  trim.push(onWall(R, G.box(1.12, 0.05, 0.05, C.cream), wx, 0.95, 0.02));
+  trim.push(onWall(R, G.box(0.03, 1.0, 0.04, C.cream), wx, 1.45, 0.02));
+  trim.push(onWall(R, G.box(1.1, 0.03, 0.04, C.cream), wx, 1.45, 0.02));
+  // Curtains in folds side by side (they overlapped by a centimetre at two depths, and traded places there),
+  // hanging from the valance down to the sill, clear of the rail below it.
   for (const side of [-1, 1]) {
-    for (let k = 0; k < 4; k++) parts.push(onWall(R, G.box(0.09, 1.38, k % 2 ? 0.02 : 0.034, k % 2 ? [0.42, 0.05, 0.07] : [0.5, 0.07, 0.09]), wx + side * (0.62 + k * 0.08), 1.56, 0.02));
+    for (let k = 0; k < 4; k++) parts.push(onWall(R, G.box(0.08, 1.27, k % 2 ? 0.02 : 0.034, k % 2 ? [0.42, 0.05, 0.07] : [0.5, 0.07, 0.09]), wx + side * (0.62 + k * 0.08), 1.615, 0.02));
   }
-  parts.push(onWall(R, G.box(1.66, 0.16, 0.04, [0.46, 0.06, 0.08]), wx, 2.25, 0.025));
-  const moon = new Node('moon', cached('room.moon', () => onWall(R, G.poly(Array.from({ length: 12 }, (_, i) => [Math.cos(i / 12 * Math.PI * 2) * 0.075, Math.sin(i / 12 * Math.PI * 2) * 0.075]), [0.95, 0.93, 0.8]), wx + 0.25, 1.75, 0.006)), { emissive: 1 });
+  parts.push(onWall(R, G.box(1.66, 0.16, 0.06, [0.46, 0.06, 0.08]), wx, 2.25, 0.03));
 
   // Door on the left wall.
   parts.push(at(G.box(0.03, 2.05, 0.9, [0.3, 0.17, 0.08]), [-w / 2 + 0.016, 1.025, -0.9]));
-  for (const [y, hh] of [[0.55, 0.7], [1.5, 0.75]]) for (const z of [-1.12, -0.68]) parts.push(at(G.box(0.012, hh, 0.32, [0.35, 0.2, 0.1]), [-w / 2 + 0.035, y, z]));
+  for (const [y, hh] of [[0.55, 0.7], [1.5, 0.75]]) for (const z of [-1.12, -0.68]) trim.push(at(G.box(0.012, hh, 0.32, [0.35, 0.2, 0.1]), [-w / 2 + 0.035, y, z]));
   parts.push(at(G.box(0.035, 2.1, 0.06, C.cream), [-w / 2 + 0.02, 1.05, -1.38]));
   parts.push(at(G.box(0.035, 2.1, 0.06, C.cream), [-w / 2 + 0.02, 1.05, -0.42]));
   parts.push(at(G.box(0.05, 0.05, 0.05, C.gold), [-w / 2 + 0.04, 1.0, -0.55]));
@@ -755,7 +991,7 @@ export function previewRoom(spec) {
   if (t) {
     const top = t.center[1];
     parts.push(at(G.box(t.w, 0.04, t.d, [0.4, 0.24, 0.12]), [t.center[0], top - 0.02, t.center[2]]));
-    parts.push(at(G.box(0.24, 0.002, t.d + 0.05, [0.6, 0.08, 0.1]), [t.center[0], top + 0.001, t.center[2]]));
+    trim.push(at(G.box(0.24, 0.002, t.d + 0.05, [0.6, 0.08, 0.1]), [t.center[0], top + 0.001, t.center[2]])); // the runner
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
       parts.push(at(G.box(0.04, top - 0.04, 0.04, [0.3, 0.17, 0.08]), [t.center[0] + sx * (t.w / 2 - 0.05), (top - 0.04) / 2, t.center[2] + sz * (t.d / 2 - 0.05)]));
     }
@@ -768,11 +1004,11 @@ export function previewRoom(spec) {
   parts.push(at(G.box(0.18, 0.62, 0.8, [0.4, 0.1, 0.09]), [0.95, 0.31, cz]));
   for (const x of [-0.55, 0.55]) parts.push(at(G.box(0.4, 0.36, 0.12, [0.78, 0.66, 0.36]), [x, 0.6, cz + 0.2], rx(-0.25)));
 
-  // Drawn in this order: the floor, the rug painted over it, then the rest of the room.
+  // Drawn in this order: the floor, the rug painted over it, the rest of the room, then its trim.
   const room = new Node('previewRoom', cached('room.floor', () => floor));
   room.add(new Node('rug', cached('room.rug', () => G.merge(rug)), { decal: true }));
   room.add(new Node('roomBody', cached('room.body', () => G.merge(parts))));
-  room.add(moon);
+  room.add(new Node('roomTrim', cached('room.trim', () => G.merge(trim)), { trim: true }));
   // The fire: flames that flicker (see animateRoom in preview.js), a glow, and its light.
   const fireAt = (x, y, z) => [fx0 + x, y, -d / 2 + z];
   const flames = [[0, 0.3, 0.085, [1, 0.42, 0.08]], [-0.11, 0.22, 0.07, [1, 0.55, 0.12]], [0.12, 0.24, 0.07, [1, 0.5, 0.1]], [0.02, 0.17, 0.055, [1, 0.85, 0.35]]];

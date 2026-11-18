@@ -9,6 +9,8 @@
 //   (the pointing cursor, over the panels) -> flash overlay
 // In mixed reality there is no backdrop: the darkness overlay dims the real
 // room (passthrough) while lit objects and glowing bulbs stay bright.
+// A node with a portal (the yard outside the window) is drawn only where it is seen through that rectangle:
+// clipped to the window's place on screen (scissor), and per fragment to the glass (see LIT_FS).
 
 const LIT_VS = `#version 300 es
 layout(location=0) in vec3 a_pos;
@@ -22,8 +24,10 @@ uniform vec4 u_lightPos[4];
 uniform vec4 u_lightCol[4];
 uniform int u_nLights;
 out vec3 v_col;
+out vec3 v_wp;
 void main() {
   vec4 wp = u_model * vec4(a_pos, 1.0);
+  v_wp = wp.xyz;
   vec3 n = normalize(mat3(u_model) * a_nrm);
   vec3 base = a_col * u_tint;
   vec3 light = u_ambient + u_sunCol * max(dot(n, -u_sunDir), 0.0);
@@ -69,22 +73,40 @@ highp float occReal(highp vec2 uv) {
   if (u_occ.z < 0.5) return raw > 0.0 && raw < 0.9999 ? occLinear(raw, u_occNF.x, u_occNF.y) : 0.0;
   return raw * u_occRaw;
 }
-bool occluded() {
+// k: how far along the ray from the eye this fragment counts as being (1: where it is). The yard outside the window
+// counts as being at the glass (k < 1): the real wall round the window, or the glass itself, never hides it, but a
+// real chair in front of the window does.
+bool occludedAt(highp float k) {
   if (u_occOn * u_occ.x < 0.5) return false;
-  highp float zf = occLinear(gl_FragCoord.z, u_occNF.z, u_occNF.w);
+  highp float zf = occLinear(gl_FragCoord.z, u_occNF.z, u_occNF.w) * k;
   if (zf < u_occNear) return false;
   highp float zr = occReal((gl_FragCoord.xy - u_occVP.xy) / u_occVP.zw);
   return zr > 0.05 && zr < zf - (0.05 + 0.04 * zf);
-}`;
+}
+bool occluded() { return occludedAt(1.0); }`;
 
+// The portal (node.portal): a rectangle (centre P, normal N, half-extents along R and U in their w). A fragment is
+// drawn only if the line from the eye to it passes through the rectangle, with the glass between them.
 const LIT_FS = `#version 300 es
 precision mediump float;
 in vec3 v_col;
+in highp vec3 v_wp;
 uniform float u_alpha;
+uniform highp vec4 u_portalP, u_portalN, u_portalR, u_portalU, u_portalEye;
 out vec4 o;
 ${OCC_GLSL}
 void main() {
-  if (occluded()) discard;
+  highp float k = 1.0;
+  if (u_portalP.w > 0.5) {
+    highp vec3 d = v_wp - u_portalEye.xyz;
+    highp float den = dot(d, u_portalN.xyz);
+    if (abs(den) < 1e-6) discard;
+    k = dot(u_portalP.xyz - u_portalEye.xyz, u_portalN.xyz) / den;
+    if (k <= 0.0 || k >= 1.0) discard;
+    highp vec3 rel = u_portalEye.xyz + d * k - u_portalP.xyz;
+    if (abs(dot(rel, u_portalR.xyz)) > u_portalR.w || abs(dot(rel, u_portalU.xyz)) > u_portalU.w) discard;
+  }
+  if (occludedAt(k)) discard;
   o = vec4(v_col * u_alpha, u_alpha);
 }`;
 
@@ -100,8 +122,9 @@ precision mediump float;
 in vec2 v_uv;
 uniform sampler2D u_tex;
 uniform float u_alpha;
+uniform vec3 u_tint;
 out vec4 o;
-void main() { o = texture(u_tex, v_uv) * u_alpha; }`;
+void main() { vec4 c = texture(u_tex, v_uv); o = vec4(c.rgb * u_tint, c.a) * u_alpha; }`;
 
 // Glow sprites (geo.sprites): every corner carries its sprite's centre, so the
 // quad is built here, facing this eye (or lying flat in the model's XZ plane),
@@ -197,15 +220,19 @@ function program(gl, vs, fs, names) {
 }
 
 const OCC_U = ['u_depth', 'u_occOn', 'u_occ', 'u_occNF', 'u_occVP', 'u_occRaw', 'u_occNear'];
-const LIT_U = ['u_model', 'u_viewProj', 'u_tint', 'u_sunDir', 'u_sunCol', 'u_ambient', 'u_camPos', 'u_emissive', 'u_snap', 'u_spec', 'u_rim', 'u_rimCol', 'u_lightPos', 'u_lightCol', 'u_nLights', 'u_alpha', ...OCC_U];
+const LIT_U = ['u_model', 'u_viewProj', 'u_tint', 'u_sunDir', 'u_sunCol', 'u_ambient', 'u_camPos', 'u_emissive', 'u_snap', 'u_spec', 'u_rim', 'u_rimCol', 'u_lightPos', 'u_lightCol', 'u_nLights', 'u_alpha',
+  'u_portalP', 'u_portalN', 'u_portalR', 'u_portalU', 'u_portalEye', ...OCC_U];
 const SPR_U = ['u_model', 'u_viewProj', 'u_camPos', 'u_tint', 'u_flat', 'u_time', 'u_alpha', 'u_cover', ...OCC_U];
 const DEPTH_UNIT = 3; // the room's depth texture; panels use unit 0
+// Trim's depth offset, in pixels of the surface's own depth slope (glPolygonOffset). The snap moves each corner
+// up to half a step (under 2 px on a laptop or a phone), so two surfaces can trade up to about 4 px between them.
+export const TRIM_OFFSET = 4;
 
 export class Renderer {
   constructor(gl) {
     this.gl = gl;
     this.lit = program(gl, LIT_VS, LIT_FS, LIT_U);
-    this.tex = program(gl, TEX_VS, TEX_FS, ['u_model', 'u_viewProj', 'u_tex', 'u_alpha']);
+    this.tex = program(gl, TEX_VS, TEX_FS, ['u_model', 'u_viewProj', 'u_tex', 'u_alpha', 'u_tint']);
     this.spr = program(gl, SPR_VS, SPR_FS, SPR_U);
     this.ovl = program(gl, OVL_VS, OVL_FS, ['u_color']);
     this.probe = program(gl, OVL_VS, PROBE_FS, ['u_probe', ...OCC_U]);
@@ -225,6 +252,9 @@ export class Renderer {
     this.lightPos = new Float32Array(16);
     this.lightCol = new Float32Array(16);
     this.lists = { backdrop: [], opaque: [], add: [], glow: [], blend: [], top: [] };
+    this.view = null; // the view being drawn (a portal's place on screen is worked out per view)
+    this.portalRects = new Map();
+    this.scissored = false;
   }
 
   // A geometry's GPU copy, made the first time it is drawn (or by prepare). A dynamic geometry (a particle
@@ -331,6 +361,7 @@ export class Renderer {
     this.collect(roots);
 
     gl.disable(gl.CULL_FACE);
+    gl.disable(gl.POLYGON_OFFSET_FILL); // trim's offset never outlives its own draw, even after a frame that threw
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
     gl.depthMask(true);
@@ -371,7 +402,61 @@ export class Renderer {
     gl.uniform1f(u.u_snap, snap);
     const c = v.camPos || [0, 0, 0];
     gl.uniform3f(u.u_camPos, c[0], c[1], c[2]);
+    gl.uniform4f(u.u_portalEye, c[0], c[1], c[2], 0);
     this.setOcclusion(u, v);
+  }
+
+  // Where a portal's rectangle lands in this view, in pixels: [x, y, w, h], or null if it cannot be worked out (a
+  // corner behind the eye: then only the per-fragment test clips it), or 'off' if it is wholly off this view.
+  portalRect(P) {
+    let r = this.portalRects.get(P);
+    if (r !== undefined) return r;
+    const v = this.view, m = v.viewProj, vp = v.viewport || [0, 0, 1, 1];
+    // The rectangle in clip space, cut where it passes behind the eye (Sutherland-Hodgman on w), then its bounds on screen.
+    const E = 0.01;
+    const clip = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => {
+      const p = [0, 1, 2].map((k) => P.p[k] + P.r[k] * P.hw * a + P.u[k] * P.hh * b);
+      return [m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12], m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13], m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15]];
+    });
+    const pts = [];
+    for (let i = 0; i < 4; i++) {
+      const c = clip[i], n = clip[(i + 1) % 4];
+      if (c[2] > E) pts.push(c);
+      if ((c[2] > E) !== (n[2] > E)) { const t = (E - c[2]) / (n[2] - c[2]); pts.push([c[0] + (n[0] - c[0]) * t, c[1] + (n[1] - c[1]) * t, E]); }
+    }
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const c of pts) { const x = c[0] / c[2], y = c[1] / c[2]; x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    r = null;
+    if (!pts.length) r = 'off'; // the whole window is behind the eye: nothing can be seen through it
+    else {
+      if (x1 < -1 || x0 > 1 || y1 < -1 || y0 > 1) r = 'off';
+      else {
+        const px = (t) => Math.max(0, Math.min(1, t * 0.5 + 0.5));
+        const X0 = Math.floor(vp[0] + px(x0) * vp[2]) - 1, X1 = Math.ceil(vp[0] + px(x1) * vp[2]) + 1;
+        const Y0 = Math.floor(vp[1] + px(y0) * vp[3]) - 1, Y1 = Math.ceil(vp[1] + px(y1) * vp[3]) + 1;
+        r = [Math.max(vp[0], X0), Math.max(vp[1], Y0), Math.max(0, Math.min(vp[0] + vp[2], X1) - Math.max(vp[0], X0)), Math.max(0, Math.min(vp[1] + vp[3], Y1) - Math.max(vp[1], Y0))];
+      }
+    }
+    this.portalRects.set(P, r);
+    return r;
+  }
+
+  // The portal for the node about to be drawn by the lit program (none: off). False if it is not on screen.
+  setPortal(n) {
+    const gl = this.gl, u = this.lit.u, P = n.portal;
+    if (!P) {
+      gl.uniform4f(u.u_portalP, 0, 0, 0, 0);
+      return true;
+    }
+    const r = this.portalRect(P);
+    if (r === 'off' || (r && (r[2] === 0 || r[3] === 0))) return false;
+    // Only for this one draw: drawLit turns it off again, so nothing drawn after it is clipped.
+    if (r) { gl.enable(gl.SCISSOR_TEST); gl.scissor(r[0], r[1], r[2], r[3]); this.scissored = true; }
+    gl.uniform4f(u.u_portalP, P.p[0], P.p[1], P.p[2], 1);
+    gl.uniform4f(u.u_portalN, P.n[0], P.n[1], P.n[2], 0);
+    gl.uniform4f(u.u_portalR, P.r[0], P.r[1], P.r[2], P.hw);
+    gl.uniform4f(u.u_portalU, P.u[0], P.u[1], P.u[2], P.hh);
+    return true;
   }
 
   // The room's depth for this eye (v.depth from js/xr.js, only once js/depth.js has turned it on), or none.
@@ -449,6 +534,7 @@ export class Renderer {
 
   drawLit(n) {
     const gl = this.gl, u = this.lit.u;
+    if (!this.setPortal(n)) return;
     const m = this.mesh(n.geo);
     gl.uniformMatrix4fv(u.u_model, false, n.world);
     gl.uniform3f(u.u_tint, n.tint[0], n.tint[1], n.tint[2]);
@@ -460,6 +546,7 @@ export class Renderer {
     gl.bindVertexArray(m.vao);
     gl.drawArrays(gl.TRIANGLES, 0, m.count);
     this.stats.draws++;
+    if (this.scissored) { gl.disable(gl.SCISSOR_TEST); this.scissored = false; }
   }
 
   overlay(rgba) {
@@ -474,6 +561,8 @@ export class Renderer {
   drawView(v, params, nLights, snap) {
     const gl = this.gl;
     const { backdrop, opaque, add, glow, blend, top } = this.lists;
+    this.view = v;
+    this.portalRects.clear();
 
     gl.disable(gl.BLEND);
     if (backdrop.length) {
@@ -481,10 +570,15 @@ export class Renderer {
       // A decal (the preview room's rug) is painted over what is already drawn, in draw order as the PlayStation
       // did, and writes its depth for what comes after. The vertex snap moves each surface's depth by more than
       // the few millimetres between a rug and its floor, so a depth test cannot tell them apart.
+      // Trim (rails, raised panels, the window's sky, the runner on the table) lies a few millimetres off the
+      // surface behind it, and the snap moves depth by more than that on screen. Its depth is pulled toward the
+      // eye by a few pixels' worth of the surface's own slope (TRIM_OFFSET), more than the snap can move it.
       for (const n of backdrop) {
         if (n.decal) gl.depthFunc(gl.ALWAYS);
+        else if (n.trim) { gl.enable(gl.POLYGON_OFFSET_FILL); gl.polygonOffset(-TRIM_OFFSET, -TRIM_OFFSET); }
         this.drawLit(n);
         if (n.decal) gl.depthFunc(gl.LEQUAL);
+        else if (n.trim) gl.disable(gl.POLYGON_OFFSET_FILL);
       }
     }
 
@@ -532,6 +626,7 @@ export class Renderer {
           gl.bindTexture(gl.TEXTURE_2D, this.texture(n.tex));
           gl.uniformMatrix4fv(this.tex.u.u_model, false, n.world);
           gl.uniform1f(this.tex.u.u_alpha, n.alpha);
+          gl.uniform3f(this.tex.u.u_tint, n.tint[0], n.tint[1], n.tint[2]); // a sign in the room takes the room's light (js/menu.js)
           const m = this.mesh(n.geo);
           gl.bindVertexArray(m.vao);
           // A panel pulled onto the screen (the preview's fit) is drawn over the scene, like a sign on the glass.

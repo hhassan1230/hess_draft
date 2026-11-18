@@ -15,9 +15,17 @@ const quadFor = (w, h) => {
   return quads.get(k);
 };
 
+// Panel shapes: 'card' (a dark rounded card), 'tag' (a gift tag on its side, its hole and string on the right, tied
+// to the ornament box beside it) and 'tags' (the night's result on a big tag, each choice a small red tag tied
+// under it, the bundle hung on a string from the middle of the top edge). Buttons are the same rectangles in every
+// shape, so pressing works the same way.
+const INK = { card: '#f4e6c8', tag: '#3a1f14', tags: '#3a1f14' };
+const CREAM = '#f3e7cc', GOLD = '#c9962f';
+
 export class Panel {
-  constructor(makeCanvas, { w = 0.36, h = 0.12, px = 640, name = 'panel' } = {}) {
+  constructor(makeCanvas, { w = 0.36, h = 0.12, px = 640, name = 'panel', shape = 'card' } = {}) {
     this.w = w; this.h = h;
+    this.shape = shape;
     this.canvas = makeCanvas(px, Math.round((px * h) / w));
     this.tex = { canvas: this.canvas, version: 0 };
     this.node = new Node(name, quadFor(w, h), { layer: 'ui', tex: this.tex, alpha: 1 });
@@ -48,6 +56,8 @@ export class Panel {
     const ctx = this.canvas.getContext('2d');
     const W = this.canvas.width, H = this.canvas.height;
     ctx.clearRect(0, 0, W, H);
+    if (this.shape === 'tag') { this.drawTag(ctx, W, H, lines, corner); this.tex.version++; return; }
+    if (this.shape === 'tags') { this.drawTags(ctx, W, H, lines, buttons, corner); this.tex.version++; return; }
     roundRect(ctx, 6, 6, W - 12, H - 12, 26);
     ctx.fillStyle = bg; ctx.fill();
     ctx.lineWidth = 5; ctx.strokeStyle = border; ctx.stroke();
@@ -92,6 +102,49 @@ export class Panel {
     this.tex.version++;
   }
 
+  // The night's tag: on its side, the hole and string at the right (toward the box), the words to the left of it.
+  drawTag(ctx, W, H, lines, corner) {
+    const x = W * 0.02, y = H * 0.06, w = W * 0.96, h = H * 0.88, notch = h * 0.3;
+    tagPath(ctx, x, y, w, h, notch, 'right');
+    ctx.fillStyle = CREAM; ctx.fill();
+    ctx.lineWidth = 5; ctx.strokeStyle = GOLD; ctx.stroke();
+    punch(ctx, x + w - notch * 0.85, y + h / 2, h * 0.08);
+    string(ctx, [x + w - notch * 0.85, y + h / 2], [W, H * 0.3]);
+    const cornerPx = corner ? Math.round(Math.min(16, H * 0.09)) : 0;
+    this.buttons = [];
+    layLines(ctx, lines, W * 0.02, y, W * 0.82, y + h - (corner ? cornerPx + 8 : 0), INK.tag);
+    if (corner) cornerLabel(ctx, corner, x + w - notch - 8, y + h - 10, cornerPx, 'rgba(58,31,20,0.5)');
+  }
+
+  // The night's end: what happened on a big tag, each choice a small red tag tied under it.
+  drawTags(ctx, W, H, lines, buttons, corner) {
+    const bx = W * 0.03, by = H * 0.07, bw = W * 0.94, bh = H * 0.56, notch = Math.min(bw, bh) * 0.16;
+    string(ctx, [W / 2, 0], [W / 2, by + notch * 0.9]);
+    tagPath(ctx, bx, by, bw, bh, notch, 'top');
+    ctx.fillStyle = CREAM; ctx.fill();
+    ctx.lineWidth = 5; ctx.strokeStyle = GOLD; ctx.stroke();
+    punch(ctx, W / 2, by + notch * 0.9, notch * 0.32);
+    const cornerPx = corner ? Math.round(Math.min(18, H * 0.05)) : 0;
+    layLines(ctx, lines, bx, by + notch * 1.5, bx + bw, by + bh - (corner ? cornerPx + 10 : 4), INK.tags);
+    if (corner) cornerLabel(ctx, corner, bx + bw - 18, by + bh - 12, cornerPx, 'rgba(58,31,20,0.5)');
+    this.buttons = [];
+    const n = buttons.length, gap = W * 0.05;
+    const tw = Math.min(W * 0.4, (bw - (n - 1) * gap) / Math.max(1, n)), th = H * 0.3, ty = H * 0.68, tn = Math.min(tw, th) * 0.2;
+    buttons.forEach((b, i) => {
+      const tx = (W - (n * tw + (n - 1) * gap)) / 2 + i * (tw + gap);
+      string(ctx, [tx + tw / 2, by + bh - 3], [tx + tw / 2, ty + tn * 0.9]);
+      tagPath(ctx, tx, ty, tw, th, tn, 'top');
+      ctx.fillStyle = 'rgba(168,30,40,0.97)'; ctx.fill();
+      ctx.lineWidth = 4; ctx.strokeStyle = '#f2c66d'; ctx.stroke();
+      punch(ctx, tx + tw / 2, ty + tn * 0.9, tn * 0.3);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      fitFont(ctx, b.label, Math.round(th * 0.36), tw - 20, (px) => `bold ${px}px ${SERIF}`);
+      ctx.fillStyle = '#fff6e0';
+      ctx.fillText(b.label, tx + tw / 2, ty + tn + (th - tn) / 2);
+      this.buttons.push({ id: b.id, x0: tx / W, y0: ty / H, x1: (tx + tw) / W, y1: (ty + th) / H });
+    });
+  }
+
   hide() { this.node.visible = false; }
 
   // World point -> { id, depth } if it is over a button (depth: meters in front of the panel).
@@ -133,6 +186,61 @@ function fitFont(ctx, text, size, room, fontOf) {
   ctx.font = fontOf(size);
   const wide = ctx.measureText(text).width;
   if (wide > room && wide > 0) ctx.font = fontOf(Math.max(8, Math.floor((size * room) / wide)));
+}
+
+// Lines centred in a box, all shrunk together if they would not fit its height, each shrunk to its width.
+function layLines(ctx, lines, x0, y0, x1, y1, ink) {
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const natural = lines.reduce((s, l) => s + (l.size || 40) * 1.25, 0);
+  const k = Math.min(1, (y1 - y0 - 12) / Math.max(1, natural));
+  let y = y0 + (y1 - y0 - natural * k) / 2;
+  for (const l of lines) {
+    const size = (l.size || 40) * k;
+    fitFont(ctx, l.t, Math.round(size), x1 - x0 - 44, (px) => `${l.weight || 'bold'} ${px}px ${l.font || SERIF}`);
+    ctx.fillStyle = l.color || ink;
+    y += size * 0.62;
+    ctx.fillText(l.t, (x0 + x1) / 2, y);
+    y += size * 0.63;
+  }
+}
+
+function cornerLabel(ctx, text, x, y, px, color) {
+  ctx.font = `${px}px ui-monospace, Menlo, monospace`;
+  ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+}
+
+// A gift tag's outline: a rectangle with two corners cut off at the end that carries the hole.
+function tagPath(ctx, x, y, w, h, n, end) {
+  ctx.beginPath();
+  if (end === 'right') {
+    ctx.moveTo(x, y); ctx.lineTo(x + w - n, y); ctx.lineTo(x + w, y + n); ctx.lineTo(x + w, y + h - n);
+    ctx.lineTo(x + w - n, y + h); ctx.lineTo(x, y + h);
+  } else {
+    ctx.moveTo(x, y + n); ctx.lineTo(x + n, y); ctx.lineTo(x + w - n, y); ctx.lineTo(x + w, y + n);
+    ctx.lineTo(x + w, y + h); ctx.lineTo(x, y + h);
+  }
+  ctx.closePath();
+}
+
+// A punched hole with a brass ring.
+function punch(ctx, x, y, r) {
+  ctx.save();
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(x, y, r * 1.25, 0, Math.PI * 2);
+  ctx.lineWidth = Math.max(2, r * 0.45); ctx.strokeStyle = '#d4a640'; ctx.stroke();
+}
+
+// Red string, with a little sag.
+function string(ctx, a, b) {
+  ctx.beginPath();
+  ctx.moveTo(a[0], a[1]);
+  ctx.quadraticCurveTo((a[0] + b[0]) / 2 + (b[1] - a[1]) * 0.05, (a[1] + b[1]) / 2 + Math.abs(b[0] - a[0]) * 0.15, b[0], b[1]);
+  ctx.lineWidth = 4; ctx.strokeStyle = '#b3141c'; ctx.stroke();
 }
 
 function roundRect(ctx, x, y, w, h, r) {

@@ -24,6 +24,7 @@ export class Node {
     this.tex = null; // { canvas, version } for textured quads
     this.depthTest = true;
     this.decal = false; // backdrop only: painted over what is drawn before it, in draw order (the rug on the floor)
+    this.trim = false; // backdrop only: thin things laid on another surface (rails, panels, the window's sky), drawn with a depth offset so the vertex snap cannot put the surface behind them in front
     this.order = 0; // draw order bias for blended layers
     this.spec = 0; // glint: a facet turned between the light and the eye flashes white
     this.rim = 0; // rim light: facets edge-on to the eye catch the scene's rim colour (renderParams.rim)

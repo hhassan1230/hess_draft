@@ -118,7 +118,32 @@ async function runSession(session, { gl, renderer, game, makeCanvas, debug = fal
   const overlay = new Node('overlay');
   overlay.add(boot.node, errPanel.node, dbgPanel.node);
   errPanel.hide(); dbgPanel.hide();
-  let error = null;
+  // One frame that throws must not end a judge's night: the rest of that frame is skipped and the night goes
+  // on. Only a fault that keeps happening (FAIL_FRAMES frames in a row, half a second, or as many of the last
+  // FAIL_WINDOW: one that comes back every other frame) stops the game, and the panel says what broke.
+  // failRun: frames in a row that threw; failTotal: all of them this visit.
+  const FAIL_FRAMES = 36, FAIL_WINDOW = 72;
+  let error = null, failRun = 0, failTotal = 0, failLast = '', frameFault = null;
+  const recent = new Uint8Array(FAIL_WINDOW);
+  let recentAt = 0, recentFails = 0;
+  const failed = (e, where) => { if (!frameFault) frameFault = { e, where }; };
+  const stoppedParams = () => ({ ...game.renderParams, flash: null, darkness: 0 }); // the panel, and your own room
+  const countFaults = () => {
+    const bad = frameFault ? 1 : 0;
+    recentFails += bad - recent[recentAt];
+    recent[recentAt] = bad;
+    recentAt = (recentAt + 1) % FAIL_WINDOW;
+    if (!frameFault) { if (!error) failRun = 0; return; }
+    const { e, where } = frameFault;
+    frameFault = null;
+    failRun++; failTotal++;
+    failLast = `${where}: ${String((e && e.message) || e)}`;
+    if (error) return;
+    if (failRun < FAIL_FRAMES && recentFails < FAIL_FRAMES) { if (failTotal <= 5) console.warn('frame skipped:', failLast); return; }
+    error = e;
+    console.error(e);
+    errPanel.show([{ t: 'Something broke', size: 44 }, { t: String(e && e.message || e).slice(0, 70), size: 22, weight: 'normal' }, { t: 'Take a screenshot and send it over', size: 22, weight: 'normal', color: '#e8c27a' }]);
+  };
 
   const pinchState = {};
   // For the ?debug readout only: what the headset granted (read on first use), what the room scan held
@@ -216,9 +241,7 @@ async function runSession(session, { gl, renderer, game, makeCanvas, debug = fal
         }
       }
     } catch (e) {
-      error = e;
-      console.error(e);
-      errPanel.show([{ t: 'Something broke', size: 44 }, { t: String(e && e.message || e).slice(0, 70), size: 22, weight: 'normal' }, { t: 'Take a screenshot and send it over', size: 22, weight: 'normal', color: '#e8c27a' }]);
+      failed(e, 'update');
     }
     if (error) placeInFront(errPanel.node, head, 0.7, 0.05);
     if (debug) {
@@ -245,10 +268,23 @@ async function runSession(session, { gl, renderer, game, makeCanvas, debug = fal
     overlay.updateWorld();
 
     // A new round (Play again, the judges' next night) is a new scene: its panels go up with the button press.
-    if (layoutDone && !error && game.scene !== prepared) { renderer.prepare([game.scene]); prepared = game.scene; }
-    gl.bindFramebuffer(gl.FRAMEBUFFER, layer.framebuffer);
-    renderer.render([error ? null : game.scene, overlay], views, game.renderParams, { clearColor: [0, 0, 0, 0] });
-    if (hooks) { hooks.frames = (hooks.frames || 0) + 1; hooks.views = views.length; hooks.draws = renderer.stats.draws; hooks.fps = fps; }
+    try {
+      if (layoutDone && !error && game.scene !== prepared) { renderer.prepare([game.scene]); prepared = game.scene; }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, layer.framebuffer);
+      // Stopped, the game no longer moves on, so a flash it had begun (a hit, the last candle) would stay over the
+      // panel, and a lights-out over your room: drawn without them.
+      renderer.render([error ? null : game.scene, overlay], views, error ? stoppedParams() : game.renderParams, { clearColor: [0, 0, 0, 0] });
+    } catch (e) {
+      // Drawing failed: as with the game, a blip is skipped and only a fault that keeps happening stops it.
+      // Stopped, only the panel is drawn, so it can still say what broke.
+      if (error) { try { renderer.render([overlay], views, stoppedParams(), { clearColor: [0, 0, 0, 0] }); } catch { /* nothing more to try */ } }
+      else failed(e, 'draw');
+    }
+    countFaults();
+    if (hooks) {
+      hooks.frames = (hooks.frames || 0) + 1; hooks.views = views.length; hooks.draws = renderer.stats.draws; hooks.fps = fps;
+      hooks.failed = { run: failRun, total: failTotal, stopped: !!error, last: failLast };
+    }
   }
   session.requestAnimationFrame(onFrame);
   return session;
