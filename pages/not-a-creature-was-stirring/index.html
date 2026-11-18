@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not a Creature Was Stirring</title>
+<meta name="description" content="A seated, hands-only mixed reality Christmas horror game for Meta Quest.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Not a Creature Was Stirring">
+<meta property="og:description" content="Decorate the tree before midnight. The nutcrackers in your living room only move when you look away. Mixed reality for Meta Quest, in the browser.">
+<meta property="og:image" content="https://hessvacio.com/pages/not-a-creature-was-stirring/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2l3.9 9.1 9.9.9-7.5 6.5 2.2 9.7L16 23.1 7.5 28.2l2.2-9.7L2.2 12l9.9-.9z' fill='%23e8c27a'/%3E%3C/svg%3E">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0b0710; color: #f4e6c8; font-family: Georgia, 'Times New Roman', serif; }
+  #gl { position: fixed; inset: 0; width: 100%; height: 100%; display: none; }
+  body.previewing #gl { display: block; }
+  body.previewing #menu { display: none; }
+  #menu { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 20px; box-sizing: border-box; background: radial-gradient(ellipse at 50% 28%, #2b1221 0%, #0b0710 72%); }
+  h1 { font-size: clamp(38px, 7vw, 76px); line-height: 1.02; margin: 0 0 14px; }
+  .tag { font-size: clamp(17px, 2.6vw, 23px); color: #e8c27a; margin: 0 0 28px; max-width: 32em; }
+  #menu p, .how li, footer { text-wrap: pretty; } /* no paragraph ends on a lone word */
+  #menu .tag { text-wrap: balance; } /* the pitch: one sentence per line where it fits */
+  .tag span { display: inline-block; }
+  button { font: inherit; font-size: 26px; padding: 18px 34px; margin: 8px; border-radius: 16px; border: 3px solid #f2c66d; background: #a81e28; color: #fff6e0; min-width: 290px; cursor: pointer; }
+  button.secondary { background: transparent; }
+  @media (max-width: 380px) { button { font-size: 24px; padding: 16px 18px; } } /* small phones: each label on one line */
+  button:disabled { opacity: 0.4; cursor: default; }
+  #progress { font-size: 17px; margin: -14px 0 22px; max-width: 32em; }
+  #xr-note { font-size: 15px; color: #b9a98c; margin: 4px 0 0; }
+  #judge-note { font-size: 15px; color: #e8c27a; margin: 6px 0 0; }
+  #content-note { font-size: 14px; color: #b9a98c; margin: 18px 0 0; max-width: 30em; }
+  .how { margin: 26px 0 0; padding-left: 22px; max-width: 30em; font-size: 16px; line-height: 1.5; color: #d9c9a8; text-align: left; }
+  .how li { margin: 4px 0; }
+  footer { margin-top: 28px; font-size: 13px; color: #8f8170; max-width: 42em; line-height: 1.5; }
+  .build { margin: 18px 0 0; font: 12px ui-monospace, Menlo, monospace; color: #6f655a; }
+  #menu.in-xr button { opacity: 0.5; }
+  /* The menu's backdrop (js/attract.js): the living room plays behind the menu, dimmed most where the words are. */
+  body.attract #gl { display: block; }
+  body.attract #menu { position: relative; z-index: 1; background: radial-gradient(ellipse 46% 64% at 50% 44%, rgba(11, 7, 16, 0.72) 0%, rgba(11, 7, 16, 0.45) 62%, rgba(11, 7, 16, 0.12) 100%); }
+  body.attract .how { background: rgba(11, 7, 16, 0.62); border-radius: 14px; padding: 12px 20px 12px 36px; }
+  /* Wide screens: the words down the left, the room and its tree to the right (the camera turns to frame it). */
+  @media (min-width: 900px) and (min-aspect-ratio: 6/5) {
+    body.attract #menu { align-items: flex-start; text-align: left; padding-left: max(5vw, 40px); background: linear-gradient(90deg, rgba(11, 7, 16, 0.86) 0%, rgba(11, 7, 16, 0.74) 34%, rgba(11, 7, 16, 0.3) 56%, rgba(11, 7, 16, 0) 72%); }
+    body.attract #menu > * { max-width: min(600px, 46vw); }
+    body.attract #menu .tag, body.attract #menu h1 { text-wrap: balance; }
+    body.attract button { margin: 8px 0; }
+    body.attract .how { margin-left: 0; }
+  }
+  body.attract #menu h1, body.attract #menu p, body.attract .how, body.attract footer { text-shadow: 0 1px 2px #000, 0 0 14px rgba(0, 0, 0, 0.9); }
+  body.attract button.secondary { background: rgba(11, 7, 16, 0.6); }
+  #close { position: fixed; top: 10px; right: 10px; z-index: 5; display: none; min-width: 0; padding: 6px 14px; font-size: 20px; }
+  body.previewing #close { display: block; }
+  #pv-help { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 5; display: none; background: rgba(10, 6, 14, 0.72); padding: 8px 14px; border-radius: 10px; font-size: 14px; white-space: nowrap; }
+  body.previewing #pv-help { display: block; }
+  #error { position: fixed; left: 12px; right: 12px; bottom: 12px; background: #3a0d12; border: 2px solid #c33; padding: 10px 14px; border-radius: 10px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; z-index: 9; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<main id="menu">
+  <h1>Not a Creature<br>Was Stirring</h1>
+  <p class="tag"><span>Decorate the tree before midnight.</span> <span>The nutcrackers only move when you look away.</span></p>
+  <p id="progress" hidden></p>
+  <button id="enter" disabled>Enter mixed reality</button>
+  <button id="preview" class="secondary">Preview on this screen</button>
+  <p id="xr-note" hidden>Open this page in the Meta Quest Browser to play in your own room.</p>
+  <p id="judge-note" hidden>Judges' link: every night is open after a win.</p>
+  <ul class="how">
+    <li>Sit down, ideally with a table in front of you. No table? A small one appears.</li>
+    <li>Pinch an ornament, then let go next to the tree to hang it.</li>
+    <li>Anything you can see freezes. Stare a nutcracker down to send it back and win back the ornament it stole.</li>
+    <li>Three candles are your lives. Hands only, no controllers needed.</li>
+  </ul>
+  <p id="content-note">Contains jump scares, sudden loud sounds and red flashes.</p>
+  <p id="build" class="build"></p>
+  <footer>Made in Brooklyn Games · Melody: “Silent Night” (Franz Gruber, 1818) · Nutcracker and Mouse King from E.T.A. Hoffmann (1816) · Title from “A Visit from St. Nicholas” (1823)</footer>
+</main>
+<button id="close" class="secondary" onclick="location.reload()" aria-label="Close preview">✕</button>
+<div id="pv-help">Drag to look around · drag an ornament onto the tree</div>
+<div id="error" hidden></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
