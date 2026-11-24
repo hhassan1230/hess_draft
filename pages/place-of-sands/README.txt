@@ -1,32 +1,32 @@
-PLACE OF SANDS  v62
+PLACE OF SANDS  1.0
 for https://hessvacio.com/pages/place-of-sands/
-Made in Brooklyn Games. Built 2026-11-06.
+Made in Brooklyn Games. Built 2026-11-22.
 
 
 WHAT'S IN THE FOLDER
 
-  index.html        the game: one page (v62)
+  index.html        the game: one page (1.0)
   three.min.js      three.js r128, loaded from beside the page (cdnjs is the fallback)
-  strand-bill.js    what plays at the Strand on Central Avenue (your three reels, see below)
+  strand-bill.js    what plays at the Strand on Central Avenue (your three reels), and the
+                    game's two switches, both off (see below)
   music/theme.ogg   the song, "3.4_Beat", for most browsers
   music/theme.mp4   the same song (AAC) for Safari before 18.4
   share.jpg         the link picture, 1200 x 630: JR on the sand at dusk, a lifeguard chair behind
   icon.png          the tab and home-screen icon, 180 x 180: his face
   README.txt        this
 
-  Only index.html and this README are new since the v60.1 folder (the one up now).
-  three.min.js, strand-bill.js, the song, share.jpg and icon.png are the same files, byte for
-  byte.
+  Only index.html, strand-bill.js and this README are new since the v62 folder (the one up
+  now). three.min.js, the song, share.jpg and icon.png are the same files, byte for byte.
 
 
 TO SWAP IT IN
 
   1. Replace everything in pages/place-of-sands/ with this folder's contents. Keep music/ as a
-     folder; the page looks for music/theme.ogg and music/theme.mp4 beside it. (v60.1 is up
-     now: copying index.html and README.txt over it does the same.)
+     folder; the page looks for music/theme.ogg and music/theme.mp4 beside it. (v62 is up
+     now: copying index.html, strand-bill.js and README.txt over it does the same.)
   2. Commit and push. The host has to serve the files as they are (GitHub Pages does).
   3. Open https://hessvacio.com/pages/place-of-sands/ and check the build number under the
-     Made in Brooklyn Games tag on the title: it should say v62. If it still shows the old one,
+     Made in Brooklyn Games tag on the title: it should say 1.0. If it still shows the old one,
      reload; GitHub Pages lets a browser keep a page for up to ten minutes.
   4. The link picture has not changed, so link previews need nothing this time.
 
@@ -38,8 +38,13 @@ THE STRAND'S BILL (strand-bill.js)
   Multiverse" (the trailer). All three are your YouTube uploads. To change the bill, edit
   strand-bill.js (the notes at its top say how); the page itself does not need rebuilding.
 
+  Below the bill are the game's two switches, one line each, both off in 1.0: the A train
+  after the ending, a ride to Kings County Lanes (switch it on only once that game's page is
+  live), and the play counts (GoatCounter, once you have a site code). The notes beside each
+  line in that file say how.
 
-WHAT'S NEW SINCE v60.1 (the folder up now)
+
+WHAT CAME IN v61 AND v62 (since v60.1)
 
   The creatures as PSX models (v62): the eight gulls over the beach and the far flock over
     the sea, the three dogs (Biscuit the golden fetching for Sal, Noodle the dachshund on

@@ -25,3 +25,43 @@ window.STRAND_BILL = [
   { title: "Museum Multiverse", by: "Feature presentation · the trailer",
     yt: "https://youtu.be/MF46EPlngic", mins: 2 }
 ];
+
+/* ------------------------------------------------------------------------------------------
+   Two switches for the game (Place of Sands 1.0). Each is one line.
+   1 is OFF until Kings County Lanes is live: take the two slashes off the front of its line.
+   2 is OFF: take the two slashes off the front of its last line and put your code in.
+   ------------------------------------------------------------------------------------------ */
+
+/* 1. THE A AFTER THE ENDING. Once the glass is set and the card is closed, the A comes back to
+      Mott Avenue and its door is a ride to your next game: name it and say where it lives.
+      Without this line there is no ride and the train stays away, as before: to switch the
+      ride off, put two slashes in front of the line.
+        name  what the car's sign and the hint say (up to 40 letters)
+        url   the game's full web address, https and all; it opens in a new tab
+      The address must be live before this file goes up, or the ride lands on a missing page.    */
+// window.POS_TRAIN = { name: "Kings County Lanes", url: "https://hessvacio.com/pages/kings-county-lanes/" };
+
+/* 2. PLAY COUNTS. The game says on the page what happened: start, resume, glass 1 to 8, finish,
+      share, ride. It sends nothing anywhere and says nothing about who is playing. This passes
+      each of those on to a GoatCounter site of yours as an event (pos-start, pos-glass-3,
+      pos-finish ...), and GoatCounter's own script counts the visit. No cookies.
+      Put your GoatCounter site code in place of YOURCODE.                                      */
+function posCounts(code) {
+  var q = [], s = document.createElement("script");
+  s.async = true; s.src = "https://gc.zgo.at/count.js";
+  s.setAttribute("data-goatcounter", "https://" + code + ".goatcounter.com/count");
+  document.head.appendChild(s);
+  function flush() {
+    if (!(window.goatcounter && window.goatcounter.count)) return;
+    while (q.length) window.goatcounter.count({ path: q.shift(), event: true });
+  }
+  window.addEventListener("placeofsands", function (e) {
+    var d = e.detail || {};
+    if (!d.event) return;
+    q.push("pos-" + d.event + (d.event === "glass" ? "-" + d.n : ""));
+    if (q.length > 40) q.shift();
+    flush();
+  });
+  setInterval(flush, 1500);
+}
+// posCounts("YOURCODE");
